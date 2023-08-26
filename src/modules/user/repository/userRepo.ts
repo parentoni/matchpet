@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import {
-  RepositoryBaseResult,
-} from "../../../shared/core/IBaseRepositoty";
+import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
 import { User, UserProps } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { AppError } from "../../../shared/core/Response/AppError";
@@ -18,11 +16,7 @@ export class UserRepo implements IUserRepo {
     this.models = models;
   }
 
-  public async exists({
-    filter
-  }: {
-    filter: Partial<IUserPersistant>;
-  }): RepositoryBaseResult<boolean> {
+  public async exists({ filter }: { filter: Partial<IUserPersistant> }): RepositoryBaseResult<boolean> {
     const UserM = this.models.user;
     try {
       const testUser = await UserM.findOne(filter);
@@ -42,20 +36,18 @@ export class UserRepo implements IUserRepo {
     }
   }
 
-  public async find_one({
-    filter
-  }: {
-    filter: Partial<IUserPersistant>;
-  }): RepositoryBaseResult<User> {
+  public async find_one({ filter }: { filter: Partial<IUserPersistant> }): RepositoryBaseResult<User> {
     const UserM = this.models.user;
     try {
       const testUser = await UserM.findOne(filter);
       if (!testUser) {
-        return left(CommonUseCaseResult.InvalidValue.create({
-          location: `${UserRepo.name}.${this.find_one.name}`,
-          variable: "FILTER",
-          errorMessage: "No user registeres were found with given filter"
-        }))
+        return left(
+          CommonUseCaseResult.InvalidValue.create({
+            location: `${UserRepo.name}.${this.find_one.name}`,
+            variable: "FILTER",
+            errorMessage: "No user registeres were found with given filter"
+          })
+        );
       }
       const userOrError = await UserMap.toDomain(testUser);
 
@@ -70,11 +62,7 @@ export class UserRepo implements IUserRepo {
   }
 
   //TODO PARAMETERS IN OBJECT
-  public async create({
-    dto
-  }: {
-    dto: User;
-  }): Promise<Either<AppError.UnexpectedError | GenericError<IBaseError>,string>> {
+  public async create({ dto }: { dto: User }): Promise<Either<AppError.UnexpectedError | GenericError<IBaseError>, string>> {
     const UserM = this.models.user;
 
     try {

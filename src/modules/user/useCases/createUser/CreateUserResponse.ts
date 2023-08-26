@@ -6,9 +6,6 @@ import { IBaseError } from "../../../../shared/core/Response/Error";
 import { User } from "../../domain/user";
 
 export type CreateUserResponse = Either<
-  | AppError.UnexpectedError
-  | CommonUseCaseResult.InvalidValue
-  | GenericError<IBaseError>
-  | CommonUseCaseResult.Conflict,
+  AppError.UnexpectedError | CommonUseCaseResult.InvalidValue | GenericError<IBaseError> | CommonUseCaseResult.Conflict,
   User
 >;

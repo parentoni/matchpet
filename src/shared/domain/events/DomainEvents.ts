@@ -9,13 +9,13 @@ export class DomainEvents {
   /**
    * @method markAggregateForDispatch
    * @static
-   * @desc 
-   * 
-   * 
+   * @desc
+   *
+   *
    */
 
   public static markAggregateForDispatch(aggregate: AggregateRoot<any>): void {
-    console.log("Called6")
+    console.log("Called6");
 
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
 
@@ -25,20 +25,20 @@ export class DomainEvents {
   }
 
   private static dispatchAggregateEvents(aggregate: AggregateRoot<any>): void {
-    console.log("Called5")
+    console.log("Called5");
 
     aggregate.domainEvents.forEach((event: IDomainEvent) => this.dispatch(event));
   }
 
   private static removeAggregateFromMarkedDispatchList(aggregate: AggregateRoot<any>): void {
-    console.log("Called4")
+    console.log("Called4");
 
     const index = this.markedAggregates.findIndex((a) => a.equals(aggregate));
     this.markedAggregates.splice(index, 1);
   }
 
   private static findMarkedAggregateByID(id: UniqueGlobalId): AggregateRoot<any> | null {
-    console.log("Called3")
+    console.log("Called3");
 
     let found: AggregateRoot<any> | null = null;
 
@@ -52,7 +52,7 @@ export class DomainEvents {
   }
 
   public static dispatchEventsForAggregate(id: UniqueGlobalId): void {
-    console.log("Called2")
+    console.log("Called2");
 
     const aggregate = this.findMarkedAggregateByID(id);
 
@@ -63,9 +63,8 @@ export class DomainEvents {
     }
   }
 
-  
   public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
-    console.log("Called1")
+    console.log("Called1");
     if (!this.handlersMap.hasOwnProperty(eventClassName)) {
       this.handlersMap[eventClassName] = [];
     }

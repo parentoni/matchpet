@@ -3,4 +3,4 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either } from "../../../../shared/core/Result";
 import { Specie } from "../../domain/Specie";
 
-export type FindSpecieByIdResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, Specie>
+export type FindSpecieByIdResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, Specie>;

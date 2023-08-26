@@ -44,11 +44,11 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get role(): USER_ROLE {
-    return this.props.role.value
+    return this.props.role.value;
   }
 
   get verified(): boolean {
-    return this.props.verified
+    return this.props.verified;
   }
 
   private constructor(props: UserProps, id?: UniqueGlobalId) {
@@ -72,7 +72,6 @@ export class User extends AggregateRoot<UserProps> {
       },
       id
     );
-
 
     return right(user);
   }

@@ -16,10 +16,7 @@ export class Secrets {
       this.instance = new Secrets(process.env.NODE_ENV as TEnv);
     }
 
-    const result = Guard.againstNullOrUndefined(
-      process.env[secret.toUpperCase()],
-      `Enviroment variable ${secret}`
-    );
+    const result = Guard.againstNullOrUndefined(process.env[secret.toUpperCase()], `Enviroment variable ${secret}`);
 
     if (result.isRight()) return process.env[secret.toUpperCase()] as string;
     throw new Error(`Unknow enviroment varible ${secret.toUpperCase()}`);

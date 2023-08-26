@@ -1,3 +1,3 @@
 export interface GetUserByUIDDTO {
-    uid: string
+  uid: string;
 }

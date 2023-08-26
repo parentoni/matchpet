@@ -3,13 +3,12 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
-  password: { type: String, required: true},
+  password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   cpf: { type: String, required: false },
-  role: {type: Number, required:true},
-  verified: {type: Boolean, required:true}
+  role: { type: Number, required: true },
+  verified: { type: Boolean, required: true }
 });
-
 
 export type IUserPersistant = {
   _id: string;

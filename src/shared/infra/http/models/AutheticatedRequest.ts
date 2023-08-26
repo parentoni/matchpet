@@ -1,6 +1,6 @@
-import express from 'express'
-import { JWTDTO } from '../../../../modules/user/domain/jwt'
+import express from "express";
+import { JWTDTO } from "../../../../modules/user/domain/jwt";
 
 export interface AuthenticatedRequest extends express.Request {
-    decoded: JWTDTO
+  decoded: JWTDTO;
 }

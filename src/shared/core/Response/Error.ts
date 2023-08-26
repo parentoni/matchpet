@@ -1,14 +1,12 @@
 import { Either } from "../Result";
-export type IBaseError = { errorMessage: string; location: string};
+export type IBaseError = { errorMessage: string; location: string };
 export type IBaseResponse = Either<BaseError<IBaseError>, success>;
 export type Iwatch<T> = { name: string; watch: T; error: string };
 export type success = true;
 
-
-
 export class BaseError<T extends IBaseError> {
   private value: T;
-  
+
   constructor(props: T) {
     this.value = props;
   }
@@ -16,7 +14,6 @@ export class BaseError<T extends IBaseError> {
   get error() {
     return this.value;
   }
-
 
   public prettyError() {
     return `[${this.value.location}]: ${this.value.errorMessage}`;

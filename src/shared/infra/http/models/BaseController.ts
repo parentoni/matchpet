@@ -8,10 +8,7 @@ import { GenericError } from "../../../core/Response/Error";
 import { AuthenticatedRequest } from "./AutheticatedRequest";
 import { Either } from "../../../core/Result";
 
-export type BaseControllerRequest<T extends Request> = (
-  req: T,
-  res: Response
-) => Promise<void | any> | void | any;
+export type BaseControllerRequest<T extends Request> = (req: T, res: Response) => Promise<void | any> | void | any;
 export type CatalogedErrors =
   | CommonUseCaseResult.Conflict
   | CommonUseCaseResult.InvalidValue
@@ -25,7 +22,7 @@ export abstract class BaseController<T extends Request> {
 
   // protected abstract executeImpl (req: express.Request, res: express.Response): Promise<void | any>;
 
-  public async execute(req: express.Request , res: express.Response): Promise<void> {
+  public async execute(req: express.Request, res: express.Response): Promise<void> {
     try {
       const userV = req.headers["accept-version"];
       const versionSearch = this.versionRegister.getVersion(userV as string | undefined);
@@ -41,9 +38,8 @@ export abstract class BaseController<T extends Request> {
         try {
           versionSearch.value(req as T, res);
         } catch (error) {
-          this.fail(res, error as Error)
+          this.fail(res, error as Error);
         }
-
       }
     } catch (err) {
       console.log(`[BaseController]: Uncaught controller error`);
@@ -119,11 +115,11 @@ export abstract class BaseController<T extends Request> {
       case CommonUseCaseResult.UnexpectedError:
         return this.fail(res, error.prettyError());
       case CommonUseCaseResult.Forbidden:
-        return this.forbidden(res, error.prettyError())
+        return this.forbidden(res, error.prettyError());
       case GenericError:
         return this.clientError(res, error.prettyError());
     }
 
-    this.fail(res, "Unknown error")
+    this.fail(res, "Unknown error");
   }
 }

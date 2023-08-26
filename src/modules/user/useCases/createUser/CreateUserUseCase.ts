@@ -20,7 +20,7 @@ import { UserCreated } from "../../domain/events/userCreated";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
-  
+
   constructor(repo: IUserRepo) {
     this.userRepo = repo;
   }
@@ -33,7 +33,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       first_name: request.first_name,
       last_name: request.last_name
     });
-    const roleOrError = UserRole.create({value: request.role || 0})
+    const roleOrError = UserRole.create({ value: request.role || 0 });
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, cpfOrError, nameOrError, roleOrError]);
     if (result.isLeft()) {
@@ -46,10 +46,13 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const name = nameOrError.getRight() as UserName;
     const role = roleOrError.getRight() as UserRole;
 
-    const hashedPassword = UserPassword.create({value: await password.getHashedValue(), hashed: true})
+    const hashedPassword = UserPassword.create({
+      value: await password.getHashedValue(),
+      hashed: true
+    });
     if (hashedPassword.isLeft()) {
-      return left(hashedPassword.value)
-    } 
+      return left(hashedPassword.value);
+    }
     const userOrError = User.create({
       name,
       email,
@@ -59,10 +62,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       verified: request.verified || false
       // role: UserRole.create({value: 0})
     });
-    
-    
-
-
 
     if (userOrError.isLeft()) {
       return left(userOrError.value);
@@ -116,8 +115,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       } else {
         return right(user);
       }
-
-      
     } catch (error) {
       return left(AppError.UnexpectedError.create(error));
     }

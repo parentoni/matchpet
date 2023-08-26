@@ -1,6 +1,6 @@
 import { Either, right, left } from "./Result";
 import { GenericError, IBaseError, success } from "./Response/Error";
-export type GuardError = GenericError<IBaseError>
+export type GuardError = GenericError<IBaseError>;
 export type GuardResponse = Either<GenericError<IBaseError>, success>;
 export interface IGuardArgument {
   argument: any;
@@ -52,7 +52,7 @@ export class Guard {
   }
 
   public static againstNullOrUndefined(argument: any, argumentName: string): GuardResponse {
-    if (argument === null || argument === undefined || argument === '') {
+    if (argument === null || argument === undefined || argument === "") {
       return left(
         GenericError.create({
           errorMessage: `${argumentName} is null or undefined`,
@@ -88,21 +88,14 @@ export class Guard {
     } else {
       return left(
         GenericError.create({
-          errorMessage: `${argumentName} isn't oneOf the correct types in ${JSON.stringify(
-            validValues
-          )}. Got "${value}".`,
+          errorMessage: `${argumentName} isn't oneOf the correct types in ${JSON.stringify(validValues)}. Got "${value}".`,
           location: `${Guard.name}.${this.isOneOf.name}`
         })
       );
     }
   }
 
-  public static inRange(
-    num: number,
-    min: number,
-    max: number,
-    argumentName: string
-  ): GuardResponse {
+  public static inRange(num: number, min: number, max: number, argumentName: string): GuardResponse {
     const isInRange = num >= min && num <= max;
     if (!isInRange) {
       return left(
@@ -116,12 +109,7 @@ export class Guard {
     }
   }
 
-  public static allInRange(
-    numbers: number[],
-    min: number,
-    max: number,
-    argumentName: string
-  ): GuardResponse {
+  public static allInRange(numbers: number[], min: number, max: number, argumentName: string): GuardResponse {
     let failingResult: GuardResponse | null = null;
 
     for (let num of numbers) {

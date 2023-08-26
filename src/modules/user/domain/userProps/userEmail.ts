@@ -19,9 +19,7 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
     return re.test(email);
   }
 
-  public static create(
-    props: IUserEmailProps
-  ): Either<CommonUseCaseResult.InvalidValue, UserEmail> {
+  public static create(props: IUserEmailProps): Either<CommonUseCaseResult.InvalidValue, UserEmail> {
     const propsResult = Guard.againstNullOrUndefined(props.value, "email");
 
     if (propsResult.isLeft()) {
@@ -57,8 +55,7 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
     ]);
 
     if (result.isRight()) {
-      const maskedName =
-        name.substring(0, 3) + "***" + name.substring(name.length - 3, name.length);
+      const maskedName = name.substring(0, 3) + "***" + name.substring(name.length - 3, name.length);
       return maskedName + "@" + domain;
     }
 

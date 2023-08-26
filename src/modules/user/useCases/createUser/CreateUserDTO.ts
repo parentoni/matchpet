@@ -5,5 +5,5 @@ export interface CreateUserDTO {
   password: string;
   cpf?: string;
   role?: number; //!Temporary,
-  verified?:boolean //!Temporary
+  verified?: boolean; //!Temporary
 }

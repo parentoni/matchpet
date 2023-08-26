@@ -3,4 +3,4 @@ import { BaseError, GenericError, IBaseError } from "../../../../shared/core/Res
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { User } from "../../domain/user";
 
-export type GetUserByUIDResponse = Promise<Either<CommonUseCaseResult.InvalidValue | GenericError<IBaseError>, User>>
+export type GetUserByUIDResponse = Promise<Either<CommonUseCaseResult.InvalidValue | GenericError<IBaseError>, User>>;

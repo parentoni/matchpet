@@ -25,9 +25,7 @@ export class VersionControl<T> {
         this.register[version] = value;
       } else {
         //In case of register error application must raise error.
-        throw new RangeError(
-          `[VersionRegister(register)]: ${guardAlreadyInRegister.value.error.errorMessage}`
-        );
+        throw new RangeError(`[VersionRegister(register)]: ${guardAlreadyInRegister.value.error.errorMessage}`);
       }
     } else {
       //In case of register error application must raise error.

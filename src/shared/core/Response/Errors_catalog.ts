@@ -1,11 +1,12 @@
-
-export interface IBaseResponse {message: string, location: string}
+export interface IBaseResponse {
+  message: string;
+  location: string;
+}
 
 export class BaseResponse<T extends IBaseResponse> {
-    private value: T;
+  private value: T;
 
-    constructor (props: T) {
-        this.value = props
-    }
-
+  constructor(props: T) {
+    this.value = props;
+  }
 }

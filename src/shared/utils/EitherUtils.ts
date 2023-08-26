@@ -1,5 +1,6 @@
 import { success } from "../core/Response/Error";
-import { Either, left, right } from "../core/Result";
+import { Either, Right, left, right } from "../core/Result";
+
 export class EitherUtils {
   public static combine<L>(array: Either<L, any>[]): Either<L, success> {
     for (let index = 0; index < array.length; index++) {

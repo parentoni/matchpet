@@ -1,3 +1,3 @@
 export interface FindSpecieByIdDTO {
-    id: string
+  id: string;
 }

@@ -12,31 +12,34 @@ import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
 
-
 export class UserMap {
-  static async toDomain(
-    persistance: IUserPersistant
-  ): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
+  static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
     const userEmailOrError = UserEmail.create({ value: persistance.email });
-    const userPasswordOrError = UserPassword.create({ value: persistance.password, hashed: true });
+    const userPasswordOrError = UserPassword.create({
+      value: persistance.password,
+      hashed: true
+    });
     const userCpfOrError = UserCpf.create({ value: persistance.cpf });
     const userNameOrError = UserName.create({
       first_name: persistance.first_name,
       last_name: persistance.last_name
     });
-    const userRoleOrError = UserRole.create({value: persistance.role})
+    const userRoleOrError = UserRole.create({ value: persistance.role });
 
     const result = EitherUtils.combine([userCpfOrError, userPasswordOrError, userCpfOrError, userRoleOrError]);
 
     if (result.isRight()) {
-      const userOrError = User.create({
-        name: userNameOrError.value as UserName,
-        email: userEmailOrError.value as UserEmail,
-        password: userPasswordOrError.value as UserPassword,
-        role: userRoleOrError.value as UserRole,
-        cpf: userCpfOrError.isRight() ? userCpfOrError.value : undefined,
-        verified: persistance.verified
-      }, new UniqueGlobalId(persistance._id));
+      const userOrError = User.create(
+        {
+          name: userNameOrError.value as UserName,
+          email: userEmailOrError.value as UserEmail,
+          password: userPasswordOrError.value as UserPassword,
+          role: userRoleOrError.value as UserRole,
+          cpf: userCpfOrError.isRight() ? userCpfOrError.value : undefined,
+          verified: persistance.verified
+        },
+        new UniqueGlobalId(persistance._id)
+      );
 
       if (userOrError.isRight()) {
         return right(userOrError.value);
@@ -48,9 +51,7 @@ export class UserMap {
     return left(result.value);
   }
 
-  static async toPersistant(
-    user: User
-  ): Promise<Either<AppError.UnexpectedError, IUserPersistant>> {
+  static async toPersistant(user: User): Promise<Either<AppError.UnexpectedError, IUserPersistant>> {
     let password = null;
 
     if (!!user.password === true) {
