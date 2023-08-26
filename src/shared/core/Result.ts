@@ -16,8 +16,10 @@ export class Left<L, A> {
   }
 
   getRight() {
-    return null;
+    return null as A;
   }
+
+
 }
 
 export class Right<L, A> {
