@@ -23,6 +23,26 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
     return this._id;
   }
 
+  get name():string {
+    return this.props.name
+  }
+
+  get svg():ValidUrl {
+    return this.props.svg
+  }
+
+  get optional():boolean {
+    return this.props.optional
+  }
+
+  get category():string {
+    return this.props.category
+  }
+
+  get options():string[] {
+    return this.props.options
+  }
+
   public static create(props: SpecieTraitProps, id?: UniqueGlobalId): Either<GuardError, SpecieTrait> {
     const guardResponse = Guard.againstNullOrUndefinedBulk([
       { argument: props.name, argumentName: "SPECIE_PROPS_NAME" },
@@ -45,4 +65,5 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
 
     return right(new SpecieTrait({ ...props, name: props.name.toString() }, id));
   }
+
 }

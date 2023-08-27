@@ -4,7 +4,7 @@ import { Either, right, left } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
 
 export class AnimalName extends ValueObject<{ value: string }> {
-  get value(): any {
+  get value(): string {
     return this.props.value;
   }
 

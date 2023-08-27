@@ -1,5 +1,6 @@
 import { Guard, GuardError, GuardResponse } from "../../../shared/core/Guard";
 import { Either, left, right } from "../../../shared/core/Result";
+import { Timestamp } from "../../../shared/core/Timestamp";
 import { ValidUrl } from "../../../shared/core/ValidUrl";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
@@ -14,14 +15,20 @@ export interface IAnimalProps {
   age: AnimalAge;
   image: ValidUrl;
   specieId: UniqueGlobalId;
-  // animalTrait: AnimalTrait[];
+  animalTrait: AnimalTrait[];
+  createdAt: Timestamp
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
 
 export class Animal extends AggregateRoot<IAnimalProps> {
+
   get donatorId(): UniqueGlobalId {
     return this.props.donatorId;
+  }
+
+  get specieId(): UniqueGlobalId {
+    return this.props.specieId
   }
 
   get name(): AnimalName {
@@ -36,13 +43,21 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.image;
   }
 
-  public static create(props: IAnimalProps): AnimalCreateResponse {
+  get animalTraits(): AnimalTrait[] {
+    return this.props.animalTrait || []
+  }
+
+  get createdAt():Timestamp {
+    return this.props.createdAt
+  }
+
+  public static create(props: IAnimalProps, id?: UniqueGlobalId): AnimalCreateResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argumentName: "NAME", argument: props.name },
       { argumentName: "AGE", argument: props.age },
       { argumentName: "IMAGE", argument: props.image },
       { argumentName: "DONATOR_ID", argument: props.donatorId },
-      // { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait }
+      { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait}
     ]);
 
     if (guardResult.isLeft()) {
@@ -52,7 +67,7 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return right(
       new Animal({
         ...props
-      })
+      }, id)
     );
   }
 }

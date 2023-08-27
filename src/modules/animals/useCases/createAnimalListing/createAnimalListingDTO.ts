@@ -8,6 +8,6 @@ export interface CreateAnimalListingDTO {
 }
 
 export interface CreateAnimalListingTraitsDTO {
-  id: string,
+  _id: string,
   value: string
 }

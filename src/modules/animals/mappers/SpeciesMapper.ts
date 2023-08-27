@@ -19,12 +19,12 @@ export class SpeciesMapper {
         return left(svgInUrl.value);
       }
 
-      const specieTrait = SpecieTrait.create({ ...option, svg: svgInUrl.value }, new UniqueGlobalId(option._id));
-
+      const specieTrait = SpecieTrait.create({ ...option, svg: svgInUrl.value }, new UniqueGlobalId(String(option._id)));
       if (specieTrait.isLeft()) {
         return left(specieTrait.value);
       }
 
+      console.log(specieTrait.value.specieTraitId.toValue(), option._id)
       specieTraitsArray.push(specieTrait.value);
     }
 

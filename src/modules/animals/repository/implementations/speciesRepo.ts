@@ -8,7 +8,7 @@ import { SpeciesMapper } from "../../mappers/SpeciesMapper";
 import { ISpecieRepo } from "../ISpeciesRepo";
 
 export class SpecieRepo implements ISpecieRepo {
-  // Por mais que a regra de inversao exiga uma inversao do modelo, por usarmos MONGO,
+  // Por mais que a regra de inversao exiga uma injecao do modelo, por usarmos MONGO,
   // q nao é SQL, nao faz sentido fazer a inversao do modelo MONGO, visto que qualquer mudanca no banco de dados exigira
   // uma mudanca geral.
   async save(specie: Specie): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {

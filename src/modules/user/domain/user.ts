@@ -10,6 +10,7 @@ import { UserCreated } from "./events/userCreated";
 import { UserCpf } from "./userProps/userCpf";
 import { UserName } from "./userProps/userName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
+import { Timestamp } from "../../../shared/core/Timestamp";
 
 export interface UserProps {
   name: UserName;

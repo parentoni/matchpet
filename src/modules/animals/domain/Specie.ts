@@ -1,7 +1,9 @@
 import { Guard, GuardError } from "../../../shared/core/Guard";
+import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { Either, left, right } from "../../../shared/core/Result";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
+import { AnimalTrait } from "./animal/AnimalTraits";
 import { SpecieTrait } from "./animal/SpecieTraits";
 
 export interface SpecieProps {
@@ -38,5 +40,30 @@ export class Specie extends AggregateRoot<SpecieProps> {
         )
       );
     }
+  }
+
+  public validateArrayOfAnimalTraits(animalTraits: AnimalTrait[]):Either<CommonUseCaseResult.InvalidValue, null> {
+    for (const specieTrait of this.traits) {
+      const found = animalTraits.find(el => el._id.equals(specieTrait.specieTraitId))
+      if (!(!!found) && !specieTrait.optional) {
+        return left(CommonUseCaseResult.InvalidValue.create({
+          location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
+          errorMessage: `Obriogatory trait ${specieTrait.name} not provided.`,
+          variable: "TRAIT_ID"
+        }))
+      }
+
+      if (!!found) {
+        if (!specieTrait.options.includes(found.value)) {
+          return left(CommonUseCaseResult.InvalidValue.create({
+            location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
+            errorMessage: `Value "${found.value}" not found in options list "${specieTrait.options}".`,
+            variable: "VALUE"
+          }))
+        }
+      }
+    }
+
+    return right(null)
   }
 }
