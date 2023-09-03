@@ -3,8 +3,12 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either, left, right } from "../../../../shared/core/Result";
 import { AnimalModel } from "../../../../shared/infra/database/models/Animal";
 import { Animal } from "../../domain/Animal";
+import { ANIMAL_STATUS } from "../../domain/animal/AnimalStatus";
 import { AnimalMapper } from "../../mappers/AnimalMapper";
+import { FILTER_MODES, FilterObject } from "../../useCases/filterAnimals/filterAnimalsDTO";
 import { IAnimalRepo } from "../IAnimalRepo";
+
+export type DBFilter = Record<string, Record<string, any>>
 
 export class AnimalRepo implements IAnimalRepo {
   
@@ -54,8 +58,8 @@ export class AnimalRepo implements IAnimalRepo {
       const results = await AnimalModel.aggregate([
         // First phase, filter all available same specie animals
         {$match: {"specie_id": specieId, "status": "PENDING","_id": {$ne: excludeId}}},
-        //Second phase, sample 300 random animals for performance resasons
-        {$sample: {size:300}},
+        //Second phase, sample 1000 random animals for performance resasons
+        {$sample: {size:1000}},
 
         
         // Third phase, unwind traits
@@ -104,4 +108,30 @@ export class AnimalRepo implements IAnimalRepo {
 
 
   }
+
+  async findBulk(filter: FilterObject[], skip: number, limit:number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>> {
+    try {
+      const dbFilter: DBFilter = {}
+      for (const ind_filter of filter) {
+        const comparation: Record<string, any> = {}
+        comparation[ind_filter.mode] = ind_filter.comparation_value
+        dbFilter[ind_filter.key] = comparation
+      }
+
+      const result = await AnimalModel.find(dbFilter).limit(limit).skip(skip)
+      const animalArray: Animal[] = []
+
+      for (const persistenceAnimal of result) {
+        const mapperResult = AnimalMapper.toDomain(persistenceAnimal.toObject())
+        if (mapperResult.isRight()) {
+          animalArray.push(mapperResult.value)
+        }
+      }
+      return right(animalArray)
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+    
+  }
+  
 }
