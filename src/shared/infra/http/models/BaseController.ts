@@ -1,6 +1,5 @@
 import * as express from "express";
 import { Request, Response } from "express";
-import semver from "semver";
 import { VersionControl, VersionControlRegister } from "../../../core/VersionControl";
 import { CommonUseCaseResult } from "../../../core/Response/UseCaseError";
 import { AppError } from "../../../core/Response/AppError";

@@ -7,6 +7,12 @@ export type VersionControlRegister<T> = {
   [x in string]: T;
 };
 
+/**
+ * {"2.0.0": x,
+ * "1.0.0": y}
+ * typeof x == y
+ */
+
 export class VersionControl<T> {
   public register: VersionControlRegister<T> = {};
   protected defaultVersion: string;

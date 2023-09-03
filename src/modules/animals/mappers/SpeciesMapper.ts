@@ -3,28 +3,43 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { Either, left, right } from "../../../shared/core/Result";
 import { ValidUrl } from "../../../shared/core/ValidUrl";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
-import { ISpeciePersistent, ISpecieTraitPersistent } from "../../../shared/infra/database/models/Specie";
+import { ISpeciePersistent, ISpecieTraitOptionsPersistent, ISpecieTraitPersistent } from "../../../shared/infra/database/models/Specie";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { Specie } from "../domain/Specie";
+import { SpecieTraitOption } from "../domain/animal/SpecieTraitOption";
 import { SpecieTrait } from "../domain/animal/SpecieTraits";
 
 export class SpeciesMapper {
   static toDomain(persistent: ISpeciePersistent): Either<GuardError | CommonUseCaseResult.InvalidValue, Specie> {
     const specieTraitsArray: SpecieTrait[] = [];
 
-    for (const option of persistent.traits) {
-      const svgInUrl = ValidUrl.create({ value: option.svg });
+    for (const trait of persistent.traits) {
+      const svgInUrl = ValidUrl.create({ value: trait.svg });
 
       if (svgInUrl.isLeft()) {
         return left(svgInUrl.value);
       }
 
-      const specieTrait = SpecieTrait.create({ ...option, svg: svgInUrl.value }, new UniqueGlobalId(String(option._id)));
+      const options: SpecieTraitOption[] = []
+
+      for (const string_option of trait.options) {
+        const optionOrError = SpecieTraitOption.create({
+          name: string_option.name,
+        }, new UniqueGlobalId(string_option._id.toString()))
+
+        if (optionOrError.isLeft()) {
+          return left(optionOrError.value)
+        }
+
+        options.push(optionOrError.value)
+      }
+
+      const specieTrait = SpecieTrait.create({ ...trait, options: options, svg: svgInUrl.value }, new UniqueGlobalId(String(trait._id)));
       if (specieTrait.isLeft()) {
         return left(specieTrait.value);
       }
 
-      console.log(specieTrait.value.specieTraitId.toValue(), option._id)
+      console.log(specieTrait.value.specieTraitId.toValue(), trait._id);
       specieTraitsArray.push(specieTrait.value);
     }
 
@@ -40,11 +55,21 @@ export class SpeciesMapper {
     try {
       const persistentSpecieTraitsArray: ISpecieTraitPersistent[] = [];
 
-      for (const option of specie.traits) {
+      for (const trait of specie.traits) {
+
+        const options : ISpecieTraitOptionsPersistent[] = []
+        for (const domain_option of trait.options) {
+          options.push({
+            _id: domain_option.optionId.toValue(),
+            name: domain_option.props.name
+          })
+        }
+
         persistentSpecieTraitsArray.push({
-          ...option.props,
-          svg: option.props.svg.value,
-          _id: option.specieTraitId.toValue()
+          ...trait.props,
+          options: options,
+          svg: trait.svg.value,
+          _id: trait.specieTraitId.toValue()
         });
       }
 

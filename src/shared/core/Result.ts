@@ -18,8 +18,6 @@ export class Left<L, A> {
   getRight() {
     return null as A;
   }
-
-
 }
 
 export class Right<L, A> {

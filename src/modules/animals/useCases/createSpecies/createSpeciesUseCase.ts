@@ -4,6 +4,7 @@ import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { ValidUrl } from "../../../../shared/core/ValidUrl";
 import { Specie } from "../../domain/Specie";
+import { SpecieTraitOption } from "../../domain/animal/SpecieTraitOption";
 import { SpecieTrait } from "../../domain/animal/SpecieTraits";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { CreateSpeciesDto } from "./createSpeciesDTO";
@@ -35,8 +36,24 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
         return left(urlOrError.value);
       }
 
+      const options: SpecieTraitOption[] = []
+      
+      // Create options
+      for (const string_option of trait.options) {
+        const optionOrError = SpecieTraitOption.create({
+          name: string_option
+        })
+
+        if (optionOrError.isLeft()) {
+          return left(optionOrError.value)
+        }
+
+        options.push(optionOrError.value)
+      }
+
       const traitOrError = SpecieTrait.create({
         ...trait,
+        options: options,
         svg: urlOrError.value,
         optional: Boolean(trait.optional)
       });

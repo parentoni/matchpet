@@ -4,10 +4,10 @@ export interface CreateAnimalListingDTO {
   age: number;
   donatorId: string;
   specie_id: string;
-  traits: CreateAnimalListingTraitsDTO[]
+  traits: CreateAnimalListingTraitsDTO[];
 }
 
 export interface CreateAnimalListingTraitsDTO {
-  _id: string,
-  value: string
+  _id: string;
+  value: string;
 }

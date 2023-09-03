@@ -14,7 +14,7 @@ import { LoginResponse } from "./loginResponse";
 
 export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
   private userRepo: IUserRepo;
-  constructor(userRepo: IUserRepo, authService: IAuthService) {
+  constructor(userRepo: IUserRepo) {
     this.userRepo = userRepo;
   }
 

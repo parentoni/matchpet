@@ -5,13 +5,14 @@ import { ValidUrl } from "../../../../shared/core/ValidUrl";
 import { Entity } from "../../../../shared/domain/Entity";
 import { UniqueGlobalId } from "../../../../shared/domain/UniqueGlobalD";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
+import { SpecieTraitOption } from "./SpecieTraitOption";
 
 export interface SpecieTraitProps {
   name: string;
   svg: ValidUrl;
   optional: boolean;
   category: string;
-  options: string[];
+  options: SpecieTraitOption[];
 }
 
 export class SpecieTrait extends Entity<SpecieTraitProps> {
@@ -23,24 +24,24 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
     return this._id;
   }
 
-  get name():string {
-    return this.props.name
+  get name(): string {
+    return this.props.name;
   }
 
-  get svg():ValidUrl {
-    return this.props.svg
+  get svg(): ValidUrl {
+    return this.props.svg;
   }
 
-  get optional():boolean {
-    return this.props.optional
+  get optional(): boolean {
+    return this.props.optional;
   }
 
-  get category():string {
-    return this.props.category
+  get category(): string {
+    return this.props.category;
   }
 
-  get options():string[] {
-    return this.props.options
+  get options(): SpecieTraitOption[] {
+    return this.props.options;
   }
 
   public static create(props: SpecieTraitProps, id?: UniqueGlobalId): Either<GuardError, SpecieTrait> {
@@ -49,21 +50,14 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
       { argument: props.svg, argumentName: "SPECIE_PROPS_SVG" },
       { argument: props.category, argumentName: "SPECIE_PROPS_CATEGORY" },
       { argument: props.options, argumentName: "SPECIE_PROPS_OPTIONS" },
-      { argument: props.optional, argumentName: "SPECIE_PROPS_OPTIONAL" }
+      { argument: props.optional, argumentName: "SPECIE_PROPS_OPTIONAL" },
+      {argument: props.options, argumentName: "SPECIFIC_PROPS_OPTIONS"}
     ]);
 
     if (guardResponse.isLeft()) {
       return left(guardResponse.value);
     }
 
-    for (let option of props.options) {
-      const optionGuardResponse = Guard.againstNullOrUndefined(option, "SPECIE_PROPS_SPECIFIC_OPTION");
-      if (optionGuardResponse.isLeft()) {
-        return left(optionGuardResponse.value);
-      }
-    }
-
     return right(new SpecieTrait({ ...props, name: props.name.toString() }, id));
   }
-
 }

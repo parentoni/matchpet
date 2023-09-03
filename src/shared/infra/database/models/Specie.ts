@@ -1,11 +1,15 @@
 import mongoose, { Mongoose } from "mongoose";
 
+const specieTraitOption = new mongoose.Schema({
+  name: {type: String}
+})
+
 const specieTrait = new mongoose.Schema({
   name: { type: String, required: true },
   svg: { type: String, required: true },
   optional: { type: Boolean, required: true },
   category: { type: String, required: true },
-  options: { type: [String], required: true }
+  options: { type: [specieTraitOption], required: true }
 });
 
 const specieSchema = new mongoose.Schema({
@@ -25,7 +29,12 @@ export interface ISpecieTraitPersistent {
   svg: string;
   optional: boolean;
   category: string;
-  options: string[];
+  options: ISpecieTraitOptionsPersistent[];
+}
+
+export interface ISpecieTraitOptionsPersistent {
+  _id:string,
+  name:string,
 }
 
 const specieModel = mongoose.model("specie", specieSchema);

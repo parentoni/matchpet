@@ -7,6 +7,7 @@ import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserId } from "../../user/domain/userProps/userId";
 import { AnimalAge } from "./animal/AnimalAge";
 import { AnimalName } from "./animal/AnimalName";
+import { AnimalStatus } from "./animal/AnimalStatus";
 import { AnimalTrait } from "./animal/AnimalTraits";
 
 export interface IAnimalProps {
@@ -16,19 +17,19 @@ export interface IAnimalProps {
   image: ValidUrl;
   specieId: UniqueGlobalId;
   animalTrait: AnimalTrait[];
-  createdAt: Timestamp
+  createdAt: Timestamp;
+  status: AnimalStatus;
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
 
 export class Animal extends AggregateRoot<IAnimalProps> {
-
   get donatorId(): UniqueGlobalId {
     return this.props.donatorId;
   }
 
   get specieId(): UniqueGlobalId {
-    return this.props.specieId
+    return this.props.specieId;
   }
 
   get name(): AnimalName {
@@ -44,11 +45,15 @@ export class Animal extends AggregateRoot<IAnimalProps> {
   }
 
   get animalTraits(): AnimalTrait[] {
-    return this.props.animalTrait || []
+    return this.props.animalTrait || [];
   }
 
-  get createdAt():Timestamp {
-    return this.props.createdAt
+  get createdAt(): Timestamp {
+    return this.props.createdAt;
+  }
+
+  get animalStatus(): AnimalStatus {
+    return this.props.status;
   }
 
   public static create(props: IAnimalProps, id?: UniqueGlobalId): AnimalCreateResponse {
@@ -57,7 +62,8 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "AGE", argument: props.age },
       { argumentName: "IMAGE", argument: props.image },
       { argumentName: "DONATOR_ID", argument: props.donatorId },
-      { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait}
+      { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait },
+      { argumentName: "ANIMAL_STATUS", argument: props.status }
     ]);
 
     if (guardResult.isLeft()) {
@@ -65,9 +71,12 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     }
 
     return right(
-      new Animal({
-        ...props
-      }, id)
+      new Animal(
+        {
+          ...props
+        },
+        id
+      )
     );
   }
 }

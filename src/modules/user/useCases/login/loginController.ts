@@ -19,5 +19,10 @@ export class LoginController extends BaseController<Request> {
         });
       }
     });
+
+
+    this.versionRegister.addToRegister("2.0.0", async (req: Request, res: Response) => {
+      this.ok(res)
+    })
   }
 }

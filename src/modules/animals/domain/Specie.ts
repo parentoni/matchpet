@@ -42,28 +42,44 @@ export class Specie extends AggregateRoot<SpecieProps> {
     }
   }
 
-  public validateArrayOfAnimalTraits(animalTraits: AnimalTrait[]):Either<CommonUseCaseResult.InvalidValue, null> {
+  public validateArrayOfAnimalTraits(animalTraits: AnimalTrait[]): Either<CommonUseCaseResult.InvalidValue, AnimalTrait[]> {
+    const traits: AnimalTrait[] = []
     for (const specieTrait of this.traits) {
-      const found = animalTraits.find(el => el._id.equals(specieTrait.specieTraitId))
+      const found = animalTraits.find((el) => el._id.equals(specieTrait.specieTraitId));
       if (!(!!found) && !specieTrait.optional) {
-        return left(CommonUseCaseResult.InvalidValue.create({
-          location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
-          errorMessage: `Obriogatory trait ${specieTrait.name} not provided.`,
-          variable: "TRAIT_ID"
-        }))
+        return left(
+          CommonUseCaseResult.InvalidValue.create({
+            location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
+            errorMessage: `Obriogatory trait ${specieTrait.name} not provided.`,
+            variable: "TRAIT_ID"
+          })
+        );
       }
 
       if (!!found) {
-        if (!specieTrait.options.includes(found.value)) {
+        let optionFound = false
+        for (const option of specieTrait.options) {
+
+          if (option.optionId.toValue() === found.value) {
+            optionFound = true
+          }
+        }
+
+        
+        if (optionFound === false) {
           return left(CommonUseCaseResult.InvalidValue.create({
             location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
-            errorMessage: `Value "${found.value}" not found in options list "${specieTrait.options}".`,
+            errorMessage: `Value "${found.value}}" not found in options list "${JSON.stringify(specieTrait.options)}".`,
             variable: "VALUE"
           }))
         }
+
+        traits.push(found)
       }
+
+      
     }
 
-    return right(null)
+    return right(traits);
   }
 }
