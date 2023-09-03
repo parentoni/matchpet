@@ -4,6 +4,7 @@ import { createSpeciesController } from "../../../useCases/createSpecies";
 import { speciesRouter } from "./species";
 import { createAnimalListingController } from "../../../useCases/createAnimalListing";
 import { getAnimalListingByIdController } from "../../../useCases/getAnimalListingById";
+import { reccommendSimilarAnimalsController } from "../../../useCases/reccommendSimilarAnimals";
 
 const animalsRouter = express.Router();
 
@@ -13,5 +14,7 @@ animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnima
 animalsRouter.post("/filter");
 
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
+animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
+
 
 export { animalsRouter };

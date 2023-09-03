@@ -34,11 +34,7 @@ export abstract class BaseController<T extends Request> {
           this.notFound(res, `Version ${userV} not found, current version: ${maxV.value}`);
         }
       } else {
-        try {
-          versionSearch.value(req as T, res);
-        } catch (error) {
-          this.fail(res, error as Error);
-        }
+        versionSearch.value(req as T, res);
       }
     } catch (err) {
       console.log(`[BaseController]: Uncaught controller error`);
