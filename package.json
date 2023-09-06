@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start:public": "cd public/app && cross-env NODE_ENV=development npm start",
     "start:dev": "cross-env NODE_ENV=development nodemon",
     "test": "jest --config jest.config.js --runInBand --no-cache --detectOpenHandles",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
