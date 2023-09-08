@@ -11,18 +11,19 @@ import { AnimalAge } from "../domain/animal/AnimalAge";
 import { AnimalImages } from "../domain/animal/AnimalImages";
 import { AnimalName } from "../domain/animal/AnimalName";
 import { AnimalStatus } from "../domain/animal/AnimalStatus";
-import { AnimalTrait } from "../domain/animal/AnimalTraits";
+import { AnimalTrait } from "../domain/animal/AnimalTrait";
+import { AnimalTraits } from "../domain/animal/AnimalTraits";
 
 export class AnimalMapper {
   public static toDomain(persistent: IAnimalPersistent): Either<GuardError, Animal> {
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalAgeOrError = AnimalAge.create({ months: persistent.age });
-    const animalImageOrError = AnimalImages.createFromPersistent(persistent.image)
+    const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
     const animalCreatedAt = Timestamp.create(persistent.created_at);
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id);
     const animalIdOrError = UniqueGlobalId.createExisting(persistent._id);
-    const animalTraitsOrError = AnimalTrait.create_bulk(persistent.traits);
+    const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -71,12 +72,6 @@ export class AnimalMapper {
 
   public static toPersistent(domain: Animal): Either<CommonUseCaseResult.UnexpectedError, IAnimalPersistent> {
     try {
-      const traitsPersistentArray: IAnimalTraitsPersistent[] = [];
-
-      for (const trait of domain.animalTraits) {
-        traitsPersistentArray.push({ _id: trait._id.toValue(), value: trait.value });
-      }
-
       return right({
         _id: domain.id.toValue(),
         name: domain.name.value,
@@ -85,7 +80,7 @@ export class AnimalMapper {
         donator_id: domain.donatorId.toValue(),
         specie_id: domain.specieId.toValue(),
         created_at: domain.createdAt.value,
-        traits: traitsPersistentArray,
+        traits: domain.animalTraits.persistentValue,
         status: domain.animalStatus.value
       });
     } catch (error) {

@@ -28,7 +28,7 @@ export class ReccommendSimilarAnimalsUseCase implements UseCase<ReccommendSimila
 
     const optionIdArray: string[] = [];
 
-    for (const trait of animal.value.animalTraits) {
+    for (const trait of animal.value.animalTraits.list) {
       optionIdArray.push(trait.value);
     }
     const result = await this.animalRepo.findSimilar(animal.value.id.toValue(), animal.value.specieId.toValue(), optionIdArray);

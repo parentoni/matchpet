@@ -4,10 +4,10 @@ import { CommonUseCaseResult } from "./Response/UseCaseError";
 import { Either, left, right } from "./Result";
 
 export interface ValidUrlProps {
-  value:string
+  value: string;
 }
 
-export type ValidUrlCreateResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, ValidUrl>
+export type ValidUrlCreateResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, ValidUrl>;
 export class ValidUrl extends ValueObject<ValidUrlProps> {
   get value(): string {
     return this.props.value;

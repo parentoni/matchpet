@@ -3,7 +3,8 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { Either, left, right } from "../../../shared/core/Result";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
-import { AnimalTrait } from "./animal/AnimalTraits";
+import { AnimalTrait } from "./animal/AnimalTrait";
+import { AnimalTraits } from "./animal/AnimalTraits";
 import { SpecieTrait } from "./animal/SpecieTraits";
 
 export interface SpecieProps {
@@ -42,10 +43,10 @@ export class Specie extends AggregateRoot<SpecieProps> {
     }
   }
 
-  public validateArrayOfAnimalTraits(animalTraits: AnimalTrait[]): Either<CommonUseCaseResult.InvalidValue, AnimalTrait[]> {
+  public validateArrayOfAnimalTraits(animalTraits: AnimalTraits): Either<CommonUseCaseResult.InvalidValue, AnimalTraits> {
     const traits: AnimalTrait[] = [];
     for (const specieTrait of this.traits) {
-      const found = animalTraits.find((el) => el._id.equals(specieTrait.specieTraitId));
+      const found = animalTraits.list.find((el) => el._id.equals(specieTrait.specieTraitId));
       if (!!!found && !specieTrait.optional) {
         return left(
           CommonUseCaseResult.InvalidValue.create({
@@ -78,6 +79,6 @@ export class Specie extends AggregateRoot<SpecieProps> {
       }
     }
 
-    return right(traits);
+    return right(AnimalTraits.create(traits));
   }
 }

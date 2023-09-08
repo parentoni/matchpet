@@ -11,7 +11,8 @@ import { AnimalAge } from "../../domain/animal/AnimalAge";
 import { AnimalImages } from "../../domain/animal/AnimalImages";
 import { AnimalName } from "../../domain/animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "../../domain/animal/AnimalStatus";
-import { AnimalTrait } from "../../domain/animal/AnimalTraits";
+import { AnimalTrait } from "../../domain/animal/AnimalTrait";
+import { AnimalTraits } from "../../domain/animal/AnimalTraits";
 import { IAnimalRepo } from "../../repository/IAnimalRepo";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { CreateAnimalListingDTO } from "./createAnimalListingDTO";
@@ -29,8 +30,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
   async execute(request: CreateAnimalListingDTO): Promise<CreateAnimalListingResponse> {
     const animalNameOrError = AnimalName.create({ value: request.name });
     const animalAgeOrError = AnimalAge.create({ months: request.age });
-    const animalImageOrError = AnimalImages.createFromPersistent(request.image_url)
-    const animalSpecieTraitsOrError = AnimalTrait.create_bulk(request.traits);
+    const animalImageOrError = AnimalImages.createFromPersistent(request.image_url);
+    const animalSpecieTraitsOrError = AnimalTraits.createFromPersistent(request.traits);
     const animalCreatedTimespamp = Timestamp.create();
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);

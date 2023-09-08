@@ -9,7 +9,8 @@ import { AnimalAge } from "./animal/AnimalAge";
 import { AnimalImages } from "./animal/AnimalImages";
 import { AnimalName } from "./animal/AnimalName";
 import { AnimalStatus } from "./animal/AnimalStatus";
-import { AnimalTrait } from "./animal/AnimalTraits";
+import { AnimalTrait } from "./animal/AnimalTrait";
+import { AnimalTraits } from "./animal/AnimalTraits";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -17,7 +18,7 @@ export interface IAnimalProps {
   age: AnimalAge;
   image: AnimalImages;
   specieId: UniqueGlobalId;
-  animalTrait: AnimalTrait[];
+  animalTrait: AnimalTraits;
   createdAt: Timestamp;
   status: AnimalStatus;
 }
@@ -45,8 +46,8 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.image;
   }
 
-  get animalTraits(): AnimalTrait[] {
-    return this.props.animalTrait || [];
+  get animalTraits(): AnimalTraits {
+    return this.props.animalTrait;
   }
 
   get createdAt(): Timestamp {
