@@ -3,7 +3,7 @@ export interface CreateUserDTO {
   last_name: string;
   email: string;
   password: string;
-  cpf?: string;
+  phone: string;
   role?: number; //!Temporary,
   verified?: boolean; //!Temporary
 }

@@ -17,5 +17,4 @@ animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req,
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
 
-
 export { animalsRouter };

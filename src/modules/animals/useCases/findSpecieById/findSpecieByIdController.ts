@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { FindSpecieByIdUseCase } from "./findSpecieByIdUseCase";
-import { FindSpecieByIdDTO } from "./FindSpecieByIdDTO";
+import { FindSpecieByIdDTO } from "./findSpecieByIdDTO";
 import { Guard } from "../../../../shared/core/Guard";
 
 export class FindSpecieByIdController extends BaseController<Request> {

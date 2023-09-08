@@ -1,3 +1,3 @@
 export interface ReccommendSimilarAnimalsDTO {
-    id: string
+  id: string;
 }

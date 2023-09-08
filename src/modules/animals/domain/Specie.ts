@@ -43,10 +43,10 @@ export class Specie extends AggregateRoot<SpecieProps> {
   }
 
   public validateArrayOfAnimalTraits(animalTraits: AnimalTrait[]): Either<CommonUseCaseResult.InvalidValue, AnimalTrait[]> {
-    const traits: AnimalTrait[] = []
+    const traits: AnimalTrait[] = [];
     for (const specieTrait of this.traits) {
       const found = animalTraits.find((el) => el._id.equals(specieTrait.specieTraitId));
-      if (!(!!found) && !specieTrait.optional) {
+      if (!!!found && !specieTrait.optional) {
         return left(
           CommonUseCaseResult.InvalidValue.create({
             location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
@@ -57,27 +57,25 @@ export class Specie extends AggregateRoot<SpecieProps> {
       }
 
       if (!!found) {
-        let optionFound = false
+        let optionFound = false;
         for (const option of specieTrait.options) {
-
           if (option.optionId.toValue() === found.value) {
-            optionFound = true
+            optionFound = true;
           }
         }
 
-        
         if (optionFound === false) {
-          return left(CommonUseCaseResult.InvalidValue.create({
-            location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
-            errorMessage: `Value "${found.value}}" not found in options list "${JSON.stringify(specieTrait.options)}".`,
-            variable: "VALUE"
-          }))
+          return left(
+            CommonUseCaseResult.InvalidValue.create({
+              location: `${Specie.name}.${this.validateArrayOfAnimalTraits.name}`,
+              errorMessage: `Value "${found.value}}" not found in options list "${JSON.stringify(specieTrait.options)}".`,
+              variable: "VALUE"
+            })
+          );
         }
 
-        traits.push(found)
+        traits.push(found);
       }
-
-      
     }
 
     return right(traits);

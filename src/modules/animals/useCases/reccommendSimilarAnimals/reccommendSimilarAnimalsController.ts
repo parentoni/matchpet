@@ -4,18 +4,17 @@ import { ReccommendSimilarAnimalsUseCase } from "./reccommendSimilarAnimalsUseCa
 import { ReccommendSimilarAnimalsDTO } from "./reccommendSimilarAnimalsDTO";
 
 export class ReccommendSimilarAnimalsController extends BaseController<Request> {
-    constructor(reccommendSimilarAnimalsUseCase:ReccommendSimilarAnimalsUseCase) {
-        super();
-        this.versionRegister.addToRegister('1.0.0', async (req: Request, res: Response) => {
-            const dto = req.params as unknown as ReccommendSimilarAnimalsDTO
-            const useCaseResponse = await reccommendSimilarAnimalsUseCase.execute(dto)
+  constructor(reccommendSimilarAnimalsUseCase: ReccommendSimilarAnimalsUseCase) {
+    super();
+    this.versionRegister.addToRegister("1.0.0", async (req: Request, res: Response) => {
+      const dto = req.params as unknown as ReccommendSimilarAnimalsDTO;
+      const useCaseResponse = await reccommendSimilarAnimalsUseCase.execute(dto);
 
-            if (useCaseResponse.isLeft()) {
-                return this.errorHandler(res, useCaseResponse.value)
-            }
+      if (useCaseResponse.isLeft()) {
+        return this.errorHandler(res, useCaseResponse.value);
+      }
 
-            return this.ok(res, useCaseResponse.value)
-            
-        })
-    }
+      return this.ok(res, useCaseResponse.value);
+    });
+  }
 }

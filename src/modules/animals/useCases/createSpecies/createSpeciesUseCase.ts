@@ -36,19 +36,19 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
         return left(urlOrError.value);
       }
 
-      const options: SpecieTraitOption[] = []
-      
+      const options: SpecieTraitOption[] = [];
+
       // Create options
       for (const string_option of trait.options) {
         const optionOrError = SpecieTraitOption.create({
           name: string_option
-        })
+        });
 
         if (optionOrError.isLeft()) {
-          return left(optionOrError.value)
+          return left(optionOrError.value);
         }
 
-        options.push(optionOrError.value)
+        options.push(optionOrError.value);
       }
 
       const traitOrError = SpecieTrait.create({

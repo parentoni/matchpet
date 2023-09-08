@@ -6,39 +6,35 @@ import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "./filterAnimalsDTO
 import { FilterAnimalsUseCaseResponse } from "./filterAnimalsResponse";
 
 export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAnimalsUseCaseResponse> {
+  protected animalRepo: IAnimalRepo;
+  constructor(animalRepo: IAnimalRepo) {
+    this.animalRepo = animalRepo;
+  }
 
-    protected animalRepo: IAnimalRepo;
-    constructor (animalRepo: IAnimalRepo) {
-        this.animalRepo = animalRepo
+  async execute(request: FilterAnimalsDTO): Promise<FilterAnimalsUseCaseResponse> {
+    const guardResponse = Guard.againstNullOrUndefinedBulk([
+      { argument: request.filter, argumentName: "FILTER" },
+      { argument: request.page, argumentName: "PAGE" }
+    ]);
+
+    if (guardResponse.isLeft()) {
+      return left(guardResponse.value);
     }
 
-    async execute(request: FilterAnimalsDTO): Promise<FilterAnimalsUseCaseResponse> {
-        const guardResponse = Guard.againstNullOrUndefinedBulk([
-            {argument: request.filter, argumentName: "FILTER"},
-            {argument: request.page, argumentName: "PAGE"}
-        ])
+    const treatedFilters: FilterObject[] = [];
 
-        if (guardResponse.isLeft()) {
-            return left(guardResponse.value)
-        }
-
-        const treatedFilters: FilterObject[] = []
-
-
-        // Treat the filters mode for animalRepo
-        for (const untreatedFilter of request.filter) {
-            
-            if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
-                treatedFilters.push({...untreatedFilter, mode: untreatedFilter.mode as FILTER_MODES})
-            }
-        }
-
-        const result = await this.animalRepo.findBulk(treatedFilters, request.page * 30, 30)
-        if (result.isLeft()) {
-            return left(result.value)
-        }
-
-        return right(result.value)
+    // Treat the filters mode for animalRepo
+    for (const untreatedFilter of request.filter) {
+      if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
+        treatedFilters.push({ ...untreatedFilter, mode: untreatedFilter.mode as FILTER_MODES });
+      }
     }
 
+    const result = await this.animalRepo.findBulk(treatedFilters, request.page * 30, 30);
+    if (result.isLeft()) {
+      return left(result.value);
+    }
+
+    return right(result.value);
+  }
 }

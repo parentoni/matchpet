@@ -17,6 +17,7 @@ import { UserName } from "../../domain/userProps/userName";
 import { IAuthService } from "../../services/IauthService";
 import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
+import { UserPhone } from "../../domain/userProps/userPhone";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -26,25 +27,25 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
   }
 
   async execute(request: CreateUserDTO): Promise<CreateUserResponse> {
-    const passwordOrError = UserPassword.create({ value: request.password });
-    const emailOrError = UserEmail.create({ value: request.email });
-    const cpfOrError = UserCpf.create({ value: request?.cpf });
     const nameOrError = UserName.create({
       first_name: request.first_name,
       last_name: request.last_name
     });
+    const passwordOrError = UserPassword.create({ value: request.password });
+    const emailOrError = UserEmail.create({ value: request.email });
     const roleOrError = UserRole.create({ value: request.role || 0 });
+    const phoneOrError = UserPhone.create({ value: request.phone });
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, cpfOrError, nameOrError, roleOrError]);
+    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError]);
     if (result.isLeft()) {
-      return left(CommonUseCaseResult.InvalidValue.create(result.value.error));
+      return left(result.value);
     }
 
-    const password = passwordOrError.getRight() as UserPassword;
-    const email = emailOrError.getRight() as UserEmail;
-    const cpf = cpfOrError.getRight() as UserCpf;
-    const name = nameOrError.getRight() as UserName;
-    const role = roleOrError.getRight() as UserRole;
+    const password = passwordOrError.getRight();
+    const email = emailOrError.getRight();
+    const name = nameOrError.getRight();
+    const role = roleOrError.getRight();
+    const phone = phoneOrError.getRight();
 
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
@@ -57,7 +58,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       name,
       email,
       password: hashedPassword.value,
-      cpf,
+      phone,
       role,
       verified: request.verified || false
       // role: UserRole.create({value: 0})
@@ -80,20 +81,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         watch: userWithEmail,
         error: `The email ${email.mask()} associated for this account already exists.`
       });
-
-      if (cpfOrError.isRight()) {
-        const cpfCheck = Guard.againstNullOrUndefined(cpf, "CPF");
-        if (cpfCheck.isRight()) {
-          const userWithCpf = await this.userRepo.exists({
-            filter: { cpf: cpfOrError.value?.value }
-          });
-          watchList.push({
-            name: "CPF",
-            watch: userWithCpf,
-            error: `The cpf ${cpf.mask()} associated for this account already exists.`
-          });
-        }
-      }
 
       for (const watched of watchList) {
         if (watched.watch.isRight()) {

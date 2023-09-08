@@ -20,18 +20,21 @@ export class SpeciesMapper {
         return left(svgInUrl.value);
       }
 
-      const options: SpecieTraitOption[] = []
+      const options: SpecieTraitOption[] = [];
 
       for (const string_option of trait.options) {
-        const optionOrError = SpecieTraitOption.create({
-          name: string_option.name,
-        }, new UniqueGlobalId(string_option._id.toString()))
+        const optionOrError = SpecieTraitOption.create(
+          {
+            name: string_option.name
+          },
+          new UniqueGlobalId(string_option._id.toString())
+        );
 
         if (optionOrError.isLeft()) {
-          return left(optionOrError.value)
+          return left(optionOrError.value);
         }
 
-        options.push(optionOrError.value)
+        options.push(optionOrError.value);
       }
 
       const specieTrait = SpecieTrait.create({ ...trait, options: options, svg: svgInUrl.value }, new UniqueGlobalId(String(trait._id)));
@@ -56,13 +59,12 @@ export class SpeciesMapper {
       const persistentSpecieTraitsArray: ISpecieTraitPersistent[] = [];
 
       for (const trait of specie.traits) {
-
-        const options : ISpecieTraitOptionsPersistent[] = []
+        const options: ISpecieTraitOptionsPersistent[] = [];
         for (const domain_option of trait.options) {
           options.push({
             _id: domain_option.optionId.toValue(),
             name: domain_option.props.name
-          })
+          });
         }
 
         persistentSpecieTraitsArray.push({

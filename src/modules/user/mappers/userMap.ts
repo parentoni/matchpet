@@ -11,31 +11,32 @@ import { UserPassword } from "../domain/userProps/userPassword";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
+import { UserPhone } from "../domain/userProps/userPhone";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
-    const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userPasswordOrError = UserPassword.create({
       value: persistance.password,
       hashed: true
     });
-    const userCpfOrError = UserCpf.create({ value: persistance.cpf });
     const userNameOrError = UserName.create({
       first_name: persistance.first_name,
       last_name: persistance.last_name
     });
+    const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
+    const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
 
-    const result = EitherUtils.combine([userCpfOrError, userPasswordOrError, userCpfOrError, userRoleOrError]);
+    const result = EitherUtils.combine([userPasswordOrError, userRoleOrError, userPhoneNumberOrError, userEmailOrError]);
 
     if (result.isRight()) {
       const userOrError = User.create(
         {
-          name: userNameOrError.value as UserName,
-          email: userEmailOrError.value as UserEmail,
-          password: userPasswordOrError.value as UserPassword,
-          role: userRoleOrError.value as UserRole,
-          cpf: userCpfOrError.isRight() ? userCpfOrError.value : undefined,
+          name: userNameOrError.getRight(),
+          email: userEmailOrError.getRight(),
+          password: userPasswordOrError.getRight(),
+          role: userRoleOrError.getRight(),
+          phone: userPhoneNumberOrError.getRight(),
           verified: persistance.verified
         },
         new UniqueGlobalId(persistance._id)
@@ -51,7 +52,7 @@ export class UserMap {
     return left(result.value);
   }
 
-  static async toPersistant(user: User): Promise<Either<AppError.UnexpectedError, IUserPersistant>> {
+  static async toPersistant(user: User): Promise<Either<CommonUseCaseResult.UnexpectedError, IUserPersistant>> {
     let password = null;
 
     if (!!user.password === true) {
@@ -65,15 +66,15 @@ export class UserMap {
       return right({
         password: user.password?.value,
         email: user.email?.value,
-        cpf: user.cpf,
         first_name: user.name?.first_name,
         last_name: user.name?.last_name,
         _id: user.id.toValue(),
         role: user.role,
-        verified: user.verified
+        verified: user.verified,
+        phone_number: user.phone.value
       });
     } catch (error) {
-      return left(AppError.UnexpectedError.create(error));
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 }

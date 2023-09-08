@@ -3,8 +3,8 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
-import { FindSpecieByIdDTO } from "./FindSpecieByIdDTO";
 import { FindSpecieByIdResponse } from "./findSpecieByIdResponse";
+import { FindSpecieByIdDTO } from "./findSpecieByIdDTO";
 
 export class FindSpecieByIdUseCase implements UseCase<FindSpecieByIdDTO, FindSpecieByIdResponse> {
   private specieRepo: ISpecieRepo;

@@ -52,7 +52,8 @@
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "prettier": "^2.8.7",
-    "semver": "^7.4.0"
+    "semver": "^7.4.0",
+    "telefone": "^1.2.4"
   },
   "directories": {
     "test": "tests"

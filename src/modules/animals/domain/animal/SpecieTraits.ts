@@ -51,7 +51,7 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
       { argument: props.category, argumentName: "SPECIE_PROPS_CATEGORY" },
       { argument: props.options, argumentName: "SPECIE_PROPS_OPTIONS" },
       { argument: props.optional, argumentName: "SPECIE_PROPS_OPTIONAL" },
-      {argument: props.options, argumentName: "SPECIFIC_PROPS_OPTIONS"}
+      { argument: props.options, argumentName: "SPECIFIC_PROPS_OPTIONS" }
     ]);
 
     if (guardResponse.isLeft()) {

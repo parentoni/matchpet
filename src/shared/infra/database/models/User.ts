@@ -5,9 +5,10 @@ const userSchema = new mongoose.Schema({
   last_name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  cpf: { type: String, required: false },
+  // cpf: { type: String, required: false },
   role: { type: Number, required: true },
-  verified: { type: Boolean, required: true }
+  verified: { type: Boolean, required: true },
+  phone_number: { type: String, required: true }
 });
 
 export type IUserPersistant = {
@@ -18,7 +19,8 @@ export type IUserPersistant = {
   email: string;
   role: number;
   verified: boolean;
-  cpf?: string;
+  phone_number: string;
+  // cpf?: string;
 };
 
 export default { name: "user", schema: userSchema };

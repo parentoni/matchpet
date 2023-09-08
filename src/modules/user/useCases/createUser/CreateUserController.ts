@@ -22,7 +22,7 @@ export class CreateUserController extends BaseController<Request> {
           last_name: dto.last_name,
           password: dto.password,
           email: dto.email,
-          cpf: dto.cpf,
+          phone: dto.phone,
           role: dto.role
         });
 

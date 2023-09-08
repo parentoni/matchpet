@@ -1,8 +1,8 @@
 import mongoose, { Mongoose } from "mongoose";
 
 const specieTraitOption = new mongoose.Schema({
-  name: {type: String}
-})
+  name: { type: String }
+});
 
 const specieTrait = new mongoose.Schema({
   name: { type: String, required: true },
@@ -33,8 +33,8 @@ export interface ISpecieTraitPersistent {
 }
 
 export interface ISpecieTraitOptionsPersistent {
-  _id:string,
-  name:string,
+  _id: string;
+  name: string;
 }
 
 const specieModel = mongoose.model("specie", specieSchema);

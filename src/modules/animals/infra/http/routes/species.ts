@@ -11,5 +11,4 @@ speciesRouter.post("/create", middleware.authenticated(), (req, res) => createSp
 speciesRouter.get("/all", (req, res) => getAllSpeceisController.execute(req, res));
 speciesRouter.get("/:id", (req, res) => findSpecieByIdController.execute(req, res));
 
-
 export { speciesRouter };

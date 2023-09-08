@@ -11,6 +11,7 @@ import { UserCpf } from "./userProps/userCpf";
 import { UserName } from "./userProps/userName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
 import { Timestamp } from "../../../shared/core/Timestamp";
+import { UserPhone } from "./userProps/userPhone";
 
 export interface UserProps {
   name: UserName;
@@ -18,7 +19,7 @@ export interface UserProps {
   password: UserPassword;
   role: UserRole;
   verified: boolean;
-  cpf?: UserCpf;
+  phone: UserPhone;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -40,8 +41,8 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.name;
   }
 
-  get cpf(): string | undefined {
-    return this.props.cpf?.value;
+  get phone(): UserPhone {
+    return this.props.phone;
   }
 
   get role(): USER_ROLE {
@@ -58,9 +59,12 @@ export class User extends AggregateRoot<UserProps> {
 
   public static create(props: UserProps, id?: UniqueGlobalId): UserResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.name, argumentName: "NAME" },
-      { argument: props.email, argumentName: "EMAIL" },
-      { argument: props.password, argumentName: "PASWORD" }
+      { argument: props.name, argumentName: "USER_NAME" },
+      { argument: props.email, argumentName: "USER_EMAIL" },
+      { argument: props.password, argumentName: "USER_PASWORD" },
+      { argument: props.phone, argumentName: "USER_PHONE" },
+      { argument: props.role, argumentName: "USER_ROLE" },
+      { argument: props.verified, argumentName: "USER_VERIFIED" }
     ]);
 
     if (guardResult.isLeft()) {
