@@ -3,12 +3,17 @@ import { Guard, GuardError } from "./Guard";
 import { CommonUseCaseResult } from "./Response/UseCaseError";
 import { Either, left, right } from "./Result";
 
-export class ValidUrl extends ValueObject<{ value: string }> {
+export interface ValidUrlProps {
+  value:string
+}
+
+export type ValidUrlCreateResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, ValidUrl>
+export class ValidUrl extends ValueObject<ValidUrlProps> {
   get value(): string {
     return this.props.value;
   }
 
-  public static create(props: { value: string }): Either<GuardError | CommonUseCaseResult.InvalidValue, ValidUrl> {
+  public static create(props: ValidUrlProps): ValidUrlCreateResponse {
     const guardResult = Guard.againstNullOrUndefined(props.value, "URL");
     if (guardResult.isLeft()) {
       return left(guardResult.value);

@@ -1,6 +1,6 @@
 export interface CreateAnimalListingDTO {
   name: string;
-  image_url: string;
+  image_url: string[];
   age: number;
   donatorId: string;
   specie_id: string;

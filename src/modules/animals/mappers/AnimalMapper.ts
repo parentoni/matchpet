@@ -8,6 +8,7 @@ import { IAnimalPersistent, IAnimalTraitsPersistent } from "../../../shared/infr
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { Animal } from "../domain/Animal";
 import { AnimalAge } from "../domain/animal/AnimalAge";
+import { AnimalImages } from "../domain/animal/AnimalImages";
 import { AnimalName } from "../domain/animal/AnimalName";
 import { AnimalStatus } from "../domain/animal/AnimalStatus";
 import { AnimalTrait } from "../domain/animal/AnimalTraits";
@@ -16,7 +17,7 @@ export class AnimalMapper {
   public static toDomain(persistent: IAnimalPersistent): Either<GuardError, Animal> {
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalAgeOrError = AnimalAge.create({ months: persistent.age });
-    const animalImageOrError = ValidUrl.create({ value: persistent.image });
+    const animalImageOrError = AnimalImages.createFromPersistent(persistent.image)
     const animalCreatedAt = Timestamp.create(persistent.created_at);
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id);
@@ -80,7 +81,7 @@ export class AnimalMapper {
         _id: domain.id.toValue(),
         name: domain.name.value,
         age: domain.age.value,
-        image: domain.image.value,
+        image: domain.image.persistentValue,
         donator_id: domain.donatorId.toValue(),
         specie_id: domain.specieId.toValue(),
         created_at: domain.createdAt.value,

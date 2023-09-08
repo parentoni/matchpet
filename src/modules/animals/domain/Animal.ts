@@ -6,6 +6,7 @@ import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserId } from "../../user/domain/userProps/userId";
 import { AnimalAge } from "./animal/AnimalAge";
+import { AnimalImages } from "./animal/AnimalImages";
 import { AnimalName } from "./animal/AnimalName";
 import { AnimalStatus } from "./animal/AnimalStatus";
 import { AnimalTrait } from "./animal/AnimalTraits";
@@ -14,7 +15,7 @@ export interface IAnimalProps {
   donatorId: UniqueGlobalId;
   name: AnimalName;
   age: AnimalAge;
-  image: ValidUrl;
+  image: AnimalImages;
   specieId: UniqueGlobalId;
   animalTrait: AnimalTrait[];
   createdAt: Timestamp;
@@ -40,7 +41,7 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.age;
   }
 
-  get image(): ValidUrl {
+  get image(): AnimalImages {
     return this.props.image;
   }
 

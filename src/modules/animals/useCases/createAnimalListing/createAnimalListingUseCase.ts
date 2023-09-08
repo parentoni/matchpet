@@ -8,6 +8,7 @@ import { EitherUtils } from "../../../../shared/utils/EitherUtils";
 import { UserId } from "../../../user/domain/userProps/userId";
 import { Animal } from "../../domain/Animal";
 import { AnimalAge } from "../../domain/animal/AnimalAge";
+import { AnimalImages } from "../../domain/animal/AnimalImages";
 import { AnimalName } from "../../domain/animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "../../domain/animal/AnimalStatus";
 import { AnimalTrait } from "../../domain/animal/AnimalTraits";
@@ -28,7 +29,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
   async execute(request: CreateAnimalListingDTO): Promise<CreateAnimalListingResponse> {
     const animalNameOrError = AnimalName.create({ value: request.name });
     const animalAgeOrError = AnimalAge.create({ months: request.age });
-    const animalImageOrError = ValidUrl.create({ value: request.image_url });
+    const animalImageOrError = AnimalImages.createFromPersistent(request.image_url)
     const animalSpecieTraitsOrError = AnimalTrait.create_bulk(request.traits);
     const animalCreatedTimespamp = Timestamp.create();
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
