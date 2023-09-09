@@ -1,6 +1,8 @@
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { UniqueGlobalId } from "../../../../shared/domain/UniqueGlobalD";
+import { IAnimalPersistent } from "../../../../shared/infra/database/models/Animal";
+import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../repository/IAnimalRepo";
 import { ReccommendSimilarAnimalsDTO } from "./reccommendSimilarAnimalsDTO";
 import { ReccommendSimilarAnimalsUseCaseResponse } from "./reccommendSimilarAnimalsResponse";
@@ -37,6 +39,17 @@ export class ReccommendSimilarAnimalsUseCase implements UseCase<ReccommendSimila
       return left(result.value);
     }
 
-    return right(result.value);
+    const persistentArray: IAnimalPersistent[] = []
+    
+    for (const animal of result.value) {
+      const mapperResult = AnimalMapper.toPersistent(animal)
+      if (mapperResult.isLeft()) {
+        return left(mapperResult.value)
+      }
+
+      persistentArray.push(mapperResult.value)
+    }
+
+    return right(persistentArray);
   }
 }

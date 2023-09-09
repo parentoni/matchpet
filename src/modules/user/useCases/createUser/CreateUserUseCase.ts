@@ -18,6 +18,7 @@ import { IAuthService } from "../../services/IauthService";
 import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
 import { UserPhone } from "../../domain/userProps/userPhone";
+import { UserMap } from "../../mappers/userMap";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -100,10 +101,15 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       if (persisantResponse.isLeft()) {
         return left(persisantResponse.value);
       } else {
-        return right(user);
+        const mapperResult = await UserMap.toPersistant(user)
+        if (mapperResult.isLeft()) {
+          return left(mapperResult.value)
+        }
+
+        return right(mapperResult.value);
       }
     } catch (error) {
-      return left(AppError.UnexpectedError.create(error));
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 }

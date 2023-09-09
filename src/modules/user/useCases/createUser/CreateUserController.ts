@@ -33,7 +33,7 @@ export class CreateUserController extends BaseController<Request> {
 
         //Generate token for instant user access
         const token = await authService.signJWT({
-          uid: result.value.id.toValue(),
+          uid: result.value._id,
           email: dto.email,
           first_name: dto.first_name,
           last_name: dto.last_name,

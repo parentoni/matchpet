@@ -4,8 +4,10 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either, left, right } from "../../../../shared/core/Result";
 import { Specie } from "../../domain/Specie";
 import { GuardError } from "../../../../shared/core/Guard";
+import { ISpeciePersistent } from "../../../../shared/infra/database/models/Specie";
+import { SpeciesMapper } from "../../mappers/SpeciesMapper";
 
-export type GetAllSpeciesResponse = Either<CommonUseCaseResult.UnexpectedError | GuardError, Specie[]>;
+export type GetAllSpeciesResponse = Either<CommonUseCaseResult.UnexpectedError | GuardError, ISpeciePersistent[]>;
 export class GetAllSpeciesUseCase implements UseCase<null, GetAllSpeciesResponse> {
   private speciesRepo: ISpecieRepo;
   constructor(speciesRepo: ISpecieRepo) {
@@ -18,6 +20,17 @@ export class GetAllSpeciesUseCase implements UseCase<null, GetAllSpeciesResponse
       return left(response.value);
     }
 
-    return right(response.value);
+    const persistentArray: ISpeciePersistent[] = []
+
+    for (const specie of response.value) {
+      const mapperResult = SpeciesMapper.toPersistent(specie)
+      if (mapperResult.isLeft()) {
+        return left(mapperResult.value)
+      }
+      
+      persistentArray.push(mapperResult.value)
+    }
+    
+    return right(persistentArray);
   }
 }

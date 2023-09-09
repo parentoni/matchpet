@@ -1,6 +1,8 @@
 import { Guard } from "../../../../shared/core/Guard";
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { Animal } from "../../domain/Animal";
+import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../repository/IAnimalRepo";
 import { GetAnimalListingByIdDTO } from "./GetAnimalListingByIdDTO";
 import { GetAnimalListingByIdResponse } from "./GetAnimalListingByIdResponse";
@@ -23,6 +25,11 @@ export class GetAnimaListingByIdUseCase implements UseCase<GetAnimalListingByIdD
       return left(repoResponse.value);
     }
 
-    return right(repoResponse.value);
+    const mapperResult = AnimalMapper.toPersistent(repoResponse.value)
+    if (mapperResult.isLeft()) {
+      return left(mapperResult.value)
+    }
+
+    return right(mapperResult.value);
   }
 }

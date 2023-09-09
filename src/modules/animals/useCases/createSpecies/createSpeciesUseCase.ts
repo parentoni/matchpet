@@ -6,6 +6,7 @@ import { ValidUrl } from "../../../../shared/core/ValidUrl";
 import { Specie } from "../../domain/Specie";
 import { SpecieTraitOption } from "../../domain/animal/SpecieTraitOption";
 import { SpecieTrait } from "../../domain/animal/SpecieTraits";
+import { SpeciesMapper } from "../../mappers/SpeciesMapper";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { CreateSpeciesDto } from "./createSpeciesDTO";
 import { CreateSpeciesResponse } from "./createSpeciesResponse";
@@ -73,11 +74,16 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
     }
 
     const repoResult = await this.speciesRepo.save(specie.value);
-    console.log(specie.value.id.toValue());
+
     if (repoResult.isLeft()) {
       return left(repoResult.value);
     }
 
-    return right(specie.value);
+    const specieInPersistent = SpeciesMapper.toPersistent(specie.value)
+    if (specieInPersistent.isLeft()) {
+      return left(specieInPersistent.value)
+    }
+
+    return right(specieInPersistent.value);
   }
 }

@@ -2,6 +2,7 @@ import { Guard } from "../../../../shared/core/Guard";
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { User } from "../../domain/user";
+import { UserMap } from "../../mappers/userMap";
 import { IUserRepo } from "../../repository/IUserRepo";
 import { GetUserByUIDDTO } from "./getUserByUIDDTO";
 import { GetUserByUIDResponse } from "./getUserByUIDResponse";
@@ -23,7 +24,13 @@ export class GetUserByUIDUseCase implements UseCase<GetUserByUIDDTO, GetUserByUI
         return left(user.value);
       }
 
-      return right(user.value);
+      const mapperResult = await UserMap.toPersistant(user.value)
+      if (mapperResult.isLeft()) {
+        return left(mapperResult.value)
+      }
+
+
+      return right(mapperResult .value);
     } else {
       return left(check.value);
     }

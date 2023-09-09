@@ -5,6 +5,8 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { FindSpecieByIdResponse } from "./findSpecieByIdResponse";
 import { FindSpecieByIdDTO } from "./findSpecieByIdDTO";
+import { AnimalMapper } from "../../mappers/AnimalMapper";
+import { SpeciesMapper } from "../../mappers/SpeciesMapper";
 
 export class FindSpecieByIdUseCase implements UseCase<FindSpecieByIdDTO, FindSpecieByIdResponse> {
   private specieRepo: ISpecieRepo;
@@ -24,7 +26,14 @@ export class FindSpecieByIdUseCase implements UseCase<FindSpecieByIdDTO, FindSpe
         return left(specie.value);
       }
 
-      return right(specie.value);
+      const mapperResult = SpeciesMapper.toPersistent(specie.value)
+      if (mapperResult.isLeft()) {
+        return left(mapperResult.value)
+      }
+
+      return right(mapperResult.value)
+      
+
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }

@@ -1,6 +1,8 @@
 import { Guard } from "../../../../shared/core/Guard";
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { IAnimalPersistent } from "../../../../shared/infra/database/models/Animal";
+import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../repository/IAnimalRepo";
 import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "./filterAnimalsDTO";
 import { FilterAnimalsUseCaseResponse } from "./filterAnimalsResponse";
@@ -35,6 +37,15 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       return left(result.value);
     }
 
-    return right(result.value);
+    const persistentValues: IAnimalPersistent[] = []
+    for (const value of  result.value) {
+      const mapperResult = AnimalMapper.toPersistent(value)
+      if (mapperResult.isLeft()){
+        return left(mapperResult.value)
+      }
+
+      persistentValues.push(mapperResult.value)
+    }
+    return right(persistentValues);
   }
 }

@@ -13,6 +13,7 @@ import { AnimalName } from "../../domain/animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "../../domain/animal/AnimalStatus";
 import { AnimalTrait } from "../../domain/animal/AnimalTrait";
 import { AnimalTraits } from "../../domain/animal/AnimalTraits";
+import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../repository/IAnimalRepo";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { CreateAnimalListingDTO } from "./createAnimalListingDTO";
@@ -92,6 +93,11 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       return left(repoResult.value);
     }
 
-    return right(animalResult.value);
+    const animalResultInPersistent = AnimalMapper.toPersistent(animalResult.value)
+    if (animalResultInPersistent.isLeft()) {
+      return left(animalResultInPersistent.value)
+    }
+
+    return right(animalResultInPersistent.value);
   }
 }
