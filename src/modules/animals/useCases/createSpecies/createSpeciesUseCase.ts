@@ -4,12 +4,14 @@ import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { ValidUrl } from "../../../../shared/core/ValidUrl";
 import { Specie } from "../../domain/Specie";
-import { SpecieTraitOption } from "../../domain/animal/SpecieTraitOption";
-import { SpecieTrait } from "../../domain/animal/SpecieTraits";
+import { SpecieTraitOption } from "../../domain/specie/SpecieTraitOption";
+import { SpecieTrait } from "../../domain/specie/SpecieTrait";
 import { SpeciesMapper } from "../../mappers/SpeciesMapper";
 import { ISpecieRepo } from "../../repository/ISpeciesRepo";
 import { CreateSpeciesDto } from "./createSpeciesDTO";
 import { CreateSpeciesResponse } from "./createSpeciesResponse";
+import { SpecieTraitPrint } from "../../domain/specie/SpecieTraitPrint";
+import { SpecieTraits } from "../../domain/specie/SpecieTraits";
 
 export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpeciesResponse> {
   private speciesRepo: ISpecieRepo;
@@ -32,9 +34,14 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
 
     for (const trait of request.SpecieTraits) {
       const urlOrError = ValidUrl.create({ value: trait.svg });
+      const printOrError = SpecieTraitPrint.create({value: trait.print})
 
       if (urlOrError.isLeft()) {
         return left(urlOrError.value);
+      }
+
+      if (printOrError.isLeft()) {
+        return left(printOrError.value);
       }
 
       const options: SpecieTraitOption[] = [];
@@ -52,11 +59,13 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
         options.push(optionOrError.value);
       }
 
+
       const traitOrError = SpecieTrait.create({
         ...trait,
         options: options,
         svg: urlOrError.value,
-        optional: Boolean(trait.optional)
+        optional: Boolean(trait.optional),
+        print: printOrError.value
       });
       if (traitOrError.isLeft()) {
         return left(traitOrError.value);
@@ -67,7 +76,7 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
 
     const specie = Specie.create({
       SpecieName: request.SpecieName,
-      SpecieTraits: speciesTraits
+      SpecieTraits: SpecieTraits.create(speciesTraits)
     });
     if (specie.isLeft()) {
       return left(specie.value);

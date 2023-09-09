@@ -30,6 +30,7 @@ export interface ISpecieTraitPersistent {
   optional: boolean;
   category: string;
   options: ISpecieTraitOptionsPersistent[];
+  print: string
 }
 
 export interface ISpecieTraitOptionsPersistent {

@@ -1,4 +1,4 @@
-import { SpecieTraitProps } from "../../domain/animal/SpecieTraits";
+import { SpecieTraitProps } from "../../domain/specie/SpecieTrait";
 
 export interface CreateSpeciesDto {
   SpecieName: string;
@@ -8,5 +8,6 @@ export interface CreateSpeciesDto {
     options: string[];
     optional: boolean;
     category: string;
+    print: string;
   }[];
 }

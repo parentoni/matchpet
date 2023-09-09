@@ -5,11 +5,11 @@ import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { AnimalTrait } from "./animal/AnimalTrait";
 import { AnimalTraits } from "./animal/AnimalTraits";
-import { SpecieTrait } from "./animal/SpecieTraits";
+import { SpecieTraits } from "./specie/SpecieTraits";
 
 export interface SpecieProps {
   SpecieName: string;
-  SpecieTraits: SpecieTrait[];
+  SpecieTraits: SpecieTraits;
 }
 
 export class Specie extends AggregateRoot<SpecieProps> {
@@ -45,7 +45,7 @@ export class Specie extends AggregateRoot<SpecieProps> {
 
   public validateArrayOfAnimalTraits(animalTraits: AnimalTraits): Either<CommonUseCaseResult.InvalidValue, AnimalTraits> {
     const traits: AnimalTrait[] = [];
-    for (const specieTrait of this.traits) {
+    for (const specieTrait of this.traits.list) {
       const found = animalTraits.list.find((el) => el._id.equals(specieTrait.specieTraitId));
       if (!!!found && !specieTrait.optional) {
         return left(
