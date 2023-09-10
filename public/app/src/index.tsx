@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './assets/index.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './pages/Routes';
+import { SpeciesContextProvider } from './utils/context/SpeciesContex';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
+  <SpeciesContextProvider>
     <RouterProvider router={router}/>
+  </SpeciesContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

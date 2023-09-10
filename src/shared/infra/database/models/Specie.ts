@@ -9,7 +9,8 @@ const specieTrait = new mongoose.Schema({
   svg: { type: String, required: true },
   optional: { type: Boolean, required: true },
   category: { type: String, required: true },
-  options: { type: [specieTraitOption], required: true }
+  options: { type: [specieTraitOption], required: true },
+  print: {type: String, required: true}
 });
 
 const specieSchema = new mongoose.Schema({
