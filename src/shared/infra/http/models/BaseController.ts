@@ -91,6 +91,10 @@ export abstract class BaseController<T extends Request> {
     return BaseController.jsonResponse(res, 400, "TODO");
   }
 
+  public tooLarge(res: express.Response, message?: string) {
+    return BaseController.jsonResponse(res, 413, message ? message : "Too many requests");
+  }
+
   public fail(res: express.Response, error: Error | string) {
     console.log(error);
     return res.status(500).json({
