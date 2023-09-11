@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ISpecieDTO } from "../dtos/SpecieDTO";
 import { Api } from "../services/Api";
+import { Species } from "../domain/Species";
 
 export const SpeciesContext = createContext<{species: ISpecieDTO[]}>({species:[]})
 
@@ -13,7 +14,8 @@ export function SpeciesContextProvider({children}: React.PropsWithChildren<{}>) 
       if (response.isLeft()) {
         alert("Erro carregando animais")
       } else {
-        setSpecies(response.value as ISpecieDTO[])
+        setSpecies([...(response.value as ISpecieDTO[])])
+        
       }
     })
   }, [])

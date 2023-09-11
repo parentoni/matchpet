@@ -21,7 +21,10 @@ export class AnimalTraits extends WatchList<AnimalTrait> {
     const array: AnimalTrait[] = [];
     try {
       for (const prop of props) {
-        const result = AnimalTrait.create(prop);
+        const result = AnimalTrait.create({
+          _id: prop._id.toString(),
+          value: prop.value
+        });
         if (result.isLeft()) {
           return left(result.value);
         }
