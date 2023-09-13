@@ -13,7 +13,7 @@ import { categoryRouter } from "./category";
 const animalsRouter = express.Router();
 
 animalsRouter.use("/species", speciesRouter);
-animalsRouter.use("/category", categoryRouter);
+animalsRouter.use("/categories", categoryRouter);
 
 animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnimalListingController.execute(req, res));
 animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req, res));

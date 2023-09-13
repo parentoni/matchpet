@@ -16,4 +16,8 @@ export class Species {
 
     return new Species(specieArray)
   }
+
+  public findByID (id:string) {
+    return this.list.find(el => el.props._id === id)
+  }
 }

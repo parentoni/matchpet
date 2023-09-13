@@ -6,5 +6,6 @@ import { Category } from "../domain/Category";
 
 export interface ICategoryRepo {
   save(category:Category): Promise<Either<CommonUseCaseResult.UnexpectedError, ICategoryPersistent>>,
-  exists(id: string): Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue| GuardError, Category>>
+  exists(id: string): Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue| GuardError, Category>>,
+  getAll(): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,  Category[]>>
 }

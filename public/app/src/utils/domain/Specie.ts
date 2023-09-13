@@ -1,4 +1,4 @@
-import { ISpecieDTO } from "../dtos/SpecieDTO";
+import { ISpecieDTO, ISpecieTraitDTO } from "../dtos/SpecieDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 
@@ -20,5 +20,16 @@ export class Specie {
     }
 
     return right(response.value as ISpecieDTO[])
+  }
+
+  public getTraitsThatMatchCategory(categoryID:string):ISpecieTraitDTO[] {
+    const traits: ISpecieTraitDTO[] = []
+    for (const trait of this.props.traits) {
+      if (trait.category === categoryID) {
+        traits.push(trait)
+      }
+    }
+
+    return traits
   }
 }

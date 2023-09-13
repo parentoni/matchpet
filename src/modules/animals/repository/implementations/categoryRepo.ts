@@ -7,6 +7,7 @@ import { CategoryMapper } from "../../mappers/CategoryMapper";
 import { ICategoryRepo } from "../ICategoryRepo";
 
 export class CategoryRepo implements ICategoryRepo {
+
   async save(category: Category): Promise<Either<CommonUseCaseResult.UnexpectedError, ICategoryPersistent>> {
     try {
       const persistentCategory = CategoryMapper.toPersistent(category)
@@ -34,6 +35,26 @@ export class CategoryRepo implements ICategoryRepo {
         variable: "CATEGORY_ID",
         errorMessage: "There was no category found with given id"
       }))
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+  }
+
+  async getAll(): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Category[]>> {
+    try {
+      const categorysArray: Category[] = [];
+      const results = await CategoryModel.find({});
+
+      for (const result of results) {
+        const mapperResult = CategoryMapper.toDomain(result.toObject())
+        if (mapperResult.isLeft()) {
+          return left(mapperResult.value)
+        }
+
+        categorysArray.push(mapperResult.value)
+      }
+
+      return right(categorysArray)
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error))
     }
