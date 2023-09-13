@@ -2,7 +2,7 @@ import { GuardError, GuardResponse } from "../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { Either } from "../../../shared/core/Result";
 import { Animal } from "../domain/Animal";
-import { FilterObject } from "../useCases/filterAnimals/filterAnimalsDTO";
+import { FilterObject } from "../useCases/animals/filterAnimals/filterAnimalsDTO";
 
 export interface IAnimalRepo {
   save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>>;

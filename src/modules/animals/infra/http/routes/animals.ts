@@ -1,12 +1,12 @@
 import express from "express";
 import { middleware } from "../../../../../shared/infra/http";
-import { createSpeciesController } from "../../../useCases/createSpecies";
+import { createSpeciesController } from "../../../useCases/species/createSpecies";
 import { speciesRouter } from "./species";
-import { createAnimalListingController } from "../../../useCases/createAnimalListing";
-import { getAnimalListingByIdController } from "../../../useCases/getAnimalListingById";
-import { reccommendSimilarAnimalsController } from "../../../useCases/reccommendSimilarAnimals";
-import { filterAnimalsController } from "../../../useCases/filterAnimals";
-import { uploadAnimalImageController } from "../../../useCases/uploadAnimalImage";
+import { createAnimalListingController } from "../../../useCases/animals/createAnimalListing";
+import { getAnimalListingByIdController } from "../../../useCases/animals/getAnimalListingById";
+import { reccommendSimilarAnimalsController } from "../../../useCases/animals/reccommendSimilarAnimals";
+import { filterAnimalsController } from "../../../useCases/animals/filterAnimals";
+import { uploadAnimalImageController } from "../../../useCases/upload/uploadAnimalImage";
 import fileUpload from "express-fileupload";
 import { categoryRouter } from "./category";
 

@@ -1,8 +1,8 @@
 import express from "express";
 import { middleware } from "../../../../../shared/infra/http";
-import { createSpeciesController } from "../../../useCases/createSpecies";
-import { getAllSpeceisController } from "../../../useCases/getAllSpecies";
-import { findSpecieByIdController } from "../../../useCases/findSpecieById";
+import { createSpeciesController } from "../../../useCases/species/createSpecies";
+import { getAllSpeceisController } from "../../../useCases/species/getAllSpecies";
+import { findSpecieByIdController } from "../../../useCases/species/findSpecieById";
 
 const speciesRouter = express.Router();
 //!todo, add admin verification

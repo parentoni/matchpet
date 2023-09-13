@@ -5,7 +5,7 @@ import { AnimalModel } from "../../../../shared/infra/database/models/Animal";
 import { Animal } from "../../domain/Animal";
 import { ANIMAL_STATUS } from "../../domain/animal/AnimalStatus";
 import { AnimalMapper } from "../../mappers/AnimalMapper";
-import { FILTER_MODES, FilterObject } from "../../useCases/filterAnimals/filterAnimalsDTO";
+import { FILTER_MODES, FilterObject } from "../../useCases/animals/filterAnimals/filterAnimalsDTO";
 import { IAnimalRepo } from "../IAnimalRepo";
 
 export type DBFilter = Record<string, Record<string, any>>;

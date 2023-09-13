@@ -1,6 +1,6 @@
 import express from 'express'
 import { middleware } from '../../../../../shared/infra/http'
-import { createCategoryController } from '../../../useCases/createCategory'
+import { createCategoryController } from '../../../useCases/category/createCategory'
 
 const categoryRouter = express.Router()
 
