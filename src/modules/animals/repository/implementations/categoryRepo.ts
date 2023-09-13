@@ -1,3 +1,4 @@
+import { GuardError } from "../../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { Either, left, right } from "../../../../shared/core/Result";
 import { CategoryModel, ICategoryPersistent } from "../../../../shared/infra/database/models/Category";
@@ -16,4 +17,25 @@ export class CategoryRepo implements ICategoryRepo {
     }
   }
   
+  async exists(id: string): Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue | GuardError, Category>> {
+    try {
+      const result = await CategoryModel.findById(id)
+      if (!!result) {
+        const mapperResult = CategoryMapper.toDomain(result.toJSON())
+        if (mapperResult.isLeft()) {
+          return left(mapperResult.value)
+        }
+
+        return right(mapperResult.value)
+      }
+
+      return left(CommonUseCaseResult.InvalidValue.create({
+        location: `${CategoryRepo.name}.${this.exists.name}`,
+        variable: "CATEGORY_ID",
+        errorMessage: "There was no category found with given id"
+      }))
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+  }
 }

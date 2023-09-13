@@ -12,12 +12,16 @@ import { CreateSpeciesDto } from "./createSpeciesDTO";
 import { CreateSpeciesResponse } from "./createSpeciesResponse";
 import { SpecieTraitPrint } from "../../../domain/specie/SpecieTraitPrint";
 import { SpecieTraits } from "../../../domain/specie/SpecieTraits";
+import { ICategoryRepo } from "../../../repository/ICategoryRepo";
+import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
+import { EitherUtils } from "../../../../../shared/utils/EitherUtils";
 
 export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpeciesResponse> {
   private speciesRepo: ISpecieRepo;
-
-  constructor(speciesRepo: ISpecieRepo) {
+  private categoryRepo: ICategoryRepo;
+  constructor(speciesRepo: ISpecieRepo, categoryRepo:ICategoryRepo) {
     this.speciesRepo = speciesRepo;
+    this.categoryRepo = categoryRepo;
   }
 
   async execute(request: CreateSpeciesDto): Promise<CreateSpeciesResponse> {
@@ -33,17 +37,19 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
     }
 
     for (const trait of request.SpecieTraits) {
-      const urlOrError = ValidUrl.create({ value: trait.svg });
       const printOrError = SpecieTraitPrint.create({value: trait.print})
+      const category = UniqueGlobalId.createExisting(trait.category)
 
-      if (urlOrError.isLeft()) {
-        return left(urlOrError.value);
+      const combineResult = EitherUtils.combine([printOrError, category])
+      if (combineResult.isLeft()) {
+        return left(combineResult.value)
       }
 
-      if (printOrError.isLeft()) {
-        return left(printOrError.value);
+      const exixts = await this.categoryRepo.exists(trait.category)
+      if (exixts.isLeft()) {
+        return left(exixts.value)
       }
-
+      
       const options: SpecieTraitOption[] = [];
 
       // Create options
@@ -63,9 +69,9 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
       const traitOrError = SpecieTrait.create({
         ...trait,
         options: options,
-        svg: urlOrError.value,
         optional: Boolean(trait.optional),
-        print: printOrError.value
+        print: printOrError.getRight(),
+        category: category.getRight()
       });
       if (traitOrError.isLeft()) {
         return left(traitOrError.value);

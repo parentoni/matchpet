@@ -25,10 +25,9 @@ export class SpecieTraits extends WatchList<SpecieTrait> {
   public static createFromPersistent(traits: ISpecieTraitPersistent[]): Either<GuardError, SpecieTraits> {
     const traitDomainArray: SpecieTrait[] = []
     for (const trait of traits) {
-      const svgInUrl = ValidUrl.create({value: trait.svg})
       const print = SpecieTraitPrint.create({value: trait.print})
-      
-      const combineResult = EitherUtils.combine([svgInUrl, print])
+      const category = UniqueGlobalId.createExisting(trait.category)      
+      const combineResult = EitherUtils.combine([category, print])
 
       if (combineResult.isLeft()) {
         return left(combineResult.value)
@@ -46,11 +45,10 @@ export class SpecieTraits extends WatchList<SpecieTrait> {
 
       const traitResponse = SpecieTrait.create({
         options: optionArray,
-        svg: svgInUrl.getRight(),
         print: print.getRight(),
         optional: trait.optional,
         name: trait.name,
-        category: trait.category
+        category: category.getRight()
       }, new UniqueGlobalId(trait._id.toString()))
 
       if (traitResponse.isLeft()) {

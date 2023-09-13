@@ -10,9 +10,8 @@ import { SpecieTraitPrint } from "./SpecieTraitPrint";
 
 export interface SpecieTraitProps {
   name: string;
-  svg: ValidUrl;
   optional: boolean;
-  category: string;
+  category: UniqueGlobalId;
   options: SpecieTraitOption[];
   print: SpecieTraitPrint;
 }
@@ -30,15 +29,11 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
     return this.props.name;
   }
 
-  get svg(): ValidUrl {
-    return this.props.svg;
-  }
-
   get optional(): boolean {
     return this.props.optional;
   }
 
-  get category(): string {
+  get category(): UniqueGlobalId {
     return this.props.category;
   }
 
@@ -54,7 +49,6 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
   public static create(props: SpecieTraitProps, id?: UniqueGlobalId): Either<GuardError, SpecieTrait> {
     const guardResponse = Guard.againstNullOrUndefinedBulk([
       { argument: props.name, argumentName: "SPECIE_PROPS_NAME" },
-      { argument: props.svg, argumentName: "SPECIE_PROPS_SVG" },
       { argument: props.category, argumentName: "SPECIE_PROPS_CATEGORY" },
       { argument: props.options, argumentName: "SPECIE_PROPS_OPTIONS" },
       { argument: props.optional, argumentName: "SPECIE_PROPS_OPTIONAL" },

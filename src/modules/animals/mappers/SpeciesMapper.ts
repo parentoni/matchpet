@@ -39,12 +39,13 @@ export class SpeciesMapper {
           });
         }
 
+
         persistentSpecieTraitsArray.push({
           ...trait.props,
           options: options,
-          svg: trait.svg.value,
           _id: trait.specieTraitId.toValue(),
-          print: trait.print.value
+          print: trait.print.value,
+          category: trait.category.toValue()
         });
       }
 
