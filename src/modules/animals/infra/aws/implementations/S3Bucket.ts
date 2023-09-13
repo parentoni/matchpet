@@ -24,7 +24,7 @@ export class S3Bucket implements IBucketUpload {
 
     try {
       const response = await this.client.send(command)
-      return right(`https://${this.REGION}.s3.amazonaws.com/${location}`)
+      return right(`https://${this.BUCKET}.s3.${this.REGION}.amazonaws.com/${location}`)
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error))
     }
