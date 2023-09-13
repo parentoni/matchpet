@@ -6,6 +6,7 @@ import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserId } from "../../user/domain/userProps/userId";
 import { AnimalAge } from "./animal/AnimalAge";
+import { AnimalDescription } from "./animal/AnimalDescription";
 import { AnimalImages } from "./animal/AnimalImages";
 import { AnimalName } from "./animal/AnimalName";
 import { AnimalStatus } from "./animal/AnimalStatus";
@@ -21,6 +22,7 @@ export interface IAnimalProps {
   animalTrait: AnimalTraits;
   createdAt: Timestamp;
   status: AnimalStatus;
+  description: AnimalDescription;
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
@@ -58,6 +60,10 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.status;
   }
 
+  get description(): AnimalDescription {
+    return this.props.description;
+  }
+
   public static create(props: IAnimalProps, id?: UniqueGlobalId): AnimalCreateResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argumentName: "NAME", argument: props.name },
@@ -65,7 +71,8 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "IMAGE", argument: props.image },
       { argumentName: "DONATOR_ID", argument: props.donatorId },
       { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait },
-      { argumentName: "ANIMAL_STATUS", argument: props.status }
+      { argumentName: "ANIMAL_STATUS", argument: props.status },
+      {argumentName: "ANIMAL_DESCRIPTION", argument: props.description}
     ]);
 
     if (guardResult.isLeft()) {

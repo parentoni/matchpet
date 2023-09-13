@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { authRouter } from "../../../../modules/user/infra/http/routes";
 import { animalsRouter } from "../../../../modules/animals/infra/http/routes/animals";
 

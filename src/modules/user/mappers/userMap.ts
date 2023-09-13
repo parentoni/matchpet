@@ -1,10 +1,8 @@
-import { AppError } from "../../../shared/core/Response/AppError";
 import { GenericError, IBaseError } from "../../../shared/core/Response/Error";
 import { right, Either, left } from "../../../shared/core/Result";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { User } from "../domain/user";
-import { UserCpf } from "../domain/userProps/userCpf";
 import { UserEmail } from "../domain/userProps/userEmail";
 import { UserName } from "../domain/userProps/userName";
 import { UserPassword } from "../domain/userProps/userPassword";
@@ -55,16 +53,16 @@ export class UserMap {
   static async toPersistant(user: User): Promise<Either<CommonUseCaseResult.UnexpectedError, IUserPersistant>> {
     let password = null;
 
-    if (!!user.password === true) {
+ 
       if (user.password?.isAlreadyHashed()) {
-        password = user.password;
+        password = user.password.value;
       } else {
         password = await user.password?.getHashedValue();
       }
-    }
+    
     try {
       return right({
-        password: user.password?.value,
+        password: password,
         email: user.email?.value,
         first_name: user.name?.first_name,
         last_name: user.name?.last_name,

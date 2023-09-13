@@ -1,7 +1,6 @@
 import express from "express";
 import { createUserController } from "../../../useCases/createUser";
 import { middleware } from "../../../../../shared/infra/http";
-import { AuthenticatedRequest } from "../../../../../shared/infra/http/models/AutheticatedRequest";
 import { getCurrentUserController } from "../../../useCases/getCurrentUser";
 import { loginController } from "../../../useCases/login";
 // const userRouter = express.Router();

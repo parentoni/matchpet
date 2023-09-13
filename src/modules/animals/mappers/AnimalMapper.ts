@@ -8,6 +8,7 @@ import { IAnimalPersistent, IAnimalTraitsPersistent } from "../../../shared/infr
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { Animal } from "../domain/Animal";
 import { AnimalAge } from "../domain/animal/AnimalAge";
+import { AnimalDescription } from "../domain/animal/AnimalDescription";
 import { AnimalImages } from "../domain/animal/AnimalImages";
 import { AnimalName } from "../domain/animal/AnimalName";
 import { AnimalStatus } from "../domain/animal/AnimalStatus";
@@ -25,6 +26,8 @@ export class AnimalMapper {
     const animalIdOrError = UniqueGlobalId.createExisting(persistent._id);
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
+    const animalDescriptionOrError = AnimalDescription.create({value: persistent.description})
+
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalAgeOrError,
@@ -33,7 +36,8 @@ export class AnimalMapper {
       animalSpecieIdOrError,
       animalTraitsOrError,
       animalIdOrError,
-      animalTraitsOrError
+      animalTraitsOrError,
+      animalDescriptionOrError
     ]);
 
     if (combineResult.isLeft()) {
@@ -48,6 +52,7 @@ export class AnimalMapper {
     const animalTraits = animalTraitsOrError.getRight();
     const animalId = animalIdOrError.getRight();
     const animalStats = animalStatsOrError.getRight();
+    const animalDescription = animalDescriptionOrError.getRight()
 
     const animal = Animal.create(
       {
@@ -58,7 +63,8 @@ export class AnimalMapper {
         specieId: animalSpecieId,
         animalTrait: animalTraits,
         createdAt: animalCreatedAt,
-        status: animalStats
+        status: animalStats,
+        description: animalDescription
       },
       animalId
     );
@@ -81,7 +87,8 @@ export class AnimalMapper {
         specie_id: domain.specieId.toValue(),
         created_at: domain.createdAt.value,
         traits: domain.animalTraits.persistentValue,
-        status: domain.animalStatus.value
+        status: domain.animalStatus.value,
+        description: domain.description.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

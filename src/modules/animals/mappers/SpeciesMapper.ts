@@ -49,11 +49,6 @@ export class SpeciesMapper {
         });
       }
 
-      console.log({
-        _id: specie.id.toValue(),
-        name: specie.name,
-        traits: persistentSpecieTraitsArray
-      })
       return right({
         _id: specie.id.toValue(),
         name: specie.name,

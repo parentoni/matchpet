@@ -8,6 +8,7 @@ import { EitherUtils } from "../../../../../shared/utils/EitherUtils";
 import { UserId } from "../../../../user/domain/userProps/userId";
 import { Animal } from "../../../domain/Animal";
 import { AnimalAge } from "../../../domain/animal/AnimalAge";
+import { AnimalDescription } from "../../../domain/animal/AnimalDescription";
 import { AnimalImages } from "../../../domain/animal/AnimalImages";
 import { AnimalName } from "../../../domain/animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "../../../domain/animal/AnimalStatus";
@@ -37,6 +38,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
     const animalStatusOrError = AnimalStatus.create(ANIMAL_STATUS.PENDING);
+    const animalDescriptionOrError = AnimalDescription.create({value: request.description})
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -45,7 +47,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       animalSpecieIdOrError,
       animalDonatorIdOError,
       animalSpecieTraitsOrError,
-      animalStatusOrError
+      animalStatusOrError,
+      animalDescriptionOrError
     ]);
 
     if (combineResult.isLeft()) {
@@ -59,6 +62,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalDonatorId = animalDonatorIdOError.getRight();
     const animalSpecieTraits = animalSpecieTraitsOrError.getRight();
     const animalStats = animalStatusOrError.getRight();
+    const animalDescription = animalDescriptionOrError.getRight()
 
     const specie = await this.specieRepo.findById(animalSpecieId.toValue());
 
@@ -80,7 +84,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       specieId: animalSpecieId,
       animalTrait: traitsValidation.value,
       createdAt: animalCreatedTimespamp,
-      status: animalStats
+      status: animalStats,
+      description: animalDescription
     });
 
     if (animalResult.isLeft()) {

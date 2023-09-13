@@ -13,7 +13,7 @@ const AnimalSchema = new mongoose.Schema({
   status: { type: String, required: true },
   donator_id: { type: mongoose.Types.ObjectId, required: true },
   specie_id: { type: mongoose.Types.ObjectId, required: true },
-
+  description: {type: String, required: true},
   traits: { type: [traitSchema], required: true }
 });
 
@@ -24,10 +24,9 @@ export interface IAnimalPersistent {
   image: string[];
   created_at: Date;
   status: string;
-
   donator_id: string;
   specie_id: string;
-
+  description: string
   traits: IAnimalTraitsPersistent[];
 }
 

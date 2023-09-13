@@ -11,6 +11,7 @@ app.use(morgan(Secrets.NODE_ENV === "development" ? "dev" : "common"));
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(cors())
+app.disable('etag')
 
 app.use("/", v1Router);
 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
-import { User, UserProps } from "../domain/user";
+import { User} from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { AppError } from "../../../shared/core/Response/AppError";
 import { UserMap } from "../mappers/userMap";
