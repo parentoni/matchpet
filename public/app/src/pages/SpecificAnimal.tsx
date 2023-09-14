@@ -14,6 +14,7 @@ import { AnimalDescription } from "../elements/SpecificAnimal/AnimalDescription"
 import { AnimalContactButton } from "../elements/SpecificAnimal/AnimalContactButton"
 import { IUserContactDTO } from "../utils/dtos/UserDTO"
 import { User } from "../utils/domain/User"
+import { ISpecieDTO } from "../utils/dtos/SpecieDTO"
 
 export const SpecificAnimal = () => {
 
@@ -23,12 +24,14 @@ export const SpecificAnimal = () => {
 
   const [selectedAnimalDTO, setSelectedAnimalDTO] = useState<IAnimalDTO>()
   const [contactInfo, setContactInfo] = useState<IUserContactDTO>()
-
+  const [selectedSpecie, setSelectedSpecie] = useState<ISpecieDTO>()
+  const [isMale, setIsMale] = useState<boolean>()
   useEffect(() => {
     Animal.getSpecific(animalId as string).then((response) => {
       if (response.isLeft()) {
         alert("Não foi posível encontrar o animal.")
       } else {
+        console.log(response.value)
         setSelectedAnimalDTO(response.value.props)
       }
     })
@@ -46,9 +49,32 @@ export const SpecificAnimal = () => {
       })
     }
   }, [selectedAnimalDTO])
+
+  //Clean code bizarro.
+  useEffect(() => {
+    if (selectedAnimalDTO) {
+      const currentSpecie = Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie
+      if (currentSpecie) {
+        setSelectedSpecie(currentSpecie.props)
+      const sexoTrait = currentSpecie.getTraitByVariable("name", "Sexo")
+      if (sexoTrait) {
+        const selectedOptionValue = currentSpecie.getTraitOptionValueById(sexoTrait._id, Animal.create(selectedAnimalDTO).getTraitById(sexoTrait._id)?.value || '')
+        if (selectedOptionValue) {
+          if (selectedOptionValue.name === 'Fêmea') {
+            setIsMale(false)
+          } else {
+            setIsMale(true)
+          }
+        }
+      }
+      }
+    }
+    }, [selectedAnimalDTO, species])
+
+  
   return(
     <>
-      {selectedAnimalDTO && 
+      {selectedAnimalDTO && selectedSpecie &&
       <div className="flex flex-col gap-3">
         <div className="px-8 pt-8">
           <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
@@ -59,7 +85,7 @@ export const SpecificAnimal = () => {
         </div>
         <AnimalTraitsSlider AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
         <AnimalDescription description={selectedAnimalDTO.description}/>
-        <AnimalContactButton />
+        <AnimalContactButton ContactDTO={contactInfo} isMale={isMale || false} AnimalName={selectedAnimalDTO.name}/>
       </div>}
     </>
   )

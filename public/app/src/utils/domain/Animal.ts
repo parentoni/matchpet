@@ -21,4 +21,11 @@ export class Animal {
 
     return right(this.create(response.value))
   }
+  
+  public getTraitById(id:string) {
+    const response = this.props.traits.find(el => el._id === id)
+    if (response) {
+      return response
+    }
+  }
 }

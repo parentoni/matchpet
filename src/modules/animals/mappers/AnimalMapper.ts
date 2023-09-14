@@ -16,6 +16,7 @@ import { AnimalTrait } from "../domain/animal/AnimalTrait";
 import { AnimalTraits } from "../domain/animal/AnimalTraits";
 
 export class AnimalMapper {
+  //!todo: add traits verification
   public static toDomain(persistent: IAnimalPersistent): Either<GuardError, Animal> {
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalAgeOrError = AnimalAge.create({ months: persistent.age });

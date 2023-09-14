@@ -32,4 +32,24 @@ export class Specie {
 
     return traits
   }
+
+  public getTraitByVariable(variable: keyof ISpecieTraitDTO, value: string):ISpecieTraitDTO | undefined{
+    const result = this.props.traits.find(el => el[variable] === value)
+    if (result) {
+      return result
+    }
+
+    return undefined
+  }
+
+  public getTraitOptionValueById(traitId:string, optionId:string) {
+    const trait = this.props.traits.find(el => el._id === traitId)
+    if (trait) {
+      const option = trait.options.find(el => el._id === optionId)
+      if (option) {
+        return option
+      }
+    }
+    return undefined
+  }
 }
