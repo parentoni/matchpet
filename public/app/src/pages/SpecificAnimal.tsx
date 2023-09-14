@@ -10,6 +10,8 @@ import { AnimalTraitsSlider } from "../elements/SpecificAnimal/AnimalTraitsSlide
 import { Specie } from "../utils/domain/Specie"
 import { Species } from "../utils/domain/Species"
 import { Categories } from "../utils/domain/Categories"
+import { AnimalDescription } from "../elements/SpecificAnimal/AnimalDescription"
+import { AnimalContactButton } from "../elements/SpecificAnimal/AnimalContactButton"
 
 export const SpecificAnimal = () => {
 
@@ -41,6 +43,8 @@ export const SpecificAnimal = () => {
           <p className="text-xs">Por <span className="text-primary hover:underline">TODO</span></p>
         </div>
         <AnimalTraitsSlider AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
+        <AnimalDescription description={selectedAnimalDTO.description}/>
+        <AnimalContactButton />
       </div>}
     </>
   )
