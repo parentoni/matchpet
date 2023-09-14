@@ -43,8 +43,8 @@ export class UserName extends ValueObject<IUserName> {
 
     return right(
       new UserName({
-        first_name: TextUtils.sanitize(props.first_name),
-        last_name: TextUtils.sanitize(props.last_name)
+        first_name: props.first_name.trim(),
+        last_name: props.last_name.trim()
       })
     );
   }

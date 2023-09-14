@@ -24,6 +24,6 @@ export class GetUserInfoUseCase implements UseCase<GetUserInfoDTO, GetUserInfoUs
     }
 
 
-    return right({phone_number: response.value.phone_number, email: response.value.email})
+    return right({phone_number: response.value.phone_number, email: response.value.email, name: response.value.first_name + " " + response.value.last_name})
   }
 }

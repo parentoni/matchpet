@@ -12,6 +12,8 @@ import { Species } from "../utils/domain/Species"
 import { Categories } from "../utils/domain/Categories"
 import { AnimalDescription } from "../elements/SpecificAnimal/AnimalDescription"
 import { AnimalContactButton } from "../elements/SpecificAnimal/AnimalContactButton"
+import { IUserContactDTO } from "../utils/dtos/UserDTO"
+import { User } from "../utils/domain/User"
 
 export const SpecificAnimal = () => {
 
@@ -20,6 +22,7 @@ export const SpecificAnimal = () => {
   const {categories} = useContext(CategoriesContext);
 
   const [selectedAnimalDTO, setSelectedAnimalDTO] = useState<IAnimalDTO>()
+  const [contactInfo, setContactInfo] = useState<IUserContactDTO>()
 
   useEffect(() => {
     Animal.getSpecific(animalId as string).then((response) => {
@@ -29,8 +32,20 @@ export const SpecificAnimal = () => {
         setSelectedAnimalDTO(response.value.props)
       }
     })
+
   }, [animalId])
 
+  useEffect(() => {
+    if (selectedAnimalDTO) {
+      User.getUserContactInfo(selectedAnimalDTO.donator_id).then(response => {
+        if (response.isLeft()) {
+          alert("Não foi posível encontrar informacoes sobre o doador.")
+        } else {
+          setContactInfo(response.value)
+        }
+      })
+    }
+  }, [selectedAnimalDTO])
   return(
     <>
       {selectedAnimalDTO && 
@@ -40,7 +55,7 @@ export const SpecificAnimal = () => {
         </div>
         <div className="px-8">
           <h1 className="text-2xl font-normal">{selectedAnimalDTO.name}</h1>
-          <p className="text-xs">Por <span className="text-primary hover:underline">TODO</span></p>
+          <p className="text-xs">Por <button className="text-primary hover:underline">{contactInfo?.name}</button></p>
         </div>
         <AnimalTraitsSlider AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
         <AnimalDescription description={selectedAnimalDTO.description}/>
