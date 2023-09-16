@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/index.css';
 import { RouterProvider } from 'react-router-dom';
-import router from './pages/Routes';
+import router from './Routes';
 import { SpeciesContextProvider } from './utils/context/SpeciesContext';
 import { CategoriesContextProvider } from './utils/context/CategoriesContext';
 const root = ReactDOM.createRoot(

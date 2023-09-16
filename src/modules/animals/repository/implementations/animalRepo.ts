@@ -112,16 +112,23 @@ export class AnimalRepo implements IAnimalRepo {
     }
   }
 
-  async findBulk(filter: FilterObject[], skip: number, limit: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>> {
+  async findBulk(filter: FilterObject[], skip: number, limit: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, {animals: Animal[], count: number}>> {
     try {
-      const dbFilter: DBFilter = {};
+      const dbFilter: DBFilter[] = [];
       for (const ind_filter of filter) {
         const comparation: Record<string, any> = {};
+        const filter: Record<string, any> = {}
+
         comparation[ind_filter.mode] = ind_filter.comparation_value;
-        dbFilter[ind_filter.key] = comparation;
+        filter[ind_filter.key] = comparation
+        dbFilter.push(filter)
+
       }
 
-      const result = await AnimalModel.find(dbFilter).limit(limit).skip(skip);
+
+      const result = await AnimalModel.find({$and: dbFilter}).limit(limit).skip(skip);
+      const count = await AnimalModel.find({$and: dbFilter}).count()
+
       const animalArray: Animal[] = [];
 
       for (const persistenceAnimal of result) {
@@ -130,7 +137,7 @@ export class AnimalRepo implements IAnimalRepo {
           animalArray.push(mapperResult.value);
         }
       }
-      return right(animalArray);
+      return right({animals: animalArray, count: count});
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }

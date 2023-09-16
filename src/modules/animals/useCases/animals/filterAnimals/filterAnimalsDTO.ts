@@ -3,7 +3,7 @@ export interface FilterAnimalsDTO {
   page: number;
 }
 
-export interface FilterObject {
+export interface  FilterObject {
   key: string;
   comparation_value: any;
   mode: FILTER_MODES;

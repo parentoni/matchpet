@@ -32,13 +32,13 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       }
     }
 
-    const result = await this.animalRepo.findBulk(treatedFilters, request.page * 30, 30);
+    const result = await this.animalRepo.findBulk(treatedFilters, request.page * 50, 50);
     if (result.isLeft()) {
       return left(result.value);
     }
 
     const persistentValues: IAnimalPersistent[] = []
-    for (const value of  result.value) {
+    for (const value of result.value.animals) {
       const mapperResult = AnimalMapper.toPersistent(value)
       if (mapperResult.isLeft()){
         return left(mapperResult.value)
@@ -46,6 +46,6 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
 
       persistentValues.push(mapperResult.value)
     }
-    return right(persistentValues);
+    return right({animals: persistentValues, count: result.value.count});
   }
 }

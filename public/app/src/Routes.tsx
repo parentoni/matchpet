@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import { App } from "./App";
-import { Listing } from "./Listing";
-import { SpecificAnimal } from "./SpecificAnimal";
+import { App } from "./Base";
+import { Listing } from "./pages/Listing";
+import { SpecificAnimal } from "./pages/SpecificAnimal";
 
 const router = createBrowserRouter([
   {

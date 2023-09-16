@@ -1,9 +1,9 @@
 import logo from '../assets/logo.svg'
 import {Menu} from 'lucide-react'
-import Hamburguer from '../assets/hamburger.svg'
+import Hamburguer from './assets/hamburger.svg'
 import { Outlet } from 'react-router-dom'
 import { useContext } from 'react'
-import { SpeciesContext } from '../utils/context/SpeciesContext'
+import { SpeciesContext } from './utils/context/SpeciesContext'
 export const App = () => {
     const {species} = useContext(SpeciesContext)
 
