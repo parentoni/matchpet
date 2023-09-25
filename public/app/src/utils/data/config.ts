@@ -3,7 +3,7 @@ export interface IGloabalVariables {
 }
 
 const devVariables: IGloabalVariables = {
-    apiUrl: 'http://192.168.0.4:8000'
+    apiUrl: 'http://localhost:8000'
 }
 
 const prodVariables: IGloabalVariables = {

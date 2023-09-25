@@ -125,9 +125,8 @@ export class AnimalRepo implements IAnimalRepo {
 
       }
 
-
-      const result = await AnimalModel.find({$and: dbFilter}).limit(limit).skip(skip);
-      const count = await AnimalModel.find({$and: dbFilter}).count()
+      const result = await AnimalModel.find(dbFilter.length>0?{$and: dbFilter}: {}).limit(limit).skip(skip);
+      const count = await AnimalModel.find(dbFilter.length>0?{$and: dbFilter}: {}).count()
 
       const animalArray: Animal[] = [];
 

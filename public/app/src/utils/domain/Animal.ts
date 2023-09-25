@@ -21,6 +21,16 @@ export class Animal {
 
     return right(this.create(response.value))
   }
+
+  public static async getAll(page: number): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
+    const response = await Api.post('/animals/filter', JSON.stringify({page: page, filter: []}))
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right({animals: response.value['animals'] as IAnimalDTO[], count: response.value["count"] as number})
+
+  }
   
   public getTraitById(id:string) {
     const response = this.props.traits.find(el => el._id === id)
