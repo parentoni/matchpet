@@ -37,7 +37,7 @@ export function AnimalImageGallery ({isOpen, setIsOpen, AnimalImages, AnimalName
           <div className="flex-1 flex p-2 overflow-x-scroll gap-3 no-scrollbar">
             {AnimalImages.map((image, index) => (
               <button className="focus:ring-2 h-full aspect-video bg-[#D9D9D9]" onClick={() => setCurrentSlide(index)}>
-                <Image hasMasterSpinner src={image}  className=" object-contain"/>
+                <Image hasMasterSpinner src={image}  className=" object-cover"/>
               </button>
             ))}
           </div>

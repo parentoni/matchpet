@@ -16,6 +16,7 @@ import { User } from "../utils/domain/User"
 import { ISpecieDTO } from "../utils/dtos/SpecieDTO"
 import { AnimalAction } from "../elements/SpecificAnimal/AnimalActions"
 import { FullPageModal } from "../elements/FullPageModal"
+import { AnimalTraits } from "../elements/SpecificAnimal/AnimalTraits"
 
 export const SpecificAnimal = () => {
 
@@ -80,13 +81,13 @@ export const SpecificAnimal = () => {
       <div className="flex flex-col gap-3">
         <AnimalAction AnimalId={selectedAnimalDTO._id}/>
         <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
-        <div className="px-8">
-          <h1 className="text-2xl font-normal">{selectedAnimalDTO.name}</h1>
-          <p className="text-xs">Por <button className="text-primary hover:underline">{contactInfo?.name}</button></p>
-        </div>
-        <AnimalTraitsSlider AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
-        <AnimalDescription description={selectedAnimalDTO.description}/>
+        
+        <AnimalDescription description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name}/>
         <AnimalContactButton ContactDTO={contactInfo} isMale={isMale || false} AnimalName={selectedAnimalDTO.name}/>
+        <div className="px-8 pt-2 w-full">
+          <div className="border"></div>
+        </div>
+        <AnimalTraits AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
       </div>}
     </>
   )
