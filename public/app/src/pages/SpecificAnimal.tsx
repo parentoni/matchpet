@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom"
-import { PageLayout } from "../elements/PageLayout"
 import { useContext, useEffect, useState } from "react"
 import { SpeciesContext } from "../utils/context/SpeciesContext"
 import { Animal } from "../utils/domain/Animal"
@@ -15,6 +14,8 @@ import { AnimalContactButton } from "../elements/SpecificAnimal/AnimalContactBut
 import { IUserContactDTO } from "../utils/dtos/UserDTO"
 import { User } from "../utils/domain/User"
 import { ISpecieDTO } from "../utils/dtos/SpecieDTO"
+import { AnimalAction } from "../elements/SpecificAnimal/AnimalActions"
+import { FullPageModal } from "../elements/FullPageModal"
 
 export const SpecificAnimal = () => {
 
@@ -26,6 +27,7 @@ export const SpecificAnimal = () => {
   const [contactInfo, setContactInfo] = useState<IUserContactDTO>()
   const [selectedSpecie, setSelectedSpecie] = useState<ISpecieDTO>()
   const [isMale, setIsMale] = useState<boolean>()
+
   useEffect(() => {
     Animal.getSpecific(animalId as string).then((response) => {
       if (response.isLeft()) {
@@ -76,9 +78,8 @@ export const SpecificAnimal = () => {
     <>
       {selectedAnimalDTO && selectedSpecie &&
       <div className="flex flex-col gap-3">
-        <div className="px-8 pt-8">
-          <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
-        </div>
+        <AnimalAction AnimalId={selectedAnimalDTO._id}/>
+        <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
         <div className="px-8">
           <h1 className="text-2xl font-normal">{selectedAnimalDTO.name}</h1>
           <p className="text-xs">Por <button className="text-primary hover:underline">{contactInfo?.name}</button></p>

@@ -12,11 +12,11 @@ const router = createBrowserRouter([
         index: true,
         element: <AllAnimals />
       },
-      {
-        path: 'animal/:animalId',
-        element: <SpecificAnimal />
-      }
     ]
+  },
+  {
+    path:'/animal/:animalId',
+    element: <SpecificAnimal />
   }
 ])
 
