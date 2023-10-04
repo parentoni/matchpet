@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { App } from "./Base";
 import { SpecificAnimal } from "./pages/SpecificAnimal";
 import { AllAnimals } from "./pages/AllAnimals";
+import { Login } from "./pages/Login";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path:'/animal/:animalId',
     element: <SpecificAnimal />
+  },
+  {
+    path: '/auth/login',
+    element: <Login />
   }
 ])
 

@@ -5,15 +5,18 @@ import { RouterProvider } from 'react-router-dom';
 import router from './Routes';
 import { SpeciesContextProvider } from './utils/context/SpeciesContext';
 import { CategoriesContextProvider } from './utils/context/CategoriesContext';
+import { AuthProvider } from './utils/context/AuthContext';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <CategoriesContextProvider>
-    <SpeciesContextProvider>
-      <RouterProvider router={router}/>
-    </SpeciesContextProvider>
-  </CategoriesContextProvider>
+  <AuthProvider>
+    <CategoriesContextProvider>
+      <SpeciesContextProvider>
+        <RouterProvider router={router}/>
+      </SpeciesContextProvider>
+    </CategoriesContextProvider>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

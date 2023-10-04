@@ -1,5 +1,10 @@
-export interface IUserContactDTO {
-  name: string,
-  phone_number: string,
-  email: string,
+export interface IUserPersistent {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+  email: string;
+  role: number;
+  verified: boolean;
+  phone_number: string;
 }

@@ -1,4 +1,4 @@
-import { IUserContactDTO } from "../dtos/UserDTO";
+import { IUserContactDTO } from "../dtos/UserContactDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 
