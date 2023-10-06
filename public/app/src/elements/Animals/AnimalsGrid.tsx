@@ -5,11 +5,15 @@ import { Species } from "../../utils/domain/Species";
 import { Animal } from "../../utils/domain/Animal";
 import { useNavigate } from "react-router-dom";
 import {Trash2, Heart} from 'lucide-react'
+import { useContext } from "react";
+import { FiltersContext } from "../../utils/context/FiltersContext";
 export function AnimalGrid ({AnimalsArray, SpeciesArray, setAnimalsArray}: {AnimalsArray: IAnimalDTO[] | undefined, SpeciesArray: ISpecieDTO[], setAnimalsArray: (a: IAnimalDTO[]) => void}) {
   const navigate = useNavigate()
 
+  const {setPage, page, animals} = useContext(FiltersContext)
+
   return (
-    <div className="w-full grid-cols-1 grid gap-5">
+    <div className="w-full grid-cols-1 grid gap-5 pb-20">
       {AnimalsArray && 
         AnimalsArray.map((animal, index) => {
 
@@ -51,6 +55,10 @@ export function AnimalGrid ({AnimalsArray, SpeciesArray, setAnimalsArray}: {Anim
           
         })
       }
+      { (animals.length % 50) === 0?
+      <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => setPage(page+1)}>
+        Carregar mais
+      </button>:''}
       
 
     </div>

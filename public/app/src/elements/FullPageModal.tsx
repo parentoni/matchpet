@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { X } from "lucide-react";
-export function FullPageModal ({isOpen, setIsOpen, title, children, absolute}: React.PropsWithChildren<{isOpen: boolean, setIsOpen: (x: boolean) => void, title:string, absolute:boolean}>) {
+export function FullPageModal ({isOpen, setIsOpen, title, children, absolute, className}: React.PropsWithChildren<{isOpen: boolean, setIsOpen: (x: boolean) => void, title:string, absolute:boolean, className?: string}>) {
   function closeModal() {
     setIsOpen(false)
   }
@@ -32,7 +32,7 @@ export function FullPageModal ({isOpen, setIsOpen, title, children, absolute}: R
         leaveFrom="translate-y-0"
         leaveTo="translate-y-full"
         >
-          <Dialog.Panel className="fixed  w-screen h-screen bg-white top-0 left-0">
+          <Dialog.Panel className={`fixed w-screen h-screen overflow-y-scroll bg-white top-0 left-0 ${className}`}>
             <Dialog.Title as="h2" className={` ${absolute && 'absolute'} top-0 left-0 flex gap-3 mb-3 px-8 pt-8 z-50`} onClick={() => setIsOpen(false)}>
               <X />{title}
             </Dialog.Title>

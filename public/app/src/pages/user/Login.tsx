@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { PageLayout } from "../elements/PageLayout";
+import { PageLayout } from "../../elements/PageLayout";
 import { MoveLeft } from "lucide-react";
 import { useContext, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import reducedLogo from '../assets/logo-reduced.svg'
-import { AuthContext } from "../utils/context/AuthContext";
+import reducedLogo from '../../assets/logo-reduced.svg'
+import { AuthContext } from "../../utils/context/AuthContext";
 export function Login () {
   const navigate = useNavigate()
   const {login} = useContext(AuthContext)
@@ -18,7 +18,7 @@ export function Login () {
       return alert("Usuário e/ou senha incorretos")
     }
 
-    navigate('/manage')
+    navigate('/partner')
 
   }
   return (

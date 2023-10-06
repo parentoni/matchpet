@@ -1,3 +1,4 @@
+import { FILTER_MODES } from "../../elements/Animals/filters";
 import { IAnimalDTO } from "../dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
@@ -22,8 +23,21 @@ export class Animal {
     return right(this.create(response.value))
   }
 
-  public static async getAll(page: number): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
-    const response = await Api.post('/animals/filter', JSON.stringify({page: page, filter: []}))
+  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
+    
+    const formatedFilters = []
+    for (const key of Object.keys(filters)) {
+      for (const method of filters[key]) {
+        if (!key.includes('trait')) {
+          formatedFilters.push({'mode':method.mode, "comparation_value":method.comparation_value, key: key})
+        } else {
+          formatedFilters.push({'mode':method.mode, "comparation_value":method.comparation_value, key: 'traits.value'})
+
+        }
+      }
+    }
+
+    const response = await Api.post('/animals/filter', JSON.stringify({page: page, filter: formatedFilters}))
     if (response.isLeft()) {
       return left(response.value)
     }
@@ -38,4 +52,5 @@ export class Animal {
       return response
     }
   }
+
 }

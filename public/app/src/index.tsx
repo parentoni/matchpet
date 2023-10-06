@@ -6,17 +6,23 @@ import router from './Routes';
 import { SpeciesContextProvider } from './utils/context/SpeciesContext';
 import { CategoriesContextProvider } from './utils/context/CategoriesContext';
 import { AuthProvider } from './utils/context/AuthContext';
+import {ChakraProvider} from '@chakra-ui/react'
+import { FiltersContext, FiltersContextProvider } from './utils/context/FiltersContext';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <AuthProvider>
-    <CategoriesContextProvider>
-      <SpeciesContextProvider>
-        <RouterProvider router={router}/>
-      </SpeciesContextProvider>
-    </CategoriesContextProvider>
-  </AuthProvider>
+  <FiltersContextProvider>
+    <ChakraProvider>
+      <AuthProvider>
+        <CategoriesContextProvider>
+          <SpeciesContextProvider>
+            <RouterProvider router={router}/>
+          </SpeciesContextProvider>
+        </CategoriesContextProvider>
+      </AuthProvider>
+    </ChakraProvider>
+  </FiltersContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

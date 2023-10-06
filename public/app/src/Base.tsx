@@ -25,7 +25,7 @@ export const App = () => {
                 <PageLayout>
                     {user?
                     <div className='flex flex-col gap-3'>
-                        <button onClick={() => {navigate('/manage')}} className='w-full bg-black text-white h-12'>
+                        <button onClick={() => {navigate('/partner')}} className='w-full bg-black text-white h-12'>
                             Gerenciar
                         </button>
                         <p className='text-sm'>Gerencie os seus animais para adoção.</p>
