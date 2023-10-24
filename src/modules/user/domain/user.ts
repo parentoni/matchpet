@@ -12,6 +12,7 @@ import { UserName } from "./userProps/userName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
 import { Timestamp } from "../../../shared/core/Timestamp";
 import { UserPhone } from "./userProps/userPhone";
+import { UserLocation } from "./userProps/userLocation";
 
 export interface UserProps {
   name: UserName;
@@ -20,6 +21,7 @@ export interface UserProps {
   role: UserRole;
   verified: boolean;
   phone: UserPhone;
+  location: UserLocation;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -53,6 +55,10 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.verified;
   }
 
+  get location(): UserLocation {
+    return this.props.location
+  }
+
   private constructor(props: UserProps, id?: UniqueGlobalId) {
     super(props, id);
   }
@@ -64,7 +70,8 @@ export class User extends AggregateRoot<UserProps> {
       { argument: props.password, argumentName: "USER_PASWORD" },
       { argument: props.phone, argumentName: "USER_PHONE" },
       { argument: props.role, argumentName: "USER_ROLE" },
-      { argument: props.verified, argumentName: "USER_VERIFIED" }
+      { argument: props.verified, argumentName: "USER_VERIFIED" },
+      {argument: props.location, argumentName: "USER_LOCATION"}
     ]);
 
     if (guardResult.isLeft()) {

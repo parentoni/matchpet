@@ -10,6 +10,7 @@ import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
 import { UserPhone } from "../domain/userProps/userPhone";
+import { UserLocation } from "../domain/userProps/userLocation";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -24,8 +25,9 @@ export class UserMap {
     const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
+    const userLocationOrError = UserLocation.create(persistance.location)
 
-    const result = EitherUtils.combine([userPasswordOrError, userRoleOrError, userPhoneNumberOrError, userEmailOrError]);
+    const result = EitherUtils.combine([userPasswordOrError, userRoleOrError, userPhoneNumberOrError, userEmailOrError, userLocationOrError]);
 
     if (result.isRight()) {
       const userOrError = User.create(
@@ -35,7 +37,8 @@ export class UserMap {
           password: userPasswordOrError.getRight(),
           role: userRoleOrError.getRight(),
           phone: userPhoneNumberOrError.getRight(),
-          verified: persistance.verified
+          verified: persistance.verified,
+          location: userLocationOrError.getRight()
         },
         new UniqueGlobalId(persistance._id)
       );
@@ -69,7 +72,8 @@ export class UserMap {
         _id: user.id.toValue(),
         role: user.role,
         verified: user.verified,
-        phone_number: user.phone.value
+        phone_number: user.phone.value,
+        location: user.location.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

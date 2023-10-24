@@ -19,6 +19,7 @@ import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
 import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
+import { UserLocation } from "../../domain/userProps/userLocation";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -36,8 +37,10 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const emailOrError = UserEmail.create({ value: request.email });
     const roleOrError = UserRole.create({ value: request.role || 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
+    const locationOrError = UserLocation.create(request.location)
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError]);
+    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError]);
+
     if (result.isLeft()) {
       return left(result.value);
     }
@@ -47,6 +50,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const name = nameOrError.getRight();
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
+    const location = locationOrError.getRight()
 
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
@@ -61,7 +65,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       password: hashedPassword.value,
       phone,
       role,
-      verified: request.verified || false
+      verified: request.verified || false,
+      location,
       // role: UserRole.create({value: 0})
     });
 

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Coordinate, { ICoordinatePersistent } from "./Coordinate";
 
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
@@ -8,7 +9,8 @@ const userSchema = new mongoose.Schema({
   // cpf: { type: String, required: false },
   role: { type: Number, required: true },
   verified: { type: Boolean, required: true },
-  phone_number: { type: String, required: true }
+  phone_number: { type: String, required: true },
+  location: {type: Coordinate, required: true}
 });
 
 export type IUserPersistant = {
@@ -20,7 +22,8 @@ export type IUserPersistant = {
   role: number;
   verified: boolean;
   phone_number: string;
-  // cpf?: string;
+  location: ICoordinatePersistent
 };
+
 
 export default { name: "user", schema: userSchema };
