@@ -1,4 +1,5 @@
 import { Guard } from "../../../../../shared/core/Guard";
+import { Location } from "../../../../../shared/core/Location";
 import { left, right } from "../../../../../shared/core/Result";
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
@@ -23,6 +24,19 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       return left(guardResponse.value);
     }
 
+    let polygon: Location.GeoJsonPolygon | undefined = undefined
+
+    if (request.coordinates) {
+      const response = Location.GeoJsonPolygon.create({
+        coordinates: request.coordinates
+      })
+      if (response.isLeft()) {
+        return left(response.value)
+      }
+
+      polygon = response.value
+    }
+
     const treatedFilters: FilterObject[] = [];
 
     // Treat the filters mode for animalRepo
@@ -32,7 +46,12 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       }
     }
 
-    const result = await this.animalRepo.findBulk(treatedFilters, request.page * 50, 50);
+    const result = await this.animalRepo.geoFind({
+      location: polygon,
+      filterObject: treatedFilters,
+      skip: request.page * 50,
+      limit: 50
+    })
     if (result.isLeft()) {
       return left(result.value);
     }

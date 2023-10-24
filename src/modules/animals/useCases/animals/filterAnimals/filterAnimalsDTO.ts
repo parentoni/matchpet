@@ -1,6 +1,7 @@
 export interface FilterAnimalsDTO {
   filter: FilterObject[];
   page: number;
+  coordinates?: GeoJSON.Position[][]
 }
 
 export interface  FilterObject {

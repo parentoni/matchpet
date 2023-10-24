@@ -43,6 +43,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.409.0",
     "@types/express-validator": "^3.0.0",
+    "@types/geojson": "^7946.0.12",
     "@types/helmet": "^4.0.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",

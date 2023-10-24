@@ -12,8 +12,7 @@ import { UserName } from "./userProps/userName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
 import { Timestamp } from "../../../shared/core/Timestamp";
 import { UserPhone } from "./userProps/userPhone";
-import { UserLocation } from "./userProps/userLocation";
-
+import { Location } from "../../../shared/core/Location";
 export interface UserProps {
   name: UserName;
   email: UserEmail;
@@ -21,7 +20,7 @@ export interface UserProps {
   role: UserRole;
   verified: boolean;
   phone: UserPhone;
-  location: UserLocation;
+  location: Location.GeoJsonPoint;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -55,7 +54,7 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.verified;
   }
 
-  get location(): UserLocation {
+  get location(): Location.GeoJsonPoint {
     return this.props.location
   }
 

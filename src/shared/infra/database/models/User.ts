@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Coordinate, { ICoordinatePersistent } from "./Coordinate";
-
+import { GeoJsonPointSchema } from "./Coordinate";
+import { Location } from "../../../core/Location";
 const userSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   role: { type: Number, required: true },
   verified: { type: Boolean, required: true },
   phone_number: { type: String, required: true },
-  location: {type: Coordinate, required: true}
+  location: {type: GeoJsonPointSchema, required: true}
 });
 
 export type IUserPersistant = {
@@ -22,7 +22,10 @@ export type IUserPersistant = {
   role: number;
   verified: boolean;
   phone_number: string;
-  location: ICoordinatePersistent
+  location: {
+    type: 'Point',
+    coordinates: GeoJSON.Position
+  }
 };
 
 

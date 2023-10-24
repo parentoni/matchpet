@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../../shared/infra/http/models/BaseController";
 import { FilterAnimalsUseCase } from "./filterAnimalsUseCase";
-import { FilterAnimalsDTO } from "./filterAnimalsDTO";
+import { FilterAnimalsDTO, FilterObject } from "./filterAnimalsDTO";
+import { AnimalRepo } from "../../../repository/implementations/animalRepo";
+import { animalRepo } from "../../../repository";
+import { Location } from "../../../../../shared/core/Location";
 
 export class FilterAnimaslsController extends BaseController<Request> {
   constructor(filterAnimalsUseCase: FilterAnimalsUseCase) {
@@ -16,5 +19,7 @@ export class FilterAnimaslsController extends BaseController<Request> {
 
       return this.ok(res, useCaseResponse.value);
     });
+
+    
   }
 }

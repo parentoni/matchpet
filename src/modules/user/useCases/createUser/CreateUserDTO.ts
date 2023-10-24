@@ -1,4 +1,3 @@
-import { ICoordinatePersistent } from "../../../../shared/infra/database/models/Coordinate";
 
 export interface CreateUserDTO {
   first_name: string;
@@ -6,7 +5,7 @@ export interface CreateUserDTO {
   email: string;
   password: string;
   phone: string;
-  location: ICoordinatePersistent;
+  location: GeoJSON.Position;
   role?: number; //!Temporary,
   verified?: boolean; //!Temporary,
 

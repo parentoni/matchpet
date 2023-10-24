@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const Coordinate = new mongoose.Schema({
-  latitude: {type: Number, required: true},
-  longitude: {type: Number, required: true},
-})
-
-export interface ICoordinatePersistent {
-  latitude: number,
-  longitude: number
-}
-
-export default Coordinate
+export const GeoJsonPointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});

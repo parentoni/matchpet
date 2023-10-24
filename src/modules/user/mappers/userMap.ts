@@ -10,7 +10,7 @@ import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
 import { UserPhone } from "../domain/userProps/userPhone";
-import { UserLocation } from "../domain/userProps/userLocation";
+import { Location } from "../../../shared/core/Location";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -25,7 +25,7 @@ export class UserMap {
     const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
-    const userLocationOrError = UserLocation.create(persistance.location)
+    const userLocationOrError = Location.GeoJsonPoint.create({coordinates: persistance.location.coordinates})
 
     const result = EitherUtils.combine([userPasswordOrError, userRoleOrError, userPhoneNumberOrError, userEmailOrError, userLocationOrError]);
 
@@ -73,7 +73,10 @@ export class UserMap {
         role: user.role,
         verified: user.verified,
         phone_number: user.phone.value,
-        location: user.location.value
+        location: {
+          type: user.location.props.type,
+          coordinates: user.location.coordinates
+        }
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

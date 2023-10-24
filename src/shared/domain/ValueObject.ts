@@ -3,7 +3,7 @@
  * @desc Value Object é um objeto generico, ou seja sem identificador definido (ver  Entity)
  */
 
-interface ValueObjectParams {
+export interface ValueObjectParams {
   [x: string]: any;
 }
 

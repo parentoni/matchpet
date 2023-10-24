@@ -19,7 +19,7 @@ import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
 import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
-import { UserLocation } from "../../domain/userProps/userLocation";
+import { Location } from "../../../../shared/core/Location";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -37,7 +37,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const emailOrError = UserEmail.create({ value: request.email });
     const roleOrError = UserRole.create({ value: request.role || 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
-    const locationOrError = UserLocation.create(request.location)
+    const locationOrError = Location.GeoJsonPoint.create({coordinates: request.location})
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError]);
 
