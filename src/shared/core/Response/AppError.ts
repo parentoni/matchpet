@@ -1,4 +1,4 @@
-import { BaseError} from "./Error";
+import { BaseError } from "./Error";
 
 interface IUnexpectedError {
   errorMessage: string;

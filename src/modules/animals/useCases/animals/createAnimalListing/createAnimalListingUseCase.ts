@@ -38,7 +38,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
     const animalStatusOrError = AnimalStatus.create(ANIMAL_STATUS.PENDING);
-    const animalDescriptionOrError = AnimalDescription.create({value: request.description})
+    const animalDescriptionOrError = AnimalDescription.create({ value: request.description });
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -62,7 +62,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalDonatorId = animalDonatorIdOError.getRight();
     const animalSpecieTraits = animalSpecieTraitsOrError.getRight();
     const animalStats = animalStatusOrError.getRight();
-    const animalDescription = animalDescriptionOrError.getRight()
+    const animalDescription = animalDescriptionOrError.getRight();
 
     const specie = await this.specieRepo.findById(animalSpecieId.toValue());
 
@@ -98,9 +98,9 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       return left(repoResult.value);
     }
 
-    const animalResultInPersistent = AnimalMapper.toPersistent(animalResult.value)
+    const animalResultInPersistent = AnimalMapper.toPersistent(animalResult.value);
     if (animalResultInPersistent.isLeft()) {
-      return left(animalResultInPersistent.value)
+      return left(animalResultInPersistent.value);
     }
 
     return right(animalResultInPersistent.value);

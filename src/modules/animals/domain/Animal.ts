@@ -12,6 +12,7 @@ import { AnimalName } from "./animal/AnimalName";
 import { AnimalStatus } from "./animal/AnimalStatus";
 import { AnimalTrait } from "./animal/AnimalTrait";
 import { AnimalTraits } from "./animal/AnimalTraits";
+import { AnimalCreated } from "./events/AnimalCreated";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -72,20 +73,24 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "DONATOR_ID", argument: props.donatorId },
       { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait },
       { argumentName: "ANIMAL_STATUS", argument: props.status },
-      {argumentName: "ANIMAL_DESCRIPTION", argument: props.description}
+      { argumentName: "ANIMAL_DESCRIPTION", argument: props.description }
     ]);
 
     if (guardResult.isLeft()) {
       return left(guardResult.value);
     }
 
-    return right(
-      new Animal(
-        {
-          ...props
-        },
-        id
-      )
+    const isNew = !!id === false;
+    const animal = new Animal(
+      {
+        ...props
+      },
+      id
     );
+
+    if (isNew) {
+      animal.addDomainEvent(new AnimalCreated(animal));
+    }
+    return right(animal);
   }
 }

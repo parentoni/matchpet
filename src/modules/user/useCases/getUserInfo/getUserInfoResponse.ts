@@ -3,5 +3,4 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either } from "../../../../shared/core/Result";
 import { GetUserInfoResponseDTO } from "./getUserInfoDTO";
 
-
-export type GetUserInfoUseCaseResponse = Either<GuardError | CommonUseCaseResult.UnexpectedError, GetUserInfoResponseDTO>
+export type GetUserInfoUseCaseResponse = Either<GuardError | CommonUseCaseResult.UnexpectedError, GetUserInfoResponseDTO>;

@@ -11,53 +11,55 @@ import { SpecieTraitPrint } from "./SpecieTraitPrint";
 
 export class SpecieTraits extends WatchList<SpecieTrait> {
   compareItems(a: SpecieTrait, b: SpecieTrait): boolean {
-    return a.equals(b)
+    return a.equals(b);
   }
 
-  constructor(traits:SpecieTrait[]) {
-    super(traits)
+  constructor(traits: SpecieTrait[]) {
+    super(traits);
   }
 
-  public static create(traits:SpecieTrait[]) {
-    return new SpecieTraits(traits)
+  public static create(traits: SpecieTrait[]) {
+    return new SpecieTraits(traits);
   }
 
   public static createFromPersistent(traits: ISpecieTraitPersistent[]): Either<GuardError, SpecieTraits> {
-    const traitDomainArray: SpecieTrait[] = []
+    const traitDomainArray: SpecieTrait[] = [];
     for (const trait of traits) {
-      const print = SpecieTraitPrint.create({value: trait.print})
-      const category = UniqueGlobalId.createExisting(trait.category)      
-      const combineResult = EitherUtils.combine([category, print])
+      const print = SpecieTraitPrint.create({ value: trait.print });
+      const category = UniqueGlobalId.createExisting(trait.category);
+      const combineResult = EitherUtils.combine([category, print]);
 
       if (combineResult.isLeft()) {
-        return left(combineResult.value)
+        return left(combineResult.value);
       }
 
-      const optionArray: SpecieTraitOption[] = []
+      const optionArray: SpecieTraitOption[] = [];
       for (const option of trait.options) {
-        const optionResult = SpecieTraitOption.create({name: option.name}, new UniqueGlobalId(option._id.toString()))
+        const optionResult = SpecieTraitOption.create({ name: option.name }, new UniqueGlobalId(option._id.toString()));
         if (optionResult.isLeft()) {
-          return left(optionResult.value)
+          return left(optionResult.value);
         }
 
-        optionArray.push(optionResult.value)
+        optionArray.push(optionResult.value);
       }
 
-      const traitResponse = SpecieTrait.create({
-        options: optionArray,
-        print: print.getRight(),
-        optional: trait.optional,
-        name: trait.name,
-        category: category.getRight()
-      }, new UniqueGlobalId(trait._id.toString()))
+      const traitResponse = SpecieTrait.create(
+        {
+          options: optionArray,
+          print: print.getRight(),
+          optional: trait.optional,
+          name: trait.name,
+          category: category.getRight()
+        },
+        new UniqueGlobalId(trait._id.toString())
+      );
 
       if (traitResponse.isLeft()) {
-        return left(traitResponse.value)
+        return left(traitResponse.value);
       }
-      traitDomainArray.push(traitResponse.value)
+      traitDomainArray.push(traitResponse.value);
     }
 
-    return right(SpecieTraits.create(traitDomainArray))
+    return right(SpecieTraits.create(traitDomainArray));
   }
-  
 }

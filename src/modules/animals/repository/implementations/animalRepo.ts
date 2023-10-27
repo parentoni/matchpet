@@ -114,21 +114,26 @@ export class AnimalRepo implements IAnimalRepo {
     }
   }
 
-  async findBulk(filter: FilterObject[], skip: number, limit: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, {animals: Animal[], count: number}>> {
+  async findBulk(
+    filter: FilterObject[],
+    skip: number,
+    limit: number
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>> {
     try {
       const dbFilter: DBFilter[] = [];
       for (const ind_filter of filter) {
         const comparation: Record<string, any> = {};
-        const filter: Record<string, any> = {}
+        const filter: Record<string, any> = {};
 
         comparation[ind_filter.mode] = ind_filter.comparation_value;
-        filter[ind_filter.key] = comparation
-        dbFilter.push(filter)
-
+        filter[ind_filter.key] = comparation;
+        dbFilter.push(filter);
       }
 
-      const result = await AnimalModel.find(dbFilter.length>0?{$and: dbFilter}: {}).limit(limit).skip(skip);
-      const count = await AnimalModel.find(dbFilter.length>0?{$and: dbFilter}: {}).count()
+      const result = await AnimalModel.find(dbFilter.length > 0 ? { $and: dbFilter } : {})
+        .limit(limit)
+        .skip(skip);
+      const count = await AnimalModel.find(dbFilter.length > 0 ? { $and: dbFilter } : {}).count();
 
       const animalArray: Animal[] = [];
 
@@ -138,76 +143,77 @@ export class AnimalRepo implements IAnimalRepo {
           animalArray.push(mapperResult.value);
         }
       }
-      return right({animals: animalArray, count: count});
+      return right({ animals: animalArray, count: count });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
   //Todo: better filter, clean this || documentate.
-  async  geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number; }>> {
-    const filters:PipelineStage[] = []
+  async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>> {
+    const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
 
     for (const ind_filter of props.filterObject) {
-        const comparation: Record<string, any> = {};
-        const filter: Record<string, any> = {}
+      const comparation: Record<string, any> = {};
+      const filter: Record<string, any> = {};
 
-        comparation[ind_filter.mode] = ind_filter.comparation_value;
-        filter[ind_filter.key] = comparation
-        dbFilter.push(filter)
+      comparation[ind_filter.mode] = ind_filter.comparation_value;
+      filter[ind_filter.key] = comparation;
+      dbFilter.push(filter);
     }
-    
+
     if (dbFilter.length > 0) {
-      filters.push({$match: {$and: dbFilter}})
+      filters.push({ $match: { $and: dbFilter } });
     }
 
     //If location push location filters
     if (props.location) {
-      filters.push(...[
-        {$lookup: {
-          from: 'users',
-          localField: 'donator_id',
-          foreignField: '_id',
-          as: 'user_data'
-          }
-        },
-        {$match: {
-          "user_data.location": {
-            $geoWithin: {
-              $geometry: {
-                type: 'Polygon',
-                coordinates: props.location.coordinates
+      filters.push(
+        ...[
+          {
+            $lookup: {
+              from: "users",
+              localField: "donator_id",
+              foreignField: "_id",
+              as: "user_data"
+            }
+          },
+          {
+            $match: {
+              "user_data.location": {
+                $geoWithin: {
+                  $geometry: {
+                    type: "Polygon",
+                    coordinates: props.location.coordinates
+                  }
+                }
               }
             }
           }
-        }}
-      ])
+        ]
+      );
     }
 
-    const countFilter = structuredClone(filters)
-    filters.push({$skip: props.skip}, {$limit: props.limit})
-
-    
+    const countFilter = structuredClone(filters);
+    filters.push({ $skip: props.skip }, { $limit: props.limit });
 
     const animalArray: Animal[] = [];
     try {
-      const result = await AnimalModel.aggregate(filters)
-    
-      const count =  result.length>0? await AnimalModel.aggregate(countFilter).count('count'): ''
+      const result = await AnimalModel.aggregate(filters);
+
+      const count = result.length > 0 ? await AnimalModel.aggregate(countFilter).count("count") : "";
 
       for (const persistenceAnimal of result) {
-        
         const mapperResult = AnimalMapper.toDomain(persistenceAnimal);
         if (mapperResult.isRight()) {
           animalArray.push(mapperResult.value);
         }
       }
 
-      return right({animals: animalArray, count: result.length>0?count[0].count:0})
+      return right({ animals: animalArray, count: result.length > 0 ? count[0].count : 0 });
     } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 }
-

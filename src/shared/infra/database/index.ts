@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {createModels } from "./models/registerModels";
+import { createModels } from "./models/registerModels";
 
 export class Database {
   private register: mongoose.Models;

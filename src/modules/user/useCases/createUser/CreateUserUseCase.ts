@@ -37,7 +37,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const emailOrError = UserEmail.create({ value: request.email });
     const roleOrError = UserRole.create({ value: request.role || 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
-    const locationOrError = Location.GeoJsonPoint.create({coordinates: request.location})
+    const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError]);
 
@@ -50,7 +50,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const name = nameOrError.getRight();
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
-    const location = locationOrError.getRight()
+    const location = locationOrError.getRight();
 
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
@@ -67,6 +67,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       role,
       verified: request.verified || false,
       location,
+      inAdoption: 0,
+      completedAdoptions: 0
       // role: UserRole.create({value: 0})
     });
 
@@ -106,9 +108,9 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       if (persisantResponse.isLeft()) {
         return left(persisantResponse.value);
       } else {
-        const mapperResult = await UserMap.toPersistant(user)
+        const mapperResult = await UserMap.toPersistant(user);
         if (mapperResult.isLeft()) {
-          return left(mapperResult.value)
+          return left(mapperResult.value);
         }
 
         return right(mapperResult.value);

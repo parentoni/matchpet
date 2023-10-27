@@ -3,20 +3,18 @@ import { AggregateRoot } from "../AggregateRoot";
 import { UniqueGlobalId } from "../UniqueGlobalD";
 
 export class DomainEvents {
-  private static handlersMap: { [x in string]: any } = {};
+  private static handlersMap: Record<string, any> = {};
   private static markedAggregates: AggregateRoot<any>[] = [];
 
   /**
    * @method markAggregateForDispatch
    * @static
-   * @desc
-   *
-   *
+   * @desc Called by aggregate root objects that have created domain
+   * events to eventually be dispatched when the infrastructure commits
+   * the unit of work.
    */
 
   public static markAggregateForDispatch(aggregate: AggregateRoot<any>): void {
-    console.log("Called6");
-
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id);
 
     if (!aggregateFound) {
@@ -25,23 +23,16 @@ export class DomainEvents {
   }
 
   private static dispatchAggregateEvents(aggregate: AggregateRoot<any>): void {
-    console.log("Called5");
-
     aggregate.domainEvents.forEach((event: IDomainEvent) => this.dispatch(event));
   }
 
   private static removeAggregateFromMarkedDispatchList(aggregate: AggregateRoot<any>): void {
-    console.log("Called4");
-
     const index = this.markedAggregates.findIndex((a) => a.equals(aggregate));
     this.markedAggregates.splice(index, 1);
   }
 
-  private static findMarkedAggregateByID(id: UniqueGlobalId): AggregateRoot<any> | null {
-    console.log("Called3");
-
-    let found: AggregateRoot<any> | null = null;
-
+  private static findMarkedAggregateByID(id: UniqueGlobalId): AggregateRoot<any> | undefined {
+    let found: AggregateRoot<any> | undefined = undefined;
     for (let aggregate of this.markedAggregates) {
       if (aggregate.id.equals(id)) {
         found = aggregate;
@@ -52,10 +43,7 @@ export class DomainEvents {
   }
 
   public static dispatchEventsForAggregate(id: UniqueGlobalId): void {
-    console.log("Called2");
-
     const aggregate = this.findMarkedAggregateByID(id);
-
     if (aggregate) {
       this.dispatchAggregateEvents(aggregate);
       aggregate.clearEvents();
@@ -63,8 +51,7 @@ export class DomainEvents {
     }
   }
 
-  public static register(callback: (event: IDomainEvent) => void, eventClassName: string): void {
-    console.log("Called1");
+  public static register<T extends IDomainEvent>(callback: (event: T) => void, eventClassName: string): void {
     if (!this.handlersMap.hasOwnProperty(eventClassName)) {
       this.handlersMap[eventClassName] = [];
     }

@@ -7,13 +7,12 @@ export class GetAllCategoriesController extends BaseController<AuthenticatedRequ
   constructor(getAllCategoriesUseCase: GetAllCategoriesUseCase) {
     super();
     this.versionRegister.addToRegister("1.0.0", async (req, res) => {
-      const useCaseResult = await getAllCategoriesUseCase.execute()
+      const useCaseResult = await getAllCategoriesUseCase.execute();
       if (useCaseResult.isLeft()) {
-        return this.errorHandler(res, useCaseResult.value)
+        return this.errorHandler(res, useCaseResult.value);
       }
 
-      return this.ok(res, useCaseResult.value)
-
-    })
+      return this.ok(res, useCaseResult.value);
+    });
   }
 }

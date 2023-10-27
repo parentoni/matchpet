@@ -19,7 +19,7 @@ import { EitherUtils } from "../../../../../shared/utils/EitherUtils";
 export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpeciesResponse> {
   private speciesRepo: ISpecieRepo;
   private categoryRepo: ICategoryRepo;
-  constructor(speciesRepo: ISpecieRepo, categoryRepo:ICategoryRepo) {
+  constructor(speciesRepo: ISpecieRepo, categoryRepo: ICategoryRepo) {
     this.speciesRepo = speciesRepo;
     this.categoryRepo = categoryRepo;
   }
@@ -37,19 +37,19 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
     }
 
     for (const trait of request.SpecieTraits) {
-      const printOrError = SpecieTraitPrint.create({value: trait.print})
-      const category = UniqueGlobalId.createExisting(trait.category)
+      const printOrError = SpecieTraitPrint.create({ value: trait.print });
+      const category = UniqueGlobalId.createExisting(trait.category);
 
-      const combineResult = EitherUtils.combine([printOrError, category])
+      const combineResult = EitherUtils.combine([printOrError, category]);
       if (combineResult.isLeft()) {
-        return left(combineResult.value)
+        return left(combineResult.value);
       }
 
-      const exixts = await this.categoryRepo.exists(trait.category)
+      const exixts = await this.categoryRepo.exists(trait.category);
       if (exixts.isLeft()) {
-        return left(exixts.value)
+        return left(exixts.value);
       }
-      
+
       const options: SpecieTraitOption[] = [];
 
       // Create options
@@ -64,7 +64,6 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
 
         options.push(optionOrError.value);
       }
-
 
       const traitOrError = SpecieTrait.create({
         ...trait,
@@ -94,9 +93,9 @@ export class CreateSpecieUseCase implements UseCase<CreateSpeciesDto, CreateSpec
       return left(repoResult.value);
     }
 
-    const specieInPersistent = SpeciesMapper.toPersistent(specie.value)
+    const specieInPersistent = SpeciesMapper.toPersistent(specie.value);
     if (specieInPersistent.isLeft()) {
-      return left(specieInPersistent.value)
+      return left(specieInPersistent.value);
     }
 
     return right(specieInPersistent.value);

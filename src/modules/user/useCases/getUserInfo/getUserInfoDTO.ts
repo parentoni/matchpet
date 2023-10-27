@@ -1,9 +1,9 @@
 export interface GetUserInfoDTO {
-  id:string
+  id: string;
 }
 
 export interface GetUserInfoResponseDTO {
   phone_number: string;
-  email:string;
+  email: string;
   name: string;
 }

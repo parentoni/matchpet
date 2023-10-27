@@ -4,14 +4,14 @@ import { Secrets } from "../../../config/secretsManager";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import helmet from "helmet";
-const cors = require('cors')
+const cors = require("cors");
 const app = express(); //
 
 app.use(morgan(Secrets.NODE_ENV === "development" ? "dev" : "common"));
 app.use(bodyParser.json());
 app.use(helmet());
-app.use(cors())
-app.disable('etag')
+app.use(cors());
+app.disable("etag");
 
 app.use("/", v1Router);
 

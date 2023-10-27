@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
   role: { type: Number, required: true },
   verified: { type: Boolean, required: true },
   phone_number: { type: String, required: true },
-  location: {type: GeoJsonPointSchema, required: true}
+  location: { type: GeoJsonPointSchema, required: true },
+  completed_adoptions: { type: Number, required: true },
+  in_adoption: { type: Number, required: true }
 });
 
 export type IUserPersistant = {
@@ -23,10 +25,11 @@ export type IUserPersistant = {
   verified: boolean;
   phone_number: string;
   location: {
-    type: 'Point',
-    coordinates: GeoJSON.Position
-  }
+    type: "Point";
+    coordinates: GeoJSON.Position;
+  };
+  completed_adoptions: number;
+  in_adoption: number;
 };
-
 
 export default { name: "user", schema: userSchema };

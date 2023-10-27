@@ -21,6 +21,8 @@ export interface UserProps {
   verified: boolean;
   phone: UserPhone;
   location: Location.GeoJsonPoint;
+  completedAdoptions: number;
+  inAdoption: number;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -55,7 +57,23 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get location(): Location.GeoJsonPoint {
-    return this.props.location
+    return this.props.location;
+  }
+
+  get completedAdoptions(): number {
+    return this.props.completedAdoptions;
+  }
+
+  get inAdoption(): number {
+    return this.props.inAdoption;
+  }
+
+  public updateCompletedAdoptions(num: number): void {
+    this.props.completedAdoptions = num;
+  }
+
+  public updateInAdoption(num: number): void {
+    this.props.inAdoption = num;
   }
 
   private constructor(props: UserProps, id?: UniqueGlobalId) {
@@ -70,7 +88,7 @@ export class User extends AggregateRoot<UserProps> {
       { argument: props.phone, argumentName: "USER_PHONE" },
       { argument: props.role, argumentName: "USER_ROLE" },
       { argument: props.verified, argumentName: "USER_VERIFIED" },
-      {argument: props.location, argumentName: "USER_LOCATION"}
+      { argument: props.location, argumentName: "USER_LOCATION" }
     ]);
 
     if (guardResult.isLeft()) {

@@ -1,4 +1,4 @@
 export interface CreateCategoryDTO {
-  svg: string,
-  name: string
+  svg: string;
+  name: string;
 }

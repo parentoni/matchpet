@@ -6,7 +6,7 @@ import { userRouter } from "../../../../modules/user/domain/infra/http/routes/us
 const v1Router = express.Router();
 
 v1Router.use("/auth", authRouter);
-v1Router.use("/user", userRouter)
+v1Router.use("/user", userRouter);
 
 v1Router.use("/animals", animalsRouter);
 v1Router.get("/app/status", (req, res) => res.sendStatus(200));

@@ -19,7 +19,5 @@ export class FilterAnimaslsController extends BaseController<Request> {
 
       return this.ok(res, useCaseResponse.value);
     });
-
-    
   }
 }

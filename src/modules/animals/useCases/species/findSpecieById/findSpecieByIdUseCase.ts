@@ -26,14 +26,12 @@ export class FindSpecieByIdUseCase implements UseCase<FindSpecieByIdDTO, FindSpe
         return left(specie.value);
       }
 
-      const mapperResult = SpeciesMapper.toPersistent(specie.value)
+      const mapperResult = SpeciesMapper.toPersistent(specie.value);
       if (mapperResult.isLeft()) {
-        return left(mapperResult.value)
+        return left(mapperResult.value);
       }
 
-      return right(mapperResult.value)
-      
-
+      return right(mapperResult.value);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }

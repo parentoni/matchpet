@@ -25,9 +25,9 @@ export class GetAnimaListingByIdUseCase implements UseCase<GetAnimalListingByIdD
       return left(repoResponse.value);
     }
 
-    const mapperResult = AnimalMapper.toPersistent(repoResponse.value)
+    const mapperResult = AnimalMapper.toPersistent(repoResponse.value);
     if (mapperResult.isLeft()) {
-      return left(mapperResult.value)
+      return left(mapperResult.value);
     }
 
     return right(mapperResult.value);

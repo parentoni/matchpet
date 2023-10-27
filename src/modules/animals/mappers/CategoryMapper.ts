@@ -6,19 +6,19 @@ import { ICategoryPersistent } from "../../../shared/infra/database/models/Categ
 import { Category } from "../domain/Category";
 
 export class CategoryMapper {
-  public static toDomain(props: ICategoryPersistent):Either<GuardError, Category> {
-    const svgInUrl = ValidUrl.create({value: props.svg})
+  public static toDomain(props: ICategoryPersistent): Either<GuardError, Category> {
+    const svgInUrl = ValidUrl.create({ value: props.svg });
     if (svgInUrl.isLeft()) {
-      return left(svgInUrl.value)
+      return left(svgInUrl.value);
     }
 
-    const createResult = Category.create({svg: svgInUrl.value, name: props.name}, new UniqueGlobalId(props._id.toString()))
-    
+    const createResult = Category.create({ svg: svgInUrl.value, name: props.name }, new UniqueGlobalId(props._id.toString()));
+
     if (createResult.isLeft()) {
-      return left(createResult.value)
+      return left(createResult.value);
     }
 
-    return right(createResult.value)
+    return right(createResult.value);
   }
 
   public static toPersistent(props: Category): ICategoryPersistent {
@@ -26,6 +26,6 @@ export class CategoryMapper {
       _id: props.id.toValue(),
       svg: props.svg.value,
       name: props.name
-    }
+    };
   }
 }

@@ -24,13 +24,12 @@ export class GetUserByUIDUseCase implements UseCase<GetUserByUIDDTO, GetUserByUI
         return left(user.value);
       }
 
-      const mapperResult = await UserMap.toPersistant(user.value)
+      const mapperResult = await UserMap.toPersistant(user.value);
       if (mapperResult.isLeft()) {
-        return left(mapperResult.value)
+        return left(mapperResult.value);
       }
 
-
-      return right(mapperResult .value);
+      return right(mapperResult.value);
     } else {
       return left(check.value);
     }

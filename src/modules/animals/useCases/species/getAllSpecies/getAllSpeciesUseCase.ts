@@ -20,17 +20,17 @@ export class GetAllSpeciesUseCase implements UseCase<null, GetAllSpeciesResponse
       return left(response.value);
     }
 
-    const persistentArray: ISpeciePersistent[] = []
+    const persistentArray: ISpeciePersistent[] = [];
 
     for (const specie of response.value) {
-      const mapperResult = SpeciesMapper.toPersistent(specie)
+      const mapperResult = SpeciesMapper.toPersistent(specie);
       if (mapperResult.isLeft()) {
-        return left(mapperResult.value)
+        return left(mapperResult.value);
       }
-      
-      persistentArray.push(mapperResult.value)
+
+      persistentArray.push(mapperResult.value);
     }
-    
+
     return right(persistentArray);
   }
 }

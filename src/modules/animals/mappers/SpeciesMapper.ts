@@ -12,10 +12,10 @@ import { SpecieTraits } from "../domain/specie/SpecieTraits";
 
 export class SpeciesMapper {
   static toDomain(persistent: ISpeciePersistent): Either<GuardError | CommonUseCaseResult.InvalidValue, Specie> {
-    const specieTraits = SpecieTraits.createFromPersistent(persistent.traits)
+    const specieTraits = SpecieTraits.createFromPersistent(persistent.traits);
 
     if (specieTraits.isLeft()) {
-      return left(specieTraits.value)
+      return left(specieTraits.value);
     }
 
     const specie = Specie.create({ SpecieName: persistent.name, SpecieTraits: specieTraits.value }, new UniqueGlobalId(persistent._id));
@@ -38,7 +38,6 @@ export class SpeciesMapper {
             name: domain_option.props.name
           });
         }
-
 
         persistentSpecieTraitsArray.push({
           ...trait.props,

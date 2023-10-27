@@ -1,4 +1,4 @@
 export interface UploadAnimalImageDTO {
-  file: Buffer,
-  fileName: string
+  file: Buffer;
+  fileName: string;
 }

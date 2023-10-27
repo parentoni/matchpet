@@ -11,5 +11,5 @@ authRouter.post("/register", (req, res) => createUserController.execute(req, res
 authRouter.post("/login", (req, res) => loginController.execute(req, res));
 
 authRouter.get("/myself", middleware.authenticated(), (req, res) => getCurrentUserController.execute(req, res));
-authRouter.get('/:id', (req, res) => getUserInfoController.execute(req,res))
+authRouter.get("/:id", (req, res) => getUserInfoController.execute(req, res));
 export { authRouter }; //

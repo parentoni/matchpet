@@ -5,7 +5,7 @@ export interface CreateAnimalListingDTO {
   donatorId: string;
   specie_id: string;
   traits: CreateAnimalListingTraitsDTO[];
-  description:string;
+  description: string;
 }
 
 export interface CreateAnimalListingTraitsDTO {

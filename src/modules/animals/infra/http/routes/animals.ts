@@ -17,7 +17,9 @@ animalsRouter.use("/categories", categoryRouter);
 
 animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnimalListingController.execute(req, res));
 animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req, res));
-animalsRouter.post("/image/upload",middleware.authenticated(), fileUpload({limits: { fileSize: 50 * 1024 * 1024 }}), (req, res) => uploadAnimalImageController.execute(req, res))
+animalsRouter.post("/image/upload", middleware.authenticated(), fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } }), (req, res) =>
+  uploadAnimalImageController.execute(req, res)
+);
 
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));

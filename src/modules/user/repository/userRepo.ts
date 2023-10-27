@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
-import { User} from "../domain/user";
+import { User } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { AppError } from "../../../shared/core/Response/AppError";
 import { UserMap } from "../mappers/userMap";
@@ -64,27 +64,21 @@ export class UserRepo implements IUserRepo {
   //TODO PARAMETERS IN OBJECT
   public async create({ dto }: { dto: User }): Promise<Either<AppError.UnexpectedError | GenericError<IBaseError>, string>> {
     const UserM = this.models.user;
+    const userInPersistanceFormat = await UserMap.toPersistant(dto);
 
-    try {
-      const userInPersistanceFormat = await UserMap.toPersistant(dto);
-      if (userInPersistanceFormat.isRight()) {
-        console.log(userInPersistanceFormat.value);
-        const createdUser = await UserM.create(userInPersistanceFormat.value);
-        if (createdUser) {
-          return right(createdUser._id);
-        } else {
-          return left(
-            GenericError.create({
-              errorMessage: "Couldn't create or edit user.",
-              location: `${UserRepo.name}.${this.create.name}`
-            })
-          );
-        }
-      } else {
-        return left(userInPersistanceFormat.value);
-      }
-    } catch (error) {
-      return left(AppError.UnexpectedError.create(error));
+    if (userInPersistanceFormat.isLeft()) {
+      return left(userInPersistanceFormat.value);
     }
+    const exists = await UserM.exists({ _id: dto.id.toValue() });
+
+    if (!!exists) {
+      const resp = await UserM.findByIdAndUpdate(dto.id.toValue(), userInPersistanceFormat.value);
+      // console.log(resp)
+      // console.log(userInPersistanceFormat)
+      return right(dto.id.toValue());
+    }
+
+    const created = await UserM.create(userInPersistanceFormat);
+    return right(created._id);
   }
 }

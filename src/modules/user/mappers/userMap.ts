@@ -25,9 +25,17 @@ export class UserMap {
     const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
-    const userLocationOrError = Location.GeoJsonPoint.create({coordinates: persistance.location.coordinates})
+    const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
+    const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
 
-    const result = EitherUtils.combine([userPasswordOrError, userRoleOrError, userPhoneNumberOrError, userEmailOrError, userLocationOrError]);
+    const result = EitherUtils.combine([
+      userPasswordOrError,
+      userRoleOrError,
+      userPhoneNumberOrError,
+      userEmailOrError,
+      userLocationOrError,
+      userIdOrError
+    ]);
 
     if (result.isRight()) {
       const userOrError = User.create(
@@ -38,9 +46,11 @@ export class UserMap {
           role: userRoleOrError.getRight(),
           phone: userPhoneNumberOrError.getRight(),
           verified: persistance.verified,
-          location: userLocationOrError.getRight()
+          location: userLocationOrError.getRight(),
+          inAdoption: persistance.in_adoption,
+          completedAdoptions: persistance.completed_adoptions
         },
-        new UniqueGlobalId(persistance._id)
+        userIdOrError.getRight()
       );
 
       if (userOrError.isRight()) {
@@ -56,13 +66,12 @@ export class UserMap {
   static async toPersistant(user: User): Promise<Either<CommonUseCaseResult.UnexpectedError, IUserPersistant>> {
     let password = null;
 
- 
-      if (user.password?.isAlreadyHashed()) {
-        password = user.password.value;
-      } else {
-        password = await user.password?.getHashedValue();
-      }
-    
+    if (user.password?.isAlreadyHashed()) {
+      password = user.password.value;
+    } else {
+      password = await user.password?.getHashedValue();
+    }
+
     try {
       return right({
         password: password,
@@ -76,7 +85,9 @@ export class UserMap {
         location: {
           type: user.location.props.type,
           coordinates: user.location.coordinates
-        }
+        },
+        completed_adoptions: user.completedAdoptions,
+        in_adoption: user.inAdoption
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

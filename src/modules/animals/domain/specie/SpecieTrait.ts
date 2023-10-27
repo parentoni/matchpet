@@ -42,9 +42,8 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
   }
 
   get print(): SpecieTraitPrint {
-    return this.props.print
+    return this.props.print;
   }
-
 
   public static create(props: SpecieTraitProps, id?: UniqueGlobalId): Either<GuardError, SpecieTrait> {
     const guardResponse = Guard.againstNullOrUndefinedBulk([
@@ -53,7 +52,6 @@ export class SpecieTrait extends Entity<SpecieTraitProps> {
       { argument: props.options, argumentName: "SPECIE_PROPS_OPTIONS" },
       { argument: props.optional, argumentName: "SPECIE_PROPS_OPTIONAL" },
       { argument: props.print, argumentName: "SPECIE_TRAITS_PRINT" }
-
     ]);
 
     if (guardResponse.isLeft()) {

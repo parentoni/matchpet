@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
+import { DomainEvents } from "../../../domain/events/DomainEvents";
+import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 
 const traitSchema = new mongoose.Schema({
   _id: { type: mongoose.Types.ObjectId, required: true },
   value: { type: String, required: true }
 });
 
-const AnimalSchema = new mongoose.Schema({
+export const AnimalSchema = new mongoose.Schema({
   name: { type: String, required: true },
   age: { type: Number, required: true },
   image: { type: [String], required: true },
@@ -13,7 +15,7 @@ const AnimalSchema = new mongoose.Schema({
   status: { type: String, required: true },
   donator_id: { type: mongoose.Types.ObjectId, required: true },
   specie_id: { type: mongoose.Types.ObjectId, required: true },
-  description: {type: String, required: true},
+  description: { type: String, required: true },
   traits: { type: [traitSchema], required: true }
 });
 
@@ -26,7 +28,7 @@ export interface IAnimalPersistent {
   status: string;
   donator_id: string;
   specie_id: string;
-  description: string
+  description: string;
   traits: IAnimalTraitsPersistent[];
 }
 
@@ -34,6 +36,8 @@ export interface IAnimalTraitsPersistent {
   _id: string;
   value: string;
 }
+
+AnimalSchema.post("save", (t) => DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString() as string)));
 
 const AnimalModel = mongoose.model("animal", AnimalSchema);
 export { AnimalModel };

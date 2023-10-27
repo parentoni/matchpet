@@ -24,17 +24,17 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       return left(guardResponse.value);
     }
 
-    let polygon: Location.GeoJsonPolygon | undefined = undefined
+    let polygon: Location.GeoJsonPolygon | undefined = undefined;
 
     if (request.coordinates) {
       const response = Location.GeoJsonPolygon.create({
         coordinates: request.coordinates
-      })
+      });
       if (response.isLeft()) {
-        return left(response.value)
+        return left(response.value);
       }
 
-      polygon = response.value
+      polygon = response.value;
     }
 
     const treatedFilters: FilterObject[] = [];
@@ -51,20 +51,20 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       filterObject: treatedFilters,
       skip: request.page * 50,
       limit: 50
-    })
+    });
     if (result.isLeft()) {
       return left(result.value);
     }
 
-    const persistentValues: IAnimalPersistent[] = []
+    const persistentValues: IAnimalPersistent[] = [];
     for (const value of result.value.animals) {
-      const mapperResult = AnimalMapper.toPersistent(value)
-      if (mapperResult.isLeft()){
-        return left(mapperResult.value)
+      const mapperResult = AnimalMapper.toPersistent(value);
+      if (mapperResult.isLeft()) {
+        return left(mapperResult.value);
       }
 
-      persistentValues.push(mapperResult.value)
+      persistentValues.push(mapperResult.value);
     }
-    return right({animals: persistentValues, count: result.value.count});
+    return right({ animals: persistentValues, count: result.value.count });
   }
 }

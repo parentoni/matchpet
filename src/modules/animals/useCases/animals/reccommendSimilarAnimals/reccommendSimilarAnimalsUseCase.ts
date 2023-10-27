@@ -39,15 +39,15 @@ export class ReccommendSimilarAnimalsUseCase implements UseCase<ReccommendSimila
       return left(result.value);
     }
 
-    const persistentArray: IAnimalPersistent[] = []
-    
+    const persistentArray: IAnimalPersistent[] = [];
+
     for (const animal of result.value) {
-      const mapperResult = AnimalMapper.toPersistent(animal)
+      const mapperResult = AnimalMapper.toPersistent(animal);
       if (mapperResult.isLeft()) {
-        return left(mapperResult.value)
+        return left(mapperResult.value);
       }
 
-      persistentArray.push(mapperResult.value)
+      persistentArray.push(mapperResult.value);
     }
 
     return right(persistentArray);

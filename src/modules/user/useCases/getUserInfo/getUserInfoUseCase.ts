@@ -11,19 +11,22 @@ import { GetUserInfoUseCaseResponse } from "./getUserInfoResponse";
 export class GetUserInfoUseCase implements UseCase<GetUserInfoDTO, GetUserInfoUseCaseResponse> {
   protected userRepo: IUserRepo;
   protected getUserByUIDUseCase: GetUserByUIDUseCase;
-  constructor (userRepo: IUserRepo, getUserByUIDUseCase: GetUserByUIDUseCase) {
-    this.userRepo = userRepo
-    this.getUserByUIDUseCase = getUserByUIDUseCase
+  constructor(userRepo: IUserRepo, getUserByUIDUseCase: GetUserByUIDUseCase) {
+    this.userRepo = userRepo;
+    this.getUserByUIDUseCase = getUserByUIDUseCase;
   }
 
-  async execute(request: GetUserInfoDTO ): Promise<GetUserInfoUseCaseResponse> {
-    const response = await this.getUserByUIDUseCase.execute({uid: request.id})
+  async execute(request: GetUserInfoDTO): Promise<GetUserInfoUseCaseResponse> {
+    const response = await this.getUserByUIDUseCase.execute({ uid: request.id });
 
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
-
-    return right({phone_number: response.value.phone_number, email: response.value.email, name: response.value.first_name + " " + response.value.last_name})
+    return right({
+      phone_number: response.value.phone_number,
+      email: response.value.email,
+      name: response.value.first_name + " " + response.value.last_name
+    });
   }
 }

@@ -1,10 +1,10 @@
 export interface FilterAnimalsDTO {
   filter: FilterObject[];
   page: number;
-  coordinates?: GeoJSON.Position[][]
+  coordinates?: GeoJSON.Position[][];
 }
 
-export interface  FilterObject {
+export interface FilterObject {
   key: string;
   comparation_value: any;
   mode: FILTER_MODES;

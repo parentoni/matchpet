@@ -5,12 +5,11 @@ const specieTraitOption = new mongoose.Schema({
 });
 
 const specieTrait = new mongoose.Schema({
-
   name: { type: String, required: true },
   optional: { type: Boolean, required: true },
   category: { type: mongoose.Types.ObjectId, required: true },
   options: { type: [specieTraitOption], required: true },
-  print: {type: String, required: true}
+  print: { type: String, required: true }
 });
 
 const specieSchema = new mongoose.Schema({
@@ -30,7 +29,7 @@ export interface ISpecieTraitPersistent {
   optional: boolean;
   category: string;
   options: ISpecieTraitOptionsPersistent[];
-  print: string
+  print: string;
 }
 
 export interface ISpecieTraitOptionsPersistent {

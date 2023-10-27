@@ -2,3 +2,5 @@
 
 *.env.development
 .DS_Store
+
+/scripts/tmp/*

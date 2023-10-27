@@ -27,7 +27,7 @@ export class AnimalMapper {
     const animalIdOrError = UniqueGlobalId.createExisting(persistent._id);
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
-    const animalDescriptionOrError = AnimalDescription.create({value: persistent.description})
+    const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -53,7 +53,7 @@ export class AnimalMapper {
     const animalTraits = animalTraitsOrError.getRight();
     const animalId = animalIdOrError.getRight();
     const animalStats = animalStatsOrError.getRight();
-    const animalDescription = animalDescriptionOrError.getRight()
+    const animalDescription = animalDescriptionOrError.getRight();
 
     const animal = Animal.create(
       {
