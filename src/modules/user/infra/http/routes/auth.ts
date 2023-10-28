@@ -1,9 +1,9 @@
 import express from "express";
-import { createUserController } from "../../../../useCases/createUser";
-import { middleware } from "../../../../../../shared/infra/http";
-import { getCurrentUserController } from "../../../../useCases/getCurrentUser";
-import { loginController } from "../../../../useCases/login";
-import { getUserInfoController } from "../../../../useCases/getUserInfo";
+import { createUserController } from "../../../useCases/createUser";
+import { middleware } from "../../../../../shared/infra/http";
+import { getCurrentUserController } from "../../../useCases/getCurrentUser";
+import { loginController } from "../../../useCases/login";
+import { getUserInfoController } from "../../../useCases/getUserInfo";
 // const userRouter = express.Router();
 const authRouter = express.Router();
 

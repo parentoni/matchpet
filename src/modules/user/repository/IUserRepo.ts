@@ -11,4 +11,5 @@ export interface IUserRepo {
   exists: ({ filter }: { filter: Partial<IUserPersistant> }) => RepositoryBaseResult<boolean>;
   find_one: ({ filter }: { filter: Partial<IUserPersistant> }) => RepositoryBaseResult<User>;
   create: ({ dto }: { dto: User }) => Promise<Either<AppError.UnexpectedError | GenericError<IBaseError>, string>>;
+  getActiveUsers: (props: { limit?: number; skip?: number }) => RepositoryBaseResult<User[]>;
 }

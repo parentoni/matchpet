@@ -34,7 +34,6 @@ export class UpdateUserStatsUseCase implements UseCase<UpdateUserStatsDTO, Updat
     user.updateCompletedAdoptions(user.completedAdoptions + request.addCompletedAdoptions);
 
     const saveResponse = await this.userRepo.create({ dto: user });
-    console.log(saveResponse);
     if (saveResponse.isLeft()) {
       return left(saveResponse.value);
     }

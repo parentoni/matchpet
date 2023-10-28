@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
   verified: { type: Boolean, required: true },
   phone_number: { type: String, required: true },
   location: { type: GeoJsonPointSchema, required: true },
-  completed_adoptions: { type: Number, required: true },
-  in_adoption: { type: Number, required: true }
+  completed_adoptions: { type: Number, default: 0 },
+  in_adoption: { type: Number, default: 0 }
 });
 
 export type IUserPersistant = {

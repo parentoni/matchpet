@@ -81,4 +81,26 @@ export class UserRepo implements IUserRepo {
     const created = await UserM.create(userInPersistanceFormat);
     return right(created._id);
   }
+
+  public async getActiveUsers(props: { limit?: number; skip?: number }): RepositoryBaseResult<User[]> {
+    const UserM = this.models.user;
+    const userArray: User[] = [];
+    try {
+      const result = await UserM.find({
+        in_adoption: { $gt: 0 },
+        verified: true
+      });
+      for (const user of result) {
+        const userMapperResponse = await UserMap.toDomain(user);
+        if (userMapperResponse.isLeft()) {
+          return left(userMapperResponse.value);
+        }
+
+        userArray.push(userMapperResponse.value);
+      }
+      return right(userArray);
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import express from "express";
-import { authRouter } from "../../../../modules/user/domain/infra/http/routes/auth";
+import { authRouter } from "../../../../modules/user/infra/http/routes/auth";
 import { animalsRouter } from "../../../../modules/animals/infra/http/routes/animals";
-import { userRouter } from "../../../../modules/user/domain/infra/http/routes/user";
+import { userRouter } from "../../../../modules/user/infra/http/routes/user";
 
 const v1Router = express.Router();
 

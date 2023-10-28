@@ -93,4 +93,15 @@ export class UserMap {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
+
+  static async toSafePersistent(user: User): Promise<Either<CommonUseCaseResult.UnexpectedError, IUserPersistant>> {
+    const persistentResult = await this.toPersistant(user);
+    if (persistentResult.isLeft()) {
+      return left(persistentResult.value);
+    }
+
+    persistentResult.value.password = "CONFIDENTIAL";
+
+    return right(persistentResult.value);
+  }
 }
