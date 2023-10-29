@@ -9,6 +9,7 @@ import { filterAnimalsController } from "../../../useCases/animals/filterAnimals
 import { uploadAnimalImageController } from "../../../useCases/upload/uploadAnimalImage";
 import fileUpload from "express-fileupload";
 import { categoryRouter } from "./category";
+import { editAnimalController } from "../../../useCases/animals/editAnimal";
 
 const animalsRouter = express.Router();
 
@@ -23,5 +24,7 @@ animalsRouter.post("/image/upload", middleware.authenticated(), fileUpload({ lim
 
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
+
+animalsRouter.put('/:id', middleware.authenticated(), (req, res) => editAnimalController.execute(req, res))
 
 export { animalsRouter };
