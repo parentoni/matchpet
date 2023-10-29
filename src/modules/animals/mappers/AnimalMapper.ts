@@ -22,9 +22,9 @@ export class AnimalMapper {
     const animalAgeOrError = AnimalAge.create({ months: persistent.age });
     const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
     const animalCreatedAt = Timestamp.create(persistent.created_at);
-    const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id);
-    const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id);
-    const animalIdOrError = UniqueGlobalId.createExisting(persistent._id);
+    const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id.toString());
+    const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id.toString());
+    const animalIdOrError = UniqueGlobalId.createExisting(persistent._id.toString());
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
