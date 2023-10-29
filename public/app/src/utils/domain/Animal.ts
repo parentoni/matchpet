@@ -25,7 +25,9 @@ export class Animal {
 
   public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, coordinates?: [number,number][]): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
     
-    const formatedFilters = []
+    // Filter only pending animals
+    const formatedFilters = [{mode: '$eq', "comparation_value": "PENDING", key:"status"}]
+    
     for (const key of Object.keys(filters)) {
       for (const method of filters[key]) {
         if (!key.includes('trait')) {
