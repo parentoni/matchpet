@@ -73,12 +73,10 @@ export class UserRepo implements IUserRepo {
 
     if (!!exists) {
       const resp = await UserM.findByIdAndUpdate(dto.id.toValue(), userInPersistanceFormat.value);
-      // console.log(resp)
-      // console.log(userInPersistanceFormat)
       return right(dto.id.toValue());
     }
 
-    const created = await UserM.create(userInPersistanceFormat);
+    const created = await UserM.create(userInPersistanceFormat.value);
     return right(created._id);
   }
 

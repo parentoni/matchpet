@@ -1,5 +1,6 @@
 import { Guard } from "../../../../../shared/core/Guard";
 import { Location } from "../../../../../shared/core/Location";
+import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCaseError";
 import { left, right } from "../../../../../shared/core/Result";
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";

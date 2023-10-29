@@ -5,6 +5,8 @@ import { AllAnimals } from "./pages/user/AllAnimals";
 import { Login } from "./pages/user/Login";
 import { ManagerBase } from "./elements/ManagerBase";
 import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalGrid";
+import { Testing } from "./pages/testing/Testing";
+import { FourOFour } from "./pages/error/fourOFour";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
   {
     path: '/auth/login',
     element: <Login />
+  },
+  {
+    path: '/test',
+    element: <Testing />
+  },
+  {
+    path: '*',
+    element: <FourOFour />
   }
 ])
 

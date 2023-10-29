@@ -12,6 +12,7 @@ import { Categories } from '../../utils/domain/Categories'
 import { CategoriesContext } from '../../utils/context/CategoriesContext'
 import { SlideFilter } from './filters/SlideFilter'
 import { FiltersContext } from '../../utils/context/FiltersContext'
+import { LocationFilter } from './filters/LocationFilter'
 export function AnimalFiltersModalContainer ()  {
   
   const [isOpen, setIsOpen] = useState(false)
@@ -36,6 +37,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
     
     <FullPageModal isOpen={isOpen} setIsOpen={setIsOpen} absolute={false} title='FILTRAR'>
       <AnimalFilters.Root selectedSpecie={Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie}>
+        <LocationFilter />
         <SlideFilter />
         {Categories.createFromDTO(categories).list.map((category, index) => {
           return(

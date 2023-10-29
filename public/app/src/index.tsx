@@ -8,20 +8,23 @@ import { CategoriesContextProvider } from './utils/context/CategoriesContext';
 import { AuthProvider } from './utils/context/AuthContext';
 import {ChakraProvider} from '@chakra-ui/react'
 import { FiltersContext, FiltersContextProvider } from './utils/context/FiltersContext';
+import { OrganizationsProvider } from './utils/context/OrganizationsContext';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <FiltersContextProvider>
-    <ChakraProvider>
-      <AuthProvider>
-        <CategoriesContextProvider>
-          <SpeciesContextProvider>
-            <RouterProvider router={router}/>
-          </SpeciesContextProvider>
-        </CategoriesContextProvider>
-      </AuthProvider>
-    </ChakraProvider>
+    <OrganizationsProvider>
+      <ChakraProvider>
+        <AuthProvider>
+          <CategoriesContextProvider>
+            <SpeciesContextProvider>
+              <RouterProvider router={router}/>
+            </SpeciesContextProvider>
+          </CategoriesContextProvider>
+        </AuthProvider>
+      </ChakraProvider>
+    </OrganizationsProvider>
   </FiltersContextProvider>
 );
 

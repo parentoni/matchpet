@@ -20,6 +20,7 @@ import { UserCreated } from "../../domain/events/userCreated";
 import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
 import { Location } from "../../../../shared/core/Location";
+import { Secrets } from "../../../../config/secretsManager";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -65,7 +66,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       password: hashedPassword.value,
       phone,
       role,
-      verified: request.verified || false,
+      verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
       location,
       inAdoption: 0,
       completedAdoptions: 0
@@ -103,6 +104,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       }
 
       const user = userOrError.value;
+
+      console.log(user);
       const persisantResponse = await this.userRepo.create({ dto: user });
 
       if (persisantResponse.isLeft()) {

@@ -24,7 +24,8 @@ export class CreateUserController extends BaseController<Request> {
           email: dto.email,
           phone: dto.phone,
           role: dto.role,
-          location: dto.location
+          location: dto.location,
+          verified: dto.verified
         });
 
         if (result.isLeft()) {

@@ -23,7 +23,7 @@ export class Animal {
     return right(this.create(response.value))
   }
 
-  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
+  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, coordinates?: [number,number][]): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
     
     const formatedFilters = []
     for (const key of Object.keys(filters)) {
@@ -37,7 +37,7 @@ export class Animal {
       }
     }
 
-    const response = await Api.post('/animals/filter', JSON.stringify({page: page, filter: formatedFilters}))
+    const response = await Api.post('/animals/filter', JSON.stringify(coordinates?coordinates.length>0?{page: page, filter: formatedFilters, coordinates:[coordinates]}:{page: page, filter: formatedFilters}:{page: page, filter: formatedFilters} ))
     if (response.isLeft()) {
       return left(response.value)
     }

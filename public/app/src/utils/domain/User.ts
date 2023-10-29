@@ -1,4 +1,5 @@
 import { IUserContactDTO } from "../dtos/UserContactDTO";
+import { IUserPersistent } from "../dtos/UserDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 
@@ -11,5 +12,14 @@ export class User {
     }
 
     return right(response.value as IUserContactDTO)
+  }
+
+  public static async getAllActiveOrganizations(): Promise<Either<Response, IUserPersistent[]>> {
+    const response = await Api.get('/user/active')
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right( response.value as IUserPersistent[])
   }
 }

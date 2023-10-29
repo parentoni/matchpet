@@ -8,7 +8,7 @@ import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { FILTER_MODES, FilterObject } from "../../useCases/animals/filterAnimals/filterAnimalsDTO";
 import { AnimalFindProps, IAnimalRepo } from "../IAnimalRepo";
 import { Location } from "../../../../shared/core/Location";
-import { PipelineStage } from "mongoose";
+import mongoose, { PipelineStage, mongo } from "mongoose";
 
 export type DBFilter = Record<string, Record<string, any>>;
 
@@ -153,21 +153,34 @@ export class AnimalRepo implements IAnimalRepo {
   async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>> {
     const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
-
+    const idFilter: DBFilter[] = [];
+    const objectIdFields = ["donator_id"];
     for (const ind_filter of props.filterObject) {
       const comparation: Record<string, any> = {};
       const filter: Record<string, any> = {};
 
-      comparation[ind_filter.mode] = ind_filter.comparation_value;
-      filter[ind_filter.key] = comparation;
-      dbFilter.push(filter);
+      if (objectIdFields.includes(ind_filter.key)) {
+        ind_filter.comparation_value = { $toObjectId: ind_filter.comparation_value };
+        filter[ind_filter.mode] = ["$" + ind_filter.key, ind_filter.comparation_value];
+        idFilter.push(filter);
+      } else {
+        comparation[ind_filter.mode] = ind_filter.comparation_value;
+        filter[ind_filter.key] = comparation;
+        dbFilter.push(filter);
+      }
     }
 
+    console.log(dbFilter);
     if (dbFilter.length > 0) {
       filters.push({ $match: { $and: dbFilter } });
     }
 
+    if (idFilter.length > 0) {
+      filters.push({ $match: { $expr: { $and: idFilter } } });
+    }
+
     //If location push location filters
+
     if (props.location) {
       filters.push(
         ...[
@@ -201,7 +214,6 @@ export class AnimalRepo implements IAnimalRepo {
     const animalArray: Animal[] = [];
     try {
       const result = await AnimalModel.aggregate(filters);
-
       const count = result.length > 0 ? await AnimalModel.aggregate(countFilter).count("count") : "";
 
       for (const persistenceAnimal of result) {
