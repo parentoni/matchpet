@@ -1,13 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { PageLayout } from "../../elements/PageLayout";
-import { IAnimalDTO } from "../../utils/dtos/AnimalDTO";
-import { Animal } from "../../utils/domain/Animal";
 import { AnimalGrid } from "../../elements/Animals/AnimalsGrid";
 import { SpeciesContext } from "../../utils/context/SpeciesContext";
 import { AnimalFiltersModalContainer } from "../../elements/Animals/AnimalsFiltersModal";
 import reducedLogo from '../../assets/logo-reduced.svg'
-import { FILTER_MODES } from "../../elements/Animals/filters";
-import { filter } from "@chakra-ui/react";
 import { FiltersContext } from "../../utils/context/FiltersContext";
 
 

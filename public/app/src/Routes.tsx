@@ -4,9 +4,10 @@ import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
 import { Login } from "./pages/user/Login";
 import { ManagerBase } from "./elements/ManagerBase";
-import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalGrid";
+import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalManage";
 import { Testing } from "./pages/testing/Testing";
 import { FourOFour } from "./pages/error/fourOFour";
+import { PartnerEditAnimal } from "./pages/partner/PartnerEditAnimal";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <PartnerAnimalManage />
+      },
+      {
+        element: <PartnerEditAnimal />,
+        path: 'animal/:id'
       }
     ]
   },

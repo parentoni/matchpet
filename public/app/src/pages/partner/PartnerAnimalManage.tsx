@@ -4,10 +4,13 @@ import { IAnimalDTO } from "../../utils/dtos/AnimalDTO";
 import { Animal } from "../../utils/domain/Animal";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
+import { PartnerAnimalGrid } from "../../elements/partner/PartnerAnimalsGrid";
+import { FiltersContext } from "../../utils/context/FiltersContext";
 
 export function PartnerAnimalManage () {
 
-  const [page, setPage] = useState<number>(0)
+  const {page} = useContext(FiltersContext)
+
   const [animalsCount, setAnimalsCount] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
 
@@ -29,5 +32,6 @@ export function PartnerAnimalManage () {
   return (
   <PageLayout>
     <h1 className="text-2xl font-medium">{animalsCount} animais cadastrados em sua ong.</h1>
+    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} />
   </PageLayout>)
 }
