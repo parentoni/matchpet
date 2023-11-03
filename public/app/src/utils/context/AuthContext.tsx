@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { Either, left, right } from "../shared/Result";
 import { Api } from "../services/Api";
-import { IUserPersistent } from "../dtos/UserDTO";
+import { IUserPersistent } from "../services/dtos/UserDTO";
 
 
 type LoginFunction = (email:string, password:string) => Promise<Either<Response, string>>
@@ -19,14 +19,16 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction}>({user: undefined, login: (() => {}) as unknown as LoginFunction})
+export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: ''})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
+  const [token,setToken] = useState<string>('')
 
   useEffect(() => {
     const token = window.localStorage.getItem('matchpet_token')
     if (token) {
+      setToken(token)
       getInfo(token).then((response) => {
         if (response.isRight()) {
           setUser(response.value)
@@ -60,7 +62,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     return right('success')
   }
   return (
-    <AuthContext.Provider value={{user, login: login}}>
+    <AuthContext.Provider value={{user, login: login, token:token}}>
       {children}
     </AuthContext.Provider>
   )

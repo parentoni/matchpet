@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { PageLayout } from "../../elements/PageLayout";
-import { IAnimalDTO } from "../../utils/dtos/AnimalDTO";
+import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import { Animal } from "../../utils/domain/Animal";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";

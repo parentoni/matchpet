@@ -1,6 +1,7 @@
-import { ISpecieDTO, ISpecieTraitDTO } from "../dtos/SpecieDTO";
+import { ISpecieDTO, ISpecieTraitDTO } from "../services/dtos/SpecieDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
+import { IAnimalTraitsDTO } from "../services/dtos/AnimalDTO";
 
 export class Specie {
   public props: ISpecieDTO;
@@ -51,5 +52,30 @@ export class Specie {
       }
     }
     return undefined
+  }
+
+
+  get obrigatoryTraits() {
+    const traitsList:ISpecieTraitDTO[]= []
+
+    for (const trait of this.props.traits) {
+      if (!trait.optional) {
+        traitsList.push(trait)
+      }
+    }
+
+    return traitsList
+  }
+
+  get optionalTraits() {
+    const traitsList:ISpecieTraitDTO[]= []
+
+    for (const trait of this.props.traits) {
+      if (trait.optional) {
+        traitsList.push(trait)
+      }
+    }
+
+    return traitsList
   }
 }

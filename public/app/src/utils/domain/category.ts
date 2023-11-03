@@ -1,4 +1,4 @@
-import { ICategoryDTO } from "../dtos/CategoryDTO";
+import { ICategoryDTO } from "../services/dtos/CategoryDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 

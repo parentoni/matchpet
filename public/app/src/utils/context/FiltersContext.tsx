@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
 import { FILTER_MODES } from "../../elements/Animals/filters"
-import { IAnimalDTO } from "../dtos/AnimalDTO"
+import { IAnimalDTO } from "../services/dtos/AnimalDTO"
 import { Animal } from "../domain/Animal"
 
 export interface ContextProps {

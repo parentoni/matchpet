@@ -1,6 +1,6 @@
 import { Categories } from "../../utils/domain/Categories";
 import { Specie } from "../../utils/domain/Specie";
-import { IAnimalTraitsDTO } from "../../utils/dtos/AnimalDTO";
+import { IAnimalTraitsDTO } from "../../utils/services/dtos/AnimalDTO";
 
 export function AnimalTraitsSlider ({Specie, AnimalTraits, Categories}: {Specie: Specie,Categories: Categories, AnimalTraits: IAnimalTraitsDTO[]}) {
   return(

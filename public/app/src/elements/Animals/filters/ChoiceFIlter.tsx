@@ -1,5 +1,5 @@
 import { title } from "process"
-import { ISpecieTraitOptionsDTO } from "../../../utils/dtos/SpecieDTO"
+import { ISpecieTraitOptionsDTO } from "../../../utils/services/dtos/SpecieDTO"
 import { useContext, useEffect, useState } from "react"
 import { FILTER_MODES } from "."
 import { FiltersContext } from "../../../utils/context/FiltersContext"

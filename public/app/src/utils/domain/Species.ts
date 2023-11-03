@@ -1,4 +1,4 @@
-import { ISpecieDTO } from "../dtos/SpecieDTO";
+import { ISpecieDTO } from "../services/dtos/SpecieDTO";
 import { Specie } from "./Specie";
 
 export class Species {

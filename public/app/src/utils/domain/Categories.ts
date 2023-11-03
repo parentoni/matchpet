@@ -1,4 +1,4 @@
-import { ICategoryDTO } from "../dtos/CategoryDTO";
+import { ICategoryDTO } from "../services/dtos/CategoryDTO";
 import { Category } from "./category";
 
 export class Categories {

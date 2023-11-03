@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { ICategoryDTO } from "../dtos/CategoryDTO";
+import { ICategoryDTO } from "../services/dtos/CategoryDTO";
 import { Category } from "../domain/category";
 
 export const CategoriesContext = createContext<{categories: ICategoryDTO[]}>({categories: []})

@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { useState, Fragment } from "react"
 import {BsWhatsapp} from 'react-icons/bs'
 import {HiOutlineMail} from 'react-icons/hi'
-import { IUserContactDTO } from "../../utils/dtos/UserContactDTO"
+import { IUserContactDTO } from "../../utils/services/dtos/UserContactDTO"
 import { TransitionedModal } from "../TransitionedModal"
 import { FullPageModal } from "../FullPageModal"
 import naoCompre from '../../assets/nao_compre.svg'

@@ -1,6 +1,6 @@
-import { IAnimalDTO } from "../../utils/dtos/AnimalDTO";
+import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import {BsGenderFemale, BsGenderMale} from 'react-icons/bs'
-import { ISpecieDTO } from "../../utils/dtos/SpecieDTO";
+import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO";
 import { Species } from "../../utils/domain/Species";
 import { Animal } from "../../utils/domain/Animal";
 import { useNavigate } from "react-router-dom";

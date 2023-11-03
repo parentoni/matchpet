@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { IUserPersistent } from "../dtos/UserDTO";
+import { IUserPersistent } from "../services/dtos/UserDTO";
 import { User } from "../domain/User";
 
 export const OrganizationsContext = createContext<{organizations: IUserPersistent[]}>({organizations: []})

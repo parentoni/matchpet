@@ -1,5 +1,5 @@
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { IAnimalDTO } from "../dtos/AnimalDTO";
+import { IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 
@@ -53,6 +53,13 @@ export class Animal {
     if (response) {
       return response
     }
+  }
+
+  public static async uploadAnimalImage(file: File) {
+    const form = new FormData()
+    form.append('image', file)
+
+    const response = await Api.post('/animals/image/upload', form, )
   }
 
 }

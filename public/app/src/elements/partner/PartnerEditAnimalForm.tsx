@@ -1,58 +1,117 @@
 import { TextInput } from "./input/TextInput";
 import { MaxCharacters } from "./input/MaxCharacters";
 import { TextArea } from "./input/TextArea";
-import { NumberInput } from "./input/NumberInput.";
-import { AnimalInput, AnimalInputError } from "../../pages/partner/PartnerEditAnimal";
+import { NumberInput } from "./input/NumberInput";
+import { AnimalInput, AnimalInputError, SpecieInputTraitsErrors, SpecieInputTraitsProps } from "../../pages/partner/PartnerEditAnimal";
+import { Species } from "../../utils/domain/Species";
+import { SelectInput, SpecieInputProps } from "./input/SelecInput";
+import { Specie } from "../../utils/domain/Specie";
+import { text } from "body-parser";
 
 export interface PartnerEditAnimalFormProps {
   animalInput: AnimalInput,
   setAnimalInput: (x:AnimalInput) => void,
   animalInputError: AnimalInputError,
-  formSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  species: Species,
+  selectedSpecies: Specie | undefined,
+  speciesError:boolean
+  setSelectedSpecies: (x: Specie) => void,
+  traits: SpecieInputTraitsProps,
+  setTraits: (x:SpecieInputTraitsProps) => void,
+  traitsError: SpecieInputTraitsErrors
 }
 
-export const PartnerEditAnimalForm = ({ animalInput, setAnimalInput, animalInputError, formSubmit }: PartnerEditAnimalFormProps) => {
+export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
 
   function changeAnimalInput<T extends keyof AnimalInput>(key: T, value: AnimalInput[T]) {
-    animalInput[key] = value;
-    setAnimalInput(structuredClone(animalInput));
+    props.animalInput[key] = value;
+    props.setAnimalInput(structuredClone(props.animalInput));
+  }
+
+  function changeTraits(key: string, value: {name:string, _id:string}) {
+    props.traits[key]= value;
+    props.setTraits(structuredClone(props.traits));
   }
 
   return (
-    <form onSubmit={formSubmit} className="flex-1">
+    <>
       <h2 className="text-2xl font-semibold  mb-2">Informações básicas</h2>
       <div className="border-b mb-5"></div>
       <TextInput
         onChange={e => changeAnimalInput("name", e.target.value)}
-        state={animalInput['name']}
+        state={props.animalInput['name']}
+        errorMessage={props.animalInputError["description"] ?"Por favor, digite o nome do animal.":undefined}
         title="Nome"
-        subElement={<MaxCharacters current={animalInput['name'].length} max={100} error={animalInputError["name"] ? true : false} />}
+        subElement={<MaxCharacters current={props.animalInput['name'].length} max={100} error={props.animalInputError["name"] ? true : false} />}
         placeholder="Max" />
 
       <TextArea
         onChange={e => changeAnimalInput("description", e.target.value)}
-        state={animalInput['description']}
+        state={props.animalInput['description']}
         title="Descrição"
-        subElement={<MaxCharacters current={animalInput['name'].length} max={1500} error={animalInputError["name"] ? true : false} />}
+        errorMessage={props.animalInputError["description"] ?"Por favor, digite a descrição do animal.":undefined}
+        subElement={<MaxCharacters current={props.animalInput['name'].length} max={1500} error={props.animalInputError["description"] ? true : false} />}
         placeholder="Max é um animal muito brincalhão, gosta de ...." />
       <div className="flex w-full   justify-between">
 
         <NumberInput
-          onChange={e => changeAnimalInput("age", animalInput['age'] % 12 + Number(e.target.value) * 12)}
-          state={Math.floor(animalInput['age'] / 12)}
+          onChange={e => changeAnimalInput("age", props.animalInput['age'] % 12 + Number(e.target.value) * 12)}
+          state={Math.floor(props.animalInput['age'] / 12)}
           title="Idade"
           subElement={<span className="text-gray-400">anos</span>} />
-        <span className="flex-1 align-top flex items-center justify-center">e</span>
+        <span className="flex-1 align-top flex items-center justify-center mx-2">e</span>
         <div className="flex flex-1 items-end">
           <NumberInput
-            onChange={e => changeAnimalInput("age", Math.floor(animalInput['age'] / 12) * 12 + Number(e.target.value))}
-            state={animalInput['age'] % 12}
+            onChange={e => changeAnimalInput("age", Math.floor(props.animalInput['age'] / 12) * 12 + Number(e.target.value))}
+            state={props.animalInput['age'] % 12}
             title=""
             subElement={<span className="text-gray-400">meses</span>} />
         </div>
+
       </div>
 
+      <SelectInput
+        array={props.species.list}
+        state={props.selectedSpecies}
+        setState={props.setSelectedSpecies}
+        option={s => s.props.name}
+        title="Espécie"
+        checked={s => s?.props._id === props.selectedSpecies?.props._id}
+        errorMessage={props.speciesError? "Por favor, selecione uma espécie.":undefined}
+      />
+      {props.selectedSpecies && <>
+      <h2 className="text-2xl font-semibold mt-10 mb-2">Características obrigatórias</h2>
+      <div className="border-b mb-5"></div>
+      <div className="flex flex-col gap-5">
+        {props.selectedSpecies?.obrigatoryTraits.map(t => <SelectInput 
+                                                            array={t.options}
+                                                            state={props.traits[t._id]}
+                                                            setState={(x) => changeTraits(t._id, x)}
+                                                            option={(x) => x.name}
+                                                            title={t.name} 
+                                                            checked={s => s?._id === props.traits[t._id]?._id}
+                                                            errorMessage={props.traitsError[t._id]?`A característica ${t.name} é obrigatória.`:undefined}
+                                                            />)}
+      </div>
 
-    </form>
+      <h2 className="text-2xl font-semibold mt-10 mb-2">Características opicionais</h2>
+      <div className="border-b mb-5"></div>
+      <div className="flex flex-col gap-5">
+        {props.selectedSpecies?.optionalTraits.map(t => <SelectInput 
+                                                          array={t.options} 
+                                                          state={props.traits[t._id]} 
+                                                          setState={(x) => changeTraits(t._id, x)} 
+                                                          option={(x) => x.name} 
+                                                          title={t.name} 
+                                                          checked={s => s?._id === props.traits[t._id]?._id}
+                                                          optional={{
+                                                            text: "Não informar"
+                                                          }}
+                                                        />
+        )}
+      </div>
+      </>}
+
+    </>
   );
 };

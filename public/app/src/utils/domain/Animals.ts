@@ -1,4 +1,4 @@
-import { IAnimalDTO } from "../dtos/AnimalDTO";
+import { IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Animal } from "./Animal";
 
 export class Categories {

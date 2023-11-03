@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { FullPageModal } from "../FullPageModal";
-import { TransitionedModal } from "../TransitionedModal";
 import {CarouselContext, CarouselProvider, Image, Slide, Slider} from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css';
 export function AnimalImageGallery ({isOpen, setIsOpen, AnimalImages, AnimalName, currentSlide, setCurrentSlide}:{isOpen: boolean, setIsOpen: (x: boolean) => void, AnimalImages: string[], AnimalName:string, currentSlide: number, setCurrentSlide: (x: number) => void}) {

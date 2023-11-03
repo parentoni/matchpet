@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IAnimalDTO } from "../../utils/dtos/AnimalDTO";
+import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 
 
 export const PartnerSpecificAnimalCard = ({ animal }: { animal: IAnimalDTO; }) => {

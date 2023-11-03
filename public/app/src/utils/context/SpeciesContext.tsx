@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { ISpecieDTO } from "../dtos/SpecieDTO";
+import { ISpecieDTO } from "../services/dtos/SpecieDTO";
 import { Specie } from "../domain/Specie";
 
 export const SpeciesContext = createContext<{species: ISpecieDTO[]}>({species:[]})

@@ -1,5 +1,5 @@
-import { IUserContactDTO } from "../dtos/UserContactDTO";
-import { IUserPersistent } from "../dtos/UserDTO";
+import { IUserContactDTO } from "../services/dtos/UserContactDTO";
+import { IUserPersistent } from "../services/dtos/UserDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 
