@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { PageLayout } from "../../elements/PageLayout";
+import { PageLayout } from "../../PageLayout";
 import { AnimalGrid } from "../../elements/Animals/AnimalsGrid";
 import { SpeciesContext } from "../../utils/context/SpeciesContext";
 import { AnimalFiltersModalContainer } from "../../elements/Animals/AnimalsFiltersModal";
@@ -23,10 +23,6 @@ export function AllAnimals () {
         <h2 className="text-2xl">{animalsCount? animalsCount:'---'} animais disponíveis</h2>
         <AnimalGrid AnimalsArray={animals} SpeciesArray={species} setAnimalsArray={setAnimals}/>
       </PageLayout>
-      <button className="fixed h-14 bg-primary bottom-8 right-6 shadow items-center flex px-5 py-3 gap-3">
-        <img src={reducedLogo} alt="Logo reduzida matchpet" width={35}></img>
-        <p className="text-xl">Match</p>
-      </button>
     </>
     
   )

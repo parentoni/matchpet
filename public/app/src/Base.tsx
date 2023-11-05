@@ -6,7 +6,7 @@ import { useContext, useState } from 'react'
 import { SpeciesContext } from './utils/context/SpeciesContext'
 import { AuthContext } from './utils/context/AuthContext'
 import { FullPageModal } from './elements/FullPageModal'
-import { PageLayout } from './elements/PageLayout'
+import { PageLayout } from './PageLayout'
 export const App = () => {
 
     const {user} = useContext(AuthContext)
@@ -15,7 +15,7 @@ export const App = () => {
     return(
         <>
             <div className="w-full flex justify-between px-8 pt-6">
-                <img src={logo} width={70} alt='Matchpet logo'></img>
+                <img src={logo} width={70} alt='Matchpet logo' className=' cursor-pointer' onClick={() => navigate('/')}></img>
                 <button onClick={() => setShowNavigate(true)}>
                     <img src={Hamburguer} alt='Menu' width={42}></img> 
                 </button>
@@ -41,10 +41,10 @@ export const App = () => {
                     
                     <div className='w-full border my-5'></div>
                     <div className='flex flex-col gap-3'>
-                        <button className='flex gap-3 items-center'>
+                        {/* <button className='flex gap-3 items-center'>
                             <img alt='Match' src={reducedLogo} className='w-8'></img>
                             <p>Match</p>
-                        </button>
+                        </button> */}
                     </div>
                 </PageLayout>
                 

@@ -5,8 +5,12 @@ import { Species } from "../../utils/domain/Species"
 import { Specie } from "../../utils/domain/Specie"
 import { PartnerImageUpload } from "../../elements/partner/PartnerImageUpload"
 import { CarouselProvider } from "pure-react-carousel"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { SaveAnimalStateModal } from "../../elements/partner/SaveAnimalModal"
+import { AuthContext } from "../../utils/context/AuthContext"
+import { Animal } from "../../utils/domain/Animal"
+import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO"
+import { ANIMAL_STATUS } from "../../utils/services/dtos/AnimalDTO"
 export interface AnimalInput {
   name: string,
   description: string,
@@ -31,6 +35,11 @@ export type AnimalInputError = {
 export const PartnerEditAnimal = () => {
 
   const {id} = useParams()
+  const {token} = useContext(AuthContext)
+  const {species} = useContext(SpeciesContext)
+  
+  
+  const navigate = useNavigate()
 
   const [animalInput, setAnimalInput] = useState<AnimalInput>({name:'', description: '', age: 0 })
   const [animalInputError, setAnimalInputError] = useState<AnimalInputError>({name: undefined, description: undefined, age: undefined})
@@ -43,14 +52,42 @@ export const PartnerEditAnimal = () => {
 
   const [images, setImages] = useState<ImageInput[]>([])
   const [imageError, setImageError] = useState<boolean>(false)
-  const {species} = useContext(SpeciesContext)
 
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-  const [modalPercentage, setModalPercentage] = useState<number>(0)
+  const [modalPercentage, setModalPercentage] = useState<number>(.0)
   const [modalText, setModalText] = useState<string>('')
 
-  console.log(animalInputError)
-  
+  const [animalStatus, setAnimalStatus] = useState<ANIMAL_STATUS>()
+
+  useEffect(() => {
+    if (id !==  'new' && id && species.length > 0 && images.length === 0) {
+      Animal.getSpecific(id).then(res => {
+        if (res.isLeft()) {
+          alert("Erro lendo dados do animal.")
+        } else {
+          const data = res.value
+
+          animalInput['name'] = data.props.name
+          animalInput['description'] = data.props.description
+          animalInput['age'] = data.props.age
+          setAnimalInput(structuredClone(animalInput))
+          setSelectedSpecie(Specie.create(species.find(x => x._id === data.props.specie_id) as ISpecieDTO))
+
+          for (const trait of data.props?.traits) {
+            traits[trait._id] = {_id:trait.value, name: 'Negativo'}
+          }
+          setSelectedTraits(structuredClone(traits))
+
+          for (const image of data.props.image) {
+            images.push({type: 'url', data: image})
+          }
+
+          setAnimalStatus(data.props.status)
+          setImages(images.slice())
+        }
+      })
+    }
+  }, [id, species])
 
   const formValidate = () => {
     let err = -1
@@ -68,6 +105,7 @@ export const PartnerEditAnimal = () => {
     }
     setAnimalInputError(structuredClone(animalInputError))
 
+    console.log(specie)
     if (!specie) {
       err++
       setSpecieError(true)
@@ -75,7 +113,6 @@ export const PartnerEditAnimal = () => {
       setSpecieError(false)
 
       for (const trait of specie.obrigatoryTraits) {
-        // console.log(Object.keys(traits))
         if (!Object.keys(traits).includes(trait._id)) {
           err++
           traitsError[trait._id] = true
@@ -89,6 +126,7 @@ export const PartnerEditAnimal = () => {
     }
 
     if (images.length === 0) {
+      err++
       setImageError(true)
     } else {
       setImageError(false)
@@ -98,14 +136,67 @@ export const PartnerEditAnimal = () => {
 
   
   }
-  const formSubmit = () => {
+
+  const formSubmit = async () => {
     const err = formValidate()
-    if (err === 0) {
+    if (err <= 0) {
       setModalIsOpen(true)
+      
+      // Format images
+      const imagesArray: string[] = []
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i]
+
+        setModalText(`Fazendo upload das imagens (${i}/${images.length})`)
+
+        if (image.type === 'File') {
+          const imagesResponse = await Animal.uploadAnimalImage(image.data, token)
+          if (imagesResponse.isRight()) {
+            imagesArray.push(imagesResponse.value)
+          } 
+
+        } else {
+          imagesArray.push(image.data)
+        }
+
+        setModalText(`Fazendo upload das imagens (${i + 1}/${images.length})`)
+        setModalPercentage(.8 / (images.length - i)) 
+
+      }
+
+
+
+      // Format traits
+      const formatedTraits:{_id: string, value:string}[] = []
+      for (const trait of Object.keys(traits)) {
+        formatedTraits.push({_id: trait, value: traits[trait]._id})
+      }
+
+
+      setModalText("Fazendo upload do animal...")
+      if (id === 'new') {
+        const response = await Animal.newAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image_url: imagesArray, traits: formatedTraits, description: animalInput['description']}, token)
+        if (response.isRight()) {
+          setModalPercentage(1)
+        } else {
+          alert("Algo deu errado fazendo upload do animal.")
+          navigate('/partner')
+        }
+      } else {
+
+        const response = await Animal.editAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image_url: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, token, id as string)
+        if (response.isRight()) {
+          setModalPercentage(1)
+        } else {
+          alert("Algo deu errado fazendo upload do animal.")
+          navigate('/partner')
+        }
+      }
     }
   }
     //validate animals input
 
+  
   return (
     <>
   <div className="my-10 flex justify-center">
@@ -127,6 +218,10 @@ export const PartnerEditAnimal = () => {
           traits={traits}
           setTraits={setSelectedTraits}
           traitsError={traitsError}
+
+          id={id || ''}
+          animalStatus={animalStatus}
+          setAnimalStatus={setAnimalStatus}
           />
           <button className="mt-10 w-full bg-black h-10 text-white" onClick={formSubmit}>
             SALVAR

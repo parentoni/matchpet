@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { PageLayout } from "../../elements/PageLayout";
+import { PageLayout } from "../../PageLayout";
 import { MoveLeft } from "lucide-react";
 import { useContext, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";

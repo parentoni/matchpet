@@ -23,25 +23,25 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
 
   return (
     <div className="flex flex-col gap-3">
-    <div className=" w-full border aspect-square rounded flex items-center justify-center ">
+    <div className="w-full border aspect-square rounded flex items-center justify-center flex-grow-0">
     {props.images.length > 0? 
       <div className="carousel w-full h-full">
         {props.images.map((file, i) => {
           return(
-            <div className="carousel-item relative w-full" id={`slide${i}`} >
-            <img src={file.type === 'File'?URL.createObjectURL(file.data):file.data} alt={`Imagem ${i} selecionada.`}></img>
-            <button className="absolute transform h-10 bg-primary right-5 bottom-5 px-5 items-center flex" onClick={() => handleFileDelete(i)}>EXCLUIR FOTO</button>
-            <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-              <a href={`#${i > 0?`slide${i-1}`:"uploadMore"}`} className="btn btn-circle">❮</a> 
-              <a href={`#${i === props.images.length-1?`uploadMore`:`slide${i + 1}`}`} className="btn btn-circle">❯</a>
+            <div className="carousel-item relative w-full aspect-square flex justify-center" id={`slide${i}`}>
+              <img src={file.type === 'File'?URL.createObjectURL(file.data):file.data} className="object-contain" alt={`Imagem ${i} selecionada.`}></img>
+              <button className="absolute transform h-10 bg-primary right-5 bottom-5 px-5 items-center flex" onClick={() => handleFileDelete(i)}>EXCLUIR FOTO</button>
+              <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+                <a href={`#${i > 0?`slide${i-1}`:"uploadMore"}`} className="btn btn-circle">❮</a> 
+                <a href={`#${i === props.images.length-1?`uploadMore`:`slide${i + 1}`}`} className="btn btn-circle">❯</a>
+              </div>
             </div>
-          </div>
             )
           }
           ) }
           <div className="carousel-item relative w-full flex items-center justify-center " id="uploadMore">
             <label htmlFor="fileInput" className="text-sm cursor-pointer z-50">Clique para adicionar mais uma imagem</label>
-            <input id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
+            <input accept="image/*" id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
               <a href={`#slide${props.images.length - 1 }`} className="btn btn-circle">❮</a> 
               <a href="#slide0" className="btn btn-circle">❯</a>
@@ -49,8 +49,8 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
           </div>
       </div>
       :<>
-        <label htmlFor="fileInput" className="text-sm cursor-pointer">Clique para adicionar uma imagem</label>
-        <input id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
+        <label  htmlFor="fileInput" className="text-sm cursor-pointer">Clique para adicionar uma imagem</label>
+        <input accept="image/*" id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
       </>
     }
 

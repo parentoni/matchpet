@@ -7,6 +7,7 @@ import { Species } from "../../utils/domain/Species";
 import { SelectInput, SpecieInputProps } from "./input/SelecInput";
 import { Specie } from "../../utils/domain/Specie";
 import { text } from "body-parser";
+import { ANIMAL_STATUS } from "../../utils/services/dtos/AnimalDTO";
 
 export interface PartnerEditAnimalFormProps {
   animalInput: AnimalInput,
@@ -18,7 +19,10 @@ export interface PartnerEditAnimalFormProps {
   setSelectedSpecies: (x: Specie) => void,
   traits: SpecieInputTraitsProps,
   setTraits: (x:SpecieInputTraitsProps) => void,
-  traitsError: SpecieInputTraitsErrors
+  traitsError: SpecieInputTraitsErrors,
+  id:string,
+  animalStatus: ANIMAL_STATUS | undefined,
+  setAnimalStatus: (x: ANIMAL_STATUS) => void,
 }
 
 export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
@@ -76,9 +80,29 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
         setState={props.setSelectedSpecies}
         option={s => s.props.name}
         title="Espécie"
-        checked={s => s?.props._id === props.selectedSpecies?.props._id}
+        checked={s => s?.props?._id === props.selectedSpecies?.props?._id}
         errorMessage={props.speciesError? "Por favor, selecione uma espécie.":undefined}
       />
+
+      {props.id !== 'new' && props.animalStatus && <div className="mt-5">
+      <SelectInput
+        array={[ANIMAL_STATUS.CANCELED, ANIMAL_STATUS.PENDING, ANIMAL_STATUS.DONATED]}
+        state={props.animalStatus}
+        setState={props.setAnimalStatus}
+        option={s => {
+          if (s === ANIMAL_STATUS.DONATED) {
+            return "Doado"
+          } else if (s === ANIMAL_STATUS.PENDING) {
+            return "Em adoção"
+          } else {
+            return "Excluído";
+          }
+        }}
+        
+        title="Espécie"
+        checked={s => s === props.animalStatus}
+        errorMessage={props.speciesError? "Por favor, selecione uma estado.":undefined}
+      /></div>}
       {props.selectedSpecies && <>
       <h2 className="text-2xl font-semibold mt-10 mb-2">Características obrigatórias</h2>
       <div className="border-b mb-5"></div>

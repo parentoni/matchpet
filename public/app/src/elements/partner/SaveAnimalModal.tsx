@@ -9,6 +9,7 @@ export interface SaveAnimalStateModalProps {
 }
 
 export const SaveAnimalStateModal = (props: SaveAnimalStateModalProps) => {
+  console.log(props.percentage * 100)
   const navigate = useNavigate()
   return (
     <Dialog open={props.open} onClose={() => {}} >
@@ -21,7 +22,7 @@ export const SaveAnimalStateModal = (props: SaveAnimalStateModalProps) => {
               <Dialog.Title className={'font-medium'}>Salvando mudanças. Por favor, não feche essa página...</Dialog.Title>
               <p className="mt-4 text-sm">{props.message}</p>
               <div className="my-4 w-full bg-gray-300 h-2">
-                <div className={`w-[${props.percentage * 100}%] h-full bg-primary`}></div>
+                <div className={`h-full bg-primary`} style={{width: `${props.percentage * 100}%`}}></div>
               </div>
               </>
               :<>

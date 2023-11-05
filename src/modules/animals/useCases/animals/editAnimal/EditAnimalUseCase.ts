@@ -3,6 +3,9 @@ import { left, right } from "../../../../../shared/core/Result";
 import { UseCase } from "../../../../../shared/core/UseCase";
 import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
+import { updateUserStatsUseCase } from "../../../../user/useCases/updateUserStats";
+import { UpdateUserStatsUseCase } from "../../../../user/useCases/updateUserStats/updateUserStatsUseCase";
+import { ANIMAL_STATUS } from "../../../domain/animal/AnimalStatus";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../../repository/IAnimalRepo";
 import { ISpecieRepo } from "../../../repository/ISpeciesRepo";
@@ -14,10 +17,12 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
   
   animalRepo: IAnimalRepo;
   speciesRepo: ISpecieRepo;
+  updateStats: UpdateUserStatsUseCase
 
-  constructor(animalRepo:IAnimalRepo, speciesRepo: ISpecieRepo) {
+  constructor(animalRepo:IAnimalRepo, speciesRepo: ISpecieRepo, updateStats: UpdateUserStatsUseCase) {
     this.animalRepo = animalRepo
     this.speciesRepo = speciesRepo
+    this.updateStats = updateStats
   }
   
   async execute(request: EditAnimalDTO ): Promise<EditAnimalResponse> {
@@ -46,17 +51,14 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       return left(persistenAtualAnimal.value)
     }
 
-    const persistentNewAnimal = {...persistenAtualAnimal.value, ...request.edit} as IAnimalPersistent
+    if (request.edit?.image_url) {
+      request.edit.image = request.edit?.image_url 
+    }
 
+    const persistentNewAnimal = {...persistenAtualAnimal.value, ...request.edit} as IAnimalPersistent
     const domainNewAnimal = AnimalMapper.toDomain(persistentNewAnimal)
 
     if (domainNewAnimal.isLeft()) {
-      return left(EditAnimalErrors.dbError)
-    }
-
-    const saveResult = await this.animalRepo.save(domainNewAnimal.value)
-
-    if (saveResult.isLeft()) {
       return left(EditAnimalErrors.dbError)
     }
 
@@ -67,9 +69,26 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
     }
 
     const isTraitValid = specie.value.validateArrayOfAnimalTraits(domainNewAnimal.value.animalTraits);
-
     if (isTraitValid.isLeft()) {
       return left(EditAnimalErrors.dbError)
+    }
+
+    const saveResult = await this.animalRepo.save(domainNewAnimal.value)
+
+    if (saveResult.isLeft()) {
+      return left(EditAnimalErrors.dbError)
+    }
+
+    if (request.edit.status && request.edit.status !== animal.value.animalStatus.value) {
+      const updateUserResponse = await this.updateStats.execute({
+        userId: request.user.uid,
+        addInAdoption: request.edit.status === 'PENDING'? 1 :animal.value.animalStatus.value === ANIMAL_STATUS.PENDING? -1:0,
+        addCompletedAdoptions: request.edit.status === 'DONATED'?1:animal.value.animalStatus.value === ANIMAL_STATUS.DONATED? -1:0
+      })
+
+      if (updateUserResponse.isLeft()) {
+        return left(updateUserResponse.value)
+      }
     }
 
     return right(persistentNewAnimal)

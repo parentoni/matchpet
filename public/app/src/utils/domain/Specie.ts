@@ -58,11 +58,14 @@ export class Specie {
   get obrigatoryTraits() {
     const traitsList:ISpecieTraitDTO[]= []
 
-    for (const trait of this.props.traits) {
-      if (!trait.optional) {
-        traitsList.push(trait)
+    if (this.props) {
+      for (const trait of this.props.traits) {
+        if (!trait.optional) {
+          traitsList.push(trait)
+        }
       }
     }
+
 
     return traitsList
   }
@@ -70,9 +73,12 @@ export class Specie {
   get optionalTraits() {
     const traitsList:ISpecieTraitDTO[]= []
 
-    for (const trait of this.props.traits) {
-      if (trait.optional) {
-        traitsList.push(trait)
+    if (this.props) {
+
+      for (const trait of this.props.traits) {
+        if (trait.optional) {
+          traitsList.push(trait)
+        }
       }
     }
 

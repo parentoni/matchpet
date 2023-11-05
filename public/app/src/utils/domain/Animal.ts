@@ -1,7 +1,17 @@
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { IAnimalDTO } from "../services/dtos/AnimalDTO";
+import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
+
+export interface CreateAnimalListingDTO {
+  name: string;
+  image_url: string[];
+  age: number;
+  specie_id: any;
+  traits: {_id: string, value:string}[];
+  description: string;
+  status?: ANIMAL_STATUS
+}
 
 export class Animal {
   public props: IAnimalDTO;
@@ -23,10 +33,13 @@ export class Animal {
     return right(this.create(response.value))
   }
 
-  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, coordinates?: [number,number][]): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
+  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, status?: ANIMAL_STATUS, coordinates?: [number,number][]): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
     
     // Filter only pending animals
-    const formatedFilters = [{mode: '$eq', "comparation_value": "PENDING", key:"status"}]
+    const formatedFilters = []
+    if (status) {
+      formatedFilters.push({mode: '$eq', "comparation_value": status, key:"status"})
+    }
     
     for (const key of Object.keys(filters)) {
       for (const method of filters[key]) {
@@ -55,11 +68,42 @@ export class Animal {
     }
   }
 
-  public static async uploadAnimalImage(file: File) {
-    const form = new FormData()
-    form.append('image', file)
+  public static async uploadAnimalImage(file: File, token: string): Promise<Either<Response, string>>   {
+    const formData = new FormData()
+    formData.append('image', file)
 
-    const response = await Api.post('/animals/image/upload', form, )
+    const response = await fetch(Api.baseUrl + '/animals/image/upload', {
+      body: formData,
+      headers: {
+        authorization: "Bearer " + token
+      },
+      method: "POST"
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      return right(data.location)
+    }
+
+    return left(response)
+  }
+
+  public static async newAnimal (data: CreateAnimalListingDTO, token: string) {
+    const response = await Api.post('/animals/new', JSON.stringify(data), token)
+    if (response.isLeft()) {
+      return left(response)
+    }
+
+    return right(response.value)
+  }
+
+  public static async editAnimal (data: CreateAnimalListingDTO, token:string, animalId:string) {
+    const response = await Api.put('/animals/' + animalId, JSON.stringify({edit: data}), token)
+    if (response.isLeft()) {
+      return left(response)
+    }
+
+    return right(response.value)
   }
 
 }

@@ -13,6 +13,7 @@ export class UploadAnimalImageController extends BaseController<Request> {
 
     this.versionRegister.addToRegister("1.0.0", async (req, res) => {
       try {
+
         const response = await uploadAnimalImageUseCase.execute({
           file: (req.files?.image as UploadedFile).data,
           fileName: (req.files?.image as UploadedFile).name

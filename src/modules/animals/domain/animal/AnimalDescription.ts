@@ -9,7 +9,7 @@ interface AnimalDescriptionProps {
 
 export class AnimalDescription extends ValueObject<AnimalDescriptionProps> {
   private static MAX_LENGTH = 1500;
-  private static MIN_LENGTH = 5;
+  private static MIN_LENGTH = 0;
 
   get value(): string {
     return this.props.value;

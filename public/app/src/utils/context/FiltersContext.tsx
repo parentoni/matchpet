@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react"
 import { FILTER_MODES } from "../../elements/Animals/filters"
-import { IAnimalDTO } from "../services/dtos/AnimalDTO"
+import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO"
 import { Animal } from "../domain/Animal"
 
 export interface ContextProps {
@@ -29,7 +29,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
 
   useEffect(() => {
-    Animal.getAll(page, filters, searchArea).then((response) => {
+    Animal.getAll(page, filters,ANIMAL_STATUS.PENDING, searchArea).then((response) => {
       if (response.isLeft()) {
         alert("Erro lendo animais.")
       } else {
