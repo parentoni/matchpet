@@ -7,7 +7,7 @@ const devVariables: IGloabalVariables = {
 }
 
 const prodVariables: IGloabalVariables = {
-    apiUrl: 'pass'
+    apiUrl: 'http://ec2-15-228-246-55.sa-east-1.compute.amazonaws.com'
 }
 
 function getGlobal(key: keyof IGloabalVariables) {

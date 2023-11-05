@@ -1,6 +1,7 @@
 /node_modules
 
-*.env.development
 .DS_Store
 
 /scripts/tmp/*
+/dist
+/env/*

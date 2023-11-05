@@ -51,8 +51,8 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       return left(persistenAtualAnimal.value)
     }
 
-    if (request.edit?.image_url) {
-      request.edit.image = request.edit?.image_url 
+    if (request.edit?.image) {
+      request.edit.image = request.edit?.image
     }
 
     const persistentNewAnimal = {...persistenAtualAnimal.value, ...request.edit} as IAnimalPersistent

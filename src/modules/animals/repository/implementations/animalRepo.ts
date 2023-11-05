@@ -209,6 +209,12 @@ export class AnimalRepo implements IAnimalRepo {
     }
 
     const countFilter = structuredClone(filters);
+    filters.push({
+      $sort: {
+        "created_at": -1
+      }
+    })
+    
     filters.push({ $skip: props.skip }, { $limit: props.limit });
 
     const animalArray: Animal[] = [];

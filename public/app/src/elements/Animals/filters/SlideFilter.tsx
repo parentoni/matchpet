@@ -1,12 +1,7 @@
-import { Box, RangeSlider, RangeSliderFilledTrack, RangeSliderThumb, RangeSliderTrack } from '@chakra-ui/react'
-import MultiSliderRange from 'multi-range-slider-react'
+import { RangeSlider, RangeSliderFilledTrack, RangeSliderThumb, RangeSliderTrack } from '@chakra-ui/react'
 import { useContext, useEffect, useState } from 'react'
 import { FILTER_MODES } from '.'
 import { FiltersContext } from '../../../utils/context/FiltersContext'
-
-interface Props {
-  
-}
 
 export function SlideFilter () {
 

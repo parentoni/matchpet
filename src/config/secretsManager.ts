@@ -7,7 +7,7 @@ export class Secrets {
 
   private constructor(env: TEnv) {
     dotenv.config({
-      path: __dirname + `/env/.env.${env === "development" ? "development" : "production"}`
+      path: __dirname + `/../../env/.env.${env === "development" ? "development" : "production"}`
     });
   }
 
