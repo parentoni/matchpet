@@ -200,9 +200,9 @@ export const PartnerEditAnimal = () => {
   return (
     <>
   <div className="my-10 flex justify-center">
-    <div className="w-full max-w-4xl">
+    <div className="w-full max-w-4xl px-10 pb-10 lg:p-0">
       <h2 className="text-3xl font-semibold  mb-2">{id === 'new'?"Criar animal":"Editar animal"}</h2>
-      <div className="grid grid-cols-2 gap-10">
+      <div className="grid  grid-cols-1 lg:grid-cols-2 gap-10">
 
       <div className="flex flex-1 flex-col">
         <PartnerEditAnimalForm

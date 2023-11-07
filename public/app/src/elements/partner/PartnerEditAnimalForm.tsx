@@ -38,7 +38,7 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
   }
 
   return (
-    <>
+    <div className="">
       <h2 className="text-2xl font-semibold  mb-2">Informações básicas</h2>
       <div className="border-b mb-5"></div>
       <TextInput
@@ -56,7 +56,7 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
         errorMessage={props.animalInputError["description"] ?"Por favor, digite a descrição do animal.":undefined}
         subElement={<MaxCharacters current={props.animalInput['name'].length} max={1500} error={props.animalInputError["description"] ? true : false} />}
         placeholder="Max é um animal muito brincalhão, gosta de ...." />
-      <div className="flex w-full   justify-between">
+      <div className="flex w-full flex-col lg:flex-row justify-between">
 
         <NumberInput
           onChange={e => changeAnimalInput("age", props.animalInput['age'] % 12 + Number(e.target.value) * 12)}
@@ -136,6 +136,6 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
       </div>
       </>}
 
-    </>
+    </div>
   );
 };

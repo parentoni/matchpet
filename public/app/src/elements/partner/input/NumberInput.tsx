@@ -9,7 +9,7 @@ export interface NumberInputProps {
 
 export const NumberInput = (props: NumberInputProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <label htmlFor={props.title} className={`font-medium  ${props.errorMessage ? "text-error" : ""}`}>{props.title}</label>
       <input value={props.state} id={props.title} type="number" min={0} onChange={props.onChange} className={`border-gray-300 w-50 border p-2 rounded ${props.errorMessage ? "border-error text-error" : ""}`}></input>
       <div className="flex items-center">
