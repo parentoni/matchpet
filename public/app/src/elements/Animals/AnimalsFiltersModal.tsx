@@ -37,36 +37,45 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
     <>
       {specie &&
-      <FullPageModal isOpen={isOpen} setIsOpen={setIsOpen} absolute={false} title='FILTRAR'>
-        <AnimalFilters.Root selectedSpecie={Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie}>
-          <LocationFilter />
-          <SlideFilter />
-          {Categories.createFromDTO(categories).list.map((category, index) => {
-            return(
-              <div className='border-b flex flex-col gap-3 py-5'>
-                <h2 className='font-semibold'>{category.props.name}</h2>
-                {specie.getTraitsThatMatchCategory(category.props._id).map((trait, index) => (
-                  <AnimalFilters.ChoiceFilter title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
-                  ))}
+      <FullPageModal isOpen={isOpen} setIsOpen={setIsOpen} absolute={false} title='FILTRAR' className='w-full'>
+        <div className='flex-col flex items-center w-full '>
+          <div className='grid lg:grid-cols-2 grid-cols-1 '>
+            {/* <div className='px-8'> */}
+              
+            {/* </div> */}
+
+            <AnimalFilters.Root selectedSpecie={Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie}>
+              <div className='block lg:hidden'>
+                <LocationFilter />
               </div>
-            )
-          })}
-        {/* {(Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie)?.props.traits.map((trait, index) => (
-          <AnimalFilters.ChoiceFilter title={trait.name} options={trait.options} trait_name={`trait_${trait._id}`}/>
-        ))} */}
-        </AnimalFilters.Root>
-
-        <div className='pb-20'></div>
-        <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between">
-          <button className='h-full px-6 bg-black text-white items-center flex' onClick={() => setFilters({})}>
-            Limpar
-          </button>
-          <button className='h-full px-6 bg-primary  items-center flex' onClick={() => setIsOpen(false)}>
-            Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
-          </button>
-
+              
+              <SlideFilter />
+              {Categories.createFromDTO(categories).list.map((category, index) => {
+                return(
+                  <div className='border-b flex flex-col gap-3 py-5'>
+                    <h2 className='font-semibold'>{category.props.name}</h2>
+                    {specie.getTraitsThatMatchCategory(category.props._id).map((trait, index) => (
+                      <AnimalFilters.ChoiceFilter title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
+                      ))}
+                  </div>
+                )
+              })}
+            </AnimalFilters.Root>
+          
+            <div className='px-8 hidden lg:block'>
+              <LocationFilter />
+            </div>
+            <div className='pb-20 '></div>
+            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-2">
+              <button className='h-full px-6 bg-black text-white items-center flex' onClick={() => setFilters({})}>
+                Limpar
+              </button>
+              <button className='h-full px-6 bg-primary  items-center flex' onClick={() => setIsOpen(false)}>
+                Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
+              </button>
+            </div>
+          </div>
         </div>
-
       </FullPageModal>
       }
     </>

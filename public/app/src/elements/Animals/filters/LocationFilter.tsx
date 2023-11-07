@@ -19,7 +19,7 @@ const ComponentResize = () => {
   return null
 }
 
-export function LocationFilter () {
+export function LocationFilter ({className}: {className?:string}) {
 
   const {searchArea} = useContext(FiltersContext)
   const [isDrawing, setIsDrawing] = useState<boolean>(searchArea.length>0?true:false)
@@ -27,7 +27,7 @@ export function LocationFilter () {
   const [secondPoint, setSecondPoint] = useState<[number, number] | undefined>(searchArea.length>0?[searchArea[2][1], searchArea[2][0]]:undefined)
 
   return (
-  <div className="py-5 flex flex-col gap-5">
+  <div className={`py-5 flex flex-col gap-5 ${className}`}>
     <h2 className="font-semibold">Localização</h2>
     <MapContainer zoom={12} center={[-19.92272511866239, -43.945159428103494]} style={{width: '100%', aspectRatio: 1/1}} scrollWheelZoom={false} className="mt-2 brute-border" maxZoom={13} minZoom={8}>
       <ComponentResize />
