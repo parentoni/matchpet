@@ -38,9 +38,14 @@ export function PartnerAnimalManage () {
   return (
   <PageLayout>
     <h1 className="text-2xl font-medium">{animalsCount} animais cadastrados em sua ong.</h1>
-    <button className="px-4 py-1 bg-primary flex justify-center items-center mt-5" onClick={() =>  navigate('/partner/animal/new')}>
-      ADICIONAR
-    </button>
+    <div className="flex gap-5">
+      <button className="px-4 py-1 bg-primary flex justify-center items-center mt-5" onClick={() =>  navigate('/partner/animal/new')}>
+        ADICIONAR
+      </button>
+      <button className="px-4 py-1 bg-black flex justify-center items-center mt-5 text-white">
+        FILTRAR
+      </button>
+    </div>
     <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} />
   </PageLayout>)
 }

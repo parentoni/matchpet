@@ -7,13 +7,14 @@ import { useNavigate } from "react-router-dom";
 import {Trash2, Heart, User} from 'lucide-react'
 import { useContext } from "react";
 import { FiltersContext } from "../../utils/context/FiltersContext";
+import '../partner/PartnerAnimalsGrid.css'
 export function AnimalGrid ({AnimalsArray, SpeciesArray, setAnimalsArray}: {AnimalsArray: IAnimalDTO[] | undefined, SpeciesArray: ISpecieDTO[], setAnimalsArray: (a: IAnimalDTO[]) => void}) {
   const navigate = useNavigate()
 
   const {setPage, page, animals, loading} = useContext(FiltersContext)
 
   return (
-    <div className="w-full grid-cols-1 grid gap-5 pb-20">
+    <div className="w-full grid-cols-1 grid gap-5 grid-resizable-columns pb-20">
       {/* <UserAnimalCardSkeleton /> */}
       {AnimalsArray && 
         AnimalsArray.map((animal, index) => {

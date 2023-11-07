@@ -12,7 +12,6 @@ export function AllAnimals () {
   const {species} = useContext(SpeciesContext)
   const {animalsCount, animals, setAnimals} = useContext(FiltersContext)
   
-  
   return (
     <>
       <div className="px-6 pt-8">
