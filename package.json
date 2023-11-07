@@ -60,7 +60,8 @@
     "multi-range-slider-react": "^2.0.5",
     "prettier": "^2.8.7",
     "semver": "^7.4.0",
-    "telefone": "^1.2.4"
+    "telefone": "^1.2.4",
+    "typecript": "^0.0.1-security"
   },
   "directories": {
     "test": "tests"

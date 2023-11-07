@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "primary": "#FFA1F5"
+        "primary": "#FFA1F5",
+        "loading": "#e5e7eb"
       },
     },
   },
@@ -12,7 +13,8 @@ module.exports = {
     themes: [{
       light: {
         ...require("daisyui/src/theming/themes")["[data-theme=light]"],
-        "primary": "FFA1F5"
+        "primary": "FFA1F5",
+        
       }
     }]
   },

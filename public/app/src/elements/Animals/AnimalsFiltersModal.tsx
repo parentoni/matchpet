@@ -13,6 +13,7 @@ import { CategoriesContext } from '../../utils/context/CategoriesContext'
 import { SlideFilter } from './filters/SlideFilter'
 import { FiltersContext } from '../../utils/context/FiltersContext'
 import { LocationFilter } from './filters/LocationFilter'
+import { MapIcon } from 'lucide-react'
 export function AnimalFiltersModalContainer ()  {
   
   const [isOpen, setIsOpen] = useState(false)
@@ -29,7 +30,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
   const {species}= useContext(SpeciesContext)
   const {categories} = useContext(CategoriesContext)
-  const {filters, setFilters, animalsCount} = useContext(FiltersContext)
+  const {filters, setFilters, animalsCount, loading} = useContext(FiltersContext)
 
   const specie = (Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie)
   return (
@@ -61,7 +62,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
             Limpar
           </button>
           <button className='h-full px-6 bg-primary  items-center flex' onClick={() => setIsOpen(false)}>
-            Mostar {animalsCount?animalsCount:'----'} animais
+            Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
           </button>
 
         </div>
@@ -75,8 +76,14 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
 function AnimalFiltersButton ({setIsOpen}: {setIsOpen: (open: boolean) => void}) {
   return (
-    <button className="w-full h-11 bg-black flex justify-center items-center " onClick={() => setIsOpen(true)}>
+    <div className='flex gap-5'>
+     <button className="w-full h-11 bg-black flex justify-center items-center " onClick={() => setIsOpen(true)}>
       <p className='text-white text-xl font-light'>Filtrar</p>
     </button>
+    <button className="w-full h-11 brute-border flex justify-center items-center " onClick={() => setIsOpen(true)}>
+      <p className=' text-xl font-light'>Ver mapa</p>
+    </button>
+    </div>
+    
   )
 }

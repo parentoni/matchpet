@@ -5,7 +5,7 @@ import { Either, left, right } from "../shared/Result";
 
 export interface CreateAnimalListingDTO {
   name: string;
-  image_url: string[];
+  image: string[];
   age: number;
   specie_id: any;
   traits: {_id: string, value:string}[];

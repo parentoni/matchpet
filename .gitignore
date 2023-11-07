@@ -6,4 +6,5 @@
 .DS_Store
 
 /scripts/tmp/*
+/env/*
 /dist
