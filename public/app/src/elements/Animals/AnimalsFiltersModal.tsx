@@ -30,7 +30,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
   const {species}= useContext(SpeciesContext)
   const {categories} = useContext(CategoriesContext)
-  const {filters, setFilters, animalsCount} = useContext(FiltersContext)
+  const {filters, setFilters, animalsCount, loading} = useContext(FiltersContext)
 
   const specie = (Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie)
   return (
@@ -62,7 +62,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
             Limpar
           </button>
           <button className='h-full px-6 bg-primary  items-center flex' onClick={() => setIsOpen(false)}>
-            Mostar {animalsCount?animalsCount:'----'} animais
+            Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
           </button>
 
         </div>

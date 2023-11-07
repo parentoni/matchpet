@@ -13,10 +13,10 @@ export interface ContextProps {
   setPage: (x: number) => void,
   searchArea: [number, number][],
   setSearchArea: (x: [number, number][]) => void
-
+  loading: boolean
 }
 
-export const FiltersContext = createContext<ContextProps>({filters:{} ,setFilters: () => {}, animalsCount:0, animals: [], page: 0, setPage :() => {}, setAnimals: () => {}, searchArea: [], setSearchArea: () => {}})
+export const FiltersContext = createContext<ContextProps>({filters:{} ,setFilters: () => {}, animalsCount:0, animals: [], page: 0, setPage :() => {}, setAnimals: () => {}, searchArea: [], setSearchArea: () => {}, loading: true})
 
 export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) => {
 
@@ -27,12 +27,15 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
   const [animalsCount, setAnimalsCount] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
+    setLoading(true)
     Animal.getAll(page, filters,ANIMAL_STATUS.PENDING, searchArea).then((response) => {
       if (response.isLeft()) {
         alert("Erro lendo animais.")
       } else {
+        setLoading(false)
         if (page !== 0) {
           setAnimals(animals => [...animals, ...response.value.animals])
         }  else {
@@ -49,7 +52,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   }, [filters, searchArea])
   
   return (
-    <FiltersContext.Provider value={{filters, setFilters, animalsCount: animalsCount || 0, animals, page, setPage ,setAnimals, searchArea, setSearchArea}}>
+    <FiltersContext.Provider value={{filters, setFilters, animalsCount: animalsCount || 0, animals, page, setPage ,setAnimals, searchArea, setSearchArea, loading}}>
       {children}
     </FiltersContext.Provider>
   )
