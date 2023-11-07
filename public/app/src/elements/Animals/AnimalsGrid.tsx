@@ -79,7 +79,7 @@ function UserAnimalCard(props: UserAnimalCardProps) {
   </div>;
 }
 
-const UserAnimalCardSkeleton = () => {
+export const UserAnimalCardSkeleton = () => {
   return (
     <div className="w-full brute-border shadow overflow-hidden relative mt-3">
       <div className="w-full aspect-video animate-pulse bg-gray-200"></div>

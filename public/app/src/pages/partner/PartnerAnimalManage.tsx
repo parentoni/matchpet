@@ -14,16 +14,19 @@ export function PartnerAnimalManage () {
 
   const [animalsCount, setAnimalsCount] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   const {user} = useContext(AuthContext)
   const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
+      setLoading(true)
       Animal.getAll(page, {"donator_id": [{mode: FILTER_MODES.EQUAL, comparation_value: user._id}]}).then((response) => {
         if (response.isLeft()) {
           alert("Erro lendo animais.")
         } else {
+          setLoading(false)
           setAnimalsCount(response.value.count)
           setAnimals(animals => [...animals, ...response.value.animals])
         }
@@ -38,6 +41,6 @@ export function PartnerAnimalManage () {
     <button className="px-4 py-1 bg-primary flex justify-center items-center mt-5" onClick={() =>  navigate('/partner/animal/new')}>
       ADICIONAR
     </button>
-    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} />
+    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} />
   </PageLayout>)
 }

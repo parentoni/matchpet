@@ -28,53 +28,22 @@ export const PartnerSpecificAnimalCard = ({ animal }: { animal: IAnimalDTO; }) =
           </button>
         </div>
       </div>
-      {/* <PartnerSpecificAnimalCardDesambiguationModal open={showModal} setOpen={setShowModal} id={animal._id} /> */}
     </div>
   );
 };
 
-export interface  PartnerSpecificAnimalCardDesambiguationModalProps {
-  open: boolean,
-  setOpen: (x: boolean) => void,
-  id: string
+export const PartnerSpecificAnimalCardSkeleton = () => {
+  return(
+    <div className="grid-resizable-cards-width brute-border">
+      <div className="w-full aspect-video bg-loading animate-pulse"></div>
+      <div className=" flex flex-col p-4">
+        <div className="flex justify-between items-center">
+          <div className="h-5 w-40 bg-loading animate-pulse"></div>
+          <div className="h-5 w-16 bg-loading animate-pulse"></div>
+        </div>
+        <div className="h-4 w-60 bg-loading animate-pulse mt-1"></div>
+        <div className="mt-5 w-full h-8 bg-loading animate-pulse"></div>
+      </div>
+    </div>
+  )
 }
-
-// export const PartnerSpecificAnimalCardDesambiguationModal = (props: PartnerSpecificAnimalCardDesambiguationModalProps) => {
-  
-//   const navigate = useNavigate()
-//   const [situationClicked, setSituationClicked] = useState<boolean>(false)
-
-//   useEffect(() => {
-//     if (!props.open) {
-//       setSituationClicked(false)
-//     }
-//   }, [props.open])
-//   return (
-//   <TransitionedModal isOpen={props.open} setIsOpen={props.setOpen} panelStyle="p-4 brute-border bg-white items-start flex flex-col gap-4">
-    
-//     {situationClicked?
-//     <>
-//       <Dialog.Title className={''}>Qual é a nova situação do animal?</Dialog.Title>
-//       <button className="px-4 py-0.5 brute-border">
-//         Excluído
-//       </button>
-//       <button className="px-4 py-0.5 brute-border">
-//         Em adoção 
-//       </button>
-//       <button className="px-4 py-0.5 brute-border">
-//         Doado
-//       </button>
-//     </>:
-//     <>
-//         <Dialog.Title className={'font-medium'}>O que deseja editar?</Dialog.Title>
-//         <button className="px-4 py-0.5 brute-border" onClick={() => navigate(`/partner/animal/${props.id}`)}>
-//           Características do animal (Ex: NOME, IMAGEM...)
-//         </button>
-//         <button className="px-4 py-0.5 brute-border bg-black text-white" onClick={() => setSituationClicked(true)}>
-//           Situacao do animal (Ex: ADOTADO, EXCLUIR...)
-//         </button>
-//     </> 
-//     }
-
-//   </TransitionedModal>)
-// }
