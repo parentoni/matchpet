@@ -65,8 +65,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
             <div className='px-8 hidden lg:block'>
               <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
             </div>
-            <div className='pb-20 '></div>
-            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-2">
+            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-2 mt-5 z-50">
               <button className='h-full px-6 bg-black text-white items-center flex' onClick={() => setFilters({})}>
                 Limpar
               </button>
@@ -74,6 +73,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
                 Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
               </button>
             </div>
+            <div className='my-5'></div>
           </div>
         </div>
       </FullPageModal>

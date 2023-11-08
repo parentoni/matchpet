@@ -19,11 +19,12 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: ''})
+export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string, loading: boolean}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: '', loading:true})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
   const [token,setToken] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const token = window.localStorage.getItem('matchpet_token')
@@ -47,22 +48,26 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   }
 
   async function login (email:string, password:string): Promise<Either<Response, string>> {
+    setLoading(true)
     const response = await __login(email, password)
     if (response.isLeft()) {
+      setLoading(false)
       return left(response.value)
     }
 
     const mySelfResponse = await getInfo(response.value)
     if (mySelfResponse.isLeft()) {
+      setLoading(false)
       return left(mySelfResponse.value)
     }
 
     localStorage.setItem('matchpet_token', response.value)
     setUser(mySelfResponse.value)
+    setLoading(false)
     return right('success')
   }
   return (
-    <AuthContext.Provider value={{user, login: login, token:token}}>
+    <AuthContext.Provider value={{user, login: login, token:token, loading}}>
       {children}
     </AuthContext.Provider>
   )
