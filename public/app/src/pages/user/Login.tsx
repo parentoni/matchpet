@@ -7,19 +7,20 @@ import reducedLogo from '../../assets/logo-reduced.svg'
 import { AuthContext } from "../../utils/context/AuthContext";
 export function Login () {
   const navigate = useNavigate()
-  const {login} = useContext(AuthContext)
+  const {login, loading} = useContext(AuthContext)
   
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
   const loginWrapper = async () => {
-    const response  = await login(email, password)
-    if (response.isLeft()) {
-      return alert("Usuário e/ou senha incorretos")
+    if (!loading) {
+      const response  = await login(email, password)
+      if (response.isLeft()) {
+        return alert("Usuário e/ou senha incorretos")
+      }
+
+      navigate('/partner')
     }
-
-    navigate('/partner')
-
   }
   return (
     <PageLayout>
@@ -39,7 +40,7 @@ export function Login () {
           <PasswordInput password={password} setPassword={setPassword}/>
         </div>
         <button className="w-full h-12 bg-black flex justify-center items-center text-white text-lg" onClick={loginWrapper}>
-          Entrar
+          {loading?<span className=" loading loading-spinner loading-sm"></span>:<span>Entrar</span>}
         </button>
         <p className="text-sm">Ainda não tem uma conta? Entre em contato com <span className="  font-semibold">parentoni.arthur@gmail.com</span> e crie a sua em até 2 dias úteis.</p>
       </div>
