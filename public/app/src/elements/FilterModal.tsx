@@ -84,8 +84,7 @@ export const FilterModal = (props: FilterModalProps) => {
             <LocationFilter searchArea={props.searchArea} setSearchArea={props.setSearchArea} filters={props.filters} setFilters={props.setFilters}/>
           </div>
 
-          <div className='pb-20 '></div> 
-            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-1 lg:col-span-2">
+            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-1 z-50 lg:col-span-2 mt-5">
               <button className='h-full px-6 bg-black text-white items-center flex' onClick={() => props.setFilters({})}>
                 Limpar
               </button>
@@ -93,7 +92,10 @@ export const FilterModal = (props: FilterModalProps) => {
                 Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:props.animalsCount}&nbsp; animais
               </button>
             </div>
+            <div className='my-5'></div>
+
         </div>
+
       </div>
 }
     </FullPageModal>
