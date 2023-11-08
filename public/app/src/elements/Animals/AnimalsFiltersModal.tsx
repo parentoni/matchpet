@@ -30,7 +30,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
   const {species}= useContext(SpeciesContext)
   const {categories} = useContext(CategoriesContext)
-  const {filters, setFilters, animalsCount, loading} = useContext(FiltersContext)
+  const {setFilters, animalsCount, loading, searchArea, setSearchArea, filters} = useContext(FiltersContext)
 
   const specie = (Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie)
   return (
@@ -46,16 +46,16 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 
             <AnimalFilters.Root selectedSpecie={Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie}>
               <div className='block lg:hidden'>
-                <LocationFilter />
+                <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
               </div>
               
-              <SlideFilter />
+              <SlideFilter filters={filters} setFilters={setFilters} />
               {Categories.createFromDTO(categories).list.map((category, index) => {
                 return(
                   <div className='border-b flex flex-col gap-3 py-5'>
                     <h2 className='font-semibold'>{category.props.name}</h2>
                     {specie.getTraitsThatMatchCategory(category.props._id).map((trait, index) => (
-                      <AnimalFilters.ChoiceFilter title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
+                      <AnimalFilters.ChoiceFilter filters={filters} setFilters={setFilters} title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
                       ))}
                   </div>
                 )
@@ -63,7 +63,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
             </AnimalFilters.Root>
           
             <div className='px-8 hidden lg:block'>
-              <LocationFilter />
+              <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
             </div>
             <div className='pb-20 '></div>
             <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-2">

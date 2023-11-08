@@ -1,21 +1,19 @@
-import { useMap } from "react-leaflet"
 import { DraftingCompass } from 'lucide-react';
-import { useContext } from "react";
-import { FiltersContext } from "../../../../utils/context/FiltersContext";
 
 export interface DrawSearchAreaProps {
   drawing: boolean,
   setIsDrawing: (x: boolean) => void,
   firstPosition: [number, number] | undefined,
-  secondPosition: [number, number] | undefined
+  secondPosition: [number, number] | undefined,
+  searchArea: [number, number][],
+  setSearchArea: (x: [number, number][]) => void
 }
 export const DrawSearchAreaControl = (props: DrawSearchAreaProps) => {
-  const {searchArea, setSearchArea} = useContext(FiltersContext)
   
   const stopDrawing = () => {
     props.setIsDrawing(!props.drawing)
-    if (searchArea.length>0) {
-      setSearchArea([])
+    if (props.searchArea.length>0) {
+      props.setSearchArea([])
     }
   }
   return (

@@ -1,4 +1,3 @@
-import { title } from "process"
 import { ISpecieTraitOptionsDTO } from "../../../utils/services/dtos/SpecieDTO"
 import { useContext, useEffect, useState } from "react"
 import { FILTER_MODES } from "."
@@ -8,27 +7,27 @@ interface Props {
   title: string,
   options: ISpecieTraitOptionsDTO[],
   trait_name: string,
+  setFilters: (x: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void,
+  filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>,
 }
 
 export function ChoiceFilter (props: Props) {
 
-  const {filters, setFilters} = useContext(FiltersContext)
   const [selectedValue, setSelectedValue] = useState<string| undefined>()
 
   const changeFilters = (option:string) => {
-    filters[props.trait_name] = [{mode: FILTER_MODES.EQUAL, comparation_value: option}]
-    setFilters(structuredClone(filters))
+    props.filters[props.trait_name] = [{mode: FILTER_MODES.EQUAL, comparation_value: option}]
+    props.setFilters(structuredClone(props.filters))
   }
 
   const clearFilter = () => {
-    delete filters[props.trait_name]
-    console.log(filters)
-    setFilters(structuredClone(filters))
+    delete props.filters[props.trait_name]
+    props.setFilters(structuredClone(props.filters))
   }
 
   useEffect(() => {
 
-    const selectedTraitFilter = filters[props.trait_name]
+    const selectedTraitFilter = props.filters[props.trait_name]
 
     if (selectedTraitFilter !== undefined) {
       setSelectedValue(selectedTraitFilter[0].comparation_value)
@@ -36,7 +35,7 @@ export function ChoiceFilter (props: Props) {
       setSelectedValue(undefined)
     }
     
-  }, [filters, props.trait_name])
+  }, [props.filters, props.trait_name])
 
 
   

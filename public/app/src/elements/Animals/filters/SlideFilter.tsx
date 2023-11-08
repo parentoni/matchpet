@@ -1,19 +1,22 @@
 import { RangeSlider, RangeSliderFilledTrack, RangeSliderThumb, RangeSliderTrack } from '@chakra-ui/react'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FILTER_MODES } from '.'
-import { FiltersContext } from '../../../utils/context/FiltersContext'
 
-export function SlideFilter () {
 
-  const {filters, setFilters} = useContext(FiltersContext)
+export interface SlideFilterProps {
+  filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>,
+  setFilters: (x:Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void,
+}
+export function SlideFilter (props: SlideFilterProps) {
+
 
   const [min, setMin] = useState(0)
   const [max, setMax] = useState(120)
 
   useEffect(() => {
 
-    filters['age'] = [{mode: FILTER_MODES.GREATHER_THAN_EQUAL, comparation_value: min}, {mode: FILTER_MODES.LESS_THAN_EQUAL, comparation_value: max}]
-    setFilters(structuredClone(filters))
+    props.filters['age'] = [{mode: FILTER_MODES.GREATHER_THAN_EQUAL, comparation_value: min}, {mode: FILTER_MODES.LESS_THAN_EQUAL, comparation_value: max}]
+    props.setFilters(structuredClone(props.filters))
   }, [min, max])
 
   return (

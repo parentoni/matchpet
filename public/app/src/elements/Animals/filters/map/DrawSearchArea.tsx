@@ -2,6 +2,7 @@ import L, { Circle, LatLngExpression, Marker, Polygon, circle, latLng, marker, p
 import { useContext, useEffect, useState } from "react"
 import { useMap, useMapEvent } from "react-leaflet"
 import { FiltersContext } from "../../../../utils/context/FiltersContext"
+import { FILTER_MODES } from ".."
 
 export interface DrawSearchAreaProps {
   drawing : boolean,
@@ -9,13 +10,17 @@ export interface DrawSearchAreaProps {
   firstPoint: [number, number] | undefined,
   setFirstPoint: (x: [number, number] | undefined) => void,
   secondPoint: [number, number] | undefined,
-  setSecondPoint: (x: [number, number] | undefined) => void
+  setSecondPoint: (x: [number, number] | undefined) => void,
+  setSearchArea: (x: [number, number][]) => void,
+  filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>,
+  setFilters: (x:Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void,
+  searchArea: [number, number][]
 }
 
 export const DrawSearchArea = (props: DrawSearchAreaProps) => {
   const map = useMap()
 
-  const {filters, setFilters, setSearchArea } = useContext(FiltersContext)
+  // const {filters, setFilters } = useContext(FiltersContext)
   const [usedMarker, setUsedMarker] = useState<Circle>()
   const [usedPolygon, setUsedPolygon] = useState<Polygon>()
 
@@ -57,11 +62,11 @@ export const DrawSearchArea = (props: DrawSearchAreaProps) => {
         map.removeLayer(usedMarker)
       }
 
-      if (filters['donator_id']) {
-        delete filters['donator_id']
-        setFilters(structuredClone(filters))
+      if (props.filters['donator_id']) {
+        delete props.filters['donator_id']
+        props.setFilters(structuredClone(props.filters))
       }
-      setSearchArea(path)
+      props.setSearchArea(path)
       setUsedPolygon(p)
     } 
 
@@ -76,13 +81,22 @@ export const DrawSearchArea = (props: DrawSearchAreaProps) => {
 
       if (usedPolygon) {
         map.removeLayer(usedPolygon)
-        setUsedMarker(undefined)
+        setUsedPolygon(undefined)
       }
 
       props.setFirstPoint(undefined)
       props.setSecondPoint(undefined)
 
     }
-  }, [props.drawing])
+  }, [props.drawing, map])
+
+  useEffect(() => {
+    // console.log('Search area')
+    if (props.searchArea.length === 0 && usedPolygon) {
+      map.removeLayer(usedPolygon)
+      setUsedPolygon(usedPolygon)
+      props.setIsDrawing(false)
+    }
+  }, [props.searchArea, map])
   return null
 }

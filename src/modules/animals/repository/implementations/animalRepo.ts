@@ -154,7 +154,9 @@ export class AnimalRepo implements IAnimalRepo {
     const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
     const idFilter: DBFilter[] = [];
-    const objectIdFields = ["donator_id"];
+
+    const objectIdFields = ["donator_id", 'specie_id'];
+    
     for (const ind_filter of props.filterObject) {
       const comparation: Record<string, any> = {};
       const filter: Record<string, any> = {};

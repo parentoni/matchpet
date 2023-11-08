@@ -31,7 +31,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
   useEffect(() => {
     setLoading(true)
-    Animal.getAll(page, filters,ANIMAL_STATUS.PENDING, searchArea).then((response) => {
+    Animal.getAll(page, filters,searchArea,ANIMAL_STATUS.PENDING).then((response) => {
       if (response.isLeft()) {
         alert("Erro lendo animais.")
       } else {

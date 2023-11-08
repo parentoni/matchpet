@@ -33,7 +33,7 @@ export class Animal {
     return right(this.create(response.value))
   }
 
-  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, status?: ANIMAL_STATUS, coordinates?: [number,number][]): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
+  public static async getAll(page: number, filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>, coordinates?: [number,number][], status?: ANIMAL_STATUS,): Promise<Either<Response, {animals:IAnimalDTO[], count:number}>> {
     
     // Filter only pending animals
     const formatedFilters = []
