@@ -21,6 +21,7 @@ import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
 import { Location } from "../../../../shared/core/Location";
 import { Secrets } from "../../../../config/secretsManager";
+import { UserLastLogin } from "../../domain/userProps/userLastLogin";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -38,8 +39,9 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const roleOrError = UserRole.create({ value: request.role || 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
+    const lastLoginOrError = UserLastLogin.create({date: new Date()})
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError]);
+    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError, lastLoginOrError]);
 
     if (result.isLeft()) {
       return left(result.value);
@@ -51,6 +53,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
     const location = locationOrError.getRight();
+    const lastLogin = lastLoginOrError.getRight()
 
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
@@ -68,7 +71,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
       location,
       inAdoption: 0,
-      completedAdoptions: 0
+      completedAdoptions: 0,
+      lastLogin: lastLogin
       // role: UserRole.create({value: 0})
     });
 

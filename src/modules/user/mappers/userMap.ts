@@ -11,6 +11,7 @@ import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
 import { UserPhone } from "../domain/userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
+import { UserLastLogin } from "../domain/userProps/userLastLogin";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -28,6 +29,7 @@ export class UserMap {
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
     const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
+    const userLastLoginOrError = UserLastLogin.create({date: persistance.last_login})
 
     const result = EitherUtils.combine([
       userPasswordOrError,
@@ -35,7 +37,8 @@ export class UserMap {
       userPhoneNumberOrError,
       userEmailOrError,
       userLocationOrError,
-      userIdOrError
+      userIdOrError,
+      userLastLoginOrError
     ]);
 
     if (result.isRight()) {
@@ -49,9 +52,10 @@ export class UserMap {
           verified: persistance.verified,
           location: userLocationOrError.getRight(),
           inAdoption: persistance.in_adoption,
-          completedAdoptions: persistance.completed_adoptions
+          completedAdoptions: persistance.completed_adoptions,
+          lastLogin: userLastLoginOrError.getRight()
         },
-        userIdOrError.getRight()
+        new UniqueGlobalId(userIdOrError.getRight().toValue().toString() as string)
       );
 
       if (userOrError.isRight()) {
@@ -87,7 +91,8 @@ export class UserMap {
           coordinates: user.location.coordinates
         },
         completed_adoptions: user.completedAdoptions,
-        in_adoption: user.inAdoption
+        in_adoption: user.inAdoption,
+        last_login: user.lastLogin.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

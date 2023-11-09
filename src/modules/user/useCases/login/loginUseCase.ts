@@ -49,6 +49,9 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
           role: user.value.role,
           verified: user.value.verified
         });
+
+        user.value.logActivity()
+        
         return right(token);
       } else {
         return left(
