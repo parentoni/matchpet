@@ -18,10 +18,11 @@ export class UserMap {
       value: persistance.password,
       hashed: true
     });
+
     const userNameOrError = UserName.create({
-      first_name: persistance.first_name,
-      last_name: persistance.last_name
+      display_name: persistance.display_name
     });
+
     const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
@@ -76,8 +77,7 @@ export class UserMap {
       return right({
         password: password,
         email: user.email?.value,
-        first_name: user.name?.first_name,
-        last_name: user.name?.last_name,
+        display_name: user.name.displayName,
         _id: user.id.toValue(),
         role: user.role,
         verified: user.verified,

@@ -6,29 +6,23 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
 
 export interface IUserName {
-  first_name: string;
-  last_name: string;
+  display_name: string;
 }
 
 type IUserNameResponse = Either<CommonUseCaseResult.InvalidValue, UserName>;
 
 export class UserName extends ValueObject<IUserName> {
   get value(): string {
-    return this.props.first_name + " " + this.props.last_name;
+    return this.props.display_name;
   }
 
-  get first_name(): string {
-    return this.props.first_name;
-  }
-
-  get last_name(): string {
-    return this.props.last_name;
+  get displayName(): string {
+    return this.props.display_name;
   }
 
   public static create(props: IUserName): IUserNameResponse {
     const guardResponse = Guard.againstNullOrUndefinedBulk([
-      { argument: props.first_name, argumentName: "FIRST_NAME" },
-      { argument: props.last_name, argumentName: "LAST_NAME" }
+      { argument: props.display_name, argumentName: "DISPLAY_NAME_NAME" }
     ]);
 
     if (guardResponse.isLeft()) {
@@ -43,8 +37,7 @@ export class UserName extends ValueObject<IUserName> {
 
     return right(
       new UserName({
-        first_name: props.first_name.trim(),
-        last_name: props.last_name.trim()
+        display_name: props.display_name.trim()
       })
     );
   }

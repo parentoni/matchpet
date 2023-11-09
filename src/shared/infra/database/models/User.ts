@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import { GeoJsonPointSchema } from "./Coordinate";
 import { Location } from "../../../core/Location";
 const userSchema = new mongoose.Schema({
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
+  display_name: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   // cpf: { type: String, required: false },
@@ -17,8 +16,7 @@ const userSchema = new mongoose.Schema({
 
 export type IUserPersistant = {
   _id: string;
-  first_name: string;
-  last_name: string;
+  display_name: string;
   password: string;
   email: string;
   role: number;

@@ -31,8 +31,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
 
   async execute(request: CreateUserDTO): Promise<CreateUserResponse> {
     const nameOrError = UserName.create({
-      first_name: request.first_name,
-      last_name: request.last_name
+      display_name: request.display_name
     });
     const passwordOrError = UserPassword.create({ value: request.password });
     const emailOrError = UserEmail.create({ value: request.email });

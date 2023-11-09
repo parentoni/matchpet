@@ -18,8 +18,7 @@ export class CreateUserController extends BaseController<Request> {
 
       try {
         const result = await CreateUserUseCase.execute({
-          first_name: dto.first_name,
-          last_name: dto.last_name,
+          display_name: dto.display_name,
           password: dto.password,
           email: dto.email,
           phone: dto.phone,
@@ -37,8 +36,7 @@ export class CreateUserController extends BaseController<Request> {
         const token = await authService.signJWT({
           uid: result.value._id,
           email: dto.email,
-          first_name: dto.first_name,
-          last_name: dto.last_name,
+          display_namme: dto.display_name,
           token_function: TokenFunctions.authenticateUser,
           role: result.value.role,
           verified: result.value.verified
