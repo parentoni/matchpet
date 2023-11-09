@@ -41,7 +41,6 @@ export const FilterModal = (props: FilterModalProps) => {
     
   }, [selectedSpecie])
 
-  console.log(categories)
   return (
     <>
       
@@ -68,7 +67,6 @@ export const FilterModal = (props: FilterModalProps) => {
             <SlideFilter filters={props.filters} setFilters={props.setFilters}/>
             <StatusFilter filters={props.filters} setFilters={props.setFilters}/>
             {selectedSpecie && Categories.createFromDTO(categories).list.map(category => {
-              console.log(selectedSpecie, 'oi')
             return(
               <div className='border-b flex flex-col gap-3 py-5'>
                 <h2 className='font-semibold'>{category.props.name}</h2>

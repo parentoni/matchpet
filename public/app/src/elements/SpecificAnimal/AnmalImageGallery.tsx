@@ -11,7 +11,6 @@ export function AnimalImageGallery ({isOpen, setIsOpen, AnimalImages, AnimalName
       setCurrentSlide(carouselContext.state.currentSlide);
     }
     carouselContext.subscribe(onChange);
-    console.log(carouselContext)
     return () => carouselContext?.unsubscribe(onChange);
   }, [carouselContext]);
 

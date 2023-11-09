@@ -29,7 +29,7 @@ export class UserMap {
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
     const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
-    const userLastLoginOrError = UserLastLogin.create({date: persistance.last_login})
+    const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
 
     const result = EitherUtils.combine([
       userPasswordOrError,

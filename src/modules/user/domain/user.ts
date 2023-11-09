@@ -74,7 +74,7 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get lastLogin(): UserLastLogin {
-    return this.props.lastLogin
+    return this.props.lastLogin;
   }
 
   public updateCompletedAdoptions(num: number): void {
@@ -85,16 +85,14 @@ export class User extends AggregateRoot<UserProps> {
     this.props.inAdoption = num;
   }
 
-  public logActivity () {
-    this.addDomainEvent(new UserLogin(this))
-    DomainEvents.dispatchEventsForAggregate(this._id)
+  public logActivity() {
+    this.addDomainEvent(new UserLogin(this));
+    DomainEvents.dispatchEventsForAggregate(this._id);
   }
 
   private constructor(props: UserProps, id?: UniqueGlobalId) {
     super(props, id);
   }
-
-
 
   public static create(props: UserProps, id?: UniqueGlobalId): UserResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
@@ -105,7 +103,7 @@ export class User extends AggregateRoot<UserProps> {
       { argument: props.role, argumentName: "USER_ROLE" },
       { argument: props.verified, argumentName: "USER_VERIFIED" },
       { argument: props.location, argumentName: "USER_LOCATION" },
-      { argument: props.lastLogin, argumentName: "USER_LASTLOGIN"}
+      { argument: props.lastLogin, argumentName: "USER_LASTLOGIN" }
     ]);
 
     if (guardResult.isLeft()) {

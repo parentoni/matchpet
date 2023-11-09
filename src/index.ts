@@ -3,4 +3,4 @@ import "./shared/infra/database/config";
 
 //Subs
 import "./modules/animals/subscriptions";
-import './modules/user/subscriptions'
+import "./modules/user/subscriptions";

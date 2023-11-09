@@ -32,7 +32,6 @@ export const SpecificAnimal = () => {
       if (response.isLeft()) {
         alert("Não foi posível encontrar o animal.")
       } else {
-        console.log(response.value)
         setSelectedAnimalDTO(response.value.props)
       }
     })

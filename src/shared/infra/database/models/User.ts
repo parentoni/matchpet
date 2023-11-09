@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   location: { type: GeoJsonPointSchema, required: true },
   completed_adoptions: { type: Number, default: 0 },
   in_adoption: { type: Number, default: 0 },
-  last_login: {type: Date, required: true}
+  last_login: { type: Date, required: true }
 });
 
 export type IUserPersistant = {

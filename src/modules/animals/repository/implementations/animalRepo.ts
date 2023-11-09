@@ -155,8 +155,8 @@ export class AnimalRepo implements IAnimalRepo {
     const dbFilter: DBFilter[] = [];
     const idFilter: DBFilter[] = [];
 
-    const objectIdFields = ["donator_id", 'specie_id'];
-    
+    const objectIdFields = ["donator_id", "specie_id"];
+
     for (const ind_filter of props.filterObject) {
       const comparation: Record<string, any> = {};
       const filter: Record<string, any> = {};
@@ -172,7 +172,6 @@ export class AnimalRepo implements IAnimalRepo {
       }
     }
 
-    console.log(dbFilter);
     if (dbFilter.length > 0) {
       filters.push({ $match: { $and: dbFilter } });
     }
@@ -213,10 +212,10 @@ export class AnimalRepo implements IAnimalRepo {
     const countFilter = structuredClone(filters);
     filters.push({
       $sort: {
-        "created_at": -1
+        created_at: -1
       }
-    })
-    
+    });
+
     filters.push({ $skip: props.skip }, { $limit: props.limit });
 
     const animalArray: Animal[] = [];

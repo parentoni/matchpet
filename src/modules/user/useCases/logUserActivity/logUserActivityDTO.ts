@@ -1,4 +1,4 @@
 export interface LogUserActivityDTO {
-  uid: string,
-  date: Date,
+  uid: string;
+  date: Date;
 }

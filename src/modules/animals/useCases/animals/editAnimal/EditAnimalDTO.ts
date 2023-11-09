@@ -3,7 +3,7 @@ import { JWTDTO } from "../../../../user/domain/jwt";
 import { IAuthService } from "../../../../user/services/IauthService";
 
 export interface EditAnimalDTO {
-  user: JWTDTO,
-  animal: string,
-  edit: Partial<IAnimalPersistent>
+  user: JWTDTO;
+  animal: string;
+  edit: Partial<IAnimalPersistent>;
 }

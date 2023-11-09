@@ -75,11 +75,8 @@ export namespace CommonUseCaseResult {
       });
     }
 
-
     public static create(props: ICommonInvalidValueProps): Forbidden {
       return new Forbidden(props);
     }
   }
-
-
 }

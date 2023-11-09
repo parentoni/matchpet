@@ -91,7 +91,6 @@ export const DrawSearchArea = (props: DrawSearchAreaProps) => {
   }, [props.drawing, map])
 
   useEffect(() => {
-    // console.log('Search area')
     if (props.searchArea.length === 0 && usedPolygon) {
       map.removeLayer(usedPolygon)
       setUsedPolygon(usedPolygon)

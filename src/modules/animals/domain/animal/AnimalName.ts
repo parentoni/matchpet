@@ -10,7 +10,7 @@ export class AnimalName extends ValueObject<{ value: string }> {
 
   private static validate(name: string): Either<CommonUseCaseResult.InvalidValue, string> {
     const formatedName = name.trim();
-    if (formatedName.length <= 100 ) {
+    if (formatedName.length <= 100) {
       return right(formatedName);
     } else {
       return left(

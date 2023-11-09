@@ -39,7 +39,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const roleOrError = UserRole.create({ value: request.role || 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
-    const lastLoginOrError = UserLastLogin.create({date: new Date()})
+    const lastLoginOrError = UserLastLogin.create({ date: new Date() });
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError, lastLoginOrError]);
 
@@ -53,7 +53,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
     const location = locationOrError.getRight();
-    const lastLogin = lastLoginOrError.getRight()
+    const lastLogin = lastLoginOrError.getRight();
 
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
@@ -108,7 +108,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
 
       const user = userOrError.value;
 
-      console.log(user);
       const persisantResponse = await this.userRepo.create({ dto: user });
 
       if (persisantResponse.isLeft()) {

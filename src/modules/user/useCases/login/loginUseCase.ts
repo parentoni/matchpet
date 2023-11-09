@@ -50,8 +50,8 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
           verified: user.value.verified
         });
 
-        user.value.logActivity()
-        
+        user.value.logActivity();
+
         return right(token);
       } else {
         return left(

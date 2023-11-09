@@ -12,12 +12,12 @@ export class GetCurrentUserController extends BaseController<AuthenticatedReques
     super();
 
     this.versionRegister.addToRegister("1.0.0", async (req: AuthenticatedRequest, res: Response) => {
-      const response = await useCase.execute({user: req.decoded})
+      const response = await useCase.execute({ user: req.decoded });
       if (response.isLeft()) {
-        return this.errorHandler(res, response.value)
+        return this.errorHandler(res, response.value);
       }
 
-      return this.ok(res, response.value)
-    })
+      return this.ok(res, response.value);
+    });
   }
 }

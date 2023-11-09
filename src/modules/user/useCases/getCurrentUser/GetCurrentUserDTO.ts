@@ -1,5 +1,5 @@
-import { JWTDTO } from "../../domain/jwt"
+import { JWTDTO } from "../../domain/jwt";
 
 export interface GetCurrentUserDTO {
-  user: JWTDTO
+  user: JWTDTO;
 }

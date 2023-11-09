@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "matchpet",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Line-Facilitadora/Server.git"
+    "url": "git+https://github.com/parentoni/ONG_DDD.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Arthur Parentoni <parentoni.arthur@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Line-Facilitadora/Server/issues"
+    "url": "https://github.com/parentoni/ONG_DDD/issues"
   },
-  "homepage": "https://github.com/Line-Facilitadora/Server#readme",
+  "homepage": "https://github.com/parentoni/ONG_DDD#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.17",

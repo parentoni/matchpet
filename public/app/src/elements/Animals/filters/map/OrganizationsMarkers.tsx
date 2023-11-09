@@ -18,7 +18,6 @@ export const OrganizationsMarkers = (props: OrganizationsMarkersProps) => {
   useEffect(() => {
 
     if (markers.length > 0) {
-      console.log('called');
       for (const marker of markers) {
         map.removeLayer(marker);
       }

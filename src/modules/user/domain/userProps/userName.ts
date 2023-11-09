@@ -21,9 +21,7 @@ export class UserName extends ValueObject<IUserName> {
   }
 
   public static create(props: IUserName): IUserNameResponse {
-    const guardResponse = Guard.againstNullOrUndefinedBulk([
-      { argument: props.display_name, argumentName: "DISPLAY_NAME_NAME" }
-    ]);
+    const guardResponse = Guard.againstNullOrUndefinedBulk([{ argument: props.display_name, argumentName: "DISPLAY_NAME_NAME" }]);
 
     if (guardResponse.isLeft()) {
       return left(

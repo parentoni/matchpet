@@ -7,29 +7,29 @@ import { GetCurrentUserDTO } from "./GetCurrentUserDTO";
 import { GetCurrentUserResponse } from "./GetCurretnUserResponse";
 
 export class GetCurrentUserUseCase implements UseCase<GetCurrentUserDTO, GetCurrentUserResponse> {
-  private getUserByUID: GetUserByUIDUseCase
+  private getUserByUID: GetUserByUIDUseCase;
 
   constructor(getUserByUID: GetUserByUIDUseCase) {
-    this.getUserByUID = getUserByUID
+    this.getUserByUID = getUserByUID;
   }
-  
+
   async execute(request: GetCurrentUserDTO): Promise<GetCurrentUserResponse> {
-    const check = Guard.againstNullOrUndefined(request.user, "USER")
+    const check = Guard.againstNullOrUndefined(request.user, "USER");
     if (check.isLeft()) {
-      return left(check.value)
+      return left(check.value);
     }
 
-    const useCaseResponse = await this.getUserByUID.execute({uid: request.user.uid})
+    const useCaseResponse = await this.getUserByUID.execute({ uid: request.user.uid });
     if (useCaseResponse.isLeft()) {
-      return left(useCaseResponse.value)
+      return left(useCaseResponse.value);
     }
 
-    const userDomain = await UserMap.toDomain(useCaseResponse.value)
+    const userDomain = await UserMap.toDomain(useCaseResponse.value);
     if (userDomain.isLeft()) {
-      return left(userDomain.value)
+      return left(userDomain.value);
     }
 
-    userDomain.value.logActivity()
-    return right(useCaseResponse.value)
+    userDomain.value.logActivity();
+    return right(useCaseResponse.value);
   }
 }

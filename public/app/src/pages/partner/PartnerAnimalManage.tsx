@@ -34,7 +34,6 @@ export function PartnerAnimalManage () {
   }, [filters])
 
   useEffect(() => {
-    console.log(filters)
     if (user ) {
       setLoading(true)
       Animal.getAll(page, {"donator_id": [{mode: FILTER_MODES.EQUAL, comparation_value: user._id}], ...filters}, searchArea ).then((response) => {
