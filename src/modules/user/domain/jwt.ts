@@ -5,6 +5,7 @@ export interface JWTDTO {
   role: number;
   token_function: TokenFunctions;
   verified: boolean;
+  username:string
 }
 
 export enum TokenFunctions {

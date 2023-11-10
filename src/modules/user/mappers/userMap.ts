@@ -4,7 +4,7 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { User } from "../domain/user";
 import { UserEmail } from "../domain/userProps/userEmail";
-import { UserName } from "../domain/userProps/userName";
+import { UserDisplayName } from "../domain/userProps/userDisplayName";
 import { UserPassword } from "../domain/userProps/userPassword";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
@@ -12,6 +12,7 @@ import { UserRole } from "../domain/userProps/userRole";
 import { UserPhone } from "../domain/userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
 import { UserLastLogin } from "../domain/userProps/userLastLogin";
+import { UserName } from "../domain/userProps/userName";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -20,7 +21,7 @@ export class UserMap {
       hashed: true
     });
 
-    const userNameOrError = UserName.create({
+    const userDisplayNameOrError = UserDisplayName.create({
       display_name: persistance.display_name
     });
 
@@ -30,6 +31,7 @@ export class UserMap {
     const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
     const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
+    const userNameOrError = UserName.create({username: persistance.username})
 
     const result = EitherUtils.combine([
       userPasswordOrError,
@@ -38,13 +40,16 @@ export class UserMap {
       userEmailOrError,
       userLocationOrError,
       userIdOrError,
-      userLastLoginOrError
+      userLastLoginOrError,
+      userDisplayNameOrError,
+      userNameOrError
     ]);
 
     if (result.isRight()) {
       const userOrError = User.create(
         {
-          name: userNameOrError.getRight(),
+          displayName: userDisplayNameOrError.getRight(),
+          username: userNameOrError.getRight(),
           email: userEmailOrError.getRight(),
           password: userPasswordOrError.getRight(),
           role: userRoleOrError.getRight(),
@@ -81,7 +86,8 @@ export class UserMap {
       return right({
         password: password,
         email: user.email?.value,
-        display_name: user.name.displayName,
+        display_name: user.displayName.displayName,
+        username: user.userName.value,
         _id: user.id.toValue(),
         role: user.role,
         verified: user.verified,

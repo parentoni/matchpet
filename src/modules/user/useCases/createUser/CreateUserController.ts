@@ -17,15 +17,7 @@ export class CreateUserController extends BaseController<Request> {
       const dto = req.body as CreateUserDTO;
 
       try {
-        const result = await CreateUserUseCase.execute({
-          display_name: dto.display_name,
-          password: dto.password,
-          email: dto.email,
-          phone: dto.phone,
-          role: dto.role,
-          location: dto.location,
-          verified: dto.verified
-        });
+        const result = await CreateUserUseCase.execute(dto);
 
         if (result.isLeft()) {
           const error = result.value;
@@ -39,7 +31,8 @@ export class CreateUserController extends BaseController<Request> {
           display_namme: dto.display_name,
           token_function: TokenFunctions.authenticateUser,
           role: result.value.role,
-          verified: result.value.verified
+          verified: result.value.verified,
+          username: result.value.username
         });
         this.ok(res, { token: token });
       } catch (err) {

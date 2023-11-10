@@ -13,7 +13,7 @@ import { AppError } from "../../../../shared/core/Response/AppError";
 import { RepositoryBaseResult } from "../../../../shared/core/IBaseRepositoty";
 import { Iwatch } from "../../../../shared/core/Response/Error";
 import { Guard } from "../../../../shared/core/Guard";
-import { UserName } from "../../domain/userProps/userName";
+import { UserDisplayName } from "../../domain/userProps/userDisplayName";
 import { IAuthService } from "../../services/IauthService";
 import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
@@ -22,6 +22,7 @@ import { UserMap } from "../../mappers/userMap";
 import { Location } from "../../../../shared/core/Location";
 import { Secrets } from "../../../../config/secretsManager";
 import { UserLastLogin } from "../../domain/userProps/userLastLogin";
+import { UserName } from "../../domain/userProps/userName";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -31,7 +32,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
   }
 
   async execute(request: CreateUserDTO): Promise<CreateUserResponse> {
-    const nameOrError = UserName.create({
+    const displayNameOrError = UserDisplayName.create({
       display_name: request.display_name
     });
     const passwordOrError = UserPassword.create({ value: request.password });
@@ -40,8 +41,9 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
     const lastLoginOrError = UserLastLogin.create({ date: new Date() });
+    const userNameOrError = UserName.create({username: request.username})
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError, lastLoginOrError]);
+    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, displayNameOrError, roleOrError, locationOrError, lastLoginOrError, userNameOrError]);
 
     if (result.isLeft()) {
       return left(result.value);
@@ -49,12 +51,12 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
 
     const password = passwordOrError.getRight();
     const email = emailOrError.getRight();
-    const name = nameOrError.getRight();
+    const displayName = displayNameOrError.getRight();
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
     const location = locationOrError.getRight();
     const lastLogin = lastLoginOrError.getRight();
-
+    const username = userNameOrError.getRight();
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
       hashed: true
@@ -63,7 +65,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       return left(hashedPassword.value);
     }
     const userOrError = User.create({
-      name,
+      username,
+      displayName,
       email,
       password: hashedPassword.value,
       phone,
@@ -87,12 +90,21 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       const userWithEmail = await this.userRepo.exists({
         filter: { email: userOrError.value.email.value }
       });
+      
+      const userWithUserName = await this.userRepo.exists({
+        filter: {username: username.value}
+      })
 
       watchList.push({
-        name: "EMAIL",
+        name: "USER_EMAIL",
         watch: userWithEmail,
         error: `The email ${email.mask()} associated for this account already exists.`
+      }, {
+        name: "USER_NAME",
+        watch: userWithUserName,
+        error: `The username ${username.value} associated for this account already exists.`
       });
+
 
       for (const watched of watchList) {
         if (watched.watch.isRight()) {

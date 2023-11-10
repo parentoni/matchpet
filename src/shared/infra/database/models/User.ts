@@ -5,6 +5,7 @@ import { DomainEvents } from "../../../domain/events/DomainEvents";
 import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 const userSchema = new mongoose.Schema({
   display_name: { type: String, required: true },
+  username: {type: String, required: true},
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   // cpf: { type: String, required: false },
@@ -20,6 +21,7 @@ const userSchema = new mongoose.Schema({
 export type IUserPersistant = {
   _id: string;
   display_name: string;
+  username: string;
   password: string;
   email: string;
   role: number;

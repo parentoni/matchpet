@@ -6,4 +6,5 @@ export interface GetUserInfoResponseDTO {
   phone_number: string;
   email: string;
   name: string;
+  username:string;
 }

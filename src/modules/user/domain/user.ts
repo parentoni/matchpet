@@ -8,7 +8,7 @@ import { UserPassword } from "./userProps/userPassword";
 import { Either, left, right } from "../../../shared/core/Result";
 import { UserCreated } from "./events/userCreated";
 import { UserCpf } from "./userProps/userCpf";
-import { UserName } from "./userProps/userName";
+import { UserDisplayName } from "./userProps/userDisplayName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
 import { Timestamp } from "../../../shared/core/Timestamp";
 import { UserPhone } from "./userProps/userPhone";
@@ -16,9 +16,11 @@ import { Location } from "../../../shared/core/Location";
 import { UserLastLogin } from "./userProps/userLastLogin";
 import { UserLogin } from "./events/userLogin";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
+import { UserName } from "./userProps/userName";
 
 export interface UserProps {
-  name: UserName;
+  displayName: UserDisplayName;
+  username: UserName;
   email: UserEmail;
   password: UserPassword;
   role: UserRole;
@@ -45,8 +47,12 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.password;
   }
 
-  get name(): UserName {
-    return this.props.name;
+  get displayName(): UserDisplayName {
+    return this.props.displayName;
+  }
+
+  get userName(): UserName {
+    return this.props.username
   }
 
   get phone(): UserPhone {
@@ -96,7 +102,7 @@ export class User extends AggregateRoot<UserProps> {
 
   public static create(props: UserProps, id?: UniqueGlobalId): UserResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.name, argumentName: "USER_NAME" },
+      { argument: props.displayName, argumentName: "USER_DISPLAYNAME" },
       { argument: props.email, argumentName: "USER_EMAIL" },
       { argument: props.password, argumentName: "USER_PASWORD" },
       { argument: props.phone, argumentName: "USER_PHONE" },
