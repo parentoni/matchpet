@@ -1,5 +1,5 @@
 export interface ICategoryDTO {
-  _id: string,
-  name: string,
-  svg: string
+  _id: string;
+  name: string;
+  svg: string;
 }

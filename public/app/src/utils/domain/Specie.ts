@@ -7,81 +7,78 @@ export class Specie {
   public props: ISpecieDTO;
 
   constructor(props: ISpecieDTO) {
-    this.props = props
+    this.props = props;
   }
 
   public static create(props: ISpecieDTO) {
-    return new Specie(props)
+    return new Specie(props);
   }
 
-  public static async  getAll(): Promise<Either<Response, ISpecieDTO[]>> {
-    const response = await Api.get('/animals/species/all')
+  public static async getAll(): Promise<Either<Response, ISpecieDTO[]>> {
+    const response = await Api.get("/animals/species/all");
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
-    return right(response.value as ISpecieDTO[])
+    return right(response.value as ISpecieDTO[]);
   }
 
-  public getTraitsThatMatchCategory(categoryID:string):ISpecieTraitDTO[] {
-    const traits: ISpecieTraitDTO[] = []
+  public getTraitsThatMatchCategory(categoryID: string): ISpecieTraitDTO[] {
+    const traits: ISpecieTraitDTO[] = [];
     for (const trait of this.props.traits) {
       if (trait.category === categoryID) {
-        traits.push(trait)
+        traits.push(trait);
       }
     }
 
-    return traits
+    return traits;
   }
 
-  public getTraitByVariable(variable: keyof ISpecieTraitDTO, value: string):ISpecieTraitDTO | undefined{
-    const result = this.props.traits.find(el => el[variable] === value)
+  public getTraitByVariable(variable: keyof ISpecieTraitDTO, value: string): ISpecieTraitDTO | undefined {
+    const result = this.props.traits.find((el) => el[variable] === value);
     if (result) {
-      return result
+      return result;
     }
 
-    return undefined
+    return undefined;
   }
 
-  public getTraitOptionValueById(traitId:string, optionId:string) {
-    const trait = this.props.traits.find(el => el._id === traitId)
+  public getTraitOptionValueById(traitId: string, optionId: string) {
+    const trait = this.props.traits.find((el) => el._id === traitId);
     if (trait) {
-      const option = trait.options.find(el => el._id === optionId)
+      const option = trait.options.find((el) => el._id === optionId);
       if (option) {
-        return option
+        return option;
       }
     }
-    return undefined
+    return undefined;
   }
-
 
   get obrigatoryTraits() {
-    const traitsList:ISpecieTraitDTO[]= []
+    const traitsList: ISpecieTraitDTO[] = [];
 
     if (this.props) {
       for (const trait of this.props.traits) {
         if (!trait.optional) {
-          traitsList.push(trait)
+          traitsList.push(trait);
         }
       }
     }
 
-
-    return traitsList
+    return traitsList;
   }
 
   get optionalTraits() {
-    const traitsList:ISpecieTraitDTO[]= []
+    const traitsList: ISpecieTraitDTO[] = [];
 
     if (this.props) {
-
       for (const trait of this.props.traits) {
         if (trait.optional) {
-          traitsList.push(trait)
+          traitsList.push(trait);
         }
       }
     }
 
-    return traitsList
+    return traitsList;
   }
 }

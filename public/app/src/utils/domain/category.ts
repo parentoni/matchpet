@@ -6,20 +6,19 @@ export class Category {
   public props: ICategoryDTO;
 
   constructor(props: ICategoryDTO) {
-    this.props = props
+    this.props = props;
   }
 
   public static create(props: ICategoryDTO) {
-    return new Category(props)
+    return new Category(props);
   }
 
   public static async getAll(): Promise<Either<Response, ICategoryDTO[]>> {
-    const result = await Api.get('/animals/categories/all')
+    const result = await Api.get("/animals/categories/all");
     if (result.isLeft()) {
-      return left(result.value)
+      return left(result.value);
     }
 
-    return right(result.value as ICategoryDTO[])
+    return right(result.value as ICategoryDTO[]);
   }
-  
 }

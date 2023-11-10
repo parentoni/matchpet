@@ -11,6 +11,8 @@ import { authService } from "../../services";
 import { IAuthService } from "../../services/IauthService";
 import { LoginDTO } from "./loginDTO";
 import { LoginResponse } from "./loginResponse";
+import { IUserPersistant } from "../../../../shared/infra/database/models/User";
+import { UserName } from "../../domain/userProps/userName";
 
 export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
   private userRepo: IUserRepo;
@@ -19,22 +21,38 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
   }
 
   async execute(request: LoginDTO): Promise<LoginResponse> {
-    const givenEmailOrError = UserEmail.create({ value: request.email });
-    const givenPasswordOrError = UserPassword.create({
-      value: request.password,
-      hashed: false
-    });
 
-    const result = EitherUtils.combine([givenEmailOrError, givenPasswordOrError]);
 
-    if (result.isLeft()) {
-      return left(result.value);
+    let filter: Partial<IUserPersistant>;
+
+    if (request.credential.includes('@')) {
+      const givenEmailOrError = UserEmail.create({ value: request.credential });
+      if (givenEmailOrError.isLeft()) {
+        return left(givenEmailOrError.value)
+      }
+
+      filter = {email: givenEmailOrError.getRight().value}
+    } else {
+      const givenUserNameOrError = UserName.create({ username: request.credential });
+      if (givenUserNameOrError.isLeft()) {
+        return left(givenUserNameOrError.value)
+      }
+
+      filter = {username: givenUserNameOrError.getRight().value}
     }
 
-    const givenEmail = givenEmailOrError.value as UserEmail;
+    const givenPasswordOrError = UserPassword.create({
+          value: request.password,
+          hashed: false
+        });
+
+    if (givenPasswordOrError.isLeft()) {
+      return left(givenPasswordOrError.value);
+    }
+
     const givenPassword = givenPasswordOrError.value as UserPassword;
     const user = await this.userRepo.find_one({
-      filter: { email: givenEmail.value }
+      filter: filter
     });
 
     if (user.isLeft()) {

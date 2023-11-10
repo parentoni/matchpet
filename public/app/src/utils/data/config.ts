@@ -1,24 +1,24 @@
 export interface IGloabalVariables {
-    apiUrl: string
+  apiUrl: string;
 }
 
 const devVariables: IGloabalVariables = {
-    apiUrl: 'http://localhost:8000'
-}
+  apiUrl: "http://localhost:8000"
+};
 
 const prodVariables: IGloabalVariables = {
-    apiUrl: 'https://api.matchpet.org'
-}
+  apiUrl: "https://api.matchpet.org"
+};
 
 function getGlobal(key: keyof IGloabalVariables) {
-    const env = process.env.NODE_ENV
-    if (env === 'development') {
-        return devVariables[key]
-    } else if (env === 'production'){
-        return prodVariables[key]
-    } else {
-        return devVariables[key]
-    }
+  const env = process.env.NODE_ENV;
+  if (env === "development") {
+    return devVariables[key];
+  } else if (env === "production") {
+    return prodVariables[key];
+  } else {
+    return devVariables[key];
+  }
 }
 
-export {getGlobal}
+export { getGlobal };

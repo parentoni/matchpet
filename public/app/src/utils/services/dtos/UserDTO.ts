@@ -7,8 +7,8 @@ export interface IUserPersistent {
   verified: boolean;
   phone_number: string;
   location: {
-    type: 'Point',
-    coordinates: [number, number]
+    type: "Point";
+    coordinates: [number, number];
   };
   in_adoption: number;
   completed_adoptions: number;

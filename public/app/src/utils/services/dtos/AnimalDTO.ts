@@ -18,7 +18,6 @@ export enum ANIMAL_STATUS {
   DONATED = "DONATED"
 }
 
-
 export interface IAnimalTraitsDTO {
   _id: string;
   value: string;

@@ -11,7 +11,7 @@ export interface ISpecieTraitDTO {
   optional: boolean;
   category: string;
   options: ISpecieTraitOptionsDTO[];
-  print: string
+  print: string;
 }
 
 export interface ISpecieTraitOptionsDTO {
