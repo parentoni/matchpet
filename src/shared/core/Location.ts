@@ -39,7 +39,7 @@ export namespace Location {
     }
 
     get longitude(): number {
-      return this.props.coordinates[0];
+      return this.props.coordinates[1];
     }
 
     get coordinates(): GeoJSON.Position {
