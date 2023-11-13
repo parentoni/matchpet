@@ -21,4 +21,13 @@ export class User {
 
     return right(response.value as IUserPersistent[]);
   }
+
+  public static async getUserByUsername(username: string) :Promise<Either<Response, IUserPersistent>> {
+    const response = await Api.post("/user/username", JSON.stringify({username: username}))
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right(response.value as IUserPersistent)
+  }
 }

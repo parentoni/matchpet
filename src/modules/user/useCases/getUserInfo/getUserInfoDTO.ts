@@ -7,4 +7,5 @@ export interface GetUserInfoResponseDTO {
   email: string;
   name: string;
   username:string;
+  display_name:string;
 }

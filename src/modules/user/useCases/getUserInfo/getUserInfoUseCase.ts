@@ -27,7 +27,8 @@ export class GetUserInfoUseCase implements UseCase<GetUserInfoDTO, GetUserInfoUs
       phone_number: response.value.phone_number,
       email: response.value.email,
       name: response.value.display_name,
-      username: response.value.username
+      username: response.value.username,
+      display_name: response.value.display_name
     });
   }
 }

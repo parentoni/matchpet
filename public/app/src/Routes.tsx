@@ -2,12 +2,13 @@ import { createBrowserRouter } from "react-router-dom";
 import { App } from "./Base";
 import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
-import { Login } from "./pages/user/Login";
+import { Login } from "./pages/auth/Login";
 import { ManagerBase } from "./elements/ManagerBase";
 import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalManage";
 import { Testing } from "./pages/testing/Testing";
 import { FourOFour } from "./pages/error/fourOFour";
 import { PartnerEditAnimal } from "./pages/partner/PartnerEditAnimal";
+import { AllPartnerAnimals } from "./pages/user/AllPartnerAnimals";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AllAnimals />
+      },
+      {
+        path: '/p/:username',
+        element: <AllPartnerAnimals />
       },
     ]
   },
@@ -34,6 +39,8 @@ const router = createBrowserRouter([
       }
     ]
   },
+
+
   {
     path:'/animal/:animalId',
     element: <SpecificAnimal />

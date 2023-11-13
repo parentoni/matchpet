@@ -31,7 +31,7 @@ export const SelectedAreaChoice = (props: SelectedAreaChoiceProps) => {
   useEffect(() => {
     if (mode === 'organization' && props.filters['donator_id']) {
       const index = organizations.findIndex(x => x._id === props.filters['donator_id'][0].comparation_value);
-      setText((organizations[index].first_name + ' ' + organizations[index].last_name));
+      setText((organizations[index].display_name));
     }
 
     if (mode === 'area' && props.searchArea.length > 0) {

@@ -10,7 +10,7 @@ import { FiltersContext } from "../../utils/context/FiltersContext";
 export function AllAnimals () {
 
   const {species} = useContext(SpeciesContext)
-  const {animalsCount, animals, setAnimals} = useContext(FiltersContext)
+  const {animalsCount, animals, setAnimals, loading, page, setPage} = useContext(FiltersContext)
   
   return (
     <>
@@ -20,7 +20,7 @@ export function AllAnimals () {
       <div className="divider mb-0"></div>
       <PageLayout>
         <h2 className="text-2xl">{animalsCount? animalsCount:'---'} animais disponíveis</h2>
-        <AnimalGrid AnimalsArray={animals} SpeciesArray={species} setAnimalsArray={setAnimals}/>
+        <AnimalGrid AnimalsArray={animals} SpeciesArray={species} setAnimalsArray={setAnimals} loading={loading} page={page} setPage={setPage}/>
       </PageLayout>
     </>
     

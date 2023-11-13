@@ -8,26 +8,36 @@ import {Trash2, Heart, User} from 'lucide-react'
 import { useContext } from "react";
 import { FiltersContext } from "../../utils/context/FiltersContext";
 import '../partner/PartnerAnimalsGrid.css'
-export function AnimalGrid ({AnimalsArray, SpeciesArray, setAnimalsArray}: {AnimalsArray: IAnimalDTO[] | undefined, SpeciesArray: ISpecieDTO[], setAnimalsArray: (a: IAnimalDTO[]) => void}) {
+
+export interface AnimalGridProps {
+  AnimalsArray: IAnimalDTO[],
+  SpeciesArray: ISpecieDTO[],
+  setAnimalsArray: (a: IAnimalDTO[]) => void,
+  setPage: (x: number) => void,
+  page: number, 
+  loading: boolean,
+}
+
+export function AnimalGrid (props: AnimalGridProps) {
   const navigate = useNavigate()
 
-  const {setPage, page, animals, loading} = useContext(FiltersContext)
+  // const {setPage, page, loading} = useContext(FiltersContext)
 
   return (
     <div className="w-full grid-cols-1 grid gap-5 grid-resizable-columns pb-20">
       {/* <UserAnimalCardSkeleton /> */}
-      {AnimalsArray && 
-        AnimalsArray.map((animal, index) => {
+      {props.AnimalsArray?.length > 0 && 
+        props.AnimalsArray.map((animal, index) => {
 
-          const currentSpecie = Species.createFromDTO(SpeciesArray).findByID(animal.specie_id)
+          const currentSpecie = Species.createFromDTO(props.SpeciesArray).findByID(animal.specie_id)
           const sexoTrait = currentSpecie?.getTraitByVariable('name', "Sexo")
           if (sexoTrait) {
             const selectedOptionValue = currentSpecie?.getTraitOptionValueById(sexoTrait._id, Animal.create(animal).getTraitById(sexoTrait?._id)?.value || '')
             const male = selectedOptionValue?.name === 'Fêmea' ? false:true
 
             const deleteFromArray = () => {
-              AnimalsArray.splice(index,1)
-              setAnimalsArray(AnimalsArray.slice())
+              props.AnimalsArray.splice(index,1)
+              props.setAnimalsArray(props.AnimalsArray.slice())
             }
 
             return(
@@ -39,9 +49,9 @@ export function AnimalGrid ({AnimalsArray, SpeciesArray, setAnimalsArray}: {Anim
           
         })
       }
-      {loading && [...Array(50).keys()].map(_ => <UserAnimalCardSkeleton />)}
-      { (animals.length % 50) === 0?
-      <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => setPage(page+1)}>
+      {props.loading && [...Array(50).keys()].map(_ => <UserAnimalCardSkeleton />)}
+      { (props.AnimalsArray.length % 50) === 0?
+      <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => props.setPage(props.page+1)}>
         Carregar mais
       </button>:''}
       
