@@ -22,7 +22,14 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
 
   async execute(request: LoginDTO): Promise<LoginResponse> {
 
+    const GuardResult = Guard.againstNullOrUndefinedBulk([
+      {argument: request.credential, argumentName: "CREDENTIALS"},
+      {argument: request.password, argumentName: "PASSWORD"}
+    ])
 
+    if (GuardResult.isLeft()) {
+      return left(GuardResult.value)
+    }
     let filter: Partial<IUserPersistant>;
 
     if (request.credential.includes('@')) {

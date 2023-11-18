@@ -46,33 +46,35 @@ export const FilterModal = (props: FilterModalProps) => {
       
     <FullPageModal isOpen={props.open} setIsOpen={props.setIsOpen} absolute={false} title='FILTRAR' className='w-full'>
     {categories && species && 
-      <div className='flex-col flex items-center w-full '>
-        <div className='grid lg:grid-cols-2 grid-cols-1 w-full'>
-          <div className="border-b flex gap-8 px-8 overflow-x-scroll no-scrollbar">
-              <div className="font-medium">
-                <button onClick={() => setSelectedSpecie(undefined)} className=" whitespace-nowrap">TODOS</button>
-                <div className={`h-2 w-full ${!selectedSpecie? 'bg-black':''}`}></div>
-            </div>
-            {species && species.map(s => 
-              <div className="font-medium">
-                <button onClick={() => setSelectedSpecie(s)} className=" whitespace-nowrap">{s.name}</button>
-                <div className={`h-2 w-full ${selectedSpecie === s? 'bg-black':''}`}></div>
-              </div>)}
+    <>
+      <div className="border-b flex gap-8 px-8 overflow-x-scroll no-scrollbar  pt-5 z-50">
+        <div className="font-medium flex flex-col h-full">
+          <button onClick={() => setSelectedSpecie(undefined)} className=" whitespace-nowrap">TODOS</button>
+          <div className={`h-4 w-full ${!selectedSpecie? 'bg-black':''}`}></div>
           </div>
+          {species && species.map(s => 
+             <div className="font-medium flex flex-col">
+              <button onClick={() => setSelectedSpecie(s)} className=" whitespace-nowrap">{s.name}</button>
+              <div className={`h-2 w-full ${selectedSpecie === s? 'bg-black':''}`}></div>
+            </div>)}
+        </div>
+      <div className='flex-col flex items-center w-full h-full overflow-y-scroll '>
+        <div className='grid lg:grid-cols-2 grid-cols-1 w-full max-w-2xl'>
+          
 
-          <div className="px-8">
+          <div className="px-8 py-8">
             <div className='block lg:hidden'>
               <LocationFilter searchArea={props.searchArea} setSearchArea={props.setSearchArea} filters={props.filters} setFilters={props.setFilters}/>
             </div>
             <SlideFilter filters={props.filters} setFilters={props.setFilters}/>
-            <StatusFilter filters={props.filters} setFilters={props.setFilters}/>
+            {props.isPartner?<StatusFilter filters={props.filters} setFilters={props.setFilters}/>:''}
             {selectedSpecie && Categories.createFromDTO(categories).list.map(category => {
-            return(
-              <div className='border-b flex flex-col gap-3 py-5'>
+              return(
+                <div className='border-b flex flex-col gap-3 py-5'>
                 <h2 className='font-semibold'>{category.props.name}</h2>
                 {Specie.create(selectedSpecie).getTraitsThatMatchCategory(category.props._id).map((trait, index) => (
                   <AnimalFilters.ChoiceFilter filters={props.filters} setFilters={props.setFilters} title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
-                ))}
+                  ))}
               </div>
             )}
             )}
@@ -82,20 +84,23 @@ export const FilterModal = (props: FilterModalProps) => {
             <LocationFilter searchArea={props.searchArea} setSearchArea={props.setSearchArea} filters={props.filters} setFilters={props.setFilters}/>
           </div>
 
-            <div className="sticky bottom-8 inset-0 px-8 w-full h-12 flex justify-between col-span-1 z-50 lg:col-span-2 mt-5">
-              <button className='h-full px-6 bg-black text-white items-center flex' onClick={() => props.setFilters({})}>
-                Limpar
-              </button>
-              <button className='h-full px-6 bg-primary  items-center flex' onClick={() => props.setIsOpen(false)}>
-                Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:props.animalsCount}&nbsp; animais
-              </button>
-            </div>
-            <div className='my-5'></div>
+           
 
         </div>
 
+
       </div>
+        <div className="bottom-8 inset-0 px-8 w-full flex justify-between col-span-1 z-50 lg:col-span-2 py-5 border-t">
+            <button className='h-12  px-6 bg-black text-white items-center flex' onClick={() => props.setFilters({})}>
+              Limpar
+            </button>
+            <button className='h-12  px-6 bg-primary  items-center flex' onClick={() => props.setIsOpen(false)}>
+              Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:props.animalsCount}&nbsp; animais
+            </button>
+        </div>
+      </>
 }
+
     </FullPageModal>
 
     </>

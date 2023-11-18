@@ -7,7 +7,7 @@ import { IUserPersistent } from "../services/dtos/UserDTO";
 type LoginFunction = (email:string, password:string) => Promise<Either<Response, string>>
 async function __login (email:string, password:string): Promise<Either<Response, string>> {
   const response = await Api.post('/auth/login', JSON.stringify({
-    email: email,
+    credential: email,
     password: password
   }))
 

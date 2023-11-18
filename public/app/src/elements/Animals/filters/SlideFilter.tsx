@@ -20,7 +20,7 @@ export function SlideFilter (props: SlideFilterProps) {
   }, [min, max])
 
   return (
-    <div className='flex flex-col gap-3 border-b pb-5'>
+    <div className='flex flex-col gap-3 border-b pb-5 w-full'>
       <h2 className=' font-semibold'>Idade</h2>
       <RangeSlider
         aria-label={['min', 'max']}
