@@ -9,6 +9,7 @@ import { GenericError, IBaseError } from "../../../shared/core/Response/Error";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { Either } from "../../../shared/core/Result";
 import { IUserRepo } from "./IUserRepo";
+import { AppStatsResponseSuccess } from "../../app/useCases/stats/AppStatsResponse";
 export class UserRepo implements IUserRepo {
   private models: mongoose.Models;
 
@@ -101,4 +102,33 @@ export class UserRepo implements IUserRepo {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
+
+  public async aggregateStats (): Promise<Either<CommonUseCaseResult.UnexpectedError,AppStatsResponseSuccess>> {
+    try {
+      const UserM = this.models.user
+      const result = await UserM.aggregate([
+        {$match: {}},
+        {
+          $group: {
+            _id: null,
+            in_adoption: { $sum: "$in_adoption" },
+            completed_adoptions: { $sum: "$completed_adoptions" }
+          }
+        },
+        // {
+        //   $group: {
+        //     _id: null,
+        //     completed_adoptions: { $sum: "$completed_adoptions" }
+        //   }
+        // }
+      ])
+
+
+      // console.log(result)
+       return right({in_adoption:  result[0].in_adoption, completed_adoptions: result[0].completed_adoptions})
+    } catch (e) {
+      return left(CommonUseCaseResult.UnexpectedError.create(e))
+    }
+  }
+
 }
