@@ -41,10 +41,10 @@ export const App = () => {
                     
                     <div className='w-full border my-5'></div>
                     <div className='flex flex-col gap-3'>
-                        {/* <button className='flex gap-3 items-center'>
+                        <button className='flex gap-3 items-center' onClick={() => {navigate(`/select?to=${window.location.pathname}`);setShowNavigate(false)}}>
                             <img alt='Match' src={reducedLogo} className='w-8'></img>
-                            <p>Match</p>
-                        </button> */}
+                            <p>Mudar espécie selecionada</p>
+                        </button>
                     </div>
                 </PageLayout>
                 

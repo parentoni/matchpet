@@ -39,7 +39,7 @@ export const DrawSearchArea = (props: DrawSearchAreaProps) => {
       const m = circle(props.firstPoint, {
         radius: 200,
         color: '#000',
-        fillColor: '#FFA1F5',
+        fillColor: '#FA8128',
         fillOpacity: 1,
         weight: 1,
       }
@@ -50,8 +50,8 @@ export const DrawSearchArea = (props: DrawSearchAreaProps) => {
     } else if (props.firstPoint && props.secondPoint) {
       const path = [[props.firstPoint[1], props.firstPoint[0]], [props.firstPoint[1], props.secondPoint[0]], [props.secondPoint[1], props.secondPoint[0]], [props.secondPoint[1], props.firstPoint[0]], [props.firstPoint[1], props.firstPoint[0]]] as [number, number][]
       const p = polygon([props.firstPoint, [props.firstPoint[0], props.secondPoint[1]], props.secondPoint, [props.secondPoint[0], props.firstPoint[1]]], {
-        fillColor: '#FFA1F5',
-        color: '#FFA1F5',
+        fillColor: '#FA8128',
+        color: '#FA8128',
         className: 'z-2',
         interactive: false,
         

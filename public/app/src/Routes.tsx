@@ -11,6 +11,7 @@ import { PartnerEditAnimal } from "./pages/partner/PartnerEditAnimal";
 import { AllPartnerAnimals } from "./pages/user/AllPartnerAnimals";
 import { RegisterPage } from "./pages/auth/Register";
 import { HeroPage } from "./pages/hero/Hero";
+import { AnimalSelect } from "./pages/hero/AnimalSelect";
 
 const router = createBrowserRouter([
   {
@@ -26,9 +27,13 @@ const router = createBrowserRouter([
         element: <AllAnimals />
       },
       {
-        path: '/p/:username',
+        path: '/organizations/:username',
         element: <AllPartnerAnimals />
       },
+      {
+        path: '/select',
+        element: <AnimalSelect />
+      }
     ]
   },
   {
@@ -48,7 +53,7 @@ const router = createBrowserRouter([
 
 
   {
-    path:'/animal/:animalId',
+    path:'/animals/:animalId',
     element: <SpecificAnimal />
   },
   {

@@ -68,7 +68,7 @@ export interface UserAnimalCardProps {
 }
 function UserAnimalCard(props: UserAnimalCardProps) {
   return <div className="w-full brute-border shadow overflow-hidden relative mt-3">
-    <img src={props.animal.image[0]} alt={`Imagem de ${props.animal.name}`} className="w-full aspect-video  object-cover" onClick={() => props.navigate(`/animal/${props.animal._id}`)}></img>
+    <img src={props.animal.image[0]} alt={`Imagem de ${props.animal.name}`} className="w-full aspect-video  object-cover" onClick={() => props.navigate(`/animals/${props.animal._id}`)}></img>
     <div className="flex flex-col p-4">
       <div className="flex justify-between items-center">
         <p className="text-xl">{props.animal.name}</p>
@@ -76,13 +76,13 @@ function UserAnimalCard(props: UserAnimalCardProps) {
       </div>
       <p className="line-clamp-2 text-xs">{props.animal.description.slice(0)}</p>
       <div className="flex justify-between items-center mt-5 gap-3">
-        <button className="h-8 flex-1 border flex justify-center items-center" onClick={() => props.navigate(`/animal/${props.animal._id}`)}>
+        <button className="h-8 flex-1 border flex justify-center items-center" onClick={() => props.navigate(`/animals/${props.animal._id}`)}>
           <span className="text-sm">VER MAIS</span>
         </button>
         <button className="h-8 w-8 border rounded-full flex items-center justify-center" onClick={props.deleteFromArray}>
           <Trash2 width={15} />
         </button>
-        <button className="h-8 w-8 border rounded-full flex items-center justify-center" onClick={() => props.navigate(`/animal/${props.animal._id}`)}>
+        <button className="h-8 w-8 border rounded-full flex items-center justify-center" onClick={() => props.navigate(`/animals/${props.animal._id}`)}>
           <Heart width={15} />
         </button>
       </div>

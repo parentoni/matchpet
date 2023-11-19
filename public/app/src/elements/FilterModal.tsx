@@ -20,17 +20,20 @@ export interface FilterModalProps {
   setIsOpen: (x: boolean) => void,
   searchArea: [number, number][],
   setSearchArea: (x: [number, number][]) => void,
-  isPartner: boolean
+  isPartner: boolean,
+
 
 }
 
 export const FilterModal = (props: FilterModalProps) => {
 
-  const {species} = useContext(SpeciesContext)
+  const {species, preferredSpecie, setPreferredSpecie} = useContext(SpeciesContext)
   const {categories} = useContext(CategoriesContext)
 
   const [selectedSpecie, setSelectedSpecie] = useState<ISpecieDTO | undefined>()
 
+  const [min, setMin] = useState<number>(0)
+  const [max, setMax] = useState<number>(120)
 
   useEffect(() => {
     if (selectedSpecie) {
@@ -40,6 +43,15 @@ export const FilterModal = (props: FilterModalProps) => {
     }
     
   }, [selectedSpecie])
+
+  useEffect(() => {
+    if (preferredSpecie) {
+      const specie = species.find(x => x._id == preferredSpecie)
+      if (specie) {
+        setSelectedSpecie(specie)
+      }
+    }
+  }, [preferredSpecie, species])
 
   return (
     <>
@@ -66,7 +78,7 @@ export const FilterModal = (props: FilterModalProps) => {
             <div className='block lg:hidden'>
               <LocationFilter searchArea={props.searchArea} setSearchArea={props.setSearchArea} filters={props.filters} setFilters={props.setFilters}/>
             </div>
-            <SlideFilter filters={props.filters} setFilters={props.setFilters}/>
+            <SlideFilter filters={props.filters} setFilters={props.setFilters} max={max} min={min} setMax={setMax} setMin={setMin}/>
             {props.isPartner?<StatusFilter filters={props.filters} setFilters={props.setFilters}/>:''}
             {selectedSpecie && Categories.createFromDTO(categories).list.map(category => {
               return(

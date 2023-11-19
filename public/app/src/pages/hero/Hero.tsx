@@ -1,7 +1,16 @@
 import { GithubIcon, Instagram } from "lucide-react"
 import { PageLayout } from "../../PageLayout"
 import catLogo from '../../assets/logo-reduced.svg'
+import { useGetStats } from "../../elements/hero/useGetStats"
+import { useGetActiveUsers } from "../../elements/hero/useGetActiveUsers"
+import { useNavigate } from "react-router-dom"
 export function HeroPage  ()  {
+
+  const stats = useGetStats()
+  const users = useGetActiveUsers()
+
+  const navigate = useNavigate()
+
   return (
     <div>
       <div className="w-full border-b "></div>
@@ -12,11 +21,11 @@ export function HeroPage  ()  {
           
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
             
-            <button className="w-60 h-10 bg-primary flex items-center justify-center text-neutral-950">
-              Ver animais
+            <button className="w-60 h-10 bg-primary flex items-center justify-center text-neutral-950" onClick={() => navigate('/select?to=' + encodeURI('/animals'))}>
+              Quero adotar
             </button>
             <button className="w-60 h-10 brute-border flex justify-center items-center">
-              Doar animal
+              Quero doar
             </button>
           </div>
 
@@ -31,35 +40,18 @@ export function HeroPage  ()  {
 
             <h2 className="text-4xl font-medium text-white">Projetos parceiros</h2>
               <ul  className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
+
+                {users.length > 0? users.slice(0,6).map(u => {return(
+                  <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
+                    <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
+                    <p className="line-clamp-1 text-white">{u.display_name}</p>
                 </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
-                  <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                  <p className="line-clamp-1 text-white">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab tempore necessitatibus odit aliquam iure, velit culpa voluptatum cupiditate eius porro eos odio quasi totam error neque sequi accusamus dolore vitae!</p>
-                </div>
-                <button className="flex w-full h-full flex-row gap-2 line-clamp-1 text-white">
+                )}):''}
+
+                {[...Array(7-users.length).keys()].map(i => <p className="line-clamp-1 text-white">..........</p>)}
+                
+                
+                <button className="flex w-full h-full flex-row gap-2 line-clamp-1 text-white" onClick={() => navigate('/organizations')}>
                   Ver todos
                 </button>
               </ul>
@@ -84,11 +76,11 @@ export function HeroPage  ()  {
             <h2 className="text-4xl font-medium text-white">Estatísticas</h2>
             <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:gap-20">
               <div>
-                <p className="text-[80px]  [line-height:84px] font-medium tracking-tight text-white">320</p>
+                <p className="text-[80px]  [line-height:84px] font-medium tracking-tight text-white">{stats?.in_adoption || '---'}</p>
                 <p className="text-white  text-lg">Animais em adoção</p>
               </div>
               <div>
-                <p className="text-[80px]  [line-height:84px] font-medium tracking-tight text-white">34</p>
+                <p className="text-[80px]  [line-height:84px] font-medium tracking-tight text-white">{stats?.completed_adoptions || '---'}</p>
                 <p className="text-white  text-lg">Animais adotados</p>
               </div>
             </div>
@@ -123,8 +115,5 @@ export function HeroPageSection ({children}: React.PropsWithChildren<{}>) {
         {children}
       </section>
     </div>
-      
-
-    
   )
 }

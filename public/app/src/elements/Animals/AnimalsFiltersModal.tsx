@@ -58,7 +58,7 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
                 <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
               </div>
               
-              <SlideFilter filters={filters} setFilters={setFilters} />
+              {/* <SlideFilter filters={filters} setFilters={setFilters} /> */}
               {Categories.createFromDTO(categories).list.map((category, index) => {
                 return(
                   <div className='border-b flex flex-col gap-3 py-5'>

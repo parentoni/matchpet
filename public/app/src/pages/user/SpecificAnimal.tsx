@@ -85,7 +85,7 @@ export const SpecificAnimal = () => {
         <AnimalDescription description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name}/>
         
         <AnimalContactButton ContactDTO={contactInfo} isMale={isMale || false} AnimalName={selectedAnimalDTO.name}/>
-        <button className="px-8 text-sm items-start text-start" onClick={() => navigate(`/p/${contactInfo?.username}`)}>
+        <button className="px-8 text-sm items-start text-start" onClick={() => navigate(`/organizations/${contactInfo?.username}`)}>
           Responsável: &nbsp;
           <span className="text-primary font-medium">{contactInfo?.display_name}</span>
         </button>
