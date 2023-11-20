@@ -9,7 +9,9 @@ export interface JWTDTO {
 }
 
 export enum TokenFunctions {
-  authenticateUser = "AUTHENTICATE_USER"
+  authenticateUser = "AUTHENTICATE_USER",
+  verifyUser = "VERIFY_USER",
+  changePassword = 'CHANGE_PASSWORD'
 }
 
 export type JWTToken = string;

@@ -9,7 +9,7 @@ import { IAuthService } from "../../services/IauthService";
 import { User } from "../../domain/user";
 
 export class CreateUserController extends BaseController<Request> {
-  constructor(CreateUserUseCase: CreateUserUseCase, authService: IAuthService) {
+  constructor(CreateUserUseCase: CreateUserUseCase) {
     super();
     this.versionRegister.default = "1.0.0";
 
@@ -25,16 +25,9 @@ export class CreateUserController extends BaseController<Request> {
         }
 
         //Generate token for instant user access
-        const token = await authService.signJWT({
-          uid: result.value._id,
-          email: dto.email,
-          display_namme: dto.display_name,
-          token_function: TokenFunctions.authenticateUser,
-          role: result.value.role,
-          verified: result.value.verified,
-          username: result.value.username
-        });
-        this.ok(res, { token: token });
+
+
+        this.ok(res)
       } catch (err) {
         this.fail(res, err as Error);
       }

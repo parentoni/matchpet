@@ -5,6 +5,5 @@ export interface CreateUserDTO {
   password: string;
   phone: string;
   location: GeoJSON.Position;
-  role?: number; //!Temporary,
   verified?: boolean; //!Temporary,
 }

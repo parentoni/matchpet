@@ -116,12 +116,21 @@ export class User extends AggregateRoot<UserProps> {
       return left(guardResult.value);
     }
 
+
+    
+    
     const user = new User(
       {
         ...props
       },
       id
-    );
+      );
+      
+      const userIsNew = !!id === false
+
+      if (userIsNew) {
+        user.addDomainEvent(new UserCreated(user))
+      }
 
     return right(user);
   }

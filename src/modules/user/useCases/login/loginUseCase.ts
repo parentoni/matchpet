@@ -7,7 +7,6 @@ import { TokenFunctions } from "../../domain/jwt";
 import { UserEmail } from "../../domain/userProps/userEmail";
 import { UserPassword } from "../../domain/userProps/userPassword";
 import { IUserRepo } from "../../repository/IUserRepo";
-import { authService } from "../../services";
 import { IAuthService } from "../../services/IauthService";
 import { LoginDTO } from "./loginDTO";
 import { LoginResponse } from "./loginResponse";
@@ -16,8 +15,11 @@ import { UserName } from "../../domain/userProps/userName";
 
 export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
   private userRepo: IUserRepo;
-  constructor(userRepo: IUserRepo) {
+  private authService: IAuthService;
+
+  constructor(userRepo: IUserRepo, authService: IAuthService) {
     this.userRepo = userRepo;
+    this.authService = authService
   }
 
   async execute(request: LoginDTO): Promise<LoginResponse> {
@@ -66,7 +68,7 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
       return left(user.value);
     } else {
       if (await user.value.password.comparePassword(givenPassword.value)) {
-        const token = await authService.signJWT({
+        const token = await this.authService.signJWT({
           email: user.value.email.value,
           uid: user.value.id.toValue(),
           display_namme: user.value.displayName.value,

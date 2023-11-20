@@ -68,7 +68,6 @@ export class SendEmailUseCase implements UseCase<SendEmailDTO, SendEmailResponse
     try {
       const response = await this.client.send(command)
 
-      console.log(response)
       return right(request.recepient)
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error))

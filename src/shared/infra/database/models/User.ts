@@ -37,6 +37,6 @@ export type IUserPersistant = {
 };
 
 // userSchema.post('findOne', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
-// userSchema.post('save', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
+userSchema.post('save', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
 
 export default { name: "user", schema: userSchema };

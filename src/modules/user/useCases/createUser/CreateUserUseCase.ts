@@ -37,7 +37,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     });
     const passwordOrError = UserPassword.create({ value: request.password });
     const emailOrError = UserEmail.create({ value: request.email });
-    const roleOrError = UserRole.create({ value: request.role || 0 });
+    const roleOrError = UserRole.create({ value: 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
     const lastLoginOrError = UserLastLogin.create({ date: new Date() });
@@ -64,31 +64,14 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     if (hashedPassword.isLeft()) {
       return left(hashedPassword.value);
     }
-    const userOrError = User.create({
-      username,
-      displayName,
-      email,
-      password: hashedPassword.value,
-      phone,
-      role,
-      verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
-      location,
-      inAdoption: 0,
-      completedAdoptions: 0,
-      lastLogin: lastLogin
-      // role: UserRole.create({value: 0})
-    });
-
-    if (userOrError.isLeft()) {
-      return left(userOrError.value);
-    }
+    
 
     try {
       // User Conflict checking
       let watchList: Iwatch<Awaited<RepositoryBaseResult<any>>>[] = [];
 
       const userWithEmail = await this.userRepo.exists({
-        filter: { email: userOrError.value.email.value }
+        filter: { email: email.value }
       });
       
       const userWithUserName = await this.userRepo.exists({
@@ -118,7 +101,26 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         }
       }
 
-      const user = userOrError.value;
+      const userOrError = User.create({
+        username,
+        displayName,
+        email,
+        password: hashedPassword.value,
+        phone,
+        role,
+        verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
+        location,
+        inAdoption: 0,
+        completedAdoptions: 0,
+        lastLogin: lastLogin
+        // role: UserRole.create({value: 0})
+      });
+  
+      if (userOrError.isLeft()) {
+        return left(userOrError.value);
+      }
+
+      const user = userOrError.value
 
       const persisantResponse = await this.userRepo.create({ dto: user });
 
