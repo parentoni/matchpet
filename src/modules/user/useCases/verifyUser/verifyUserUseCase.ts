@@ -67,7 +67,7 @@ export class VerifyUserUseCase implements UseCase<VerifyUserDTO, VerifyUserRespo
       username: repoResponse.value.userName.value,
       role: repoResponse.value.role,
       email: repoResponse.value.email.value,
-      display_namme: repoResponse.value.displayName.value,
+      display_name: repoResponse.value.displayName.value,
       token_function: TokenFunctions.authenticateUser,
       verified: true
     })

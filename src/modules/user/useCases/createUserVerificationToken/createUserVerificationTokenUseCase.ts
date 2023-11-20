@@ -26,7 +26,7 @@ export class CreateUserVerificationTokenUseCase implements UseCase<CreateUserVer
       username: request.user.userName.value,
       email: request.user.email.value,
       verified: request.user.verified,
-      display_namme: request.user.displayName.value,
+      display_name: request.user.displayName.value,
       role: request.user.role,
       token_function: TokenFunctions.verifyUser
     })

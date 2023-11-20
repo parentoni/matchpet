@@ -71,7 +71,7 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
         const token = await this.authService.signJWT({
           email: user.value.email.value,
           uid: user.value.id.toValue(),
-          display_namme: user.value.displayName.value,
+          display_name: user.value.displayName.value,
           token_function: TokenFunctions.authenticateUser,
           role: user.value.role,
           verified: user.value.verified,

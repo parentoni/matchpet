@@ -1,7 +1,7 @@
 export interface JWTDTO {
   uid: string;
   email: string;
-  display_namme: string;
+  display_name: string;
   role: number;
   token_function: TokenFunctions;
   verified: boolean;
