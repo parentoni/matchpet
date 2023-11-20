@@ -29,7 +29,7 @@ export class CreateUserVerificationTokenUseCase implements UseCase<CreateUserVer
       display_name: request.user.displayName.value,
       role: request.user.role,
       token_function: TokenFunctions.verifyUser
-    })
+    }, '10m')
 
     return right({
       token: token,

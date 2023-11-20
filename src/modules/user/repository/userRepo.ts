@@ -46,7 +46,7 @@ export class UserRepo implements IUserRepo {
           CommonUseCaseResult.InvalidValue.create({
             location: `${UserRepo.name}.${this.find_one.name}`,
             variable: "FILTER",
-            errorMessage: "No user registeres were found with given filter"
+            errorMessage: "No user registers were found with given filter"
           })
         );
       }

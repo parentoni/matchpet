@@ -28,7 +28,7 @@ export class CreateNewPasswordTokenUseCase implements UseCase<CreateNewPasswordT
       token_function: TokenFunctions.changePassword,
       verified: request.user.verified,
       username: request.user.userName.value
-    })
+    }, '10m')
 
     return right({
       token: token,

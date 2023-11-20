@@ -7,14 +7,16 @@ import { getUserInfoController } from "../../../useCases/getUserInfo";
 import { UserLocation } from "../../../domain/userProps/userLocation";
 import { verifyUserController } from "../../../useCases/verifyUser";
 import { changePasswordController } from "../../../useCases/changePassword";
+import { sendChangePasswordEmailController } from "../../../useCases/sendChangePasswordEmail";
 // const userRouter = express.Router();
 const authRouter = express.Router();
 
 authRouter.post("/register", (req, res) => createUserController.execute(req, res));
 authRouter.post("/login", (req, res) => loginController.execute(req, res));
 authRouter.post('/verify', (req, res) => verifyUserController.execute(req ,res))
-authRouter.put('/password/new', (req, res) => changePasswordController.execute(req, res))
 
+authRouter.put('/password/new', (req, res) => changePasswordController.execute(req, res))
+authRouter.post('/password/new', (req, res) => sendChangePasswordEmailController.execute(req,res))
 
 authRouter.get("/myself", middleware.authenticated(), (req, res) => getCurrentUserController.execute(req, res));
 

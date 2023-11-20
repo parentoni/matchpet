@@ -11,8 +11,10 @@ export class AuthService implements IAuthService {
   }
 
   //Returns a token that never expires
-  public async signJWT(props: JWTDTO): Promise<string> {
-    return sign(props, this.key);
+  public async signJWT(props: JWTDTO, expiresIn?: string): Promise<string> {
+    return sign(props, this.key, {
+      expiresIn
+    });
   }
 
   public async decodeJWT(token: string): Promise<Either<CommonUseCaseResult.InvalidValue, JWTDTO>> {
