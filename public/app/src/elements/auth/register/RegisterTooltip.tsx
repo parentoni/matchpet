@@ -5,7 +5,7 @@ export interface RegisterTooltipProps {
 }
 export const RegisterTooltip = (props: RegisterTooltipProps) => {
   return (
-    <button className={'h-10 absolute top-1 right-1 aspect-square flex rounded-md bg-primary items-center justify-center'} onClick={props.onClick}>
+    <button type="button" className={'h-10 absolute top-1 right-1 aspect-square flex rounded-md bg-primary items-center justify-center'} onClick={props.onClick}>
       {props.interior}
     </button>
   )

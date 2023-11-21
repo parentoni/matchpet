@@ -3,9 +3,10 @@ import { RegisterContext } from "./RegisterRoot"
 
 export function RegisterButton () {
 
-  const {page, pages} = useContext(RegisterContext)
+  const {page, pages, loading} = useContext(RegisterContext)
   return (
-    <input type="submit" className="w-full h-12 bg-primary  cursor-pointer rounded-md flex justify-center items-center text-white text-lg mt-5" value={`Próxima página (${page + 1}/${pages})`}>
-    </input>
+    <button type="submit" className="w-full h-12 bg-primary  cursor-pointer rounded-md flex justify-center items-center text-white text-lg mt-5">
+      {loading? <span className=" loading loading-spinner loading-sm"></span>:<span>Próxima página ({page + 1}/{pages})</span>}
+    </button>
   )
 }

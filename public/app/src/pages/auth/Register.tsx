@@ -1,4 +1,4 @@
-import { PropsWithChildren, useContext, useState } from "react"
+import { PropsWithChildren, useContext, useEffect, useRef, useState } from "react"
 import { PageLayout } from "../../PageLayout"
 import { useNavigate } from "react-router-dom"
 import { Eye, EyeOff, Info, MoveLeft } from "lucide-react";
@@ -6,16 +6,21 @@ import reducedLogo from '../../assets/logo-reduced.svg'
 import logo from '../../assets/logo.svg'
 
 import { Register } from "../../elements/auth/register";
-import { Form, checkFormErrors } from "../../elements/auth/register/Form";
+import { Form} from "../../elements/auth/register/Form";
+import { firstPageSubmit } from "../../elements/auth/register/functions/firstPageSubmit";
+import { secondPageSubmit } from "../../elements/auth/register/functions/secondPageSubmit";
 export function RegisterPage () {
 
   const navigate = useNavigate()
 
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
 
   const [showFirstPassword, setShowFirstPassword] = useState<boolean>(false)
   const [showSecondPassword, setShowSecondPassword] = useState<boolean>(false)
-  
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const usernameRef = useRef<HTMLInputElement>(null)
+
   const [form, setForm] = useState<Form>(
     {
       'display_name': {
@@ -44,40 +49,40 @@ export function RegisterPage () {
         variable:'',
         regExp: /.{6,}/g,
         errorMessage: "Por favor, digite uma senha igual à primeira."
+      }, 
+      "phone": {
+        variable: '',
+        regExp:  /^(\([1-9]{2}\)\s?9[6-9][0-9]{3}-?[0-9]{4}|[1-9]{2}9[6-9][0-9]{7})$/g,
+        errorMessage: "Por favor, digite um número de whatsapp válido."
       }
     }
     )
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [location, setLocation] = useState<[number,number]>()
+  const [locationErrorMessage, setLocationErrorMessage] = useState<string>()
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setLoading(true)
     if (page === 0) {
-      firstPageSubmit()
-    }
-  }
-
-  const firstPageSubmit = () => {
-    const error = checkFormErrors(form)
-    if (error) {
-      setForm(structuredClone(form))
+      await firstPageSubmit(form, setForm, setPage)
+    } else if (page === 1) {
+      secondPageSubmit(form,setForm, location, setLocationErrorMessage, setPage)
     }
 
-    if (form['password'].variable !== form['confirm_password'].variable && !form['password'].hasError)   {
-      form['confirm_password'].hasError = true
-      setForm(structuredClone(form))
-    } else {
-      form['confirm_password'].hasError = false
-      setForm(structuredClone(form))
-    }
+    setLoading(false)
   }
+
+
   return (
-    <div className="w-screen h-screen0">
+    <div className="w-screen h-screen">
       
     <PageLayout>
       <div className="flex  justify-center ">
         <div className=" max-w-lg w-full bg-white lg:mt-24">
 
         <div className="flex justify-between mb-3">
-          <button className="" onClick={() => navigate(-1)}>
+          <button className="" onClick={() => page === 0?navigate(-1): setPage(page - 1)}>
             <MoveLeft />
           </button>
           <button onClick={() => navigate('/')} className="lg:hidden">
@@ -88,7 +93,7 @@ export function RegisterPage () {
           </button>
         </div>
 
-        <Register.Root page={page} setPage={setPage} pages={3} form={form} setForm={setForm} onSubmit={onSubmit}>
+        <Register.Root page={page} setPage={setPage} pages={3} form={form} setForm={setForm} onSubmit={onSubmit} loading={loading}>
 
           <Register.Title page={0} title="Crie sua conta"/> 
           <Register.Title page={1} title="Detalhes de contato"/>
@@ -99,7 +104,7 @@ export function RegisterPage () {
               formName="display_name"
               type={'text'}
               title="Nome de exibição"
-              placeholder="ONG Parentoni" 
+              placeholder="ONG matchpet" 
               tooltip={
                 <Register.Tooltip 
                   onClick={() => alert('Nome que será utilizado para exibir a sua organização em nosso site.')} 
@@ -112,13 +117,15 @@ export function RegisterPage () {
               type={'text'}
               inputMode={'text'}
               title="Nome de usuário"
-              placeholder="parentoni"
+              placeholder="matchpet"
               tooltip={
                 <Register.Tooltip 
                   onClick={() => alert('Nome que será utilizado para identificação e em links. Pode apenas conter os caracters -, _, A até Z e 0 até 9')} 
                   interior={<Info size={24} color="#fff"/>}
                 />
               }
+
+              innerRef={usernameRef}
               />
             <Register.TextInput type={'email'} title="Email" placeholder="nome@provedor.com" formName="email"/>
             <Register.TextInput 
@@ -152,6 +159,13 @@ export function RegisterPage () {
           </Register.Step>
 
           <Register.Step page={1}>
+            <Register.TextInput 
+              type="tel"
+              title="Número Whatsapp"
+              placeholder="(31) 12345-6789"
+              formName="phone"
+            />
+            <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={locationErrorMessage}/>
           </Register.Step>
 
           <Register.Step page={2}>
@@ -166,13 +180,3 @@ export function RegisterPage () {
     </div>
   )
 }
-
-
-
-
-
-
-
-
-
-

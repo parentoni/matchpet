@@ -30,4 +30,5 @@ export class User {
 
     return right(response.value as IUserPersistent)
   }
+
 }

@@ -7,12 +7,12 @@ export type FormData = {
   regExp: RegExp
 }
 
-export const checkFormErrors = (form: Form): boolean => {
-  let error = false
-  for (const key of Object.keys(form)) {
+export const checkFormErrors = (form: Form, keys: string[]): number => {
+  let error = 0
+  for (const key of keys) {
     const value = form[key]
     if (!String(value.variable).match(value.regExp)) {
-      error = true
+      error++
       form[key].hasError = true
     } else {
       form[key].hasError = false
