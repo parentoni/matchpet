@@ -81,11 +81,13 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       watchList.push({
         name: "USER_EMAIL",
         watch: userWithEmail,
-        error: `The email ${email.mask()} associated for this account already exists.`
+        error: `The email ${email.mask()} associated for this account already exists.`,
+        printableErrorMessage: `O email "${email.mask()}" associado com essa conta já está sendo utilizado.`
       }, {
         name: "USER_NAME",
         watch: userWithUserName,
-        error: `The username ${username.value} associated for this account already exists.`
+        error: `The username ${username.value} associated for this account already exists.`,
+        printableErrorMessage: `O nome de usuário "${username}" associado com essa conta já está sendo utilizado.`
       });
 
 
