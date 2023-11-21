@@ -1,15 +1,25 @@
 
 import { Info } from "lucide-react"
+import React, { useContext } from "react";
+import { Form } from "./Form";
+import { RegisterContext } from "./RegisterRoot";
 
 export interface RegisterTextInputProps {
   title: string;
   placeholder:string;
   type: React.HTMLInputTypeAttribute
-  tooltip?:string;
+  tooltip?: JSX.Element;
   inputMode?: "search" | "text" | "none" | "tel" | "url" | "email" | "numeric" | "decimal";
+  formName:string
 }
 export function RegisterTextInput (props: RegisterTextInputProps) {
 
+  const {form, setForm} = useContext(RegisterContext)
+
+  const onChange = (e:  React.ChangeEvent<HTMLInputElement>) => {
+    form[props.formName].variable = e.target.value
+    setForm(structuredClone(form))
+  }
 
   return(
     <div className="flex flex-col gap-1">
@@ -17,19 +27,22 @@ export function RegisterTextInput (props: RegisterTextInputProps) {
         <label className="font-medium">{props.title}</label>
         
       </div>
-      <div className="flex w-full h-12">
+      <div className="flex w-full h-12 relative">
 
-        <input type={props.type} inputMode={props.inputMode} className={`w-full h-12 p-2 brute-border  focus:outline-0 outline-black rounded-none font-normal text-lg ${props.tooltip?"border-r-0":""}`} placeholder={props.placeholder} ></input>
-        {props.tooltip && 
+        <input
+          autoComplete='off' 
+          value={form[props.formName].variable}
+          type={props.type}
+          inputMode={props.inputMode}
+          className={`w-full h-12 autofill:bg-primary autofill:text-white  pl-6 py-4 border  focus:border-neutral-600 rounded-md transition ring-transparent relative focus:outline-none focus:ring-primary/20 ring-4 outline-2  font-normal text-lg ${form[props.formName].hasError?"border-error  bg-error/5":"border-neutral-300"}`} 
+          placeholder={props.placeholder} 
+          onChange={onChange}
+          ></input>
 
-          <button className={'h-full aspect-square flex brute-border border-l-0 items-center justify-center'} onClick={() => alert(props.tooltip)}>
-            <Info size={20} />
-          </button>
+        {props.tooltip}
 
-          
-        }
-      </div>
-
+    </div>
+    <span className="text-error text-sm">{form[props.formName].hasError?form[props.formName].errorMessage:""}</span>
     </div>
   )
 }

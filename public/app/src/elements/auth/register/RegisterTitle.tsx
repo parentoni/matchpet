@@ -11,7 +11,7 @@ export function RegisterTitle  (props: RegisterTitleProps)   {
   return(
   <>
     {page === props.page? 
-    <h1 className="text-2xl font-semibold mb-5" onClick={() => setPage(1)}>{props.title}</h1>
+    <h1 className="text-2xl font-semibold mb-5  text-start " >{props.title}</h1>
     :""}
   </>)
 }
