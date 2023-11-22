@@ -28,11 +28,11 @@ export class CreateNewPasswordTokenUseCase implements UseCase<CreateNewPasswordT
       token_function: TokenFunctions.changePassword,
       verified: request.user.verified,
       username: request.user.userName.value
-    }, '10m')
+    })
 
     return right({
       token: token,
-      url: Secrets.getSecret('PUBLIC_APP_URL') + `auth/new-password?token=${token}`
+      url: Secrets.getSecret('PUBLIC_APP_URL') + `/auth/new-password?token=${token}`
     })
   }
 }

@@ -52,4 +52,13 @@ export class User {
     return right('ok')
   }
 
+  public static async verifyUser (token:string): Promise<Either<Response,{token:string}>> {
+    const response = await Api.post('/auth/verify', JSON.stringify({token: token}))
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right(response.value)
+  }
+
 }

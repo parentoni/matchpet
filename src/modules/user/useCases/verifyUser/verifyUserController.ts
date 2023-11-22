@@ -8,7 +8,6 @@ export class VerifyUserController extends BaseController<Request> {
     super();
     this.versionRegister.addToRegister('1.0.0', async (req, res) => {
       const dto = req.body as VerifyUserDTO
-      console.log(dto)
       const useCaseResponse = await useCase.execute(dto)
       if (useCaseResponse.isLeft()) {
         return this.errorHandler(res, useCaseResponse.value)

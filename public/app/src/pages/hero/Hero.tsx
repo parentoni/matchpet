@@ -21,10 +21,10 @@ export function HeroPage  ()  {
           
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
             
-            <button className="w-60 h-10 bg-primary flex items-center justify-center text-neutral-950" onClick={() => navigate('/select?to=' + encodeURI('/animals'))}>
+            <button className="w-60 h-12 rounded bg-primary flex items-center justify-center text-white" onClick={() => navigate('/select?to=' + encodeURI('/animals'))}>
               Quero adotar
             </button>
-            <button className="w-60 h-10 brute-border flex justify-center items-center">
+            <button className="w-60 h-12 rounded brute-border flex justify-center items-center">
               Quero doar
             </button>
           </div>

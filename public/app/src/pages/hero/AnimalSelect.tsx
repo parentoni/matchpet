@@ -24,7 +24,7 @@ export const AnimalSelect = () => {
           <p className="mt-6 text-xl text-neutral-600">Escolha abaixo qual a espécie de animal você está interessado.</p>
           <div className="flex gap-5 mt-5">
             {species.map(s => 
-            <button className=" h-12 flex items-center justify-center w-60 bg-primary text-white" onClick={() => setSelected(s._id)}>{s.name}</button>
+            <button className=" h-12 rounded flex items-center justify-center w-60 bg-primary text-white" onClick={() => setSelected(s._id)}>{s.name}</button>
             )}
           </div>
         </div>

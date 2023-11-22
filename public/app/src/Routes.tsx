@@ -12,6 +12,8 @@ import { AllPartnerAnimals } from "./pages/user/AllPartnerAnimals";
 import { RegisterPage } from "./pages/auth/Register";
 import { HeroPage } from "./pages/hero/Hero";
 import { AnimalSelect } from "./pages/hero/AnimalSelect";
+import { Thanks } from "./pages/auth/Thanks";
+import { Verify } from "./pages/auth/Verify";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
   {
     path: '/auth/register',
     element: <RegisterPage />
+  },
+  {
+    path: 'auth/register/success',
+    element: <Thanks />
+  },
+  {
+    path: '/auth/register/verify',
+    element: <Verify />
   },
   {
     path: '/test',

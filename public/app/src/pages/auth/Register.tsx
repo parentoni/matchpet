@@ -14,7 +14,7 @@ export function RegisterPage () {
 
   const navigate = useNavigate()
 
-  const [page, setPage] = useState<number>(2)
+  const [page, setPage] = useState<number>(0)
 
   const [showFirstPassword, setShowFirstPassword] = useState<boolean>(false)
   const [showSecondPassword, setShowSecondPassword] = useState<boolean>(false)
@@ -84,7 +84,6 @@ export function RegisterPage () {
       if (response.isLeft()) {
         setErrorMessage(response.value)
       } else {
-        console.log('oi')
         navigate('/auth/register/success?email=' + form['email'].variable)
       }
 
