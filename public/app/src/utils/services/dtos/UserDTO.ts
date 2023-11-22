@@ -1,6 +1,7 @@
 export interface IUserPersistent {
   _id: string;
   display_name:string;
+  username:string;
   email: string;
   role: number;
   verified: boolean;

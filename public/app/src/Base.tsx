@@ -10,7 +10,10 @@ import { PageLayout } from './PageLayout'
 export const App = () => {
 
     const {user} = useContext(AuthContext)
+    const {species, preferredSpecie } = useContext(SpeciesContext)
+
     const [showNavigate, setShowNavigate] = useState(false)
+
     const navigate = useNavigate()
     return(
         <>
@@ -25,7 +28,7 @@ export const App = () => {
                 <PageLayout>
                     {user?
                     <div className='flex flex-col gap-3'>
-                        <button onClick={() => {navigate('/partner')}} className='w-full bg-black text-white h-12'>
+                        <button onClick={() => {navigate('/partner')}} className='w-full rounded bg-primary text-white h-12'>
                             Gerenciar
                         </button>
                         <p className='text-sm'>Gerencie os seus animais para adoção.</p>
@@ -33,17 +36,27 @@ export const App = () => {
                     </div>
                         :
                         <div className='flex flex-col gap-3'>
-                            <button onClick={() => {navigate('/auth/login')}} className='w-full bg-black text-white h-12'>
+                            <button onClick={() => {navigate('/auth/login')}} className='w-full rounded bg-primary text-white h-12'>
                                 Entrar
                             </button>
                             <p className='text-sm'>Entre em sua conta para disponibilizar animais para adoção.</p>
                         </div>}
                     
                     <div className='w-full border my-5'></div>
-                    <div className='flex flex-col gap-3'>
+                    <div className='flex flex-col gap-5'>
+                        <button className='flex gap-3 items-center' onClick={() => {navigate('/');setShowNavigate(false)}}>
+                            <img alt='Match' src={reducedLogo} className='w-8'></img>
+                            <p>Tela incial</p>
+                        </button>
+                        <div className='dividier border-b'></div>
                         <button className='flex gap-3 items-center' onClick={() => {navigate(`/select?to=${window.location.pathname}`);setShowNavigate(false)}}>
                             <img alt='Match' src={reducedLogo} className='w-8'></img>
-                            <p>Mudar espécie selecionada</p>
+                            <p>Mudar espécie selecionada ({species.find(x => x._id === preferredSpecie)?.name || 'nenhuma'})</p>
+                        </button>
+                        <div className='dividier border-b'></div>
+                        <button className='flex gap-3 items-center' onClick={() => {navigate('/animals');setShowNavigate(false)}}>
+                            <img alt='Match' src={reducedLogo} className='w-8'></img>
+                            <p>Ver animais para adoção</p>
                         </button>
                     </div>
                 </PageLayout>

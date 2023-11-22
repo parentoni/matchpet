@@ -14,6 +14,10 @@ import { HeroPage } from "./pages/hero/Hero";
 import { AnimalSelect } from "./pages/hero/AnimalSelect";
 import { Thanks } from "./pages/auth/Thanks";
 import { Verify } from "./pages/auth/Verify";
+import { ForgotPassword } from "./pages/auth/ForgotPassword";
+import { ForgotPasswordSuccess } from "./pages/auth/ForgotPassrodSuccess";
+import { ResetPassword } from "./pages/auth/ResetPassword";
+import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +77,22 @@ const router = createBrowserRouter([
   {
     path: '/auth/register/verify',
     element: <Verify />
+  },
+  {
+    path :'/auth/password',
+    element: <ForgotPassword />
+  },
+  {
+    path :'/auth/password/success',
+    element: <ForgotPasswordSuccess />
+  },
+  {
+    path :'/auth/new-password',
+    element: <ResetPassword />
+  },
+  {
+    path :'/auth/new-password/success',
+    element: <ResetPasswordSuccess />
   },
   {
     path: '/test',

@@ -61,4 +61,21 @@ export class User {
     return right(response.value)
   }
 
+  public static async sendPasswordRedefinitionEmail (credential:string): Promise<Either<Response, string>> {
+    const response = await Api.post('/auth/password/new', JSON.stringify({credential: credential}))
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right(response.value)
+  }
+
+  public static async resetPassword (token:string, password:string): Promise<Either<Response, string>> {
+    const response = await Api.put('/auth/password/new', JSON.stringify({password: password, token: token}))
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right(response.value)
+  }
 }

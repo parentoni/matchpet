@@ -10,6 +10,7 @@ import { Categories } from "../utils/domain/Categories"
 import { CategoriesContext } from "../utils/context/CategoriesContext"
 import { Specie } from "../utils/domain/Specie"
 import { ANIMAL_STATUS } from "../utils/services/dtos/AnimalDTO"
+import { Trash } from "lucide-react"
 
 export interface FilterModalProps {
   setFilters: (x: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void,
@@ -103,10 +104,11 @@ export const FilterModal = (props: FilterModalProps) => {
 
       </div>
         <div className="bottom-8 inset-0 px-8 w-full flex justify-between col-span-1 z-50 lg:col-span-2 py-5 border-t">
-            <button className='h-12  px-6 bg-black text-white items-center flex' onClick={() => props.setFilters({})}>
+            <button className='h-12  gap-6 px-6 text-white bg-black brute-border rounded items-center flex' onClick={() => props.setFilters({})}>
+              {/* <Trash /> */}
               Limpar
             </button>
-            <button className='h-12  px-6 bg-primary  items-center flex' onClick={() => props.setIsOpen(false)}>
+            <button className='h-12  px-6 bg-primary rounded  items-center flex' onClick={() => props.setIsOpen(false)}>
               Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:props.animalsCount}&nbsp; animais
             </button>
         </div>

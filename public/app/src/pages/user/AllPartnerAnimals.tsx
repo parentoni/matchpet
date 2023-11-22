@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { User } from "../../utils/domain/User"
 import { Animal } from "../../utils/domain/Animal"
 import { IUserPersistent } from "../../utils/services/dtos/UserDTO"
@@ -24,6 +24,7 @@ export const AllPartnerAnimals = () => {
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
+  const routerLocation = useLocation()
   useEffect(() => {
     setLoading(true)
     User.getUserByUsername(username).then(res => {
@@ -52,12 +53,14 @@ export const AllPartnerAnimals = () => {
     }
   }, [user, page])
 
+
+
   return (
 
     <>
       <div className="divider mb-0"></div>
       <PageLayout>
-        <button className="mb-5 font-medium flex gap-2" onClick={() => navigate('/')}>
+        <button className="mb-5 font-medium flex gap-2" onClick={() => routerLocation.key !== 'default'?navigate(-1):navigate('/')}>
           <span><ArrowLeft /></span>
           Ver todos os animais disponíveis
         </button>

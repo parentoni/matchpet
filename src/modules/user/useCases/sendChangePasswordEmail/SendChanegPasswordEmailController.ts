@@ -14,7 +14,7 @@ export class SendChangePasswordEmailController extends BaseController<Request> {
         return this.errorHandler(res, response.value)
       }
 
-      this.ok(res)
+      this.ok(res, response.value)
     })
   }
 }

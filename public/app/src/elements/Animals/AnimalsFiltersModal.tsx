@@ -101,10 +101,10 @@ function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: 
 function AnimalFiltersButton ({setIsOpen}: {setIsOpen: (open: boolean) => void}) {
   return (
     <div className='flex gap-5'>
-     <button className="w-full h-11 bg-black flex justify-center items-center " onClick={() => setIsOpen(true)}>
+     <button className="w-full h-11 bg-primary rounded flex justify-center items-center " onClick={() => setIsOpen(true)}>
       <p className='text-white text-xl font-light'>Filtrar</p>
     </button>
-    <button className="w-full h-11 brute-border flex justify-center items-center " onClick={() => setIsOpen(true)}>
+    <button className="w-full h-11 brute-border rounded flex justify-center items-center " onClick={() => setIsOpen(true)}>
       <p className=' text-xl font-light'>Ver mapa</p>
     </button>
     </div>

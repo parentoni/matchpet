@@ -4,6 +4,8 @@ import catLogo from '../../assets/logo-reduced.svg'
 import { useGetStats } from "../../elements/hero/useGetStats"
 import { useGetActiveUsers } from "../../elements/hero/useGetActiveUsers"
 import { useNavigate } from "react-router-dom"
+import { useContext } from "react"
+import { SpeciesContext } from "../../utils/context/SpeciesContext"
 export function HeroPage  ()  {
 
   const stats = useGetStats()
@@ -11,6 +13,7 @@ export function HeroPage  ()  {
 
   const navigate = useNavigate()
 
+  const {preferredSpecie} = useContext(SpeciesContext)
   return (
     <div>
       <div className="w-full border-b "></div>
@@ -21,7 +24,7 @@ export function HeroPage  ()  {
           
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
             
-            <button className="w-60 h-12 rounded bg-primary flex items-center justify-center text-white" onClick={() => navigate('/select?to=' + encodeURI('/animals'))}>
+            <button className="w-60 h-12 rounded bg-primary flex items-center justify-center text-white" onClick={() => preferredSpecie?navigate('/animals'):navigate('/select?to=' + encodeURI('/animals'))}>
               Quero adotar
             </button>
             <button className="w-60 h-12 rounded brute-border flex justify-center items-center">
@@ -42,18 +45,15 @@ export function HeroPage  ()  {
               <ul  className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
 
                 {users.length > 0? users.slice(0,6).map(u => {return(
-                  <div className="flex w-full h-full flex-row gap-2 line-clamp-1">
+                  <button className="flex w-full h-full flex-row gap-2 line-clamp-1" onClick={() => navigate(`/organizations/${u.username}`)}>
                     <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
                     <p className="line-clamp-1 text-white">{u.display_name}</p>
-                </div>
+                </button>
                 )}):''}
 
-                {[...Array(7-users.length).keys()].map(i => <p className="line-clamp-1 text-white">..........</p>)}
+                {[...Array(8-users.length).keys()].map(i => <p className="line-clamp-1 text-white">..........</p>)}
                 
                 
-                <button className="flex w-full h-full flex-row gap-2 line-clamp-1 text-white" onClick={() => navigate('/organizations')}>
-                  Ver todos
-                </button>
               </ul>
           </div>
         </div>
