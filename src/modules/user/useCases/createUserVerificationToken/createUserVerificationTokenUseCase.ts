@@ -33,7 +33,7 @@ export class CreateUserVerificationTokenUseCase implements UseCase<CreateUserVer
 
     return right({
       token: token,
-      url: Secrets.getSecret('PUBLIC_APP_URL') + `/verify?token=${token}`
+      url: Secrets.getSecret('PUBLIC_APP_URL') + `auth/register/verify?token=${token}`
     })
   }
 }

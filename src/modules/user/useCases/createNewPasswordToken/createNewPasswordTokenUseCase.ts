@@ -32,7 +32,7 @@ export class CreateNewPasswordTokenUseCase implements UseCase<CreateNewPasswordT
 
     return right({
       token: token,
-      url: Secrets.getSecret('PUBLIC_APP_URL') + `/new-password?token=${token}`
+      url: Secrets.getSecret('PUBLIC_APP_URL') + `auth/new-password?token=${token}`
     })
   }
 }

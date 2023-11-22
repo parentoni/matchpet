@@ -9,11 +9,12 @@ import { Register } from "../../elements/auth/register";
 import { Form} from "../../elements/auth/register/Form";
 import { firstPageSubmit } from "../../elements/auth/register/functions/firstPageSubmit";
 import { secondPageSubmit } from "../../elements/auth/register/functions/secondPageSubmit";
+import { User } from "../../utils/domain/User";
 export function RegisterPage () {
 
   const navigate = useNavigate()
 
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(2)
 
   const [showFirstPassword, setShowFirstPassword] = useState<boolean>(false)
   const [showSecondPassword, setShowSecondPassword] = useState<boolean>(false)
@@ -61,6 +62,8 @@ export function RegisterPage () {
   const [location, setLocation] = useState<[number,number]>()
   const [locationErrorMessage, setLocationErrorMessage] = useState<string>()
 
+  const [errorMessage, setErrorMessage] = useState<string>()
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -68,8 +71,24 @@ export function RegisterPage () {
       await firstPageSubmit(form, setForm, setPage)
     } else if (page === 1) {
       secondPageSubmit(form,setForm, location, setLocationErrorMessage, setPage)
-    }
+    } else {
+      const response = await User.signInUser({
+        display_name: form['display_name'].variable,
+        username: form['username'].variable,
+        email: form['email'].variable,
+        password: form['password'].variable,
+        phone:  form['phone'].variable,
+        location: location || [0,0]
+      })
 
+      if (response.isLeft()) {
+        setErrorMessage(response.value)
+      } else {
+        console.log('oi')
+        navigate('/auth/register/success?email=' + form['email'].variable)
+      }
+
+    }
     setLoading(false)
   }
 
@@ -169,10 +188,18 @@ export function RegisterPage () {
           </Register.Step>
 
           <Register.Step page={2}>
-            <>revisar</>
+            <h2 className="text-xl font-medium mb-3 text-start">Geral</h2>
+            <div className="flex flex-col gap-2">
+              <span className="">Nome de exibição: <b>{form['display_name'].variable}</b></span>
+              <span className="">Nome de usuário: <b>{form['username'].variable}</b></span>
+              <span className="">Email: <b>{form['email'].variable}</b></span>
+              <span className="">Telefone: <b>{form['phone'].variable}</b></span>
+            </div>
+            
           </Register.Step>
 
           <Register.Button />
+          {errorMessage && <span className="text-error mt-2">{errorMessage}</span>}
         </Register.Root>
         </div>
       </div>

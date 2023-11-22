@@ -106,17 +106,17 @@ export abstract class BaseController<T extends Request> {
   public errorHandler(res: express.Response, error: CatalogedErrors) {
     switch (error.constructor) {
       case CommonUseCaseResult.InvalidValue:
-        return this.clientError(res, error.prettyError());
+        return this.clientError(res, error.error);
       case CommonUseCaseResult.Conflict:
-        return this.conflict(res, error.prettyError());
+        return this.conflict(res, error.error);
       case AppError.UnexpectedError:
-        return this.fail(res, error.prettyError());
+        return this.fail(res, error.error);
       case CommonUseCaseResult.UnexpectedError:
-        return this.fail(res, error.prettyError());
+        return this.fail(res, error.error);
       case CommonUseCaseResult.Forbidden:
-        return this.forbidden(res, error.prettyError());
+        return this.forbidden(res, error.error);
       case GenericError:
-        return this.clientError(res, error.prettyError());
+        return this.clientError(res, error.error);
     }
 
     this.fail(res, "Unknown error");

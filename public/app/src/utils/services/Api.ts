@@ -30,8 +30,8 @@ export class Api {
       body: body
     });
 
-    const json = await response.json();
     if (response.ok) {
+      const json = await response.json();
       return right(json);
     }
 

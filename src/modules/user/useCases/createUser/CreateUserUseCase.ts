@@ -82,7 +82,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         name: "USER_EMAIL",
         watch: userWithEmail,
         error: `The email ${email.mask()} associated for this account already exists.`,
-        printableErrorMessage: `O email "${email.mask()}" associado com essa conta já está sendo utilizado.`
+        printableErrorMessage: `O email ${email.mask()} associado com essa conta já está sendo utilizado.`
       }, {
         name: "USER_NAME",
         watch: userWithUserName,
@@ -97,7 +97,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
             CommonUseCaseResult.Conflict.create({
               errorMessage: watched.error,
               variable: watched.name,
-              location: `${CreateUserUseCase.name}.${this.execute.name}`
+              location: `${CreateUserUseCase.name}.${this.execute.name}`,
+              printableErrorMessage: watched.printableErrorMessage
             })
           );
         }
