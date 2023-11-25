@@ -13,7 +13,7 @@ import { AppError } from "../../../../shared/core/Response/AppError";
 import { RepositoryBaseResult } from "../../../../shared/core/IBaseRepositoty";
 import { Iwatch } from "../../../../shared/core/Response/Error";
 import { Guard } from "../../../../shared/core/Guard";
-import { UserName } from "../../domain/userProps/userName";
+import { UserDisplayName } from "../../domain/userProps/userDisplayName";
 import { IAuthService } from "../../services/IauthService";
 import { UserRole } from "../../domain/userProps/userRole";
 import { UserCreated } from "../../domain/events/userCreated";
@@ -21,6 +21,8 @@ import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
 import { Location } from "../../../../shared/core/Location";
 import { Secrets } from "../../../../config/secretsManager";
+import { UserLastLogin } from "../../domain/userProps/userLastLogin";
+import { UserName } from "../../domain/userProps/userName";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -30,17 +32,18 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
   }
 
   async execute(request: CreateUserDTO): Promise<CreateUserResponse> {
-    const nameOrError = UserName.create({
-      first_name: request.first_name,
-      last_name: request.last_name
+    const displayNameOrError = UserDisplayName.create({
+      display_name: request.display_name
     });
     const passwordOrError = UserPassword.create({ value: request.password });
     const emailOrError = UserEmail.create({ value: request.email });
-    const roleOrError = UserRole.create({ value: request.role || 0 });
+    const roleOrError = UserRole.create({ value: 0 });
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
+    const lastLoginOrError = UserLastLogin.create({ date: new Date() });
+    const userNameOrError = UserName.create({username: request.username})
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, nameOrError, roleOrError, locationOrError]);
+    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, displayNameOrError, roleOrError, locationOrError, lastLoginOrError, userNameOrError]);
 
     if (result.isLeft()) {
       return left(result.value);
@@ -48,11 +51,12 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
 
     const password = passwordOrError.getRight();
     const email = emailOrError.getRight();
-    const name = nameOrError.getRight();
+    const displayName = displayNameOrError.getRight();
     const role = roleOrError.getRight();
     const phone = phoneOrError.getRight();
     const location = locationOrError.getRight();
-
+    const lastLogin = lastLoginOrError.getRight();
+    const username = userNameOrError.getRight();
     const hashedPassword = UserPassword.create({
       value: await password.getHashedValue(),
       hashed: true
@@ -60,36 +64,32 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     if (hashedPassword.isLeft()) {
       return left(hashedPassword.value);
     }
-    const userOrError = User.create({
-      name,
-      email,
-      password: hashedPassword.value,
-      phone,
-      role,
-      verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
-      location,
-      inAdoption: 0,
-      completedAdoptions: 0
-      // role: UserRole.create({value: 0})
-    });
-
-    if (userOrError.isLeft()) {
-      return left(userOrError.value);
-    }
+    
 
     try {
       // User Conflict checking
       let watchList: Iwatch<Awaited<RepositoryBaseResult<any>>>[] = [];
 
       const userWithEmail = await this.userRepo.exists({
-        filter: { email: userOrError.value.email.value }
+        filter: { email: email.value }
       });
+      
+      const userWithUserName = await this.userRepo.exists({
+        filter: {username: username.value}
+      })
 
       watchList.push({
-        name: "EMAIL",
+        name: "USER_EMAIL",
         watch: userWithEmail,
-        error: `The email ${email.mask()} associated for this account already exists.`
+        error: `The email ${email.mask()} associated for this account already exists.`,
+        printableErrorMessage: `O email ${email.mask()} associado com essa conta já está sendo utilizado.`
+      }, {
+        name: "USER_NAME",
+        watch: userWithUserName,
+        error: `The username ${username.value} associated for this account already exists.`,
+        printableErrorMessage: `O nome de usuário "${username}" associado com essa conta já está sendo utilizado.`
       });
+
 
       for (const watched of watchList) {
         if (watched.watch.isRight()) {
@@ -97,15 +97,34 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
             CommonUseCaseResult.Conflict.create({
               errorMessage: watched.error,
               variable: watched.name,
-              location: `${CreateUserUseCase.name}.${this.execute.name}`
+              location: `${CreateUserUseCase.name}.${this.execute.name}`,
+              printableErrorMessage: watched.printableErrorMessage
             })
           );
         }
       }
 
-      const user = userOrError.value;
+      const userOrError = User.create({
+        username,
+        displayName,
+        email,
+        password: hashedPassword.value,
+        phone,
+        role,
+        verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
+        location,
+        inAdoption: 0,
+        completedAdoptions: 0,
+        lastLogin: lastLogin
+        // role: UserRole.create({value: 0})
+      });
+  
+      if (userOrError.isLeft()) {
+        return left(userOrError.value);
+      }
 
-      console.log(user);
+      const user = userOrError.value
+
       const persisantResponse = await this.userRepo.create({ dto: user });
 
       if (persisantResponse.isLeft()) {

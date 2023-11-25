@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 import { GeoJsonPointSchema } from "./Coordinate";
-import { Location } from "../../../core/Location";
+
+import { DomainEvents } from "../../../domain/events/DomainEvents";
+import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 const userSchema = new mongoose.Schema({
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
+  display_name: { type: String, required: true },
+  username: {type: String, required: true},
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   // cpf: { type: String, required: false },
@@ -12,13 +14,14 @@ const userSchema = new mongoose.Schema({
   phone_number: { type: String, required: true },
   location: { type: GeoJsonPointSchema, required: true },
   completed_adoptions: { type: Number, default: 0 },
-  in_adoption: { type: Number, default: 0 }
+  in_adoption: { type: Number, default: 0 },
+  last_login: { type: Date, required: true }
 });
 
 export type IUserPersistant = {
   _id: string;
-  first_name: string;
-  last_name: string;
+  display_name: string;
+  username: string;
   password: string;
   email: string;
   role: number;
@@ -30,6 +33,10 @@ export type IUserPersistant = {
   };
   completed_adoptions: number;
   in_adoption: number;
+  last_login: Date;
 };
+
+// userSchema.post('findOne', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
+userSchema.post('save', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
 
 export default { name: "user", schema: userSchema };

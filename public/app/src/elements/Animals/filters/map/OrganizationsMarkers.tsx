@@ -17,19 +17,22 @@ export const OrganizationsMarkers = (props: OrganizationsMarkersProps) => {
   const [markers, setMarkers] = useState<Marker[]>([]);
   useEffect(() => {
 
-    if (markers.length > 0) {
-      console.log('called');
-      for (const marker of markers) {
-        map.removeLayer(marker);
+    if (organizations.length >= 0 && organizations) {
+      if (markers.length > 0) {
+        for (const marker of markers) {
+          map.removeLayer(marker);
+        }
       }
-    }
 
-    let biggest = organizations[0].in_adoption || 0;
-    for (const organization of organizations) {
-      if (organization.in_adoption > biggest) {
-        biggest = organization.in_adoption;
+      // alert(organizations.length)
+
+      let biggest = organizations[0]?.in_adoption || 0;
+      for (const organization of organizations) {
+        console.log(organization, 'oi', organizations)
+        if (organization.in_adoption > biggest) {
+          biggest = organization?.in_adoption || 0;
+        }
       }
-    }
 
     for (const organization of organizations) {
 
@@ -64,6 +67,10 @@ export const OrganizationsMarkers = (props: OrganizationsMarkersProps) => {
 
     }
 
+    }
+
+    
+    
 
   }, [organizations, props.filters, props.drawing]);
 

@@ -4,13 +4,15 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { User } from "../domain/user";
 import { UserEmail } from "../domain/userProps/userEmail";
-import { UserName } from "../domain/userProps/userName";
+import { UserDisplayName } from "../domain/userProps/userDisplayName";
 import { UserPassword } from "../domain/userProps/userPassword";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserRole } from "../domain/userProps/userRole";
 import { UserPhone } from "../domain/userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
+import { UserLastLogin } from "../domain/userProps/userLastLogin";
+import { UserName } from "../domain/userProps/userName";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -18,15 +20,18 @@ export class UserMap {
       value: persistance.password,
       hashed: true
     });
-    const userNameOrError = UserName.create({
-      first_name: persistance.first_name,
-      last_name: persistance.last_name
+
+    const userDisplayNameOrError = UserDisplayName.create({
+      display_name: persistance.display_name
     });
+
     const userEmailOrError = UserEmail.create({ value: persistance.email });
     const userRoleOrError = UserRole.create({ value: persistance.role });
     const userPhoneNumberOrError = UserPhone.create({ value: persistance.phone_number });
     const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
+    const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
+    const userNameOrError = UserName.create({username: persistance.username})
 
     const result = EitherUtils.combine([
       userPasswordOrError,
@@ -34,13 +39,17 @@ export class UserMap {
       userPhoneNumberOrError,
       userEmailOrError,
       userLocationOrError,
-      userIdOrError
+      userIdOrError,
+      userLastLoginOrError,
+      userDisplayNameOrError,
+      userNameOrError
     ]);
 
     if (result.isRight()) {
       const userOrError = User.create(
         {
-          name: userNameOrError.getRight(),
+          displayName: userDisplayNameOrError.getRight(),
+          username: userNameOrError.getRight(),
           email: userEmailOrError.getRight(),
           password: userPasswordOrError.getRight(),
           role: userRoleOrError.getRight(),
@@ -48,9 +57,10 @@ export class UserMap {
           verified: persistance.verified,
           location: userLocationOrError.getRight(),
           inAdoption: persistance.in_adoption,
-          completedAdoptions: persistance.completed_adoptions
+          completedAdoptions: persistance.completed_adoptions,
+          lastLogin: userLastLoginOrError.getRight()
         },
-        userIdOrError.getRight()
+        new UniqueGlobalId(userIdOrError.getRight().toValue().toString() as string)
       );
 
       if (userOrError.isRight()) {
@@ -76,8 +86,8 @@ export class UserMap {
       return right({
         password: password,
         email: user.email?.value,
-        first_name: user.name?.first_name,
-        last_name: user.name?.last_name,
+        display_name: user.displayName.displayName,
+        username: user.userName.value,
         _id: user.id.toValue(),
         role: user.role,
         verified: user.verified,
@@ -87,7 +97,8 @@ export class UserMap {
           coordinates: user.location.coordinates
         },
         completed_adoptions: user.completedAdoptions,
-        in_adoption: user.inAdoption
+        in_adoption: user.inAdoption,
+        last_login: user.lastLogin.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

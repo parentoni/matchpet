@@ -6,16 +6,28 @@ import router from './Routes';
 import { SpeciesContextProvider } from './utils/context/SpeciesContext';
 import { CategoriesContextProvider } from './utils/context/CategoriesContext';
 import { AuthProvider } from './utils/context/AuthContext';
-import {ChakraProvider} from '@chakra-ui/react'
-import { FiltersContext, FiltersContextProvider } from './utils/context/FiltersContext';
+import {ChakraProvider, StyleFunctionProps, extendTheme} from '@chakra-ui/react'
+import { FiltersContextProvider } from './utils/context/FiltersContext';
 import { OrganizationsProvider } from './utils/context/OrganizationsContext';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const overrides = extendTheme({
+  styles: {
+      global: (props: StyleFunctionProps) => ({
+          body: {
+              fontFamily: '"Roboto", "Noto", sans-serif"'
+          },
+      }),
+  },
+})
+
 root.render(
   <FiltersContextProvider>
     <OrganizationsProvider>
-      <ChakraProvider>
+      <ChakraProvider theme={overrides}>
         <AuthProvider>
           <CategoriesContextProvider>
             <SpeciesContextProvider>

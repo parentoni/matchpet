@@ -1,5 +1,5 @@
 import NaoCompre from '../../assets/nao_compre.svg'
-import missPng from '../../assets/404.jpeg'
+import missPng from '../../assets/miss.jpeg'
 import { useNavigate } from 'react-router-dom'
 export const FourOFour = () => {
   const navigate = useNavigate()

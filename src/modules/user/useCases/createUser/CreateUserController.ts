@@ -9,7 +9,7 @@ import { IAuthService } from "../../services/IauthService";
 import { User } from "../../domain/user";
 
 export class CreateUserController extends BaseController<Request> {
-  constructor(CreateUserUseCase: CreateUserUseCase, authService: IAuthService) {
+  constructor(CreateUserUseCase: CreateUserUseCase) {
     super();
     this.versionRegister.default = "1.0.0";
 
@@ -17,16 +17,7 @@ export class CreateUserController extends BaseController<Request> {
       const dto = req.body as CreateUserDTO;
 
       try {
-        const result = await CreateUserUseCase.execute({
-          first_name: dto.first_name,
-          last_name: dto.last_name,
-          password: dto.password,
-          email: dto.email,
-          phone: dto.phone,
-          role: dto.role,
-          location: dto.location,
-          verified: dto.verified
-        });
+        const result = await CreateUserUseCase.execute(dto);
 
         if (result.isLeft()) {
           const error = result.value;
@@ -34,16 +25,9 @@ export class CreateUserController extends BaseController<Request> {
         }
 
         //Generate token for instant user access
-        const token = await authService.signJWT({
-          uid: result.value._id,
-          email: dto.email,
-          first_name: dto.first_name,
-          last_name: dto.last_name,
-          token_function: TokenFunctions.authenticateUser,
-          role: result.value.role,
-          verified: result.value.verified
-        });
-        this.ok(res, { token: token });
+
+
+        this.ok(res, result.value)
       } catch (err) {
         this.fail(res, err as Error);
       }

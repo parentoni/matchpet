@@ -33,11 +33,13 @@ export function FullPageModal ({isOpen, setIsOpen, title, children, absolute, cl
         leaveFrom="translate-y-0"
         leaveTo="translate-y-full"
         >
-          <Dialog.Panel className={`fixed w-screen modal-height overflow-y-scroll bg-white top-0 left-0 ${className}`}>
-            <Dialog.Title as="h2" className={` ${absolute && 'absolute'} top-0 left-0 flex gap-3 mb-3 px-8 pt-8 z-50`} onClick={() => setIsOpen(false)}>
-              <X />{title}
-            </Dialog.Title>
-            {children}
+          <Dialog.Panel className={`fixed flex flex-col w-screen modal-height overflow-y-scroll bg-white top-0 left-0 no-scrollbar ${className}`}>
+            <div className="flex-1 flex flex-col h-full">
+              <Dialog.Title as="h2" className={` ${absolute && 'absolute'} top-0 left-0 flex gap-3 px-8 h-16 items-center z-50 `}onClick={() => setIsOpen(false)}>
+                <X />{title}
+              </Dialog.Title>
+                {children}
+            </div>
           </Dialog.Panel>
         </Transition.Child>
       </Dialog>

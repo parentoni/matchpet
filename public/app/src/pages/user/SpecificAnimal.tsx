@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { Animal } from "../../utils/domain/Animal"
@@ -27,12 +27,14 @@ export const SpecificAnimal = () => {
   const [selectedSpecie, setSelectedSpecie] = useState<ISpecieDTO>()
   const [isMale, setIsMale] = useState<boolean>()
 
+  const navigate = useNavigate()
+
   useEffect(() => {
+    
     Animal.getSpecific(animalId as string).then((response) => {
       if (response.isLeft()) {
         alert("Não foi posível encontrar o animal.")
       } else {
-        console.log(response.value)
         setSelectedAnimalDTO(response.value.props)
       }
     })
@@ -81,7 +83,12 @@ export const SpecificAnimal = () => {
         <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
         
         <AnimalDescription description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name}/>
+        
         <AnimalContactButton ContactDTO={contactInfo} isMale={isMale || false} AnimalName={selectedAnimalDTO.name}/>
+        <button className="px-8 text-sm items-start text-start" onClick={() => navigate(`/organizations/${contactInfo?.username}`)}>
+          Responsável: &nbsp;
+          <span className="text-primary font-medium">{contactInfo?.display_name}</span>
+        </button>
         <div className="px-8 pt-2 w-full">
           <div className="border"></div>
         </div>

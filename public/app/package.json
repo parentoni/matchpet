@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.17",
     "@mantine/core": "^7.1.2",
+    "@popperjs/core": "^2.11.8",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -24,8 +25,10 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-leaflet": "^4.2.1",
+    "react-popper": "^2.3.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
+    "telefone": "^1.2.4",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -33,7 +36,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "pretty": "prettier --write \"src/**/*.ts\""
   },
   "eslintConfig": {
     "extends": [

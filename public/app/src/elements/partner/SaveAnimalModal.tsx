@@ -9,7 +9,6 @@ export interface SaveAnimalStateModalProps {
 }
 
 export const SaveAnimalStateModal = (props: SaveAnimalStateModalProps) => {
-  console.log(props.percentage * 100)
   const navigate = useNavigate()
   return (
     <Dialog open={props.open} onClose={() => {}} >

@@ -5,6 +5,7 @@ interface ICommonInvalidValueProps {
   errorMessage: string;
   variable: string;
   location: string;
+  printableErrorMessage?: string
 }
 
 interface IUnexpectedError {
@@ -25,7 +26,8 @@ export namespace CommonUseCaseResult {
         errorMessage: props.errorMessage,
         code: `INVALID_${props.variable.toUpperCase()}`,
         location: props.location,
-        variable: props.variable
+        variable: props.variable,
+        printableErrorMessage: props.printableErrorMessage  
       });
     }
 
@@ -40,7 +42,9 @@ export namespace CommonUseCaseResult {
         errorMessage: props.errorMessage,
         code: `CONFLICT_${props.variable.toUpperCase()}`,
         location: props.location,
-        variable: props.variable
+        variable: props.variable,
+        printableErrorMessage: props.printableErrorMessage  
+
       });
     }
 
@@ -55,7 +59,8 @@ export namespace CommonUseCaseResult {
         errorMessage: `An unexpected error occurred.`,
         error: err,
         code: "SERVER_ERROR",
-        location: "App"
+        location: "App",
+        
       });
       console.log(`[AppError]: An unexpected error occurred`);
       console.error(err);
@@ -71,15 +76,14 @@ export namespace CommonUseCaseResult {
         errorMessage: props.errorMessage,
         code: `FORBIDDEN_${props.variable.toUpperCase()}`,
         location: props.location,
-        variable: props.variable
+        variable: props.variable,
+        printableErrorMessage: props.printableErrorMessage  
+
       });
     }
-
 
     public static create(props: ICommonInvalidValueProps): Forbidden {
       return new Forbidden(props);
     }
   }
-
-
 }

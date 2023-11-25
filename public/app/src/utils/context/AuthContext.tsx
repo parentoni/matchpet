@@ -7,7 +7,7 @@ import { IUserPersistent } from "../services/dtos/UserDTO";
 type LoginFunction = (email:string, password:string) => Promise<Either<Response, string>>
 async function __login (email:string, password:string): Promise<Either<Response, string>> {
   const response = await Api.post('/auth/login', JSON.stringify({
-    email: email,
+    credential: email,
     password: password
   }))
 
@@ -19,7 +19,7 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string, loading: boolean}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: '', loading:true})
+export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string, loading: boolean, setToken: (x:string) => void}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: '', loading:true, setToken: () => {}})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
@@ -30,13 +30,20 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     const token = window.localStorage.getItem('matchpet_token')
     if (token) {
       setToken(token)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (token) {
       getInfo(token).then((response) => {
+        localStorage.setItem('matchpet_token', token)
         if (response.isRight()) {
           setUser(response.value)
         }
       })
     }
-  }, [])
+  }, [token])
 
   async function getInfo (token:string):Promise<Either<Response, IUserPersistent>> {
     const response = await Api.get('/auth/myself', token)
@@ -67,7 +74,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     return right('success')
   }
   return (
-    <AuthContext.Provider value={{user, login: login, token:token, loading}}>
+    <AuthContext.Provider value={{user, login: login, token:token, loading, setToken}}>
       {children}
     </AuthContext.Provider>
   )

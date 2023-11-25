@@ -12,7 +12,7 @@ export const AnimalSchema = new mongoose.Schema({
   age: { type: Number, required: true },
   image: { type: [String], required: true },
   created_at: { type: Date, required: true },
-  status: { type: String, enum: ['PENDING', "CANCELED", "DONATED"], required: true },
+  status: { type: String, enum: ["PENDING", "CANCELED", "DONATED"], required: true },
   donator_id: { type: mongoose.Types.ObjectId, required: true },
   specie_id: { type: mongoose.Types.ObjectId, required: true },
   description: { type: String, required: true },

@@ -25,6 +25,6 @@ animalsRouter.post("/image/upload", middleware.authenticated(), fileUpload({ lim
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
 
-animalsRouter.put('/:id', middleware.authenticated(), (req, res) => editAnimalController.execute(req, res))
+animalsRouter.put("/:id", middleware.authenticated(), (req, res) => editAnimalController.execute(req, res));
 
 export { animalsRouter };

@@ -105,7 +105,6 @@ export const PartnerEditAnimal = () => {
     }
     setAnimalInputError(structuredClone(animalInputError))
 
-    console.log(specie)
     if (!specie) {
       err++
       setSpecieError(true)

@@ -13,7 +13,6 @@ export function AnimalTraits ({Specie, AnimalTraits, Categories}: {Specie: Speci
         return(traits.map((trait, index) => {
           const animalTraitValue = AnimalTraits.find(el => el._id === trait._id)
           const animalTraitValueInString = trait.options.find(el => el._id === animalTraitValue?.value)
-          console.log(animalTraitValue, animalTraitValueInString)
           return (
             <>
                 {animalTraitValue && animalTraitValueInString &&

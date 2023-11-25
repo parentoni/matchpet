@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "matchpet",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,23 +11,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Line-Facilitadora/Server.git"
+    "url": "git+https://github.com/parentoni/ONG_DDD.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Arthur Parentoni <parentoni.arthur@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Line-Facilitadora/Server/issues"
+    "url": "https://github.com/parentoni/ONG_DDD/issues"
   },
-  "homepage": "https://github.com/Line-Facilitadora/Server#readme",
+  "homepage": "https://github.com/parentoni/ONG_DDD#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^4.17.17",
     "@types/express-fileupload": "^1.4.1",
     "@types/formidable": "^3.4.2",
     "@types/jest": "^29.5.0",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/latlon-geohash": "^2.0.3",
     "@types/morgan": "^1.9.4",
+    "@types/ngeohash": "^0.6.7",
     "@types/node": "^18.15.11",
     "@types/npm": "^7.19.0",
     "@types/semver": "^7.3.13",
@@ -42,6 +45,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.409.0",
+    "@aws-sdk/client-ses": "^3.454.0",
     "@types/express-validator": "^3.0.0",
     "@types/geojson": "^7946.0.12",
     "@types/helmet": "^4.0.0",
@@ -49,15 +53,19 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "esm": "^3.2.25",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.0",
     "express-validator": "^7.0.1",
     "formidable": "^3.5.1",
     "helmet": "^6.2.0",
     "jsonwebtoken": "^9.0.1",
+    "latlon-geohash": "^2.0.0",
     "mongoose": "^7.1.0",
     "morgan": "^1.10.0",
     "multi-range-slider-react": "^2.0.5",
+    "ngeohash": "^0.6.3",
     "prettier": "^2.8.7",
     "semver": "^7.4.0",
     "telefone": "^1.2.4",

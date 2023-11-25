@@ -38,7 +38,7 @@ export function AnimalContactButton ({ContactDTO, isMale, AnimalName}: {ContactD
       </FullPageModal>
         
       <div className="px-8 pt-2">
-        <button className="w-full h-12  bg-primary flex justify-center items-center cursor-pointer shadow" onClick={() => setIsOpen(!isOpen)}>
+        <button className="w-full h-12 text-white rounded  bg-primary flex justify-center items-center cursor-pointer shadow" onClick={() => setIsOpen(!isOpen)}>
           CONTATO
         </button>
       </div>

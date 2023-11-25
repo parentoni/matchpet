@@ -4,11 +4,10 @@ import { Secrets } from "../../../config/secretsManager";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import helmet from "helmet";
-import https from  'node:https'
-import fs from 'node:fs'
+import https from "node:https";
+import fs from "node:fs";
 const cors = require("cors");
 const app = express(); //
-
 
 app.use(morgan(Secrets.NODE_ENV === "development" ? "dev" : "common"));
 app.use(bodyParser.json());
@@ -20,10 +19,9 @@ app.use("/", v1Router);
 
 const port = Secrets.getSecret("port");
 
-if (Secrets.NODE_ENV === 'production') {
-  const privateKey = fs.readFileSync('/etc/letsencrypt/live/api.matchpet.org/privkey.pem')
-  const certificate = fs.readFileSync('/etc/letsencrypt/live/api.matchpet.org/fullchain.pem')
-
+if (Secrets.NODE_ENV === "production") {
+  const privateKey = fs.readFileSync("/etc/letsencrypt/live/api.matchpet.org/privkey.pem");
+  const certificate = fs.readFileSync("/etc/letsencrypt/live/api.matchpet.org/fullchain.pem");
 } else {
   app.listen(port, () => {
     console.log(`[App]: Listening on port ${port}`);

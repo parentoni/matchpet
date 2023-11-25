@@ -8,13 +8,19 @@ import { UserPassword } from "./userProps/userPassword";
 import { Either, left, right } from "../../../shared/core/Result";
 import { UserCreated } from "./events/userCreated";
 import { UserCpf } from "./userProps/userCpf";
-import { UserName } from "./userProps/userName";
+import { UserDisplayName } from "./userProps/userDisplayName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
 import { Timestamp } from "../../../shared/core/Timestamp";
 import { UserPhone } from "./userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
+import { UserLastLogin } from "./userProps/userLastLogin";
+import { UserLogin } from "./events/userLogin";
+import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
+import { UserName } from "./userProps/userName";
+
 export interface UserProps {
-  name: UserName;
+  displayName: UserDisplayName;
+  username: UserName;
   email: UserEmail;
   password: UserPassword;
   role: UserRole;
@@ -23,6 +29,7 @@ export interface UserProps {
   location: Location.GeoJsonPoint;
   completedAdoptions: number;
   inAdoption: number;
+  lastLogin: UserLastLogin;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -40,8 +47,12 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.password;
   }
 
-  get name(): UserName {
-    return this.props.name;
+  get displayName(): UserDisplayName {
+    return this.props.displayName;
+  }
+
+  get userName(): UserName {
+    return this.props.username
   }
 
   get phone(): UserPhone {
@@ -68,6 +79,10 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.inAdoption;
   }
 
+  get lastLogin(): UserLastLogin {
+    return this.props.lastLogin;
+  }
+
   public updateCompletedAdoptions(num: number): void {
     this.props.completedAdoptions = num;
   }
@@ -76,31 +91,46 @@ export class User extends AggregateRoot<UserProps> {
     this.props.inAdoption = num;
   }
 
+  public logActivity() {
+    this.addDomainEvent(new UserLogin(this));
+    DomainEvents.dispatchEventsForAggregate(this._id);
+  }
+
   private constructor(props: UserProps, id?: UniqueGlobalId) {
     super(props, id);
   }
 
   public static create(props: UserProps, id?: UniqueGlobalId): UserResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      { argument: props.name, argumentName: "USER_NAME" },
+      { argument: props.displayName, argumentName: "USER_DISPLAYNAME" },
       { argument: props.email, argumentName: "USER_EMAIL" },
       { argument: props.password, argumentName: "USER_PASWORD" },
       { argument: props.phone, argumentName: "USER_PHONE" },
       { argument: props.role, argumentName: "USER_ROLE" },
       { argument: props.verified, argumentName: "USER_VERIFIED" },
-      { argument: props.location, argumentName: "USER_LOCATION" }
+      { argument: props.location, argumentName: "USER_LOCATION" },
+      { argument: props.lastLogin, argumentName: "USER_LASTLOGIN" }
     ]);
 
     if (guardResult.isLeft()) {
       return left(guardResult.value);
     }
 
+
+    
+    
     const user = new User(
       {
         ...props
       },
       id
-    );
+      );
+      
+      const userIsNew = !!id === false
+
+      if (userIsNew) {
+        user.addDomainEvent(new UserCreated(user))
+      }
 
     return right(user);
   }
