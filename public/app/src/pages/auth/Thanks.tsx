@@ -13,8 +13,8 @@ export const Thanks = () => {
 
         <div className="mt-8 flex flex-col sm:flex-row gap-5">
             
-            <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('')}>
-              Gerenciar animais
+            <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/')}>
+              Tela de início
             </button>
           </div>
       </div>

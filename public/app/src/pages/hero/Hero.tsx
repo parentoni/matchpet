@@ -94,7 +94,7 @@ export function HeroPage  ()  {
           <div className="w-full flex items-center">
             <div className="flex-1">
               <p className="text-xs font-medium">Arthur Parentoni Guimarães, 2023</p>
-              <a  className='text-xs' href="mailto:parentoni.arthur@gmail.com">&lt;parentoni.arthur@gmai.com&gt;</a>
+              <a  className='text-xs' href="mailto:parentoni.arthur@gmail.com">&lt;parentoni.arthur@gmail.com&gt;</a>
             </div>
             <div className="flex gap-5">
               <a target="#" href="https://www.instagram.com/matchpetorg/"><Instagram size={28}/></a>
