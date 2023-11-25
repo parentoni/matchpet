@@ -20,7 +20,7 @@ export function HeroPage  ()  {
       <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-24 sm:mt-32 md:mt-56">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <h1 className="text-5xl font-medium tracking-tight text-neutral-950 [text-wrap:balance] sm:text-7xl"><span className="text-primary">Adoção</span>, sem dor de cabeça.</h1>
-          <p className="mt-6 text-xl text-neutral-600">Veja todos os animais para adoção em Belo Horizonte e região de forma simples, rápida e unificada, para dessa forma encontrar o animal que seja o seu match! <span className="text-primary">Não compre, adote!</span></p>
+          <p className="mt-6 text-xl text-neutral-600">Veja todos os animais para adoção em Belo Horizonte e região de forma simples, rápida e unificada, para dessa forma encontrar o pet que seja o seu match! <span className="text-primary">Não compre, adote!</span></p>
           
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
             

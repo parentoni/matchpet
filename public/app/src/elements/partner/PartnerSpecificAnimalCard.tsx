@@ -17,7 +17,7 @@ export const PartnerSpecificAnimalCard = ({ animal }: { animal: IAnimalDTO; }) =
         <div className="flex justify-between items-center">
             <div className="text-xl">{animal.name}</div>
             <div className={`flex items-center px-2 py-.5 w-auto ${animal.status === ANIMAL_STATUS.CANCELED? "text-white bg-black" : `text-black ${animal.status === ANIMAL_STATUS.PENDING? "brute-border bg-white":"bg-primary"}`}`}>
-              <p className="line-clamp-2 text-xs">{animal.status === ANIMAL_STATUS.DONATED? "Doado": animal.status === ANIMAL_STATUS.PENDING? "Em adoção": "Excluído"}</p>
+              <p className="line-clamp-2 text-xs">{animal.status === ANIMAL_STATUS.DONATED? "Doado": animal.status === ANIMAL_STATUS.PENDING? "Em adoção": "Cancelado"}</p>
             </div>
         </div>
         

@@ -95,11 +95,11 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
           } else if (s === ANIMAL_STATUS.PENDING) {
             return "Em adoção"
           } else {
-            return "Excluído";
+            return "Cancelado";
           }
         }}
         
-        title="Espécie"
+        title="Estado"
         checked={s => s === props.animalStatus}
         errorMessage={props.speciesError? "Por favor, selecione uma estado.":undefined}
       /></div>}

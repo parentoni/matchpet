@@ -27,7 +27,6 @@ export const SaveAnimalStateModal = (props: SaveAnimalStateModalProps) => {
               :<>
               <Dialog.Title className={'font-medium'}>Mudanças salvas com sucesso.</Dialog.Title>
               <div className="w-full mt-5 flex justify-end gap-5">
-                <button className="w-40 h-10 brute-border" onClick={() => navigate('/partner/animal/new')}> Criar nova adoção</button>
                 <button className="w-40 h-10  bg-black text-white" onClick={() => navigate('/partner')}> Voltar</button>
               </div>
               </>}

@@ -19,7 +19,7 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, token: string, loading: boolean, setToken: (x:string) => void}>({user: undefined, login: (() => {}) as unknown as LoginFunction, token: '', loading:true, setToken: () => {}})
+export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, getToken: () => string, loading: boolean, setToken: (x:string) => void}>({user: undefined, login: (() => {}) as unknown as LoginFunction, getToken: () => '', loading:true, setToken: () => {}})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
@@ -73,8 +73,12 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     setLoading(false)
     return right('success')
   }
+
+  function getToken(){
+    return window.localStorage.getItem('matchpet_token') || ''
+  }
   return (
-    <AuthContext.Provider value={{user, login: login, token:token, loading, setToken}}>
+    <AuthContext.Provider value={{user, login: login, getToken:getToken, loading, setToken}}>
       {children}
     </AuthContext.Provider>
   )

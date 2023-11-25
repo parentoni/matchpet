@@ -35,7 +35,7 @@ export type AnimalInputError = {
 export const PartnerEditAnimal = () => {
 
   const {id} = useParams()
-  const {token} = useContext(AuthContext)
+  const {getToken} = useContext(AuthContext)
   const {species} = useContext(SpeciesContext)
   
   
@@ -124,7 +124,7 @@ export const PartnerEditAnimal = () => {
       setSelectedTraitsError(structuredClone(traitsError))
     }
 
-    if (images.length === 0) {
+    if (images.length <= 0) {
       err++
       setImageError(true)
     } else {
@@ -149,7 +149,7 @@ export const PartnerEditAnimal = () => {
         setModalText(`Fazendo upload das imagens (${i}/${images.length})`)
 
         if (image.type === 'File') {
-          const imagesResponse = await Animal.uploadAnimalImage(image.data, token)
+          const imagesResponse = await Animal.uploadAnimalImage(image.data, getToken())
           if (imagesResponse.isRight()) {
             imagesArray.push(imagesResponse.value)
           } 
@@ -174,7 +174,7 @@ export const PartnerEditAnimal = () => {
 
       setModalText("Fazendo upload do animal...")
       if (id === 'new') {
-        const response = await Animal.newAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, token)
+        const response = await Animal.newAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
         if (response.isRight()) {
           setModalPercentage(1)
         } else {
@@ -183,7 +183,7 @@ export const PartnerEditAnimal = () => {
         }
       } else {
 
-        const response = await Animal.editAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, token, id as string)
+        const response = await Animal.editAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
         if (response.isRight()) {
           setModalPercentage(1)
         } else {

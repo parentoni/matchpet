@@ -9,7 +9,8 @@ export interface PartnerImageUploadProps {
 export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
 
   const handleFileUpload = (e:  React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
+      console.log(e.target.files)
       props.setImages([...props.images,{"type": 'File', data: e.target.files[0]}])      
     }
   }
@@ -49,8 +50,8 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
           </div>
       </div>
       :<>
-        <label  htmlFor="fileInput" className="text-sm cursor-pointer">Clique para adicionar uma imagem</label>
-        <input accept="image/*" id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
+        <label  htmlFor="fileInput" className="lg:text-sm cursor-pointer w-full h-full text-xs">Clique para adicionar uma imagem</label>
+        <input accept="image/*" id="fileInput" type="file" className="hidden " onChange={handleFileUpload}></input>
       </>
     }
 
