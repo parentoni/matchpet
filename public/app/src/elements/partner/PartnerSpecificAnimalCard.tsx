@@ -11,7 +11,7 @@ export const PartnerSpecificAnimalCard = ({ animal }: { animal: IAnimalDTO; }) =
   const [showModal, setShowModal] = useState<boolean>(false)
 
   return (
-    <div className="grid-resizable-cards-width  brute-border " key={animal._id}>
+    <div className="grid-resizable-cards-width rounded  brute-border " key={animal._id}>
       <img className="w-full aspect-video bg-cover" alt={`Imagem de ${animal.name}`} src={animal.image[0]}></img>
       <div className="flex flex-col p-4">
         <div className="flex justify-between items-center">

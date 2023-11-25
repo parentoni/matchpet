@@ -14,7 +14,7 @@ export const Thanks = () => {
         <div className="mt-8 flex flex-col sm:flex-row gap-5">
             
             <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('')}>
-              Tela de início
+              Gerenciar animais
             </button>
           </div>
       </div>

@@ -27,7 +27,7 @@ export function HeroPage  ()  {
             <button className="w-60 h-12 rounded bg-primary flex items-center justify-center text-white" onClick={() => preferredSpecie?navigate('/animals'):navigate('/select?to=' + encodeURI('/animals'))}>
               Quero adotar
             </button>
-            <button className="w-60 h-12 rounded brute-border flex justify-center items-center">
+            <button className="w-60 h-12 rounded brute-border flex justify-center items-center" onClick={() => navigate('/i-want-to-donate')}>
               Quero doar
             </button>
           </div>

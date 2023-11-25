@@ -18,6 +18,7 @@ import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { ForgotPasswordSuccess } from "./pages/auth/ForgotPassrodSuccess";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
+import { IWantDonate } from "./pages/hero/IWantDonate";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: '/select',
         element: <AnimalSelect />
+      }, 
+      {
+        path: '/i-want-to-donate', 
+        element: <IWantDonate />
       }
     ]
   },

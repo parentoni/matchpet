@@ -50,7 +50,7 @@ export function AnimalGrid (props: AnimalGridProps) {
         })
       }
       {props.loading && [...Array(50).keys()].map(_ => <UserAnimalCardSkeleton />)}
-      { (props.AnimalsArray.length % 50) === 0?
+      { (props.AnimalsArray.length % 50) === 0 && props.AnimalsArray.length !== 0?
       <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => props.setPage(props.page+1)}>
         Carregar mais
       </button>:''}

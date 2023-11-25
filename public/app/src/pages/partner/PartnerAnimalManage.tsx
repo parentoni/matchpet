@@ -43,11 +43,8 @@ export function PartnerAnimalManage () {
           setLoading(false)
           setAnimalsCount(response.value.count)
           if (page !== 0) {
-            alert('tchau')
-
             setAnimals(animals => [...animals, ...response.value.animals])
           } else {
-            // alert('oi'
             setAnimals(response.value.animals)
           }
           
@@ -62,12 +59,15 @@ export function PartnerAnimalManage () {
   return (
   <PageLayout>
     <h1 className="text-2xl font-medium">{animalsCount} animais {filters?"correspondem aos filtros":'cadastrados'}  em sua ong.</h1>
-    <div className="flex gap-5">
-      <button className="px-4 py-1 bg-primary flex justify-center items-center mt-5" onClick={() =>  navigate('/partner/animal/new')}>
-        ADICIONAR
+    <div className="flex gap-5 mt-3">
+      <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center" onClick={() =>  navigate('/partner/animal/new')}>
+        Adicionar
       </button>
-      <button className="px-4 py-1 bg-black flex justify-center items-center mt-5 text-white" onClick={() => setIsModalOpen(true)}>
-        FILTRAR
+      <button className="w-60 h-10 rounded brute-border flex items-center justify-center" onClick={() => setIsModalOpen(true)}>
+        Filtrar
+      </button>
+      <button className="w-60 h-10 rounded brute-border flex items-center justify-center" onClick={() => navigator.clipboard.writeText(`https://www.matchpet.org/organizations/${user?.username}`).then(() => alert("Link copiado."), () => alert(`O seu link de catálogo: https://www.matchpet.org/organizations/${user?.username}`))}>
+        Copiar link de catálogo
       </button>
     </div>
     <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters}/>
@@ -81,8 +81,6 @@ export function PartnerAnimalManage () {
       loading={loading}
       setSearchArea={setSearchArea}
       isPartner
-      // selectedSpecie={selectedSpecie}
-      // setSelectedSpecie={setSelectedSpecie}
       />
   </PageLayout>)
 }
