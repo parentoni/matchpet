@@ -39,7 +39,7 @@ export const Verify = () => {
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
               
               <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner')}>
-                Tela de início
+                Gerenciar animais
               </button>
             </div>
         </div>
