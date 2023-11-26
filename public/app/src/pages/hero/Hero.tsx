@@ -6,10 +6,13 @@ import { useGetActiveUsers } from "../../elements/hero/useGetActiveUsers"
 import { useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
+import { AuthContext } from "../../utils/context/AuthContext"
 export function HeroPage  ()  {
 
   const stats = useGetStats()
   const users = useGetActiveUsers()
+
+  const {user} = useContext(AuthContext)
 
   const navigate = useNavigate()
 
@@ -27,7 +30,7 @@ export function HeroPage  ()  {
             <button className="w-60 h-12 rounded bg-primary flex items-center justify-center text-white" onClick={() => preferredSpecie?navigate('/animals'):navigate('/select?to=' + encodeURI('/animals'))}>
               Quero adotar
             </button>
-            <button className="w-60 h-12 rounded brute-border flex justify-center items-center" onClick={() => navigate('/i-want-to-donate')}>
+            <button className="w-60 h-12 rounded brute-border flex justify-center items-center" onClick={() => user?navigate('/partner'):navigate('/i-want-to-donate')}>
               Quero doar
             </button>
           </div>
