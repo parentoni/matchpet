@@ -10,7 +10,7 @@ export function AnimalDescription ({description, AnimalName}: {description: stri
     <div className="px-8">
       <h2 className="text-2xl" onClick={() => setIsOpen(!isOpen)}>{AnimalName}</h2>
       <div className="text-sm relative">
-        {isOpen?description:mimifiedVersion}...
+        {isOpen?description:mimifiedVersion}{hasMore && !isOpen? "...":""}
         
       </div>
       {hasMore && 

@@ -12,7 +12,7 @@ export const PartnerSpecificAnimalCard = ({ animal }: { animal: IAnimalDTO; }) =
 
   return (
     <div className="grid-resizable-cards-width rounded  brute-border " key={animal._id}>
-      <img className="w-full aspect-video bg-cover" alt={`Imagem de ${animal.name}`} src={animal.image[0]}></img>
+      <img className="w-full aspect-video  object-contain bg-neutral-100" alt={`Imagem de ${animal.name}`} src={animal.image[0]}></img>
       <div className="flex flex-col p-4">
         <div className="flex justify-between items-center">
             <div className="text-xl">{animal.name}</div>

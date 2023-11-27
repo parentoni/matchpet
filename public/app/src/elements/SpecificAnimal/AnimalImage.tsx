@@ -23,8 +23,8 @@ export function AnimalImage({AnimalImages, AnimalName}: {AnimalImages: string[],
 
       <div className="w-full aspect-square carousel z-20">
         {AnimalImages.map((image, index) => (
-          <div id={`imagem${index}`} className="carousel-item w-full">
-            <img className="w-full" src={image} alt={`Imagem ${index} de ${AnimalName}`}></img>
+          <div id={`imagem${index}`} className="carousel-item w-full bg-neutral-100">
+            <img className="w-full bg-neutra-100 object-contain" src={image} alt={`Imagem ${index} de ${AnimalName}`}></img>
             </div>
         ))}
         

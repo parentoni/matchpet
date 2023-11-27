@@ -41,7 +41,7 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
           }
           ) }
           <div className="carousel-item relative w-full flex items-center justify-center " id="uploadMore">
-            <label htmlFor="fileInput" className="lg:text-sm cursor-pointer w-full h-full text-xs text-center mt-5">Clique para adicionar mais uma imagem</label>
+            <label htmlFor="fileInput" className="lg:text-sm cursor-pointer w-full h-full text-xs text-center mt-5">Clique para adicionar mais uma imagem ({props.images.length}/10)</label>
             <input accept="image/*" id="fileInput" type="file" className="hidden" onChange={handleFileUpload}></input>
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
               <a href={`#slide${props.images.length - 1 }`} className="z-50 btn btn-circle">❮</a> 
@@ -50,7 +50,7 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
           </div>
       </div>
       :<>
-        <label  htmlFor="fileInput" className="lg:text-sm cursor-pointer w-full h-full text-xs text-center mt-5">Clique para adicionar uma imagem</label>
+        <label  htmlFor="fileInput" className="lg:text-sm cursor-pointer w-full h-full text-xs text-center mt-5">Clique para adicionar uma imagem (0/10)</label>
         <input accept="image/*" id="fileInput" type="file" className="hidden " onChange={handleFileUpload}></input>
       </>
     }
