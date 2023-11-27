@@ -68,7 +68,7 @@ export interface UserAnimalCardProps {
 }
 function UserAnimalCard(props: UserAnimalCardProps) {
   return <div className="w-full rounded brute-border shadow overflow-hidden relative mt-3">
-    <img src={props.animal.image[0]} alt={`Imagem de ${props.animal.name}`} className="w-full aspect-video  object-cover" onClick={() => props.navigate(`/animals/${props.animal._id}`)}></img>
+    <img src={props.animal.image[0]} alt={`Imagem de ${props.animal.name}`} className="w-full aspect-video   object-contain bg-neutral-100" onClick={() => props.navigate(`/animals/${props.animal._id}`)}></img>
     <div className="flex flex-col p-4">
       <div className="flex justify-between items-center">
         <p className="text-xl">{props.animal.name}</p>
