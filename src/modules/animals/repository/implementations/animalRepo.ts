@@ -213,7 +213,7 @@ export class AnimalRepo implements IAnimalRepo {
     const countFilter = structuredClone(filters);
     filters.push({
       $sort: {
-        created_at: -1
+        last_modified_at: -1
       }
     });
 

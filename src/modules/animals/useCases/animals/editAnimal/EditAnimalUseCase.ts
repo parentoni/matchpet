@@ -31,6 +31,7 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       { argumentName: "edit", argument: request.edit }
     ]);
 
+    console.log(request.edit)
     if (guardResponse.isLeft()) {
       return left(guardResponse.value);
     }
@@ -54,7 +55,21 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       request.edit.image = request.edit?.image;
     }
 
-    const persistentNewAnimal = { ...persistenAtualAnimal.value, ...request.edit, status: persistenAtualAnimal.value.status } as IAnimalPersistent;
+    const persistentNewAnimal: IAnimalPersistent = {
+      _id: persistenAtualAnimal.value._id,
+      status: persistenAtualAnimal.value.status,
+      age: persistenAtualAnimal.value.age,
+      created_at: persistenAtualAnimal.value.created_at,
+      donator_id: persistenAtualAnimal.value.donator_id,
+      specie_id: persistenAtualAnimal.value.specie_id,
+      last_modified_at: persistenAtualAnimal.value.last_modified_at,
+
+      name: request.edit.name || persistenAtualAnimal.value.name,
+      image: request.edit.image || persistenAtualAnimal.value.image,
+      description: request.edit.description || persistenAtualAnimal.value.description,
+      traits: request.edit.traits || persistenAtualAnimal.value.traits,
+    }
+
     const domainNewAnimal = AnimalMapper.toDomain(persistentNewAnimal);
 
     if (domainNewAnimal.isLeft()) {
@@ -72,6 +87,8 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       if (updateUserResponse.isLeft()) {
         return left(updateUserResponse.value);
       }
+
+      persistentNewAnimal.status = request.edit.status
     }
 
     const isTraitValid = specie.value.validateArrayOfAnimalTraits(domainNewAnimal.value.animalTraits);

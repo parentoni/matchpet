@@ -1,6 +1,7 @@
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { AuthenticatedRequest } from "../../../../../shared/infra/http/models/AutheticatedRequest";
 import { BaseController } from "../../../../../shared/infra/http/models/BaseController";
+import { EditAnimalTraits } from "./EditAnimalDTO";
 import { EditAnimalUseCase } from "./EditAnimalUseCase";
 
 export class EditAnimalController extends BaseController<AuthenticatedRequest> {
@@ -9,12 +10,12 @@ export class EditAnimalController extends BaseController<AuthenticatedRequest> {
     this.versionRegister.addToRegister("1.0.0", async (req, res) => {
       const { id } = req.params as { id: string };
       const user = req.decoded;
-      const body = req.body as { edit: Partial<IAnimalPersistent> };
+      const body = req.body as { edit: Partial<EditAnimalTraits> };
 
       const response = await useCase.execute({
         animal: id,
         user: user,
-        edit: body.edit
+        edit: body.edit,
       });
 
       if (response.isLeft()) {
