@@ -244,7 +244,7 @@ export class AnimalRepo implements IAnimalRepo {
 
     try {
       const result = await  AnimalModel.aggregate([
-        {$match: { last_modified_at: {$lt: threshold}}},
+        {$match: {status:"PENDING", last_modified_at: {$lt: threshold}}},
         {$group: {_id: {$toString:"$donator_id"}, animals: {$push: {$mergeObjects: "$$ROOT"}}}}
       ])
 

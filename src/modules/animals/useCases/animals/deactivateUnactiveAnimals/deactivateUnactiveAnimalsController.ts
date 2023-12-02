@@ -6,7 +6,7 @@ import { DeactivateUnactiveAnimalsUseCase } from "./deactivateUnactiveAnimalsUse
 
 export class DeactivateUnactiveAnimalsController extends CronController {
 
-  readonly cronTime = '* 30 * * * * ' //0 13 * * *
+  readonly cronTime = '0 0 13 * * * ' //0 13 * * *
   protected name = 'deactivateUnactiveAnimals'
   protected useCase: DeactivateUnactiveAnimalsUseCase
 
@@ -23,7 +23,6 @@ export class DeactivateUnactiveAnimalsController extends CronController {
       return left(response.value)
     }
 
-    console.log(response.value)
 
     return right('ok')
   }
