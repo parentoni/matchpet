@@ -95,11 +95,9 @@ export abstract class BaseController<T extends Request> {
     return BaseController.jsonResponse(res, 413, message ? message : "Too many requests");
   }
 
-  public fail(res: express.Response, error: Error | string) {
+  public fail(res: express.Response, error?: any) {
     console.log(error);
-    return res.status(500).json({
-      message: error.toString()
-    });
+    return BaseController.jsonResponse(res, 500, error ? error : "Something went wrong");
   }
 
   //TODO BETTER ERROR HANDLING
