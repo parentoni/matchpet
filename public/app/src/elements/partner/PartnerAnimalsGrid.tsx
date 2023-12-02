@@ -1,9 +1,6 @@
-import { useContext, useEffect, useState } from "react"
 import './PartnerAnimalsGrid.css'
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
 import { PartnerSpecificAnimalCard, PartnerSpecificAnimalCardSkeleton } from "./PartnerSpecificAnimalCard"
-import { FiltersContext } from "../../utils/context/FiltersContext"
-import { UserAnimalCardSkeleton } from "../Animals/AnimalsGrid"
 import { FILTER_MODES } from "../Animals/filters"
 
 export interface PartnerAnimalsGridProps {

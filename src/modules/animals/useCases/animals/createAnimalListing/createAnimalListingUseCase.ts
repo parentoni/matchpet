@@ -34,11 +34,12 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalAgeOrError = AnimalAge.create({ months: request.age });
     const animalImageOrError = AnimalImages.createFromPersistent(request.image);
     const animalSpecieTraitsOrError = AnimalTraits.createFromPersistent(request.traits);
-    const animalCreatedTimespamp = Timestamp.create();
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
     const animalStatusOrError = AnimalStatus.create(ANIMAL_STATUS.PENDING);
     const animalDescriptionOrError = AnimalDescription.create({ value: request.description });
+    
+    const animalCreatedTimespamp = Timestamp.create();
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -85,7 +86,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       animalTrait: traitsValidation.value,
       createdAt: animalCreatedTimespamp,
       status: animalStats,
-      description: animalDescription
+      description: animalDescription,
+      lastModifiedAt: animalCreatedTimespamp,
     });
 
     if (animalResult.isLeft()) {

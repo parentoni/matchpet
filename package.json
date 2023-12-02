@@ -22,6 +22,7 @@
   "homepage": "https://github.com/parentoni/ONG_DDD#readme",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cron": "^2.4.0",
     "@types/ejs": "^3.1.5",
     "@types/express": "^4.17.17",
     "@types/express-fileupload": "^1.4.1",
@@ -52,6 +53,7 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "cron": "^3.1.6",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
     "esm": "^3.2.25",

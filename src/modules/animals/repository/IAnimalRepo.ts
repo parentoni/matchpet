@@ -18,11 +18,12 @@ export interface IAnimalRepo {
     excludeId: string,
     specieId: string,
     searchValue: string[]
-  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>>;
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>>; //Depreceated
   findBulk(
     filter: FilterObject[],
     skip: number,
     limit: number
   ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>>;
   geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>>;
+  countUnactive(date:Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>>;
 }

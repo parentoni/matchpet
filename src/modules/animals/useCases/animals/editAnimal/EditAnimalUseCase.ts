@@ -54,7 +54,7 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       request.edit.image = request.edit?.image;
     }
 
-    const persistentNewAnimal = { ...persistenAtualAnimal.value, ...request.edit } as IAnimalPersistent;
+    const persistentNewAnimal = { ...persistenAtualAnimal.value, ...request.edit, status: persistenAtualAnimal.value.status } as IAnimalPersistent;
     const domainNewAnimal = AnimalMapper.toDomain(persistentNewAnimal);
 
     if (domainNewAnimal.isLeft()) {
@@ -67,29 +67,27 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       return left(specie.value);
     }
 
-    const isTraitValid = specie.value.validateArrayOfAnimalTraits(domainNewAnimal.value.animalTraits);
-    if (isTraitValid.isLeft()) {
-      return left(EditAnimalErrors.dbError);
-    }
-
-    const saveResult = await this.animalRepo.save(domainNewAnimal.value);
-
-    if (saveResult.isLeft()) {
-      return left(EditAnimalErrors.dbError);
-    }
-
     if (request.edit.status && request.edit.status !== animal.value.animalStatus.value) {
-      const updateUserResponse = await this.updateStats.execute({
-        userId: request.user.uid,
-        addInAdoption: request.edit.status === "PENDING" ? 1 : animal.value.animalStatus.value === ANIMAL_STATUS.PENDING ? -1 : 0,
-        addCompletedAdoptions: request.edit.status === "DONATED" ? 1 : animal.value.animalStatus.value === ANIMAL_STATUS.DONATED ? -1 : 0
-      });
-
+      const updateUserResponse = domainNewAnimal.value.animalChangeStatus(request.edit.status)
       if (updateUserResponse.isLeft()) {
         return left(updateUserResponse.value);
       }
     }
 
+    const isTraitValid = specie.value.validateArrayOfAnimalTraits(domainNewAnimal.value.animalTraits);
+    if (isTraitValid.isLeft()) {
+      return left(EditAnimalErrors.dbError);
+    }
+
+    
+    
+    const saveResult = await this.animalRepo.save(domainNewAnimal.value);
+    if (saveResult.isLeft()) {
+      return left(EditAnimalErrors.dbError);
+    }
+    
+    
+    
     return right(persistentNewAnimal);
   }
 }

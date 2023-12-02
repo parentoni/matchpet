@@ -13,6 +13,7 @@ import mongoose, { PipelineStage, mongo } from "mongoose";
 export type DBFilter = Record<string, Record<string, any>>;
 
 export class AnimalRepo implements IAnimalRepo {
+  
   async save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {
     const animalPersistent = AnimalMapper.toPersistent(animal);
     if (animalPersistent.isLeft()) {
@@ -21,7 +22,7 @@ export class AnimalRepo implements IAnimalRepo {
     const exists = await AnimalModel.exists({ _id: animal.id.toValue() });
 
     if (!!exists) {
-      await AnimalModel.findByIdAndUpdate(animal.id.toValue(), animalPersistent.value);
+      await AnimalModel.findOneAndUpdate({_id: animal.id.toValue()}, animalPersistent.value);
       return right(null);
     }
 
@@ -235,4 +236,32 @@ export class AnimalRepo implements IAnimalRepo {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
+
+  async countUnactive(date: Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>> {
+
+    const threshold = new Date(date.getTime())
+    threshold.setDate(threshold.getDate() - unactiveDays)
+
+    try {
+      const result = await  AnimalModel.aggregate([
+        {$match: { last_modified_at: {$lt: threshold}}},
+        {$group: {_id: {$toString:"$donator_id"}, animals: {$push: {$mergeObjects: "$$ROOT"}}}}
+      ])
+
+      for (const user of result) {
+        const mapperResponse = AnimalMapper.toDomainBulk(user.animals)
+        if (mapperResponse.isLeft()) {
+          return left(mapperResponse.value)
+        }
+
+        user.animals = mapperResponse.value
+      }
+
+      return right(result)
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+  }
+
 }
+

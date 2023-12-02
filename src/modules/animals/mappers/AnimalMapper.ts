@@ -21,14 +21,16 @@ export class AnimalMapper {
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalAgeOrError = AnimalAge.create({ months: persistent.age });
     const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
-    const animalCreatedAt = Timestamp.create(persistent.created_at);
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id.toString());
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id.toString());
     const animalIdOrError = UniqueGlobalId.createExisting(persistent._id.toString());
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
-
+    
+    const animalCreatedAt = Timestamp.create(persistent.created_at);
+    const animalLastModified = Timestamp.create(persistent.last_modified_at)
+    
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalAgeOrError,
@@ -65,7 +67,8 @@ export class AnimalMapper {
         animalTrait: animalTraits,
         createdAt: animalCreatedAt,
         status: animalStats,
-        description: animalDescription
+        description: animalDescription,
+        lastModifiedAt: animalLastModified
       },
       animalId
     );
@@ -86,13 +89,29 @@ export class AnimalMapper {
         image: domain.image.persistentValue,
         donator_id: domain.donatorId.toValue(),
         specie_id: domain.specieId.toValue(),
-        created_at: domain.createdAt.value,
         traits: domain.animalTraits.persistentValue,
         status: domain.animalStatus.value,
-        description: domain.description.value
+        description: domain.description.value,
+        created_at: domain.createdAt.value,
+        last_modified_at: domain.lastModifiedAt.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
+  }
+
+  public static toDomainBulk(persistent: IAnimalPersistent[]):Either<GuardError, Animal[]> {
+    const array: Animal[] = []
+    for (const animal of persistent) {
+      const response = this.toDomain(animal)
+      if (response.isLeft()) {
+        return left(response.value)
+      }
+
+      array.push(response.value)
+    }
+
+    return right(array)
+
   }
 }
