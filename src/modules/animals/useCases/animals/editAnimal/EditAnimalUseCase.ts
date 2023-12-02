@@ -31,7 +31,6 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       { argumentName: "edit", argument: request.edit }
     ]);
 
-    console.log(request.edit)
     if (guardResponse.isLeft()) {
       return left(guardResponse.value);
     }
@@ -95,15 +94,14 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
     if (isTraitValid.isLeft()) {
       return left(EditAnimalErrors.dbError);
     }
-
     
     
+    
+    domainNewAnimal.value.markAnimalAsEditied()
     const saveResult = await this.animalRepo.save(domainNewAnimal.value);
     if (saveResult.isLeft()) {
       return left(EditAnimalErrors.dbError);
     }
-    
-    
     
     return right(persistentNewAnimal);
   }

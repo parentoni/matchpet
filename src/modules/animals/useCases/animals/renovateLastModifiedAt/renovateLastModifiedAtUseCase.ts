@@ -11,7 +11,7 @@ import { Timestamp } from "../../../../../shared/core/Timestamp";
 
 export class RenovateLastModifiedAtUseCase implements UseCase<RenovateLastModifiedAtDTO, RenovateLastModifiedAtResponse> {
   protected animalRepo: IAnimalRepo;
-  protected DAYS_THRESHOLD = 7
+  protected static DAYS_THRESHOLD = 7
   constructor (animalRepo: IAnimalRepo) {
     this.animalRepo = animalRepo
   }
@@ -33,9 +33,9 @@ export class RenovateLastModifiedAtUseCase implements UseCase<RenovateLastModifi
 
     const newLastModifiedDate = new Date()
     
-    if (differenceInDays(newLastModifiedDate, animal.lastModifiedAt.value) < this.DAYS_THRESHOLD) {
+    if (differenceInDays(newLastModifiedDate, animal.lastModifiedAt.value) < RenovateLastModifiedAtUseCase.DAYS_THRESHOLD) {
       return left( CommonUseCaseResult.InvalidValue.create({
-        errorMessage: `Cannot renovate animal with last_modified_at less than ${this.DAYS_THRESHOLD} days ago.`,
+        errorMessage: `Cannot renovate animal with last_modified_at less than ${RenovateLastModifiedAtUseCase.DAYS_THRESHOLD} days ago.`,
         variable: 'LAST_MODIFED_AT',
         location: `${RenovateLastModifiedAtUseCase.name}.${this.execute.name}`
       }))

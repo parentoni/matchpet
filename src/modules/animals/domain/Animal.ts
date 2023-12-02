@@ -14,6 +14,7 @@ import { AnimalTrait } from "./animal/AnimalTrait";
 import { AnimalTraits } from "./animal/AnimalTraits";
 import { AnimalCreated } from "./events/AnimalCreated";
 import { AnimalStatusChanged } from "./events/AnimalStatusChanged";
+import { AnimalEdited } from "./events/AnimalEdited";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -70,6 +71,10 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   get lastModifiedAt(): Timestamp {
     return this.props.lastModifiedAt
+  }
+
+  public markAnimalAsEditied() {
+    this.addDomainEvent(new AnimalEdited(this))
   }
 
   public animalChangeStatus(newStatus: ANIMAL_STATUS): Either<GuardError, null>{
