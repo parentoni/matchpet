@@ -23,6 +23,7 @@ import { Location } from "../../../../shared/core/Location";
 import { Secrets } from "../../../../config/secretsManager";
 import { UserLastLogin } from "../../domain/userProps/userLastLogin";
 import { UserName } from "../../domain/userProps/userName";
+import { UserImage } from "../../domain/userProps/userImage";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -42,6 +43,18 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
     const lastLoginOrError = UserLastLogin.create({ date: new Date() });
     const userNameOrError = UserName.create({username: request.username})
+
+
+    let image: undefined | UserImage
+
+    if (request.image) {
+      const imageOrError = UserImage.create({image:request.image})
+      if (imageOrError.isLeft()) {
+        return left(imageOrError.value)
+      }
+
+      image = imageOrError.value
+    }
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, displayNameOrError, roleOrError, locationOrError, lastLoginOrError, userNameOrError]);
 
@@ -111,11 +124,12 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         password: hashedPassword.value,
         phone,
         role,
-        verified: Secrets.NODE_ENV === "development" ? request.verified || false : false,
+        verified: false,
         location,
         inAdoption: 0,
         completedAdoptions: 0,
-        lastLogin: lastLogin
+        lastLogin: lastLogin,
+        image
         // role: UserRole.create({value: 0})
       });
   

@@ -17,6 +17,7 @@ import { UserLastLogin } from "./userProps/userLastLogin";
 import { UserLogin } from "./events/userLogin";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { UserName } from "./userProps/userName";
+import { UserImage } from "./userProps/userImage";
 
 export interface UserProps {
   displayName: UserDisplayName;
@@ -30,6 +31,7 @@ export interface UserProps {
   completedAdoptions: number;
   inAdoption: number;
   lastLogin: UserLastLogin;
+  image?: UserImage
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -81,6 +83,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get lastLogin(): UserLastLogin {
     return this.props.lastLogin;
+  }
+
+  get image(): UserImage | undefined {
+    return this.props.image
   }
 
   public updateCompletedAdoptions(num: number): void {

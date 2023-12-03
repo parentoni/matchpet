@@ -13,6 +13,7 @@ import { UserPhone } from "../domain/userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
 import { UserLastLogin } from "../domain/userProps/userLastLogin";
 import { UserName } from "../domain/userProps/userName";
+import { UserImage } from "../domain/userProps/userImage";
 
 export class UserMap {
   static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
@@ -32,6 +33,16 @@ export class UserMap {
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
     const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
     const userNameOrError = UserName.create({username: persistance.username})
+
+    let image: undefined | UserImage;
+    if (persistance.image) {
+      const imageOrError = UserImage.create({image: persistance.image})
+      if (imageOrError.isLeft()) {
+        return left(imageOrError.value)
+      }
+
+      image = imageOrError.value
+    }
 
     const result = EitherUtils.combine([
       userPasswordOrError,
@@ -58,7 +69,8 @@ export class UserMap {
           location: userLocationOrError.getRight(),
           inAdoption: persistance.in_adoption,
           completedAdoptions: persistance.completed_adoptions,
-          lastLogin: userLastLoginOrError.getRight()
+          lastLogin: userLastLoginOrError.getRight(),
+          image
         },
         new UniqueGlobalId(userIdOrError.getRight().toValue().toString() as string)
       );
@@ -98,7 +110,9 @@ export class UserMap {
         },
         completed_adoptions: user.completedAdoptions,
         in_adoption: user.inAdoption,
-        last_login: user.lastLogin.value
+        last_login: user.lastLogin.value,
+        image: user.image?.value 
+
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

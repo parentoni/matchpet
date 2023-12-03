@@ -5,5 +5,5 @@ export interface CreateUserDTO {
   password: string;
   phone: string;
   location: GeoJSON.Position;
-  verified?: boolean; //!Temporary,
+  image?: string; 
 }

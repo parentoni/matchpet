@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
   location: { type: GeoJsonPointSchema, required: true },
   completed_adoptions: { type: Number, default: 0 },
   in_adoption: { type: Number, default: 0 },
-  last_login: { type: Date, required: true }
+  last_login: { type: Date, required: true },
+  image: {type: String, required: false}
 });
 
 export type IUserPersistant = {
@@ -34,6 +35,8 @@ export type IUserPersistant = {
   completed_adoptions: number;
   in_adoption: number;
   last_login: Date;
+
+  image?: string
 };
 
 // userSchema.post('findOne', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
