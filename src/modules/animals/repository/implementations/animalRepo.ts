@@ -9,6 +9,7 @@ import { FILTER_MODES, FilterObject } from "../../useCases/animals/filterAnimals
 import { AnimalFindProps, IAnimalRepo } from "../IAnimalRepo";
 import { Location } from "../../../../shared/core/Location";
 import mongoose, { PipelineStage, mongo } from "mongoose";
+import { endOfDay, startOfDay } from "date-fns";
 
 export type DBFilter = Record<string, Record<string, any>>;
 
@@ -261,6 +262,35 @@ export class AnimalRepo implements IAnimalRepo {
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error))
     }
+  }
+
+  async aggregataCanRenovate(notificationDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]; }[]>> {
+    const baseDate = new Date()
+    baseDate.setDate(baseDate.getDate() - notificationDays)
+
+    const start = startOfDay(baseDate)
+    const end = endOfDay(baseDate)
+
+    try {
+      const result = await  AnimalModel.aggregate([
+        {$match: {status:"PENDING", last_modified_at: {$lte: end, $gt: start}}},
+        {$group: {_id: {$toString:"$donator_id"}, animals: {$push: {$mergeObjects: "$$ROOT"}}}}
+      ])
+
+      for (const user of result) {
+        const mapperResponse = AnimalMapper.toDomainBulk(user.animals)
+        if (mapperResponse.isLeft()) {
+          return left(mapperResponse.value)
+        }
+
+        user.animals = mapperResponse.value
+      }
+
+      return right(result)
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+
   }
 
 }
