@@ -5,5 +5,6 @@ export interface CreateUserDTO {
   password: string;
   phone: string;
   location: GeoJSON.Position;
-  image?: string; 
+  image?: string;
+  description?:string
 }

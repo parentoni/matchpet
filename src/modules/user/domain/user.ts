@@ -18,6 +18,7 @@ import { UserLogin } from "./events/userLogin";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { UserName } from "./userProps/userName";
 import { UserImage } from "./userProps/userImage";
+import { UserDescription } from "./userProps/userDescription";
 
 export interface UserProps {
   displayName: UserDisplayName;
@@ -31,7 +32,9 @@ export interface UserProps {
   completedAdoptions: number;
   inAdoption: number;
   lastLogin: UserLastLogin;
-  image?: UserImage
+
+  image?: UserImage;
+  description?: UserDescription;
 }
 
 type UserResponse = Either<GenericError<IBaseError>, User>;
@@ -84,9 +87,12 @@ export class User extends AggregateRoot<UserProps> {
   get lastLogin(): UserLastLogin {
     return this.props.lastLogin;
   }
-
+  
   get image(): UserImage | undefined {
     return this.props.image
+  }
+  public get description(): UserDescription | undefined {
+    return this.props.description
   }
 
   public updateCompletedAdoptions(num: number): void {
@@ -96,6 +102,7 @@ export class User extends AggregateRoot<UserProps> {
   public updateInAdoption(num: number): void {
     this.props.inAdoption = num;
   }
+
 
   public logActivity() {
     this.addDomainEvent(new UserLogin(this));

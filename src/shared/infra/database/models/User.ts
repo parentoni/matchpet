@@ -16,7 +16,9 @@ const userSchema = new mongoose.Schema({
   completed_adoptions: { type: Number, default: 0 },
   in_adoption: { type: Number, default: 0 },
   last_login: { type: Date, required: true },
-  image: {type: String, required: false}
+
+  image: {type: String, required: false},
+  description: {type: String, required: false}
 });
 
 export type IUserPersistant = {
@@ -36,7 +38,8 @@ export type IUserPersistant = {
   in_adoption: number;
   last_login: Date;
 
-  image?: string
+  image?: string;
+  description?: string;
 };
 
 // userSchema.post('findOne', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})

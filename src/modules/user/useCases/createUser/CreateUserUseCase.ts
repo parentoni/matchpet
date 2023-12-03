@@ -24,6 +24,7 @@ import { Secrets } from "../../../../config/secretsManager";
 import { UserLastLogin } from "../../domain/userProps/userLastLogin";
 import { UserName } from "../../domain/userProps/userName";
 import { UserImage } from "../../domain/userProps/userImage";
+import { UserDescription } from "../../domain/userProps/userDescription";
 
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
@@ -54,6 +55,16 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       }
 
       image = imageOrError.value
+    }
+
+    let description: undefined | UserDescription;
+    if (request.description) {
+      const descriptionOrError = UserDescription.create({value: request.description})
+      if (descriptionOrError.isLeft()) {
+        return left(descriptionOrError.value)
+      }
+
+      description = descriptionOrError.value
     }
 
     const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, displayNameOrError, roleOrError, locationOrError, lastLoginOrError, userNameOrError]);
@@ -129,7 +140,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         inAdoption: 0,
         completedAdoptions: 0,
         lastLogin: lastLogin,
-        image
+        image,
+        description
         // role: UserRole.create({value: 0})
       });
   

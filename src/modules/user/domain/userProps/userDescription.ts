@@ -2,11 +2,12 @@ import { Guard, GuardError } from "../../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { Either, left, right } from "../../../../shared/core/Result";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
-interface AnimalDescriptionProps {
+
+interface UserDescriptionProps {
   value: string;
 }
 
-export class AnimalDescription extends ValueObject<AnimalDescriptionProps> {
+export class UserDescription extends ValueObject<UserDescriptionProps> {
   private static MAX_LENGTH = 1500;
   private static MIN_LENGTH = 0;
 
@@ -27,19 +28,19 @@ export class AnimalDescription extends ValueObject<AnimalDescriptionProps> {
 
     return left(
       CommonUseCaseResult.InvalidValue.create({
-        location: `${AnimalDescription.name}.${this.validate.name}`,
-        variable: "ANIMAL_DESCRIPTION",
-        errorMessage: `Animal description length must be between ${this.MIN_LENGTH} and ${this.MAX_LENGTH} characters.`
+        location: `${UserDescription.name}.${this.validate.name}`,
+        variable: "USER_DESCRIPTION",
+        errorMessage: `User description length must be between ${this.MIN_LENGTH} and ${this.MAX_LENGTH} characters.`
       })
     );
   }
 
-  public static create(props: AnimalDescriptionProps): Either<GuardError | CommonUseCaseResult.InvalidValue, AnimalDescription> {
+  public static create(props: UserDescriptionProps): Either<GuardError | CommonUseCaseResult.InvalidValue, UserDescription> {
     const validateResult = this.validate(props.value);
     if (validateResult.isLeft()) {
       return left(validateResult.value);
     }
 
-    return right(new AnimalDescription({ value: validateResult.value }));
+    return right(new UserDescription({ value: validateResult.value }));
   }
 }
