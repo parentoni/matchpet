@@ -57,7 +57,6 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
     const persistentNewAnimal: IAnimalPersistent = {
       _id: persistenAtualAnimal.value._id,
       status: persistenAtualAnimal.value.status,
-      age: persistenAtualAnimal.value.age,
       created_at: persistenAtualAnimal.value.created_at,
       donator_id: persistenAtualAnimal.value.donator_id,
       specie_id: persistenAtualAnimal.value.specie_id,

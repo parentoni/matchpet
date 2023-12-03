@@ -5,6 +5,7 @@ import { FILTER_MODES } from "../Animals/filters"
 
 export interface PartnerAnimalsGridProps {
   animals: IAnimalDTO[],
+  setAnimals: (x: IAnimalDTO[]) => void,
   animalsCount: number,
   loading:boolean,
   page: number

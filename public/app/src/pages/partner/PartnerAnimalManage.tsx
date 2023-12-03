@@ -70,7 +70,7 @@ export function PartnerAnimalManage () {
         Copiar link de catálogo
       </button>
     </div>
-    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters}/>
+    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters} setAnimals={setAnimals}/>
     <FilterModal
       searchArea={searchArea}
       filters={filters}

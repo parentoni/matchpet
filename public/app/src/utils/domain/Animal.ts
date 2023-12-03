@@ -2,7 +2,7 @@ import { FILTER_MODES } from "../../elements/Animals/filters";
 import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
-
+import {differenceInDays} from 'date-fns'
 export interface CreateAnimalListingDTO {
   name: string;
   image: string[];
@@ -20,6 +20,15 @@ export class Animal {
     this.props = props;
   }
 
+  public getExpiringDate() {
+    const date = new Date(this.props.last_modified_at)
+    date.setDate(date.getDate() + 35)
+    return date
+  }
+
+  public canRenovate () {
+    return !!(differenceInDays(new Date(), this.props.last_modified_at) >= 7)
+  }
   public static create(props: IAnimalDTO) {
     return new Animal(props);
   }
@@ -115,5 +124,14 @@ export class Animal {
     }
 
     return right(response.value);
+  }
+
+  public static async renovatePost(animalId:string, token:string) {
+    const response = await Api.post('/animals/renovate', JSON.stringify({animalId: animalId}), token)
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right('ok')
   }
 }

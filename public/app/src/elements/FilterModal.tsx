@@ -79,7 +79,7 @@ export const FilterModal = (props: FilterModalProps) => {
             <div className='block lg:hidden'>
               <LocationFilter searchArea={props.searchArea} setSearchArea={props.setSearchArea} filters={props.filters} setFilters={props.setFilters}/>
             </div>
-            <SlideFilter filters={props.filters} setFilters={props.setFilters} max={max} min={min} setMax={setMax} setMin={setMin}/>
+            {/* <SlideFilter filters={props.filters} setFilters={props.setFilters} max={max} min={min} setMax={setMax} setMin={setMin}/> */}
             {props.isPartner?<StatusFilter filters={props.filters} setFilters={props.setFilters}/>:''}
             {selectedSpecie && Categories.createFromDTO(categories).list.map(category => {
               return(

@@ -15,7 +15,7 @@ export class RenovateLastModifiedAtController extends BaseController<Authenticat
       return this.errorHandler(res, response.value)
     }
 
-    return this.ok(res, response.value)
+    return this.ok(res, {"message": 'OK'})
    })
   }
 }

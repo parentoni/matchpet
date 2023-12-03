@@ -69,7 +69,6 @@ export const PartnerEditAnimal = () => {
 
           animalInput['name'] = data.props.name
           animalInput['description'] = data.props.description
-          animalInput['age'] = data.props.age
           setAnimalInput(structuredClone(animalInput))
           setSelectedSpecie(Specie.create(species.find(x => x._id === data.props.specie_id) as ISpecieDTO))
 
@@ -222,7 +221,7 @@ export const PartnerEditAnimal = () => {
           animalStatus={animalStatus}
           setAnimalStatus={setAnimalStatus}
           />
-          <button className="mt-10 w-full bg-black h-10 text-white" onClick={formSubmit}>
+          <button className="mt-10 w-full bg-primary h-10 rounded text-white" onClick={formSubmit}>
             SALVAR
           </button>
         </div>

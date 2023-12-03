@@ -19,7 +19,6 @@ import { AnimalEdited } from "./events/AnimalEdited";
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
   name: AnimalName;
-  age: AnimalAge;
   image: AnimalImages;
   specieId: UniqueGlobalId;
   animalTrait: AnimalTraits;
@@ -43,10 +42,6 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   get name(): AnimalName {
     return this.props.name;
-  }
-
-  get age(): AnimalAge {
-    return this.props.age;
   }
 
   get image(): AnimalImages {
@@ -94,7 +89,6 @@ export class Animal extends AggregateRoot<IAnimalProps> {
   public static create(props: IAnimalProps, id?: UniqueGlobalId): AnimalCreateResponse {
     const guardResult = Guard.againstNullOrUndefinedBulk([
       { argumentName: "NAME", argument: props.name },
-      { argumentName: "AGE", argument: props.age },
       { argumentName: "IMAGE", argument: props.image },
       { argumentName: "DONATOR_ID", argument: props.donatorId },
       { argumentName: "ANIMAL_TRAIT", argument: props.animalTrait },

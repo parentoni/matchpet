@@ -56,23 +56,6 @@ export const PartnerEditAnimalForm = (props: PartnerEditAnimalFormProps) => {
         errorMessage={props.animalInputError["description"] ?"Por favor, digite a descrição do animal.":undefined}
         subElement={<MaxCharacters current={props.animalInput['name'].length} max={1500} error={props.animalInputError["description"] ? true : false} />}
         placeholder="Max é um animal muito brincalhão, gosta de ...." />
-      <div className="flex w-full flex-col lg:flex-row justify-between">
-
-        <NumberInput
-          onChange={e => changeAnimalInput("age", props.animalInput['age'] % 12 + Number(e.target.value) * 12)}
-          state={Math.floor(props.animalInput['age'] / 12)}
-          title="Idade"
-          subElement={<span className="text-gray-400">anos</span>} />
-        <span className="flex-1 align-top flex items-center justify-center mx-2">e</span>
-        <div className="flex flex-1 items-end">
-          <NumberInput
-            onChange={e => changeAnimalInput("age", Math.floor(props.animalInput['age'] / 12) * 12 + Number(e.target.value))}
-            state={props.animalInput['age'] % 12}
-            title=""
-            subElement={<span className="text-gray-400">meses</span>} />
-        </div>
-
-      </div>
 
       <SelectInput
         array={props.species.list}

@@ -27,24 +27,28 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
   const [animalsCount, setAnimalsCount] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setLoading(true)
-    Animal.getAll(page, filters,searchArea,ANIMAL_STATUS.PENDING).then((response) => {
-      if (response.isLeft()) {
-        alert("Erro lendo animais.")
-      } else {
-        setLoading(false)
-        if (page !== 0) {
-          setAnimals(animals => [...animals, ...response.value.animals])
-        }  else {
-          setAnimals(response.value.animals)
-        }
-        setAnimalsCount(response.value.count)
-      }
 
-    })
+    if (typeof(page) === 'number' && filters && searchArea) {
+      console.log(page, filters, searchArea)
+      setLoading(true)
+      Animal.getAll(page, filters,searchArea,ANIMAL_STATUS.PENDING).then((response) => {
+        if (response.isLeft()) {
+          alert("Erro lendo animais.")
+        } else {
+          setLoading(false)
+          if (page !== 0) {
+            setAnimals(animals => [...animals, ...response.value.animals])
+          }  else {
+            setAnimals(response.value.animals)
+          }
+          setAnimalsCount(response.value.count)
+        }
+  
+      })
+    }
   }, [page, filters, searchArea])
 
   useEffect(() => {

@@ -19,7 +19,6 @@ export class AnimalMapper {
   //!todo: add traits verification
   public static toDomain(persistent: IAnimalPersistent): Either<GuardError, Animal> {
     const animalNameOrError = AnimalName.create({ value: persistent.name });
-    const animalAgeOrError = AnimalAge.create({ months: persistent.age });
     const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id.toString());
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id.toString());
@@ -33,7 +32,6 @@ export class AnimalMapper {
     
     const combineResult = EitherUtils.combine([
       animalNameOrError,
-      animalAgeOrError,
       animalImageOrError,
       animalDonatorIdOrError,
       animalSpecieIdOrError,
@@ -48,7 +46,6 @@ export class AnimalMapper {
     }
 
     const animalName = animalNameOrError.getRight();
-    const animalAge = animalAgeOrError.getRight();
     const animalImage = animalImageOrError.getRight();
     const animalDonatorId = animalDonatorIdOrError.getRight();
     const animalSpecieId = animalSpecieIdOrError.getRight();
@@ -60,7 +57,6 @@ export class AnimalMapper {
     const animal = Animal.create(
       {
         name: animalName,
-        age: animalAge,
         image: animalImage,
         donatorId: animalDonatorId,
         specieId: animalSpecieId,
@@ -85,7 +81,6 @@ export class AnimalMapper {
       return right({
         _id: domain.id.toValue(),
         name: domain.name.value,
-        age: domain.age.value,
         image: domain.image.persistentValue,
         donator_id: domain.donatorId.toValue(),
         specie_id: domain.specieId.toValue(),

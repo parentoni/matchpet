@@ -57,7 +57,6 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     }
 
     const animalName = animalNameOrError.getRight();
-    const animalAge = animalAgeOrError.getRight();
     const animalImage = animalImageOrError.getRight();
     const animalSpecieId = animalSpecieIdOrError.getRight();
     const animalDonatorId = animalDonatorIdOError.getRight();
@@ -79,7 +78,6 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
 
     const animalResult = Animal.create({
       name: animalName,
-      age: animalAge,
       donatorId: animalDonatorId,
       image: animalImage,
       specieId: animalSpecieId,
