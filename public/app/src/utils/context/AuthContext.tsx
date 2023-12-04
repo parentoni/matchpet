@@ -46,7 +46,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   }, [token])
 
   async function getInfo (token:string):Promise<Either<Response, IUserPersistent>> {
-    const response = await Api.get('/auth/myself', token)
+    const response = await Api.get('/user/myself', token)
     if (response.isLeft()) {
       return left(response.value)
     }

@@ -6,7 +6,7 @@ import { createAnimalListingController } from "../../../useCases/animals/createA
 import { getAnimalListingByIdController } from "../../../useCases/animals/getAnimalListingById";
 import { reccommendSimilarAnimalsController } from "../../../useCases/animals/reccommendSimilarAnimals";
 import { filterAnimalsController } from "../../../useCases/animals/filterAnimals";
-import { uploadAnimalImageController } from "../../../useCases/upload/uploadAnimalImage";
+import { uploadAnimalImageController } from "../../../../app/useCases/uploadlImage";
 import fileUpload from "express-fileupload";
 import { categoryRouter } from "./category";
 import { editAnimalController } from "../../../useCases/animals/editAnimal";
@@ -19,9 +19,7 @@ animalsRouter.use("/categories", categoryRouter);
 
 animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnimalListingController.execute(req, res));
 animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req, res));
-animalsRouter.post("/image/upload", middleware.authenticated(), fileUpload({ limits: { fileSize: 100 * 1024 * 1024 } }), (req, res) =>
-  uploadAnimalImageController.execute(req, res)
-);
+
 animalsRouter.post("/renovate", middleware.authenticated(), (req, res) => renovateLastModifiedAtController.execute(req, res));
 
 

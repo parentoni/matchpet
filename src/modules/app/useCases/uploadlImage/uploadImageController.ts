@@ -1,7 +1,7 @@
 import formidable from "formidable";
-import { AuthenticatedRequest } from "../../../../../shared/infra/http/models/AutheticatedRequest";
-import { BaseController } from "../../../../../shared/infra/http/models/BaseController";
-import { UploadAnimalImageUseCase } from "./uploadAnimalImageUseCase";
+import { AuthenticatedRequest } from "../../../../shared/infra/http/models/AutheticatedRequest";
+import { BaseController } from "../../../../shared/infra/http/models/BaseController";
+import { UploadAnimalImageUseCase } from "./uploadImageUseCase";
 import { Request } from "express";
 import { UploadedFile } from "express-fileupload";
 export class UploadAnimalImageController extends BaseController<Request> {

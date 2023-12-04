@@ -92,7 +92,7 @@ export class Animal {
     const formData = new FormData();
     formData.append("image", file);
 
-    const response = await fetch(Api.baseUrl + "/animals/image/upload", {
+    const response = await fetch(Api.baseUrl + "/app/image/upload", {
       body: formData,
       headers: {
         authorization: "Bearer " + token

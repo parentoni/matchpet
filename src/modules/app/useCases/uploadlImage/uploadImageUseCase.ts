@@ -1,10 +1,10 @@
 import { randomUUID } from "crypto";
-import { UseCase } from "../../../../../shared/core/UseCase";
-import { IBucketUpload } from "../../../infra/aws/IBucket";
-import { UploadAnimalImageDTO } from "./uploadAnimalImageDTO";
-import { UploadAnimalImageResponse } from "./uploadAnimalImageResponse";
-import { left, right } from "../../../../../shared/core/Result";
-import { Guard } from "../../../../../shared/core/Guard";
+import { UseCase } from "../../../../shared/core/UseCase";
+import { IBucketUpload } from "../../../animals/infra/aws/IBucket";
+import { UploadAnimalImageDTO } from "./uploadImageDTO";
+import { UploadAnimalImageResponse } from "./uploadImageResponse";
+import { left, right } from "../../../../shared/core/Result";
+import { Guard } from "../../../../shared/core/Guard";
 
 export class UploadAnimalImageUseCase implements UseCase<UploadAnimalImageDTO, UploadAnimalImageResponse> {
   protected bucketService: IBucketUpload;

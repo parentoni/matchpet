@@ -58,12 +58,17 @@ export const AllPartnerAnimals = () => {
   return (
 
     <>
-      <div className="divider mb-0"></div>
-      <PageLayout>
-        <button className="mb-5 font-medium flex gap-2" onClick={() => routerLocation.key !== 'default'?navigate(-1):navigate('/')}>
+      <div className="w-full flex  flex-col mt-8">
+        <button className="mb-5 font-medium flex gap-2 mx-8" onClick={() => routerLocation.key !== 'default'?navigate(-1):navigate('/')}>
           <span><ArrowLeft /></span>
           Ver todos os animais disponíveis
         </button>
+        <div className="w-full h-[100px] relative">
+          <div className="relative h-full aspect-square postion bg-red-100 mx-8 z-50"></div>
+          <div className="w-full absolute top-1/2 left-0 z-0 border-b"></div>
+        </div>
+      </div>    
+      <PageLayout>
         <h2 className="text-2xl"> {!loading && animalsCount? animalsCount: '---'} animais disponíveis da(o) {user?.display_name}</h2>
         <AnimalGrid 
           AnimalsArray={animals}

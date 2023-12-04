@@ -34,10 +34,6 @@ const router = createBrowserRouter([
         element: <AllAnimals />
       },
       {
-        path: '/organizations/:username',
-        element: <AllPartnerAnimals />
-      },
-      {
         path: '/select',
         element: <AnimalSelect />
       }, 
@@ -46,6 +42,10 @@ const router = createBrowserRouter([
         element: <IWantDonate />
       }
     ]
+  },
+  {
+    path: '/organizations/:username',
+    element: <AllPartnerAnimals />
   },
   {
     path: '/partner',
