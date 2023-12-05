@@ -89,14 +89,7 @@ export class UserRepo implements IUserRepo {
         in_adoption: { $gt: 0 },
         verified: true
       }).sort({in_adoption: -1})
-      for (const user of result) {
-        const userMapperResponse = await UserMap.toDomain(user);
-        if (userMapperResponse.isLeft()) {
-          return left(userMapperResponse.value);
-        }
-
-        userArray.push(userMapperResponse.value);
-      }
+      const userArray = await UserMap.toDomainBulk(result)
       return right(userArray);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

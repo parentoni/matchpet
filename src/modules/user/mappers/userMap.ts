@@ -140,4 +140,18 @@ export class UserMap {
 
     return right(persistentResult.value);
   }
+
+  static async toDomainBulk(persistent: IUserPersistant[]) : Promise<User[]> {
+    const userA: User[] = []
+    if (persistent.length > 0) {
+      for (const pers of persistent) {
+        const result = await this.toDomain(pers)
+        if (result.isRight()) {
+          userA.push(result.value)
+        }
+      }
+    }
+
+    return userA
+  }
 }
