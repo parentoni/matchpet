@@ -37,7 +37,7 @@ export function RegisterLocationControl ({location, setLocation}:  {location: [n
     <div className="leaflet-control-container">
       <div className="leaflet-top leaflet-right gap-2">
 
-        <button className="leaflet-control leaflet-bar bg-white px-2 py-0.5 gap-2 flex items-center" >
+        <button type="button" className="leaflet-control leaflet-bar bg-white px-2 py-0.5 gap-2 flex items-center" >
           <MapPinned /> {location?<span>Clique novamente para apagar a localizacão</span>:<span>Clique para definir a sua localização</span>}
         </button>
 

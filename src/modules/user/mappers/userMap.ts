@@ -122,8 +122,8 @@ export class UserMap {
         completed_adoptions: user.completedAdoptions,
         in_adoption: user.inAdoption,
         last_login: user.lastLogin.value,
-        image: user.image?.value ,
-        description: user.description?.value
+        image: user.image?.value || '',
+        description: user.description?.value || ''
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

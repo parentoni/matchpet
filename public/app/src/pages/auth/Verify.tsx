@@ -38,6 +38,9 @@ export const Verify = () => {
 
           <div className="mt-8 flex flex-col sm:flex-row gap-5">
               
+              <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner/config')}>
+                Adicionar imagem e descrição
+              </button>
               <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner')}>
                 Gerenciar animais
               </button>

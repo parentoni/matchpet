@@ -12,6 +12,8 @@ export interface IUserPersistent {
   };
   in_adoption: number;
   completed_adoptions: number;
+  image?:string,
+  description?:string,
 }
 
 export interface IUserSignIn {

@@ -19,6 +19,7 @@ import { ForgotPasswordSuccess } from "./pages/auth/ForgotPassrodSuccess";
 import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
 import { IWantDonate } from "./pages/hero/IWantDonate";
+import { PartnerConfig } from "./pages/partner/PartnerConfig";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
       {
         element: <PartnerEditAnimal />,
         path: 'animal/:id'
+      },
+      {
+        element: <PartnerConfig />,
+        path: 'config'
       }
     ]
   },

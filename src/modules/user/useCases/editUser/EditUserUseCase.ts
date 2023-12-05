@@ -37,18 +37,22 @@ export class EditUserUseCase implements UseCase<EditUserDTO, EditUserResponse> {
         type: "Point",
         coordinates: request.edit.location || oldUserInPersistent.value.location.coordinates
       },
-      description: request.edit.description || oldUserInPersistent.value.description,
-      image:  request.edit.image || oldUserInPersistent.value.image,
+      description: request.edit.description !== undefined? request.edit.description: oldUserInPersistent.value.description,
+      image:  request.edit.image !== undefined? request.edit.image: oldUserInPersistent.value.image,
 
       
     }
 
     const newUser = await UserMap.toDomain(persistentNewUser)
+
+    
     if (newUser.isLeft()) {
       return left(newUser.value)
     }
 
+    console.log(newUser)
     const saveResult = await this.userRepo.create({dto: newUser.value})
+
     if (saveResult.isLeft()) {
       return left(saveResult.value)
     }

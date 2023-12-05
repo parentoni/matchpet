@@ -134,4 +134,9 @@ export class Animal {
 
     return right('ok')
   }
+
+  public static async animalComplaint (animalId:string, text:string, contact?: {name: string, phone:string}) {
+    const response = await Api.post(`/animals/${animalId}/complaint`, JSON.stringify({complaint: text, contact_info: contact}))
+    return response
+  }
 }
