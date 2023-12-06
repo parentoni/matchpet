@@ -1,0 +1,13 @@
+{
+  "apps": [
+      {
+          "name": "api",
+          "script": "./dist/index.js",
+          "merge_logs": true,
+          "max_memory_restart": "200M",
+          "env": {
+              "NODE_ENV": "production"
+          }
+      }
+  ]
+}

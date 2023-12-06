@@ -19,11 +19,6 @@ app.use("/", v1Router);
 
 const port = Secrets.getSecret("port");
 
-if (Secrets.NODE_ENV === "production") {
-  const privateKey = fs.readFileSync("/etc/letsencrypt/live/api.matchpet.org/privkey.pem");
-  const certificate = fs.readFileSync("/etc/letsencrypt/live/api.matchpet.org/fullchain.pem");
-} else {
-  app.listen(port, () => {
-    console.log(`[App]: Listening on port ${port}`);
-  });
-}
+app.listen(port, () => {
+  console.log(`[App]: Listening on port ${port}`);
+});

@@ -1,10 +1,11 @@
-/node_modules
+*node_modules
 
 *.env.development
 *.env.production
-
+*.env
 .DS_Store
 
 /scripts/tmp/*
 
-/dist
+*dist
+node_modules
