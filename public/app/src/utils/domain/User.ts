@@ -11,6 +11,8 @@ export interface ISignInUserProps {
   password: string;
   phone: string;
   location: [number, number];
+  description?:string,
+  image?:string
 }
 export class User {
   public static async getUserContactInfo(id: string): Promise<Either<Response, IUserContactDTO>> {
@@ -78,4 +80,17 @@ export class User {
 
     return right(response.value)
   }
+
+
+  public static async editUser(props: Partial<ISignInUserProps>, token:string): Promise<Either<string, string>> {
+
+    const response = await Api.put('/user/myself', JSON.stringify(props), token)
+    if (response.isLeft()) {
+      
+      const data = await response.value.json()
+      return left(data.message.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data.message.location}:${data.message.variable}`)
+    }
+    return right('ok')
+  }
+
 }

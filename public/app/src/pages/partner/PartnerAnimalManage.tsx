@@ -1,15 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { PageLayout } from "../../PageLayout";
-import { ANIMAL_STATUS, IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
+import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import { Animal } from "../../utils/domain/Animal";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
 import { PartnerAnimalGrid } from "../../elements/partner/PartnerAnimalsGrid";
-import { FiltersContext } from "../../utils/context/FiltersContext";
 import { useNavigate } from "react-router-dom";
 import { FilterModal } from "../../elements/FilterModal";
-import { SpeciesContext } from "../../utils/context/SpeciesContext";
-import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO";
 
 export function PartnerAnimalManage () {
 
@@ -70,7 +67,7 @@ export function PartnerAnimalManage () {
         Copiar link de catálogo
       </button>
     </div>
-    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters}/>
+    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters} setAnimals={setAnimals}/>
     <FilterModal
       searchArea={searchArea}
       filters={filters}

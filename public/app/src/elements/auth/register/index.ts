@@ -2,6 +2,7 @@ import { RegisterButton } from "./RegisterButton";
 import { RegisterLocationInput } from "./RegisterLocationInput";
 import { RegisterRoot } from "./RegisterRoot";
 import { RegisterStep } from "./RegisterStep";
+import { RegisterTextArea } from "./RegisterTextArea";
 import { RegisterTextInput } from "./RegisterTextInput";
 import { RegisterTitle } from "./RegisterTitle";
 import { RegisterTooltip } from "./RegisterTooltip";
@@ -13,5 +14,6 @@ export const Register = {
   Step: RegisterStep,
   TextInput: RegisterTextInput,
   Tooltip: RegisterTooltip,
-  Location: RegisterLocationInput
+  Location: RegisterLocationInput,
+  TextArea: RegisterTextArea
 }

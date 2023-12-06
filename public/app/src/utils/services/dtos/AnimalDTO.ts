@@ -1,15 +1,15 @@
 export interface IAnimalDTO {
   _id: string;
   name: string;
-  age: number;
   image: string[];
-  created_at: Date;
   status: ANIMAL_STATUS;
   description: string;
   donator_id: string;
   specie_id: string;
-
   traits: IAnimalTraitsDTO[];
+
+  created_at: Date;
+  last_modified_at: string;
 }
 
 export enum ANIMAL_STATUS {

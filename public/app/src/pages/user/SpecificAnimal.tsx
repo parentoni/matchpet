@@ -80,7 +80,7 @@ export const SpecificAnimal = () => {
       {selectedAnimalDTO && selectedSpecie &&
       <div className="flex flex-col gap-3">
         <AnimalAction AnimalId={selectedAnimalDTO._id}/>
-        <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name}/>
+        <AnimalImage AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name} AnimalId={selectedAnimalDTO._id}/>
         
         <AnimalDescription description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name}/>
         

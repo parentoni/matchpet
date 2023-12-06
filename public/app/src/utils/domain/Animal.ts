@@ -2,7 +2,7 @@ import { FILTER_MODES } from "../../elements/Animals/filters";
 import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
-
+import {differenceInDays} from 'date-fns'
 export interface CreateAnimalListingDTO {
   name: string;
   image: string[];
@@ -20,6 +20,15 @@ export class Animal {
     this.props = props;
   }
 
+  public getExpiringDate() {
+    const date = new Date(this.props.last_modified_at)
+    date.setDate(date.getDate() + 35)
+    return date
+  }
+
+  public canRenovate () {
+    return !!(differenceInDays(new Date(), this.props.last_modified_at) >= 7)
+  }
   public static create(props: IAnimalDTO) {
     return new Animal(props);
   }
@@ -83,7 +92,7 @@ export class Animal {
     const formData = new FormData();
     formData.append("image", file);
 
-    const response = await fetch(Api.baseUrl + "/animals/image/upload", {
+    const response = await fetch(Api.baseUrl + "/app/image/upload", {
       body: formData,
       headers: {
         authorization: "Bearer " + token
@@ -115,5 +124,19 @@ export class Animal {
     }
 
     return right(response.value);
+  }
+
+  public static async renovatePost(animalId:string, token:string) {
+    const response = await Api.post('/animals/renovate', JSON.stringify({animalId: animalId}), token)
+    if (response.isLeft()) {
+      return left(response.value)
+    }
+
+    return right('ok')
+  }
+
+  public static async animalComplaint (animalId:string, text:string, contact?: {name: string, phone:string}) {
+    const response = await Api.post(`/animals/${animalId}/complaint`, JSON.stringify({complaint: text, contact_info: contact}))
+    return response
   }
 }

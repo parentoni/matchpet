@@ -19,7 +19,7 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, getToken: () => string, loading: boolean, setToken: (x:string) => void}>({user: undefined, login: (() => {}) as unknown as LoginFunction, getToken: () => '', loading:true, setToken: () => {}})
+export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, getToken: () => string, loading: boolean, setToken: (x:string) => void,  reloadUser: () => Promise<void>}>({user: undefined, login: (() => {}) as unknown as LoginFunction, getToken: () => '', loading:true, setToken: () => {}, reloadUser: async () => {}})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
@@ -46,7 +46,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   }, [token])
 
   async function getInfo (token:string):Promise<Either<Response, IUserPersistent>> {
-    const response = await Api.get('/auth/myself', token)
+    const response = await Api.get('/user/myself', token)
     if (response.isLeft()) {
       return left(response.value)
     }
@@ -77,8 +77,16 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   function getToken(){
     return window.localStorage.getItem('matchpet_token') || ''
   }
+
+  async function reloadUser () {
+    const token = getToken()
+    const info = await getInfo(token)
+    if (info.isRight()) {
+      setUser(info.value)
+    }
+  }
   return (
-    <AuthContext.Provider value={{user, login: login, getToken:getToken, loading, setToken}}>
+    <AuthContext.Provider value={{user, login: login, getToken:getToken, loading, setToken, reloadUser}}>
       {children}
     </AuthContext.Provider>
   )
