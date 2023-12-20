@@ -15,6 +15,7 @@ import { AnimalTraits } from "./animal/AnimalTraits";
 import { AnimalCreated } from "./events/AnimalCreated";
 import { AnimalStatusChanged } from "./events/AnimalStatusChanged";
 import { AnimalEdited } from "./events/AnimalEdited";
+import { Contacts } from "../../../shared/core/contacts/contacts";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -27,6 +28,7 @@ export interface IAnimalProps {
   
   createdAt: Timestamp;
   lastModifiedAt: Timestamp
+  contact: Contacts
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
@@ -66,6 +68,10 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   get lastModifiedAt(): Timestamp {
     return this.props.lastModifiedAt
+  }
+  
+  get contact(): Contacts {
+    return this.props.contact
   }
 
   public markAnimalAsEditied() {

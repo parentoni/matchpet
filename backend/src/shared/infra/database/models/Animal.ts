@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 import { DomainEvents } from "../../../domain/events/DomainEvents";
 import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 import { ANIMAL_STATUS } from "../../../../modules/animals/domain/animal/AnimalStatus";
@@ -7,6 +7,11 @@ const traitSchema = new mongoose.Schema({
   _id: { type: mongoose.Types.ObjectId, required: true },
   value: { type: String, required: true }
 });
+
+export const contactSchema = new mongoose.Schema({
+  contact_type: {type:String, required: true},
+  contact_value: {type:String, required: true},
+})
 
 export const AnimalSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -17,7 +22,8 @@ export const AnimalSchema = new mongoose.Schema({
   description: { type: String, required: true },
   traits: { type: [traitSchema], required: true },
   created_at: { type: Date, required: true },
-  last_modified_at: {type: Date, required:true}
+  last_modified_at: {type: Date, required:true},
+  contact: {type: [contactSchema], required:true}
 });
 
 //db.animals.updateMany({}, {$set: {last_modified_at: new Date()}})
@@ -32,11 +38,22 @@ export interface IAnimalPersistent {
   description: string;
   traits: IAnimalTraitsPersistent[];
   last_modified_at: Date
+  contact: IContactPersistent[];
 }
 
 export interface IAnimalTraitsPersistent {
   _id: string;
   value: string;
+}
+
+export enum CONTACT_TYPES {
+  WHATSAPP = "WHATSAPP",
+  EMAIL = "EMAIL",
+}
+
+export interface IContactPersistent {
+  contact_type: string;
+  contact_value: string;
 }
 
 AnimalSchema.post("save", (t) => DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString() as string)));

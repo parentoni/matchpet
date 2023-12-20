@@ -62,6 +62,7 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       specie_id: persistenAtualAnimal.value.specie_id,
       last_modified_at: persistenAtualAnimal.value.last_modified_at,
 
+      contact: persistenAtualAnimal.value.contact,
       name: request.edit.name || persistenAtualAnimal.value.name,
       image: request.edit.image || persistenAtualAnimal.value.image,
       description: request.edit.description || persistenAtualAnimal.value.description,
