@@ -113,7 +113,9 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       status: animalStats,
       description: animalDescription,
       lastModifiedAt: animalCreatedTimespamp,
-      contact: animalContact
+      contact: animalContact,
+      views: 0,
+      clicks: 0
     });
 
     if (animalResult.isLeft()) {

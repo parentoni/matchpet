@@ -70,7 +70,9 @@ export class AnimalMapper {
         status: animalStats,
         description: animalDescription,
         lastModifiedAt: animalLastModified,
-        contact: animalContacts
+        contact: animalContacts,
+        views: persistent.views || 0,
+        clicks: persistent.clicks || 0
       },
       animalId
     );
@@ -95,7 +97,9 @@ export class AnimalMapper {
         description: domain.description.value,
         created_at: domain.createdAt.value,
         last_modified_at: domain.lastModifiedAt.value,
-        contact: domain.contact.persistentValue
+        contact: domain.contact.persistentValue,
+        views: domain.views,
+        clicks: domain.clicks
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

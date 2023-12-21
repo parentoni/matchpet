@@ -6,7 +6,7 @@ import { Animal } from "../../domain/Animal";
 import { ANIMAL_STATUS } from "../../domain/animal/AnimalStatus";
 import { AnimalMapper } from "../../mappers/AnimalMapper";
 import { FILTER_MODES, FilterObject } from "../../useCases/animals/filterAnimals/filterAnimalsDTO";
-import { AnimalFindProps, IAnimalRepo } from "../IAnimalRepo";
+import { AnimalFindCountProps, AnimalFindProps, IAnimalRepo } from "../IAnimalRepo";
 import { Location } from "../../../../shared/core/Location";
 import mongoose, { PipelineStage, mongo } from "mongoose";
 import { endOfDay, startOfDay } from "date-fns";
@@ -14,6 +14,7 @@ import { endOfDay, startOfDay } from "date-fns";
 export type DBFilter = Record<string, Record<string, any>>;
 
 export class AnimalRepo implements IAnimalRepo {
+
   
   async save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {
     const animalPersistent = AnimalMapper.toPersistent(animal);
@@ -152,7 +153,91 @@ export class AnimalRepo implements IAnimalRepo {
   }
 
   //Todo: better filter, clean this || documentate.
-  async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>> {
+  async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,Animal[]>> {
+    const filters: PipelineStage[] = [];
+    const dbFilter: DBFilter[] = [];
+    const idFilter: DBFilter[] = [];
+
+    const objectIdFields = ["donator_id", "specie_id"];
+
+    for (const ind_filter of props.filterObject) {
+      const comparation: Record<string, any> = {};
+      const filter: Record<string, any> = {};
+
+      if (objectIdFields.includes(ind_filter.key)) {
+        ind_filter.comparation_value = { $toObjectId: ind_filter.comparation_value };
+        filter[ind_filter.mode] = ["$" + ind_filter.key, ind_filter.comparation_value];
+        idFilter.push(filter);
+      } else {
+        comparation[ind_filter.mode] = ind_filter.comparation_value;
+        filter[ind_filter.key] = comparation;
+        dbFilter.push(filter);
+      }
+    }
+
+    if (dbFilter.length > 0) {
+      filters.push({ $match: { $and: dbFilter } });
+    }
+
+    if (idFilter.length > 0) {
+      filters.push({ $match: { $expr: { $and: idFilter } } });
+    }
+
+    //If location push location filters
+
+    if (props.location) {
+      filters.push(
+        ...[
+          {
+            $lookup: {
+              from: "users",
+              localField: "donator_id",
+              foreignField: "_id",
+              as: "user_data"
+            }
+          },
+          {
+            $match: {
+              "user_data.location": {
+                $geoWithin: {
+                  $geometry: {
+                    type: "Polygon",
+                    coordinates: props.location.coordinates
+                  }
+                }
+              }
+            }
+          },
+        ]
+      );
+    }
+
+    filters.push({
+
+      $sort: {
+        last_modified_at: -1 as -1
+      }
+    },
+    { $skip: props.skip },{$limit: props.limit}
+    )
+    const animalArray: Animal[] = [];
+    try {
+      const result = await AnimalModel.aggregate(filters);
+
+      for (const persistenceAnimal of result) {
+        const mapperResult = AnimalMapper.toDomain(persistenceAnimal);
+        if (mapperResult.isRight()) {
+          animalArray.push(mapperResult.value);
+        }
+      }
+
+      return right(animalArray);
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
+    }
+  }
+
+  async geoCount(props: AnimalFindCountProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,number>> {
     const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
     const idFilter: DBFilter[] = [];
@@ -211,32 +296,16 @@ export class AnimalRepo implements IAnimalRepo {
       );
     }
 
-    const countFilter = structuredClone(filters);
-    filters.push({
-      $sort: {
-        last_modified_at: -1
-      }
-    });
 
-    filters.push({ $skip: props.skip }, { $limit: props.limit });
-
-    const animalArray: Animal[] = [];
     try {
-      const result = await AnimalModel.aggregate(filters);
-      const count = result.length > 0 ? await AnimalModel.aggregate(countFilter).count("count") : "";
-
-      for (const persistenceAnimal of result) {
-        const mapperResult = AnimalMapper.toDomain(persistenceAnimal);
-        if (mapperResult.isRight()) {
-          animalArray.push(mapperResult.value);
-        }
-      }
-
-      return right({ animals: animalArray, count: result.length > 0 ? count[0].count : 0 });
+      console.log(filters)
+      const count = await AnimalModel.aggregate(filters).count('count')
+      return right(count[0].count || 0);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
+
 
   async countUnactive(date: Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>> {
 
@@ -291,6 +360,15 @@ export class AnimalRepo implements IAnimalRepo {
       return left(CommonUseCaseResult.UnexpectedError.create(error))
     }
 
+  }
+
+  async updateViewsForAnimalBatch(animals_ids: string[]): Promise<Either<CommonUseCaseResult.UnexpectedError , null>> {
+    try {
+      await AnimalModel.updateMany({_id: {$in: animals_ids}}, { $inc: { "views": 1 } })
+      return right(null)
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }    
   }
 
 }

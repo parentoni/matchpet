@@ -23,7 +23,9 @@ export const AnimalSchema = new mongoose.Schema({
   traits: { type: [traitSchema], required: true },
   created_at: { type: Date, required: true },
   last_modified_at: {type: Date, required:true},
-  contact: {type: [contactSchema], required:true}
+  contact: {type: [contactSchema], required:true},
+  views: {type: Number, required:true, default: 0},
+  clicks: {type: Number, required:true, default: 0}
 });
 
 //db.animals.updateMany({}, {$set: {last_modified_at: new Date()}})
@@ -39,6 +41,8 @@ export interface IAnimalPersistent {
   traits: IAnimalTraitsPersistent[];
   last_modified_at: Date
   contact: IContactPersistent[];
+  views: number,
+  clicks: number
 }
 
 export interface IAnimalTraitsPersistent {

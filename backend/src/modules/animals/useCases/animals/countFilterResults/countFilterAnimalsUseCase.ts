@@ -9,22 +9,22 @@ import { IAnimalRepo } from "../../../repository/IAnimalRepo";
 import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "../filterAnimals/filterAnimalsDTO";
 import { FilterAnimalsUseCaseResponse } from "../filterAnimals/filterAnimalsResponse";
 import { UpdateViewCounterUseCase } from "../updateVIewCounter/UpdateViewCounterUseCase";
+import { CountFilterAnimalsDTO } from "./countFilterAnimalsDTO";
+import { CountFilterAnimalsUseCaseResponse } from "./countFilterAnimalsResponse";
 
 
-export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAnimalsUseCaseResponse> {
+export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO , CountFilterAnimalsUseCaseResponse> {
 
   protected animalRepo: IAnimalRepo;
-  protected updateViewCounterUseCase: UpdateViewCounterUseCase;
 
-  constructor(animalRepo: IAnimalRepo, updateViewCounterUseCase: UpdateViewCounterUseCase) {
+  constructor(animalRepo: IAnimalRepo) {
     this.animalRepo = animalRepo;
-    this.updateViewCounterUseCase = updateViewCounterUseCase
   }
 
-  async execute(request: FilterAnimalsDTO): Promise<FilterAnimalsUseCaseResponse> {
+  async execute(request: CountFilterAnimalsDTO): Promise<CountFilterAnimalsUseCaseResponse> {
+    console.log('oi')
     const guardResponse = Guard.againstNullOrUndefinedBulk([
-      { argument: request.filter, argumentName: "FILTER" },
-      { argument: request.page, argumentName: "PAGE" }
+      { argument: request.filter, argumentName: "FILTER" }
     ]);
 
     if (guardResponse.isLeft()) {
@@ -53,31 +53,14 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
       }
     }
 
-    const result = await this.animalRepo.geoFind({
+    const result = await this.animalRepo.geoCount({
       location: polygon,
-      filterObject: treatedFilters,
-      skip: request.page * 50,
-      limit: 50
+      filterObject: treatedFilters
     });
     if (result.isLeft()) {
       return left(result.value);
     }
 
-    const persistentValues: IAnimalPersistent[] = [];
-
-    const response = await this.updateViewCounterUseCase.execute({animals: result.value})
-    if (response.isLeft()) {
-      console.log(response)
-    }
-    
-    for (const value of result.value) {
-      const mapperResult = AnimalMapper.toPersistent(value);
-      if (mapperResult.isLeft()) {
-        return left(mapperResult.value);
-      }
-
-      persistentValues.push(mapperResult.value);
-    }
-    return right({animals:persistentValues});
+    return right({count:result.value});
   }
 }

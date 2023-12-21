@@ -16,6 +16,7 @@ import { AnimalCreated } from "./events/AnimalCreated";
 import { AnimalStatusChanged } from "./events/AnimalStatusChanged";
 import { AnimalEdited } from "./events/AnimalEdited";
 import { Contacts } from "../../../shared/core/contacts/contacts";
+import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -27,8 +28,11 @@ export interface IAnimalProps {
   description: AnimalDescription;
   
   createdAt: Timestamp;
-  lastModifiedAt: Timestamp
-  contact: Contacts
+  lastModifiedAt: Timestamp;
+  contact: Contacts;
+
+  views: number;
+  clicks: number;
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
@@ -74,8 +78,24 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.contact
   }
 
+  get views():number {
+    return this.props.views
+  }
+
+  get clicks():number {
+    return this.props.clicks
+  }
+
   public markAnimalAsEditied() {
     this.addDomainEvent(new AnimalEdited(this))
+  }
+
+  public incrementAnimalViewCount(i:number = 1) {
+    this.props.views += i
+  }
+
+  public incrementAnimalClickCount(i:number = 1) {
+    this.props.clicks += i
   }
 
   public animalChangeStatus(newStatus: ANIMAL_STATUS): Either<GuardError, null>{
@@ -102,7 +122,9 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "ANIMAL_DESCRIPTION", argument: props.description },
       { argumentName: "ANIMAL_CREATED_AT", argument: props.createdAt },
       { argumentName: "ANIMAL_LAST_MODIFIED_AT", argument: props.createdAt },
-
+      { argumentName: "ANIMAL_CONTACT", argument: props.contact },
+      { argumentName: "ANIMAL_CLICKS", argument: props.clicks },
+      { argumentName: "ANIMAL_VIEWS", argument: props.views },
     ]);
 
     if (guardResult.isLeft()) {

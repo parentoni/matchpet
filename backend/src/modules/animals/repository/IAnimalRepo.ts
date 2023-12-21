@@ -11,6 +11,12 @@ export type AnimalFindProps = {
   limit: number;
   filterObject: FilterObject[];
 };
+
+export type AnimalFindCountProps = {
+  location?: Location.GeoJsonPolygon;
+  filterObject: FilterObject[];
+};
+
 export interface IAnimalRepo {
   save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>>;
   findById(id: string): Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError | GuardError, Animal>>;
@@ -24,7 +30,9 @@ export interface IAnimalRepo {
     skip: number,
     limit: number
   ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>>;
-  geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>>;
+  geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>>;
+  geoCount(props: AnimalFindCountProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, number>>;
   countUnactive(date:Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>>;
-  aggregataCanRenovate(notificationDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,  { _id: string; animals: Animal[]}[]>>
+  aggregataCanRenovate(notificationDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,  { _id: string; animals: Animal[]}[]>>;
+  updateViewsForAnimalBatch(animals_ids: string[]): Promise<Either<CommonUseCaseResult.UnexpectedError, null>>
 }
