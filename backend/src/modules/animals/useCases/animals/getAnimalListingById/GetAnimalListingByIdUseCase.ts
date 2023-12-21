@@ -25,6 +25,8 @@ export class GetAnimaListingByIdUseCase implements UseCase<GetAnimalListingByIdD
       return left(repoResponse.value);
     }
 
+    repoResponse.value.markAnimalAsClicked()
+
     const mapperResult = AnimalMapper.toPersistent(repoResponse.value);
     if (mapperResult.isLeft()) {
       return left(mapperResult.value);

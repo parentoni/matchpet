@@ -17,6 +17,7 @@ import { AnimalStatusChanged } from "./events/AnimalStatusChanged";
 import { AnimalEdited } from "./events/AnimalEdited";
 import { Contacts } from "../../../shared/core/contacts/contacts";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
+import { AnimalClicked } from "./events/AnimalClicked";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -96,6 +97,11 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   public incrementAnimalClickCount(i:number = 1) {
     this.props.clicks += i
+  }
+
+  public markAnimalAsClicked() {
+    this.addDomainEvent(new AnimalClicked(this))
+    DomainEvents.dispatchEventsForAggregate(this._id)
   }
 
   public animalChangeStatus(newStatus: ANIMAL_STATUS): Either<GuardError, null>{
