@@ -25,6 +25,8 @@ export function SpeciesContextProvider({children}: React.PropsWithChildren<{}>) 
     const specie = localStorage.getItem('prefered_specie')
     if (specie && specie !== null) {
       setPreferredSpecie(specie)
+    } else {
+      setPreferredSpecie("NULL")
     }
   }, [])
   useEffect(() => {

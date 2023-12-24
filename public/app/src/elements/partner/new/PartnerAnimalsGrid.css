@@ -1,12 +1,7 @@
 .grid-resizable-columns {
-
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-}
-
-.grid-partner-resizable-columns {
   grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
-
 }
+
 .grid-resizable-cards-width {
   width: 100%
 }

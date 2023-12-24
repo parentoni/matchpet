@@ -17,7 +17,6 @@ import { Either } from "../../utils/shared/Result";
 export interface AnimalGridProps {
   AnimalsArray: IAnimalDTO[],
   SpeciesArray: ISpecieDTO[],
-  setAnimalsArray: (a: IAnimalDTO[]) => void,
   setPage: (x: number) => void,
   page: number, 
   loading: boolean,
@@ -25,8 +24,6 @@ export interface AnimalGridProps {
 
 export function AnimalGrid (props: AnimalGridProps) {
   const navigate = useNavigate()
-
-  // const {setPage, page, loading} = useContext(FiltersContext)
 
   return (
     <div className="w-full grid-cols-1 grid gap-5 grid-resizable-columns pb-20">
@@ -40,13 +37,9 @@ export function AnimalGrid (props: AnimalGridProps) {
             const selectedOptionValue = currentSpecie?.getTraitOptionValueById(sexoTrait._id, Animal.create(animal).getTraitById(sexoTrait?._id)?.value || '')
             const male = selectedOptionValue?.name === 'Fêmea' ? false:true
 
-            const deleteFromArray = () => {
-              props.AnimalsArray.splice(index,1)
-              props.setAnimalsArray(props.AnimalsArray.slice())
-            }
 
             return(
-              <UserAnimalCard  animal={animal} navigate={navigate} male={male} deleteFromArray={deleteFromArray}/>
+              <UserAnimalCard  animal={animal} navigate={navigate} male={male} />
               )
           }
 
@@ -69,7 +62,6 @@ export interface UserAnimalCardProps {
   animal: IAnimalDTO,
   navigate:any,
   male:boolean,
-  deleteFromArray: () => void
 }
 function UserAnimalCard(props: UserAnimalCardProps) {
 

@@ -7,6 +7,8 @@ export interface IAnimalDTO {
   donator_id: string;
   specie_id: string;
   traits: IAnimalTraitsDTO[];
+  views: number;
+  clicks:number;
 
   created_at: Date;
   last_modified_at: string;

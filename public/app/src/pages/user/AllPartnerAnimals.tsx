@@ -128,7 +128,6 @@ export const AllPartnerAnimals = () => {
         <h2 className="text-2xl"> {!loading && animalsCount? animalsCount: '---'} animais disponíveis da(o) {user?.display_name}</h2>
         <AnimalGrid 
           AnimalsArray={animals}
-          setAnimalsArray={setAnimals}
           loading={loading}
           page={page}
           setPage={setPage}

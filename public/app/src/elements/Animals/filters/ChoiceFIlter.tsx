@@ -47,7 +47,7 @@ export function ChoiceFilter (props: Props) {
           Tanto faz
         </button>
         {props.options.map((option, index) => (
-          <button className={`px-4 py-1  text-xs  brute-border rounded-full flex items-center justify-center  whitespace-nowrap ${selectedValue === option._id?"bg-black text-white":""}`} onClick={() => changeFilters(option._id)}>
+          <button key={index} className={`px-4 py-1  text-xs  brute-border rounded-full flex items-center justify-center  whitespace-nowrap ${selectedValue === option._id?"bg-black text-white":""}`} onClick={() => changeFilters(option._id)}>
             {option.name}
           </button>
         ))}

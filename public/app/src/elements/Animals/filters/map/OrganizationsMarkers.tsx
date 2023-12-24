@@ -28,7 +28,6 @@ export const OrganizationsMarkers = (props: OrganizationsMarkersProps) => {
 
       let biggest = organizations[0]?.in_adoption || 0;
       for (const organization of organizations) {
-        console.log(organization, 'oi', organizations)
         if (organization.in_adoption > biggest) {
           biggest = organization?.in_adoption || 0;
         }

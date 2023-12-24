@@ -53,7 +53,49 @@ export class Animal {
     if (status) {
       formatedFilters.push({ mode: "$eq", comparation_value: status, key: "status" });
     }
+    
+    for (const key of Object.keys(filters)) {
+      for (const method of filters[key]) {
+        if (!key.includes("trait")) {
+          formatedFilters.push({ mode: method.mode, comparation_value: method.comparation_value, key: key });
+        } else {
+          formatedFilters.push({ mode: method.mode, comparation_value: method.comparation_value, key: "traits.value" });
+        }
+      }
+    }
+    console.log(formatedFilters)
 
+    const response = await Api.post(
+      "/animals/filter",
+      JSON.stringify(
+        coordinates
+          ? coordinates.length > 0
+            ? { page: page, filter: formatedFilters, coordinates: [coordinates] }
+            : { page: page, filter: formatedFilters }
+          : { page: page, filter: formatedFilters }
+      )
+    );
+    if (response.isLeft()) {
+      return left(response.value);
+    }
+
+    return right({ animals: response.value["animals"] as IAnimalDTO[], count: response.value["count"] as number });
+  }
+
+  public static async count(
+    filters: Record<string, { mode: FILTER_MODES; comparation_value: any }[]>,
+    coordinates?: [number, number][],
+    status?: ANIMAL_STATUS
+  ): Promise<Either<Response, { animals: IAnimalDTO[]; count: number }>> {
+
+    
+    // Filter only pending animals
+    const formatedFilters = [];
+
+    if (status) {
+      formatedFilters.push({ mode: "$eq", comparation_value: status, key: "status" });
+    }
+    
     for (const key of Object.keys(filters)) {
       for (const method of filters[key]) {
         if (!key.includes("trait")) {
@@ -65,13 +107,13 @@ export class Animal {
     }
 
     const response = await Api.post(
-      "/animals/filter",
+      "/animals/filter/count",
       JSON.stringify(
         coordinates
           ? coordinates.length > 0
-            ? { page: page, filter: formatedFilters, coordinates: [coordinates] }
-            : { page: page, filter: formatedFilters }
-          : { page: page, filter: formatedFilters }
+            ? {filter: formatedFilters, coordinates: [coordinates] }
+            : { filter: formatedFilters }
+          : {filter: formatedFilters }
       )
     );
     if (response.isLeft()) {

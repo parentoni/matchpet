@@ -4,81 +4,67 @@ import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import { Animal } from "../../utils/domain/Animal";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { PartnerAnimalGrid } from "../../elements/partner/PartnerAnimalsGrid";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { FilterModal } from "../../elements/FilterModal";
-
+import { OutletContextType } from "../../elements/ManagerBase";
+import { CalendarDays, ChevronDown, Eye, MousePointerClick, Search } from "lucide-react";
+import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
+import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
 export function PartnerAnimalManage () {
 
-
-  const [page, setPage] = useState(0)
-
-  const [animalsCount, setAnimalsCount] = useState<number>()
-  const [animals, setAnimals] = useState<IAnimalDTO[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [filters, setFilters] = useState<Record<string, {mode: FILTER_MODES, comparation_value:any}[]>>({})
-  const [searchArea, setSearchArea] = useState<[number, number][]>([])
-
+  const {useSetAnimalGetter, filters, dispatch, } = useContext(FiltersContext)
   const {user} = useContext(AuthContext)
-
-  const navigate = useNavigate()
-
-
-  useEffect(() => {
-    setPage(0)
-  }, [filters])
+  
+  useSetAnimalGetter()
 
   useEffect(() => {
-    if (user ) {
-      setLoading(true)
-      Animal.getAll(page, {"donator_id": [{mode: FILTER_MODES.EQUAL, comparation_value: user._id}], ...filters}, searchArea ).then((response) => {
-        if (response.isLeft()) {
-          alert("Erro lendo animais.")
-        } else {
-          setLoading(false)
-          setAnimalsCount(response.value.count)
-          if (page !== 0) {
-            setAnimals(animals => [...animals, ...response.value.animals])
-          } else {
-            setAnimals(response.value.animals)
-          }
-          
-        }
-
-      })
+    const obj: Filters = {}
+    if (user) {
+      obj['donator_id'] = [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]
+      filters.current = structuredClone(obj)
+      dispatch(filters.current, [])
     }
-  }, [page, user, filters, searchArea])
+  }, [user])
+  
 
-
-
+  const {setIsOpen, isOpen} = useOutletContext<OutletContextType>()
   return (
-  <PageLayout>
-    <h1 className="text-2xl font-medium">{animalsCount} animais {filters?"correspondem aos filtros":'cadastrados'}  em sua ong.</h1>
-    <div className="flex gap-5 mt-3">
-      <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center" onClick={() =>  navigate('/partner/animal/new')}>
-        Adicionar
-      </button>
-      <button className="w-60 h-10 rounded brute-border flex items-center justify-center" onClick={() => setIsModalOpen(true)}>
-        Filtrar
-      </button>
-      <button className="w-60 h-10 rounded brute-border flex items-center justify-center" onClick={() => navigator.clipboard.writeText(`https://www.matchpet.org/organizations/${user?.username}`).then(() => alert("Link copiado."), () => alert(`O seu link de catálogo: https://www.matchpet.org/organizations/${user?.username}`))}>
-        Copiar link de catálogo
-      </button>
-    </div>
-    <PartnerAnimalGrid animals={animals} animalsCount={animalsCount || 0} loading={loading} page={page} setPage={setPage} setFilters={setFilters} setAnimals={setAnimals}/>
-    <FilterModal
-      searchArea={searchArea}
-      filters={filters}
-      setFilters={setFilters}
-      open={isModalOpen}
-      setIsOpen={setIsModalOpen}
-      animalsCount={animalsCount || 0}
-      loading={loading}
-      setSearchArea={setSearchArea}
-      isPartner
-      />
-  </PageLayout>)
+    <div className="w-full h-screen overflow-y-scroll">
+       <header className="w-full sticky bg-white h-12 border-b flex top-0 items-center px-8 " >
+        <search className=" w-[30rem] h-8 border rounded flex items-center relative overflow-hidden">
+          <span className="px-2 absolute ">
+            <Search className="w-4 h-4"></Search>
+          </span>
+          <input className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome">
+          </input>
+          <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l">
+            <span className="text-sm">Filtrar</span>
+            <ChevronDown className=" w-4 h-4"/>
+          </button>
+        </search>
+        </header>
+        <div className="w-full p-8 border-b">
+          <h1 className=" font-semibold text-2xl ">Todos animais</h1>
+          <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa localizados acima. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
+          <div className="flex flex-col gap-2 mt-4">
+          <div className="flex gap-2 items-center">
+            <Eye className="w-4 h-4"/> 
+            <span>Visualizações em seus animais: <span className="text-primary">TODO</span></span>
+          </div>
+          <div className="flex gap-2 items-center">
+            <MousePointerClick className="w-4 h-4"/> 
+            <span>Cliques em seus animais: <span className="text-primary">TODO</span></span>
+          </div>
+          
+        </div>
+
+        </div>
+        <section className="p-8">
+          <AnimalGrid />
+        </section>
+      </div>
+  
+
+  )
 }
 

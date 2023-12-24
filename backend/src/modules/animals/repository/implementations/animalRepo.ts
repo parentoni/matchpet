@@ -295,12 +295,12 @@ export class AnimalRepo implements IAnimalRepo {
         ]
       );
     }
-
+    filters.push({$count: "count"})
 
     try {
       console.log(filters)
-      const count = await AnimalModel.aggregate(filters).count('count')
-      return right(count[0].count || 0);
+      const count = await AnimalModel.aggregate(filters)
+      return right(count[0]?.count || 0);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
