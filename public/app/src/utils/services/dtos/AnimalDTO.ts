@@ -20,6 +20,12 @@ export enum ANIMAL_STATUS {
   DONATED = "DONATED"
 }
 
+export const PrintableAnimalStatus: Record<ANIMAL_STATUS, string> ={
+  "CANCELED": "Cancelado",
+  "PENDING": "Em adoção",
+  "DONATED": "Doado"
+}
+
 export interface IAnimalTraitsDTO {
   _id: string;
   value: string;

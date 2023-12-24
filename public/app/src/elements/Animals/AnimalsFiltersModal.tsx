@@ -25,6 +25,7 @@ export function AnimalFiltersModalContainer ()  {
   const animalsCount = 0
   const setSearchArea = () => {}
 
+
   return (
     <>
       <AnimalFiltersButton setIsOpen={setIsOpen}/>

@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import './PartnerAnimalsGrid.css'
 import { FiltersContext } from '../../../utils/context/FiltersContext';
 import { IAnimalDTO } from '../../../utils/services/dtos/AnimalDTO';
 import { CalendarDays, Eye, MousePointerSquare } from 'lucide-react';
+import { Menu, Transition } from '@headlessui/react';
 
 export const AnimalGrid = () => {
 
@@ -20,14 +21,18 @@ export interface PartnerAnimalCardProps {
 }
 export const PartnerAnimalCard = (props: PartnerAnimalCardProps) => {
 
-  
-
   const canBeModifiedAt = new Date(props.animal.last_modified_at)
   canBeModifiedAt.setDate(canBeModifiedAt.getDate())
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
   return (
     <div className=' bg-neutral-50 border p-4 rounded-xl flex flex-col gap-4'>
-      <div className='overflow-hidden w-full aspect-video rounded-md flex items-center justify-center bg-neutral-200'>
+      <div className='overflow-hidden w-full aspect-video rounded-md relative flex items-center justify-center bg-neutral-200'>
         <img alt={`Imagem principal do animal ${props.animal.name}`} src={props.animal.image[0]} className=' max-w-full max-h-full object-contain'></img>
+        <div>
+
+        </div>
       </div>
       <div>
         <h3 className='font-medium'>{props.animal.name}</h3>
@@ -43,10 +48,10 @@ export const PartnerAnimalCard = (props: PartnerAnimalCardProps) => {
           <CalendarDays className='w-4 h-4 fill-neutral-300'/>
           <p className='text-sm from-neutral-800'>Renove a partir de: <span className='text-primary  font-medium'>{canBeModifiedAt.toLocaleDateString()}</span></p>
         </div>
+        
       </div>
-      <button className='w-full h-8 items-center rounded justify-center bg-primary text-white'>
-        Ações
-      </button>
+
+      
     </div>
   )
 }

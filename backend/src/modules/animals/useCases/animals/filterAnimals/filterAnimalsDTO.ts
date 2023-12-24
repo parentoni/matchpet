@@ -18,5 +18,6 @@ export enum FILTER_MODES {
   LESS_THAN_EQUAL = "$lte",
   IN = "$in",
   NOT_EQUAL = "$ne",
-  NOT_IN = "$nin"
+  NOT_IN = "$nin",
+  REGEX = '$regex'
 }

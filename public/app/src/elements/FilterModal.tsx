@@ -49,6 +49,7 @@ export const FilterModal = (props: FilterModalProps) => {
     return obj
   }
 
+  console.log(filtersV)
   useEffect(() => {
     setFilters(createBaseFilters(selectedSpecie? selectedSpecie._id: null))
   }, [selectedSpecie, props.isPartner])

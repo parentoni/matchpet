@@ -163,13 +163,13 @@ export interface ContextProps {
   useCountVisual: (filter: Filters, setCount: (x: number) => void, coordinates: [number, number][]) => void,
   useSetAnimalGetter: () => void
   dispatch: (filter: Filters, coordinates: [number, number][]) => void,
+  countFilters: (exclude: string[]) => number
+  setPage: (x: number) => void,
   persistentCounter: number | undefined,
   loading: boolean,
   animals: IAnimalDTO[],
   page: number,
-  setPage: (x: number) => void,
   filters: React.MutableRefObject<Filters>,
-  
 }
 
 export const FiltersContext = createContext<ContextProps>({
@@ -178,13 +178,14 @@ export const FiltersContext = createContext<ContextProps>({
   useCreateVisualCoordinates: () => [[], () => {}],
   useCountVisual: () => {},
   dispatch: () => {},
+  useSetAnimalGetter: () => {},
+  countFilters: () => -1,
+  setPage: () => {},
   persistentCounter: undefined,
   loading: true,
   animals: [],
   page: 0,
-  setPage: () => {},
   filters: {current: {}},
-  useSetAnimalGetter: () => {}
 })
 
 export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) => {
@@ -194,6 +195,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   const filters = useRef<Filters>({})
   const coordinates = useRef<[number,number][]>([])
   
+  console.log(filters)
   const [persistentCounter, setPersistentCounter] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
   const [page, setPage] = useState<number>(0)
@@ -241,7 +243,6 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   const count = (filter: Filters, setCount: (x: number) => void, coordinatesV: [number, number][]) => {
     // if (!loading) {
       setLoading(true)
-      console.log(coordinates)
       if (typeof countCache.current[createCountCacheKey(filter, coordinatesV)] === 'undefined') {
         if (user){
           filter = {...filter, "donator_id": [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]}
@@ -294,6 +295,17 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     }, [filter, coordinates])
   }
 
+  const countFilters = (exclude: string[]) => {
+    let i = 0
+    for(const key of Object.keys(filters.current)) {
+      if (!exclude.includes(key)) {
+        i++
+      }
+    }
+
+    return i
+  }
+
   //!todo Atualize
   const useSetAnimalGetter = () => {
     useEffect(() => {
@@ -306,7 +318,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
 
   return (
-    <FiltersContext.Provider value={{useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter}}>
+    <FiltersContext.Provider value={{useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
       {children}
     </FiltersContext.Provider>
   )
