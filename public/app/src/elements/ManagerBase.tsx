@@ -1,6 +1,6 @@
 import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.svg'
-import { BadgeHelp, Cat, ChevronDown, ChevronRight, Plus, Settings } from 'lucide-react'
+import { BadgeHelp, Cat, ChevronDown, ChevronRight, Link2, Plus, Settings } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../utils/context/AuthContext'
 import { usePathPattern } from '../Routes'
@@ -61,6 +61,14 @@ export function ManagerSidebar () {
           {Object.keys(pages).map((name, index) => <SidebarSection key={index} name={name}items={pages[name]} />)}
         </div>
         <div className='px-2 py-4'>
+
+          <button onClick={() => {navigator.clipboard.writeText(`https://www.matchpet.org/partners/${user?.username}`).then(() => alert("Link da página de seu projeto copiado para a sua área de transferência."))}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === '/partner/help'?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
+            <Link2 className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/>
+            <p className={`text-sm text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}>Link do seu projeto</p>
+            <div className='flex-1 flex justify-end'>
+              {/* <ChevronRight className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/> */}
+            </div>
+          </button>
           
           <button onClick={() => navigate('/partner/config')} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === '/partner/config'?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
 
@@ -72,12 +80,14 @@ export function ManagerSidebar () {
           </button>
 
           <button onClick={() => navigate('/partner/help')} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === '/partner/help'?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
-            <BadgeHelp className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/>
+            <BadgeHelp className={`w-4 h-4 fill-neutral-300 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/>
             <p className={`text-sm text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}>Ajuda</p>
-            <div className='flex-1 flex justify-end'>
+            <div className='flex-1 flex fill-neutral-300 justify-end'>
               <ChevronRight className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/>
             </div>
           </button>
+
+
       {/* <button onClick={() => i{}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === item.route?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`} key={index}>
             <item.icon className={`w-4 h-4 text-neutral-800 ${route === item.route? "text-primary": ""}`}/>
             <p className={`text-sm text-neutral-800  ${route === item.route? "text-primary": ""}`}>{item.name}</p>

@@ -29,5 +29,4 @@ animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(r
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
 
 animalsRouter.put("/:id", middleware.authenticated(), (req, res) => editAnimalController.execute(req, res));
-
 export { animalsRouter };

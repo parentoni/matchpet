@@ -10,10 +10,12 @@ import { AnimalFindCountProps, AnimalFindProps, IAnimalRepo } from "../IAnimalRe
 import { Location } from "../../../../shared/core/Location";
 import mongoose, { PipelineStage, mongo } from "mongoose";
 import { endOfDay, startOfDay } from "date-fns";
+import { GetUserAnimalsStatsSuccessfulResponse } from "../../../user/useCases/getUserAnimalsStats/getUserAnimalsStatsResponse";
 
 export type DBFilter = Record<string, Record<string, any>>;
 
 export class AnimalRepo implements IAnimalRepo {
+  
 
   
   async save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {
@@ -371,5 +373,20 @@ export class AnimalRepo implements IAnimalRepo {
     }    
   }
 
+
+  async aggregateAnimalsViewsAndClicks(donator_id: string): Promise<Either<CommonUseCaseResult.UnexpectedError, GetUserAnimalsStatsSuccessfulResponse>> {
+    try {
+      const result = await AnimalModel.aggregate([
+        {$match: {donator_id: new mongoose.Types.ObjectId(donator_id)}},
+        {$group: {_id: "$donator_id" ,views: {$sum: "$views"}, clicks: {$sum: "$clicks"}}},
+      ])
+
+      return right({views: result[0]?.views || 0, clicks: result[0]?.clicks || 0})
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error))
+    }
+  }
+
+  
 }
 

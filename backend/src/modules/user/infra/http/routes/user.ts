@@ -5,12 +5,14 @@ import { getUserByUserNameController } from "../../../useCases/getUserByUserName
 import { middleware } from "../../../../../shared/infra/http";
 import { editUserController } from "../../../useCases/editUser";
 import { getCurrentUserController } from "../../../useCases/getCurrentUser";
+import { getUserAnimalsStatsController } from "../../../useCases/getUserAnimalsStats";
 
 const userRouter = express.Router();
 
 userRouter.get("/:id/contact", (req, res) => getUserInfoController.execute(req, res));
 userRouter.get("/active", (req, res) => getAllActiveOrganizationsController.execute(req, res));
 userRouter.get("/myself", middleware.authenticated(), (req, res) => getCurrentUserController.execute(req, res));
+userRouter.get("/animals/stats", middleware.authenticated(),  (req, res) => getUserAnimalsStatsController.execute(req, res))
 
 userRouter.post('/username', (req, res) => getUserByUserNameController.execute(req,res))
 

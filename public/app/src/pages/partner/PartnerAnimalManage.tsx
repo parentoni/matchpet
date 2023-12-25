@@ -1,14 +1,9 @@
 import React, { ElementType, Fragment, createElement, useContext, useEffect, useState } from "react";
 import { PageLayout } from "../../PageLayout";
 import { ANIMAL_STATUS, IAnimalDTO, PrintableAnimalStatus } from "../../utils/services/dtos/AnimalDTO";
-import { Animal } from "../../utils/domain/Animal";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { useNavigate, useOutletContext } from "react-router-dom";
-import { FilterModal } from "../../elements/FilterModal";
-import { OutletContextType } from "../../elements/ManagerBase";
 import { BarChart2, CalendarDays, Cat, ChevronDown, Eye, MousePointerClick, Search } from "lucide-react";
-import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
 import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { SpeciesContext } from "../../utils/context/SpeciesContext";
@@ -16,6 +11,8 @@ import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO";
 import { Categories } from "../../utils/domain/Categories";
 import { CategoriesContext } from "../../utils/context/CategoriesContext";
 import { Specie } from "../../utils/domain/Specie";
+import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
+
 export function PartnerAnimalManage () {
 
   const {useSetAnimalGetter, filters, dispatch, countFilters} = useContext(FiltersContext)
