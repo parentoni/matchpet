@@ -33,15 +33,14 @@ export class NotificateRenovationPossibilityUseCase implements UseCase<void, Not
     for (const user of response.value) {
       const uResponse = await this.findUserByIdUseCase.execute({uid: user._id})
       if (uResponse.isRight()){
-        for (const animal of user.animals) {
-          const file = await ejs.renderFile(join(__dirname + '../../../../../../../static/emails/ejs/animalCanBeRenovated.ejs'), {name: animal.name.value, link:  `${Secrets.getSecret('PUBLIC_APP_URL')}/partner`})
+          const file = await ejs.renderFile(join(__dirname + '../../../../../../../static/emails/ejs/animalCanBeRenovated.ejs'), {animals: user.animals.map(a => a.name.value), link:  `${Secrets.getSecret('PUBLIC_APP_URL')}/partner`})
           await this.sendEmailUseCase.execute({
             recepient: uResponse.value.email,
             source: 'nao-responda@matchpet.org',
             html_body: file,
-            subject: "Anúncio de animal pode ser renovado."
+            subject: "Anúncios de animais pode ser renovado."
           })
-        }
+        
       }
     }
 

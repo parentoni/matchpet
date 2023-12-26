@@ -23,7 +23,6 @@ export class DeactivateUnactiveAnimalsController extends CronController {
       return left(response.value)
     }
 
-
     return right('ok')
   }
 }

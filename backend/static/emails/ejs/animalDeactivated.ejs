@@ -11,17 +11,25 @@
     <table role="presentation" border="0" cellspacing="0" width="'100%">
       <tr>
         <td>
-          <h1 style="font-weight: 600; font-size: 2.5rem;">O anúncio de <%= name %> foi <span style="color: #FA8128;">cancelado</span>.</h1>
+          <h1 style="font-weight: 600; font-size: 2.5rem;">O anúncio de alguns de seus animais foi <span style="color: #FA8128;">cancelado</span>.</h1>
         </td>
       </tr>
       <tr> 
         <td>
-          <p style="color: #525252; font-size: 1.25rem;">Infelizmente, foi detectado que esse animal não foi renovado em 35 dias, logo o seu anuncio de adoção foi cancelado.</p>
+          <p style="color: #525252; font-size: 1.25rem;">Infelizmente, foi detectado que animais de sua ong não foram renovados em 35 dias, logo seus anuncios de adoção foram cancelados.</p>
+        </td>
+      </tr>
+      <tr> 
+        <td>
+          <p style="color: #525252; font-size: 1.25rem;">Animais cancelados: </p>
+          <% for (var i = 0; i < animals.length; i++) { %>
+            <p style="color: #525252; font-size: 1rem;"><%= animals[i] %></p>
+          <%} %>
         </td>
       </tr>
       <tr>
         <td>
-          <p style="color: #525252; font-size: 1.25rem;"> <b>Deseja que o anúncio volte?</b> Edite o animal e o coloque seu estado como: <b>Em adoção</b></p>
+          <p style="color: #525252; font-size: 1.25rem;"> <b>Deseja que os anúncios voltem?</b> Edite os animais e coloque os seus estados como: <b>Em adoção</b></p>
         </td>
       </tr>
     </table>
@@ -36,7 +44,7 @@
       </tr>
       <tr>
         <td>
-          <p style="color: #525252; font-size: 1.25rem;">Reative o animal agora mesmo:</p>
+          <p style="color: #525252; font-size: 1.25rem;">Reative os animais agora mesmo:</p>
           </a>
         </td>
       </tr>
@@ -49,7 +57,7 @@
         <td>
           <a style="width: 400px; line-break: anywhere;" href=<%= link %>>
             <button class="button-link" style="background-color: #FA8128; border: 0; cursor: pointer; width: 400px; height: 40px; color: white; font-size: 1rem;">
-              Editar animal
+              MatchPet
             </button>
           </a>
         </td>

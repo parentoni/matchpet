@@ -27,6 +27,7 @@ export class DeactivateUnactiveAnimalsUseCase implements UseCase<DeactivateUnact
 
   async execute(request: DeactivateUnactiveAnimalsDTO): Promise<DeactivateAnimalsResponse> {
     const result = await this.animalRepo.countUnactive(request.date, DeactivateUnactiveAnimalsUseCase.UNACTIVE_DAYS)
+
     if (result.isLeft()) {
       return left(result.value)
     }
@@ -39,22 +40,22 @@ export class DeactivateUnactiveAnimalsUseCase implements UseCase<DeactivateUnact
         for (const animal of user.animals) {
           animal.animalChangeStatus(ANIMAL_STATUS.CANCELED)
           const response = await this.animalRepo.save(animal)
-          if (response.isRight()) {
-            const file = await ejs.renderFile(join(__dirname + '../../../../../../../static/emails/ejs/animalDeactivated.ejs'), {name: animal.name.value, link:  `${Secrets.getSecret('PUBLIC_APP_URL')}/partner/animal/${animal.id.toValue()}`})
 
-            const response = await this.sendEmailuseCase.execute({
-              recepient: userResponse.value.email,
-              source: 'nao-responda@matchpet.org',
-              html_body: file,
-              subject: "Anúncio de animal cancelado."
-            })
-
-          }
+          
         }
+
+      const file = await ejs.renderFile(join(__dirname + '../../../../../../../static/emails/ejs/animalDeactivated.ejs'), { link: `${Secrets.getSecret('PUBLIC_APP_URL')}/partner`, animals: user.animals.map(a => a.name.value)})
+      await this.sendEmailuseCase.execute({
+        recepient: userResponse.value.email,
+        source: 'nao-responda@matchpet.org',
+        html_body: file,
+        subject: "Anúncio de animal cancelado."
+      })
       }
     }
 
 
     return right('ok')
+  
   }
 }
