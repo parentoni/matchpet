@@ -64,10 +64,11 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
     }
 
     const persistentValues: IAnimalPersistent[] = [];
-
-    const response = await this.updateViewCounterUseCase.execute({animals: result.value})
-    if (response.isLeft()) {
-      console.log(response)
+    if (request.countView) {
+      const response = await this.updateViewCounterUseCase.execute({animals: result.value})
+      if (response.isLeft()) {
+        console.log(response)
+      }
     }
     
     for (const value of result.value) {

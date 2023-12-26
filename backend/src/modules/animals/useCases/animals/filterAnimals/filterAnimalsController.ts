@@ -8,6 +8,14 @@ export class FilterAnimaslsController extends BaseController<Request> {
     super();
     this.versionRegister.addToRegister("1.0.0", async (req: Request, res: Response) => {
       const dto = req.body as FilterAnimalsDTO;
+      const view = req.query.view
+
+      if (view === 'false') {
+        dto.countView = false
+      } else {
+        dto.countView = true
+        
+      }
       const useCaseResponse = await filterAnimalsUseCase.execute(dto);
 
       if (useCaseResponse.isLeft()) {
