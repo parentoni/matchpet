@@ -14,7 +14,7 @@ export function AllAnimals () {
   const {species, preferredSpecie} = useContext(SpeciesContext)  
   const {persistentCounter, loading, animals, page, filters, setPage, useSetAnimalGetter} = useContext(FiltersContext)
 
-  useSetAnimalGetter()
+  useSetAnimalGetter(true)
   const navigate = useNavigate()
   return (
     <>

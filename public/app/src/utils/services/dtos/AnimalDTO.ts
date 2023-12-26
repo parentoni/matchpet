@@ -17,13 +17,15 @@ export interface IAnimalDTO {
 export enum ANIMAL_STATUS {
   PENDING = "PENDING",
   CANCELED = "CANCELED",
-  DONATED = "DONATED"
+  DONATED = "DONATED",
+  AUTO_CANCELED = "AUTO_CANCELED"
 }
 
 export const PrintableAnimalStatus: Record<ANIMAL_STATUS, string> ={
   "CANCELED": "Cancelado",
   "PENDING": "Em adoção",
-  "DONATED": "Doado"
+  "DONATED": "Doado",
+  "AUTO_CANCELED": "Cancelado automaticamente"
 }
 
 export interface IAnimalTraitsDTO {

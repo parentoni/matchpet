@@ -4,153 +4,6 @@ import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO"
 import { Animal } from "../domain/Animal"
 import { AuthContext } from "./AuthContext"
 
-// export interface ContextProps {
-  // sketchFilters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>,
-  // setSketchFilters: (x: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void,
-  // filters: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>,
-  // animalsCount:number,
-  // animals:IAnimalDTO[],
-  // // setAnimals: (x: IAnimalDTO[]) => void,
-  // page: number,
-  // setPage: (x: number) => void,
-  // searchArea: [number, number][],
-  // setSearchArea: (x: [number, number][]) => void
-  // countLoading: boolean,
-  // animalLoading: boolean,
-  // findAnimals: (filter:Record<string, {mode: FILTER_MODES, comparation_value:any}[]>) => void
-// }
-
-
-// export const FiltersContext = createContext<ContextProps>({countLoading: true, filters: {}, animalLoading: true, sketchFilters: {}, setSketchFilters: () => {}, animalsCount:-1, searchArea: [], setSearchArea: () => {}, findAnimals: () => {}, page: 0, setPage: () => {}, animals: []})
-// export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) => {
-
-
-//   const [countLoading, setCountLoading] = useState<boolean>(false)
-//   const [animalLoading, setAnimalsLoading] = useState<boolean>(false)
-
-//   const [filters, setFilters] = useState<Record<string, {mode: FILTER_MODES, comparation_value:any}[]>>({})
-//   const [sketchFilters, setSketchFilters] = useState<Record<string, {mode: FILTER_MODES, comparation_value:any}[]>>({})
-
-//   const [searchArea, setSearchArea] = useState<[number, number][]>([])
-
-//   const [animalsCount, setAnimalsCount] = useState<number>(-1)
-//   const [sketchCount, setSketchCount] = useState<number>(-1)
-  
-//   const [animalsCountCache, setAnimalsCountCache] = useState<Record<string, number>>({})
-
-//   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
-//   const [animalsCache, setAnimalsCache] = useState<Record<string,IAnimalDTO[]>>({})
-
-//   const [page, setPage] = useState<number>(0)
-
-//   /**
-//    * Count filter results
-//    * Should run in every change of the filters
-//    */
-
-//   const createCountCacheKey = () => {
-//     return JSON.stringify({filters: filters, searchArea: searchArea})
-//   }
-//   const createAnimalCacheKey = () => {
-//     return JSON.stringify({filters: filters, searchArea: searchArea, page: page})
-//   }
-
-
-//   useEffect(() => {
-//       if (sketchFilters && searchArea) {
-//         if (typeof animalsCountCache[createCountCacheKey()] === "undefined") {
-//           setCountLoading(true)
-//           Animal.count(sketchFilters, searchArea).then(res => {
-//             if (res.isLeft()) {
-//               alert('Erro lendo animais.')
-//             } else {
-//               setSketchCount(res.value.count)
-//               // Cache response
-//               animalsCountCache[createCountCacheKey()] = res.value.count
-//             }
-//           })
-//         } else {
-//           setSketchCount(animalsCountCache[createCountCacheKey()])
-//         }
-//       }
-//       setCountLoading(false)
-//   }, [sketchFilters, searchArea])
-
-//   /**
-//    * Set the Animals for giver filters
-//    */
-
-//   const findAnimals = (filter: Record<string, {mode: FILTER_MODES, comparation_value:any}[]>):void => {
-//     // if (!animalLoading) {
-//     //   setAnimalsLoading(true)
-//     //   if (typeof animalsCache[createAnimalCacheKey()] === "undefined") {
-//     //     console.log(animalsCache[createAnimalCacheKey()],createAnimalCacheKey(), animalsCache)
-//     //     Animal.getAll(page, filter, searchArea).then(res => {
-//     //       if (res.isLeft()) {
-//     //         alert("Erro lendo animais")
-//     //       } else {
-  
-//     //         setAnimals(res.value.animals)
-//     //         //Cache response
-//     //         animalsCache[createAnimalCacheKey()] = res.value.animals
-//     //         setAnimalsCache(structuredClone(animalsCache))
-//     //       }
-//     //     })
-//     //   } else {
-//     //     setAnimals(animalsCache[createAnimalCacheKey()])
-//     //   }
-//     setSketchFilters(filter)
-//   }
-
-//   useEffect(() => {
-//       if (filters && searchArea) {
-//         if (typeof animalsCountCache[createCountCacheKey()] === "undefined") {
-//           setCountLoading(true)
-//           Animal.count(filters, searchArea).then(res => {
-//             if (res.isLeft()) {
-//               alert('Erro lendo animais.')
-//             } else {
-//               setAnimalsCount(res.value.count)
-//               // Cache response
-//               animalsCountCache[createCountCacheKey()] = res.value.count
-//             }
-//           })
-//         } else {
-//           setAnimalsCount(animalsCountCache[createCountCacheKey()])
-//         }
-//       }
-//       setCountLoading(false)
-//   }, [filters, searchArea])
-
-//   useEffect(() => {
-//     if (!animalLoading) {
-//         setAnimalsLoading(true)
-//         if (typeof animalsCache[createAnimalCacheKey()] === "undefined") {
-//           console.log(animalsCache[createAnimalCacheKey()],createAnimalCacheKey(), animalsCache)
-//           Animal.getAll(page, filters, searchArea).then(res => {
-//             if (res.isLeft()) {
-//               alert("Erro lendo animais")
-//             } else {
-    
-//               setAnimals(res.value.animals)
-//               //Cache response
-//               animalsCache[createAnimalCacheKey()] = res.value.animals
-//               setAnimalsCache(structuredClone(animalsCache))
-//             }
-//           })
-//         } else {
-//           setAnimals(animalsCache[createAnimalCacheKey()])
-//         }
-//       }
-//   }, [filters])
-
-
-  // return (
-  //   <FiltersContext.Provider value={{ sketchFilters, setSketchFilters,filters, animalsCount, searchArea, setSearchArea, findAnimals, page, setPage, animals, animalLoading, countLoading}}>
-  //     {children}
-  //   </FiltersContext.Provider>
-  // )
-// }
 
 export type Filters = Record<string, {mode: FILTER_MODES, comparation_value:any}[]>
 export type CountCache = Record<string, number>
@@ -161,15 +14,17 @@ export interface ContextProps {
   useCreateVisualCounter: () => [number, (x: number) => void],
   useCreateVisualCoordinates: () => [[number, number][], (x:[number, number][]) => void]
   useCountVisual: (filter: Filters, setCount: (x: number) => void, coordinates: [number, number][]) => void,
-  useSetAnimalGetter: () => void
-  dispatch: (filter: Filters, coordinates: [number, number][]) => void,
+  useSetAnimalGetter: (countViews:boolean) => void
+  dispatch: (filter: Filters, coordinates: [number, number][], countViews:boolean) => void,
   countFilters: (exclude: string[]) => number
   setPage: (x: number) => void,
+  editCachedAnimal: (animal: IAnimalDTO) => void,
   persistentCounter: number | undefined,
   loading: boolean,
   animals: IAnimalDTO[],
   page: number,
   filters: React.MutableRefObject<Filters>,
+  animalsLoading: boolean
 }
 
 export const FiltersContext = createContext<ContextProps>({
@@ -186,6 +41,8 @@ export const FiltersContext = createContext<ContextProps>({
   animals: [],
   page: 0,
   filters: {current: {}},
+  editCachedAnimal: () => {},
+  animalsLoading:true
 })
 
 export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) => {
@@ -195,7 +52,6 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   const filters = useRef<Filters>({})
   const coordinates = useRef<[number,number][]>([])
   
-  console.log(filters)
   const [persistentCounter, setPersistentCounter] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
   const [page, setPage] = useState<number>(0)
@@ -203,6 +59,8 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   const countCache = useRef<CountCache>({})
   const animalCache = useRef<AnimalsCache>({})
   const [loading, setLoading] = useState(false)
+
+  const [animalsLoading, setAnimalsLoading] = useState(false)
   
 
   // Create cache key
@@ -228,7 +86,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     return useState(countCache.current[createCountCacheKey(filters.current, coordinates.current)] || -1)
   } 
 
-  const dispatch = (filter: Filters, coordinatesV: [number, number][]) => {
+  const dispatch = (filter: Filters, coordinatesV: [number, number][], countViews: boolean) => {
 
       filters.current = filter
       coordinates.current = coordinatesV
@@ -236,7 +94,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
         setPage(0)
       } 
       count(filter, setPersistentCounter, coordinatesV)
-      getAnimals(filter, coordinatesV)
+      getAnimals(filter, coordinatesV, countViews)
     
   }
 
@@ -264,11 +122,12 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     // }
   }
 
-  const getAnimals = (filter: Filters, coordinatesV: [number, number][]) => {
-    setLoading(true)
+  const getAnimals = (filter: Filters, coordinatesV: [number, number][], countViews: boolean) => {
+    
     if (typeof animalCache.current[createAnimalCacheKey(filter,coordinatesV)] === 'undefined') {
       
-      Animal.getAll(page, filter,coordinatesV, undefined).then(res => {
+      setAnimalsLoading(true)
+      Animal.getAll(page, filter,countViews, coordinatesV).then(res => {
         if (res.isLeft()) {
           return alert("Erro lendo animais.")
         }
@@ -281,11 +140,15 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
           animalCache.current[createAnimalCacheKey(filter, coordinatesV)] = [...animals, ...res.value.animals]
 
         }
-      })
+        setAnimalsLoading(false)
+      }).catch(err => {
+        console.log(err)
+        setAnimalsLoading(false)
+    })
     } else {
+      setAnimalsLoading(false)
       setAnimals(animalCache.current[createAnimalCacheKey(filter, coordinatesV)])
     }
-    setLoading(false)
   }
 
   // Real time animals Count 
@@ -307,18 +170,28 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   }
 
   //!todo Atualize
-  const useSetAnimalGetter = () => {
+  const useSetAnimalGetter = (countViews: boolean) => {
     useEffect(() => {
       if (page !== 0) {
         count(filters.current, setPersistentCounter, coordinates.current)
-        getAnimals(filters.current ,coordinates.current)
+        getAnimals(filters.current ,coordinates.current, countViews)
       }
     }, [page])
   }
 
+  const editCachedAnimal = (animal: IAnimalDTO) => {
+    for (const key of Object.keys(animalCache.current)) {
+      const cachedAnimals = animalCache.current[key]
+      const index = cachedAnimals.findIndex(x => x._id === animal._id)
+      cachedAnimals[index] = animal
+      animalCache.current[key] = cachedAnimals
+      setAnimals(cachedAnimals)
+
+    }
+  }
 
   return (
-    <FiltersContext.Provider value={{useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
+    <FiltersContext.Provider value={{animalsLoading,editCachedAnimal,useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
       {children}
     </FiltersContext.Provider>
   )

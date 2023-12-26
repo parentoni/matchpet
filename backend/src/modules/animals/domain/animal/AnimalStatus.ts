@@ -6,7 +6,8 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 export enum ANIMAL_STATUS {
   PENDING = "PENDING",
   CANCELED = "CANCELED",
-  DONATED = "DONATED"
+  DONATED = "DONATED",
+  AUTO_CANCELED = "AUTO_CANCELED"
 }
 
 export class AnimalStatus extends ValueObject<{ status: ANIMAL_STATUS }> {

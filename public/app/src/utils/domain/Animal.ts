@@ -45,14 +45,12 @@ export class Animal {
   public static async getAll(
     page: number,
     filters: Record<string, { mode: FILTER_MODES; comparation_value: any }[]>,
+    countViews: boolean,
     coordinates?: [number, number][],
-    status?: ANIMAL_STATUS
   ): Promise<Either<Response, { animals: IAnimalDTO[]; count: number }>> {
     // Filter only pending animals
     const formatedFilters = [];
-    if (status) {
-      formatedFilters.push({ mode: "$eq", comparation_value: status, key: "status" });
-    }
+
     
     for (const key of Object.keys(filters)) {
       for (const method of filters[key]) {
@@ -66,7 +64,7 @@ export class Animal {
     console.log(formatedFilters)
 
     const response = await Api.post(
-      "/animals/filter",
+      `/animals/filter?view=${countViews? "true": "false"}`,
       JSON.stringify(
         coordinates
           ? coordinates.length > 0

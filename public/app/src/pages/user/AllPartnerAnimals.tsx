@@ -72,7 +72,7 @@ export const AllPartnerAnimals = () => {
 
   useEffect(() => {
     if (user) {
-      Animal.getAll(page, {'donator_id': [{mode: FILTER_MODES.EQUAL, comparation_value: user?._id}], "status": [{mode: FILTER_MODES.EQUAL, comparation_value: ANIMAL_STATUS.PENDING}]}).then(res => {
+      Animal.getAll(page, {'donator_id': [{mode: FILTER_MODES.EQUAL, comparation_value: user?._id}], "status": [{mode: FILTER_MODES.EQUAL, comparation_value: ANIMAL_STATUS.PENDING}]}, true).then(res => {
         setLoading(false)
         if (res.isLeft()) {
           alert("Erro lendo animais do usuário.")

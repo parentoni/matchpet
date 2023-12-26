@@ -166,14 +166,22 @@ export class AnimalRepo implements IAnimalRepo {
       const comparation: Record<string, any> = {};
       const filter: Record<string, any> = {};
 
+      
       if (objectIdFields.includes(ind_filter.key)) {
         ind_filter.comparation_value = { $toObjectId: ind_filter.comparation_value };
         filter[ind_filter.mode] = ["$" + ind_filter.key, ind_filter.comparation_value];
         idFilter.push(filter);
       } else {
-        comparation[ind_filter.mode] = ind_filter.comparation_value;
-        filter[ind_filter.key] = comparation;
-        dbFilter.push(filter);
+        if (ind_filter.mode === '$regex') {
+          comparation[ind_filter.mode] = ind_filter.comparation_value
+          comparation['$options'] = 'i'
+          filter[ind_filter.key] = comparation
+          dbFilter.push(filter)
+        } else {
+          comparation[ind_filter.mode] = ind_filter.comparation_value;
+          filter[ind_filter.key] = comparation;
+          dbFilter.push(filter);
+        }
       }
     }
 

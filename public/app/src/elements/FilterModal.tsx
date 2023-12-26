@@ -137,7 +137,7 @@ export const FilterModal = (props: FilterModalProps) => {
             <button className='h-12  gap-6 px-6 text-white bg-black brute-border rounded items-center flex' onClick={() => setFilters({})}>
               Limpar
             </button>
-            <button className='h-12  px-6 bg-primary rounded  items-center flex' onClick={() => {dispatch(filtersV, coordinatesV);props.setIsOpen(false)}}>
+            <button className='h-12  px-6 bg-primary rounded  items-center flex' onClick={() => {dispatch(filtersV, coordinatesV, true);props.setIsOpen(false)}}>
               Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:counter}&nbsp; animais
             </button>
         </div>

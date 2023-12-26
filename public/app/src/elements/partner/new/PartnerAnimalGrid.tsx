@@ -1,12 +1,13 @@
 import { Fragment, useContext, useState } from 'react';
 import './PartnerAnimalsGrid.css'
 import { FiltersContext } from '../../../utils/context/FiltersContext';
-import { IAnimalDTO } from '../../../utils/services/dtos/AnimalDTO';
-import { CalendarDays, Eye, File, Instagram, Link2, MousePointerSquare, Pen } from 'lucide-react';
+import { ANIMAL_STATUS, IAnimalDTO, PrintableAnimalStatus } from '../../../utils/services/dtos/AnimalDTO';
+import { CalendarDays, Copy, Eye, File, Instagram, Link2, MousePointerSquare, Pen, RefreshCcw } from 'lucide-react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
 import { InstagramFeedModal } from './InstagramFeedModal';
 import { Animal } from '../../../utils/domain/Animal';
+import { AuthContext } from '../../../utils/context/AuthContext';
 
 export const AnimalGrid = () => {
 
@@ -25,7 +26,7 @@ export interface PartnerAnimalCardProps {
 export const PartnerAnimalCard = (props: PartnerAnimalCardProps) => {
 
   const canBeModifiedAt = new Date(props.animal.last_modified_at)
-  canBeModifiedAt.setDate(canBeModifiedAt.getDate())
+  canBeModifiedAt.setDate(canBeModifiedAt.getDate() + 7)
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [instagramFeedModalIsOpen, setInstagramFeedModalIsOpen] = useState<boolean>(false)
@@ -34,12 +35,19 @@ export const PartnerAnimalCard = (props: PartnerAnimalCardProps) => {
       <div className=' bg-neutral-50 border p-4 rounded-xl flex flex-col gap-4'>
         <div className='overflow-hidden w-full aspect-video rounded-md relative flex items-center justify-center bg-neutral-200'>
           <img alt={`Imagem principal do animal ${props.animal.name}`} src={props.animal.image[0]} className=' max-w-full max-h-full object-contain'></img>
-          <div>
+          <div> 
 
           </div>
         </div>
         <div>
-          <h3 className='font-medium'>{props.animal.name}</h3>
+          <div className='flex items-center gap-2'>
+            <h3 className='font-medium flex-1'>{props.animal.name}</h3>
+      
+          </div>
+          <div className='flex items-center gap-1'>
+            <CalendarDays className='w-4 h-4 fill-neutral-300'/>
+            <p className='text-sm from-neutral-800'>Estado: <span className='text-primary  font-medium'>{PrintableAnimalStatus[props.animal.status]}</span></p>
+          </div>
           <div className='flex items-center gap-1'>
             <Eye  className='w-4 h-4 fill-neutral-300'/>
             <p className='text-sm from-neutral-800'>Visualizações: <span className='text-primary  font-medium'>{props.animal.views}</span></p>
@@ -48,14 +56,22 @@ export const PartnerAnimalCard = (props: PartnerAnimalCardProps) => {
             <MousePointerSquare  className='w-4 h-4 fill-neutral-300'/>
             <p className='text-sm from-neutral-800'>Cliques: <span className='text-primary  font-medium'>{props.animal.clicks}</span></p>
           </div>
+          {props.animal.status === ANIMAL_STATUS.PENDING &&
           <div className='flex items-center gap-1'>
             <CalendarDays className='w-4 h-4 fill-neutral-300'/>
+            {canBeModifiedAt < new Date()?
+            <p className='text-sm from-neutral-800'>Renove a partir de: <span className='text-primary  font-medium'>Qualquer momento</span></p>
+            : 
             <p className='text-sm from-neutral-800'>Renove a partir de: <span className='text-primary  font-medium'>{canBeModifiedAt.toLocaleDateString()}</span></p>
+            }
           </div>
+          } 
         </div>
-          <button className='rounded w-full flex h-8 items-center text-white justify-center bg-primary border-primary cursor-pointer hover:bg-opacity-80' onClick={() => setIsOpen(true)}>
+        <div className='flex-1 flex items-end'>
+          <button className='rounded  w-full flex h-8 items-center text-white justify-center bg-primary border-primary cursor-pointer hover:bg-opacity-80' onClick={() => setIsOpen(true)}>
             Ações 
           </button>
+        </div>
 
         
         </div>
@@ -75,12 +91,31 @@ export interface ActionsModalProps {
 
 const ActionsModal = (props: ActionsModalProps) => {
 
+  const {getToken} = useContext(AuthContext)
+  const {editCachedAnimal} = useContext(FiltersContext)
   const closeModal = () => {
     props.setIsOpen(false)
   }
 
   const navigate = useNavigate()
 
+  const canBeModifiedAt = new Date(props.animal.last_modified_at)
+  canBeModifiedAt.setDate(canBeModifiedAt.getDate() + 7)
+
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const renewAnimal = async () => {
+    if (!loading) {
+      setLoading(true)
+      const response = await Animal.renovatePost(props.animal._id, getToken())
+      props.animal.last_modified_at = new Date().toISOString()
+      if (response.isRight()){
+        editCachedAnimal(props.animal)
+        closeModal()
+        alert("Animal renovado com sucesso!")
+      }
+    }
+  }
   return (
 
       <Transition appear show={props.isOpen} as={Fragment}>
@@ -131,6 +166,14 @@ const ActionsModal = (props: ActionsModalProps) => {
                       <File className=" w-4 h-4 fill-neutral-300"/>
                       <span className='text-sm'>Ver página do animal (recomendado apenas em celulares)</span>
                     </button>
+                    {canBeModifiedAt < new Date() &&
+                      <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center' onClick={renewAnimal}>
+                        <RefreshCcw className=" w-4 h-4 "/>
+                        <span className='text-sm'>Renovar animal</span>
+                      </button>
+                    }
+
+
                   </div>
                   <div>
                     <div className='px-4'>

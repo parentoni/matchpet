@@ -38,7 +38,7 @@ export class DeactivateUnactiveAnimalsUseCase implements UseCase<DeactivateUnact
       const userResponse = await this.getUserByUiduseCase.execute({uid: user._id})
       if (userResponse.isRight()) {
         for (const animal of user.animals) {
-          animal.animalChangeStatus(ANIMAL_STATUS.CANCELED)
+          animal.animalChangeStatus(ANIMAL_STATUS.AUTO_CANCELED)
           const response = await this.animalRepo.save(animal)
 
           

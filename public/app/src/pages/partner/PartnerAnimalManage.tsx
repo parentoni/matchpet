@@ -1,4 +1,4 @@
-import React, { ElementType, Fragment, createElement, useContext, useEffect, useState } from "react";
+import React, { ElementType, Fragment, useContext, useEffect, useState, useCallback } from "react";
 import { PageLayout } from "../../PageLayout";
 import { ANIMAL_STATUS, IAnimalDTO, PrintableAnimalStatus } from "../../utils/services/dtos/AnimalDTO";
 import { AuthContext } from "../../utils/context/AuthContext";
@@ -12,20 +12,21 @@ import { Categories } from "../../utils/domain/Categories";
 import { CategoriesContext } from "../../utils/context/CategoriesContext";
 import { Specie } from "../../utils/domain/Specie";
 import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
+import _ from 'lodash';
 
 export function PartnerAnimalManage () {
 
-  const {useSetAnimalGetter, filters, dispatch, countFilters} = useContext(FiltersContext)
+  const {useSetAnimalGetter, filters, dispatch, countFilters, loading, animalsLoading,animals, useCreateVisualFilter} = useContext(FiltersContext)
   const {user} = useContext(AuthContext)
   
-  useSetAnimalGetter()
+  useSetAnimalGetter(false)
 
   useEffect(() => {
     const obj: Filters = structuredClone(filters.current)
     if (user) {
       obj['donator_id'] = [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]
       filters.current = structuredClone(obj)
-      dispatch(filters.current, [])
+      dispatch(filters.current, [], false)
     }
   }, [user])
   
@@ -34,21 +35,48 @@ export function PartnerAnimalManage () {
     if (user) {
       obj['donator_id'] = [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]
       filters.current = structuredClone(obj)
-      dispatch(filters.current, [])
+      dispatch(filters.current, [], false)
+      
     }
   }
+
+  const [query, setQuery] = useState<string>('')
+
+
+
+  const debouncedSearch = _.debounce(() => {
+      
+    if (query.replace(' ', '').replace('/', '')) {
+      const obj: Filters = structuredClone(filters.current)
+      obj['name'] = [{comparation_value: `${query}`, mode: FILTER_MODES.REGEX}]
+      filters.current = structuredClone(obj)
+      dispatch(filters.current, [], false)
+    } else {
+      const obj: Filters = structuredClone(filters.current)
+      delete obj['name']
+      filters.current = structuredClone(obj)
+      dispatch(filters.current, [], false)
+    }
+  }, 500);
+  useEffect(() => {
+    debouncedSearch()
+  }, [query])
   
   const [filterModalIsOpen, setFilterModalIsOpen] = useState<boolean>(false)
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+
+      <div className="w-full h-screen overflow-y-auto relative">
         <header className="w-full sticky bg-white h-12 border-b flex top-0 items-center px-8 gap-2 z-10" >
-          <search className=" w-[30rem] h-8 border rounded flex items-center relative overflow-hidden">
+
+          
+
+          <search className=" w-[30rem] h-8 border rounded flex items-center relative overflow-hidden" >
             <span className="px-2 absolute ">
               <Search className="w-4 h-4"></Search>
             </span>
-            <input className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome (TODO)">
+            <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome (TODO)" onChange={e => setQuery(e.target.value)}>
             </input>
             <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l hover:bg-black hover:bg-opacity-5" onClick={() => setFilterModalIsOpen(true)}>
               <span className="text-sm">Filtrar</span>
@@ -56,9 +84,14 @@ export function PartnerAnimalManage () {
             </button>
           </search>
           {
-            (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => resetFilters()}>resetar {countFilters(['donator_id'])} filtros</button>
+            (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
           }
           </header>
+
+          {animalsLoading? <div className="h-[calc(100%-3rem)] w-full bg-white flex items-center justify-center">
+            <span className="loading  loading-spinner loading-lg text-primary"></span>
+          </div>:
+          <>
           <div className="w-full p-8 border-b">
             <h1 className=" font-semibold text-2xl ">Todos animais</h1>
             <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa localizados acima. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
@@ -75,10 +108,12 @@ export function PartnerAnimalManage () {
           </div>
 
           </div>
-          <section className="p-8">
-            <AnimalGrid />
+          <section className="p-8 flex-1 flex flex-col">
+            {animals.length > 0?
+            <AnimalGrid />: <div className="flex-1 bg-red-100"></div>}
           </section>
-
+          </>
+}
 
 
       </div>
@@ -190,7 +225,7 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
                   <button className="flex items-center justify-center bg-neutral-50 border-neutral-200 border h-8 px-2 rounded text-sm hover:bg-black hover:bg-opacity-5" onClick={() => cleanVisualFilters()}>
                     Limpar
                   </button>
-                  <button className="flex items-center justify-center h-8 px-2 rounded text-sm bg-primary text-white hover:bg-primary hover:bg-opacity-80 hover:border border-primary  border" onClick={() => {dispatch(visualFilters, []); closeModal()}}>
+                  <button className="flex items-center justify-center h-8 px-2 rounded text-sm bg-primary text-white hover:bg-primary hover:bg-opacity-80 hover:border border-primary  border" onClick={() => {dispatch(visualFilters, [], false); closeModal()}}>
                     Mostrar {loading?<span className="loading loading-spinner loading-sm"></span> : counter} resultados
                   </button>
                 </div>
@@ -240,3 +275,4 @@ export function CreateCategorySVG (link:string): ElementType {
     <img alt="Ícone" src={link}></img> as unknown as ElementType
   )
 }
+
