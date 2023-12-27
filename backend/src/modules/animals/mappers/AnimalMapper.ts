@@ -27,11 +27,10 @@ export class AnimalMapper {
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
-    const animalContactsOrError = Contacts.createFromPersistent(persistent.contact)
+    const animalContactsOrError = Contacts.createFromPersistent(persistent.contact);
 
     const animalCreatedAt = Timestamp.create(persistent.created_at);
-    const animalLastModified = Timestamp.create(persistent.last_modified_at)
-    
+    const animalLastModified = Timestamp.create(persistent.last_modified_at);
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
@@ -106,18 +105,17 @@ export class AnimalMapper {
     }
   }
 
-  public static toDomainBulk(persistent: IAnimalPersistent[]):Either<GuardError, Animal[]> {
-    const array: Animal[] = []
+  public static toDomainBulk(persistent: IAnimalPersistent[]): Either<GuardError, Animal[]> {
+    const array: Animal[] = [];
     for (const animal of persistent) {
-      const response = this.toDomain(animal)
+      const response = this.toDomain(animal);
       if (response.isLeft()) {
-        return left(response.value)
+        return left(response.value);
       }
 
-      array.push(response.value)
+      array.push(response.value);
     }
 
-    return right(array)
-
+    return right(array);
   }
 }

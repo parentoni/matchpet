@@ -33,8 +33,13 @@ export interface IAnimalRepo {
   ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { animals: Animal[]; count: number }>>;
   geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>>;
   geoCount(props: AnimalFindCountProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, number>>;
-  countUnactive(date:Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>>;
-  aggregataCanRenovate(notificationDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,  { _id: string; animals: Animal[]}[]>>;
+  countUnactive(
+    date: Date,
+    unactiveDays: number
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[] }[]>>;
+  aggregataCanRenovate(
+    notificationDays: number
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[] }[]>>;
   updateViewsForAnimalBatch(animals_ids: string[]): Promise<Either<CommonUseCaseResult.UnexpectedError, null>>;
-  aggregateAnimalsViewsAndClicks(donator_id:string):Promise<Either<CommonUseCaseResult.UnexpectedError, GetUserAnimalsStatsSuccessfulResponse>>;
+  aggregateAnimalsViewsAndClicks(donator_id: string): Promise<Either<CommonUseCaseResult.UnexpectedError, GetUserAnimalsStatsSuccessfulResponse>>;
 }

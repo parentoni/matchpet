@@ -19,6 +19,7 @@ import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { UserName } from "./userProps/userName";
 import { UserImage } from "./userProps/userImage";
 import { UserDescription } from "./userProps/userDescription";
+import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 
 export interface UserProps {
   displayName: UserDisplayName;
@@ -37,7 +38,7 @@ export interface UserProps {
   description?: UserDescription;
 }
 
-type UserResponse = Either<GenericError<IBaseError>, User>;
+type UserResponse = Either<CommonUseCaseResult.InvalidValue, User>;
 
 export class User extends AggregateRoot<UserProps> {
   get userId(): UserId {
@@ -57,7 +58,7 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get userName(): UserName {
-    return this.props.username
+    return this.props.username;
   }
 
   get phone(): UserPhone {
@@ -87,12 +88,12 @@ export class User extends AggregateRoot<UserProps> {
   get lastLogin(): UserLastLogin {
     return this.props.lastLogin;
   }
-  
+
   get image(): UserImage | undefined {
-    return this.props.image
+    return this.props.image;
   }
   public get description(): UserDescription | undefined {
-    return this.props.description
+    return this.props.description;
   }
 
   public updateCompletedAdoptions(num: number): void {
@@ -102,7 +103,6 @@ export class User extends AggregateRoot<UserProps> {
   public updateInAdoption(num: number): void {
     this.props.inAdoption = num;
   }
-
 
   public logActivity() {
     this.addDomainEvent(new UserLogin(this));
@@ -129,21 +129,18 @@ export class User extends AggregateRoot<UserProps> {
       return left(guardResult.value);
     }
 
-
-    
-    
     const user = new User(
       {
         ...props
       },
       id
-      );
-      
-      const userIsNew = !!id === false
+    );
 
-      if (userIsNew) {
-        user.addDomainEvent(new UserCreated(user))
-      }
+    const userIsNew = !!id === false;
+
+    if (userIsNew) {
+      user.addDomainEvent(new UserCreated(user));
+    }
 
     return right(user);
   }

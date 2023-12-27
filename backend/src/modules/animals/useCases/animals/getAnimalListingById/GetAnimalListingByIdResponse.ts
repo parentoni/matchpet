@@ -4,4 +4,4 @@ import { Either } from "../../../../../shared/core/Result";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { Animal } from "../../../domain/Animal";
 
-export type GetAnimalListingByIdResponse = Promise<Either<GuardError, IAnimalPersistent>>;
+export type GetAnimalListingByIdResponse = Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, IAnimalPersistent>>;

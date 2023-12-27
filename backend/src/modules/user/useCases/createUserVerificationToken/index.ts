@@ -1,6 +1,6 @@
 import { CreateUserVerificationTokenUseCase } from "./createUserVerificationTokenUseCase";
 import { authService } from "../../services";
 
-const createUserVerificationTokenUseCase = new CreateUserVerificationTokenUseCase(authService)
+const createUserVerificationTokenUseCase = new CreateUserVerificationTokenUseCase(authService);
 
-export {createUserVerificationTokenUseCase}
+export { createUserVerificationTokenUseCase };

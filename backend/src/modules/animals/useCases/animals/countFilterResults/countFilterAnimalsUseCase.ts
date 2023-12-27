@@ -12,9 +12,7 @@ import { UpdateViewCounterUseCase } from "../updateVIewCounter/UpdateViewCounter
 import { CountFilterAnimalsDTO } from "./countFilterAnimalsDTO";
 import { CountFilterAnimalsUseCaseResponse } from "./countFilterAnimalsResponse";
 
-
-export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO , CountFilterAnimalsUseCaseResponse> {
-
+export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO, CountFilterAnimalsUseCaseResponse> {
   protected animalRepo: IAnimalRepo;
 
   constructor(animalRepo: IAnimalRepo) {
@@ -22,10 +20,8 @@ export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO 
   }
 
   async execute(request: CountFilterAnimalsDTO): Promise<CountFilterAnimalsUseCaseResponse> {
-    console.log('oi')
-    const guardResponse = Guard.againstNullOrUndefinedBulk([
-      { argument: request.filter, argumentName: "FILTER" }
-    ]);
+    console.log("oi");
+    const guardResponse = Guard.againstNullOrUndefinedBulk([{ argument: request.filter, argumentName: "FILTER" }]);
 
     if (guardResponse.isLeft()) {
       return left(guardResponse.value);
@@ -61,6 +57,6 @@ export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO 
       return left(result.value);
     }
 
-    return right({count:result.value});
+    return right({ count: result.value });
   }
 }

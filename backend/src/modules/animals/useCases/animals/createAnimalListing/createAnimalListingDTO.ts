@@ -10,7 +10,7 @@ export interface CreateAnimalListingDTO {
   specie_id: string;
   traits: CreateAnimalListingTraitsDTO[];
   description: string;
-  contact?: IContactPersistent[]
+  contact?: IContactPersistent[];
 }
 
 export interface CreateAnimalListingTraitsDTO {

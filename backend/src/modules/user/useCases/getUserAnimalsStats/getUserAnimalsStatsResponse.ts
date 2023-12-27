@@ -3,8 +3,11 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either } from "../../../../shared/core/Result";
 
 export interface GetUserAnimalsStatsSuccessfulResponse {
-  views: number,
-  clicks: number
+  views: number;
+  clicks: number;
 }
 
-export type GetUserAnimalsStatsResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError | GuardError, GetUserAnimalsStatsSuccessfulResponse>
+export type GetUserAnimalsStatsResponse = Either<
+  CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError,
+  GetUserAnimalsStatsSuccessfulResponse
+>;

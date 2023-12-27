@@ -5,23 +5,22 @@ import { SendUserVerificationEmailDTO } from "../useCases/sendUserVerificationEm
 import { SendUserVerificationEmailUseCase } from "../useCases/sendUserVerificationEmail/SendUserVerificationEmailUseCase";
 
 export class AfterUserCreated implements IHandle<UserCreated> {
-  protected sendUserVerificationEmailUseCase: SendUserVerificationEmailUseCase
+  protected sendUserVerificationEmailUseCase: SendUserVerificationEmailUseCase;
   constructor(sendUserVerificationEmailUseCase: SendUserVerificationEmailUseCase) {
-    this.setupSubscriptions()
-    this.sendUserVerificationEmailUseCase = sendUserVerificationEmailUseCase
+    this.setupSubscriptions();
+    this.sendUserVerificationEmailUseCase = sendUserVerificationEmailUseCase;
   }
 
   setupSubscriptions(): void {
-    DomainEvents.register(this.onUserCreation.bind(this), UserCreated.name)
+    DomainEvents.register(this.onUserCreation.bind(this), UserCreated.name);
   }
 
-  private async onUserCreation  (e: UserCreated) {
-    const response = await this.sendUserVerificationEmailUseCase.execute({user:e.user})
+  private async onUserCreation(e: UserCreated) {
+    const response = await this.sendUserVerificationEmailUseCase.execute({ user: e.user });
     if (response.isLeft()) {
       console.log(`[AfterUserCreated]: Unable to execute SendUserVerificationEmail for ${e.user.email.value}. `);
     }
 
     console.log(`[AfterUserCreated]: Success executing SendUserVerificationEmail for ${e.user.email.value}. `);
-
   }
 }

@@ -5,7 +5,7 @@ import { DomainEvents } from "../../../domain/events/DomainEvents";
 import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 const userSchema = new mongoose.Schema({
   display_name: { type: String, required: true },
-  username: {type: String, required: true},
+  username: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   // cpf: { type: String, required: false },
@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
   in_adoption: { type: Number, default: 0 },
   last_login: { type: Date, required: true },
 
-  image: {type: String, required: false},
-  description: {type: String, required: false}
+  image: { type: String, required: false },
+  description: { type: String, required: false }
 });
 
 export type IUserPersistant = {
@@ -43,6 +43,8 @@ export type IUserPersistant = {
 };
 
 // userSchema.post('findOne', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
-userSchema.post('save', t => {DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()))})
+userSchema.post("save", (t) => {
+  DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()));
+});
 
 export default { name: "user", schema: userSchema };

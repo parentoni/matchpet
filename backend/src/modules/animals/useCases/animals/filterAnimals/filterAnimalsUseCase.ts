@@ -10,15 +10,13 @@ import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "../filterAnimals/f
 import { FilterAnimalsUseCaseResponse } from "../filterAnimals/filterAnimalsResponse";
 import { UpdateViewCounterUseCase } from "../updateVIewCounter/UpdateViewCounterUseCase";
 
-
 export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAnimalsUseCaseResponse> {
-
   protected animalRepo: IAnimalRepo;
   protected updateViewCounterUseCase: UpdateViewCounterUseCase;
 
   constructor(animalRepo: IAnimalRepo, updateViewCounterUseCase: UpdateViewCounterUseCase) {
     this.animalRepo = animalRepo;
-    this.updateViewCounterUseCase = updateViewCounterUseCase
+    this.updateViewCounterUseCase = updateViewCounterUseCase;
   }
 
   async execute(request: FilterAnimalsDTO): Promise<FilterAnimalsUseCaseResponse> {
@@ -65,12 +63,12 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
 
     const persistentValues: IAnimalPersistent[] = [];
     if (request.countView) {
-      const response = await this.updateViewCounterUseCase.execute({animals: result.value})
+      const response = await this.updateViewCounterUseCase.execute({ animals: result.value });
       if (response.isLeft()) {
-        console.log(response)
+        console.log(response);
       }
     }
-    
+
     for (const value of result.value) {
       const mapperResult = AnimalMapper.toPersistent(value);
       if (mapperResult.isLeft()) {
@@ -79,6 +77,6 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
 
       persistentValues.push(mapperResult.value);
     }
-    return right({animals:persistentValues});
+    return right({ animals: persistentValues });
   }
 }

@@ -13,11 +13,12 @@ import { CategoriesContext } from "../../utils/context/CategoriesContext";
 import { Specie } from "../../utils/domain/Specie";
 import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
 import _ from 'lodash';
+import { User } from "../../utils/domain/User";
 
 export function PartnerAnimalManage () {
 
   const {useSetAnimalGetter, filters, dispatch, countFilters, loading, animalsLoading,animals, useCreateVisualFilter} = useContext(FiltersContext)
-  const {user} = useContext(AuthContext)
+  const {user, getToken} = useContext(AuthContext)
   
   useSetAnimalGetter(false)
 
@@ -64,6 +65,19 @@ export function PartnerAnimalManage () {
   
   const [filterModalIsOpen, setFilterModalIsOpen] = useState<boolean>(false)
 
+
+  const [stats, setStats] = useState<{clicks:number, views:number} | undefined>(undefined)
+  useEffect(() => {
+    User.getUserAnimalStats(getToken()).then(res => {
+      console.log(res)
+      if (res.isLeft()) {
+        return alert(res.value)
+      }
+
+      console.log(res.value)
+      setStats(res.value)
+    })
+  }, [])
   return (
     <>
 
@@ -76,7 +90,7 @@ export function PartnerAnimalManage () {
             <span className="px-2 absolute ">
               <Search className="w-4 h-4"></Search>
             </span>
-            <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome (TODO)" onChange={e => setQuery(e.target.value)}>
+            <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome" onChange={e => setQuery(e.target.value)}>
             </input>
             <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l hover:bg-black hover:bg-opacity-5" onClick={() => setFilterModalIsOpen(true)}>
               <span className="text-sm">Filtrar</span>
@@ -98,11 +112,11 @@ export function PartnerAnimalManage () {
             <div className="flex flex-col gap-2 mt-4">
             <div className="flex gap-2 items-center">
               <Eye className="w-4 h-4"/> 
-              <span>Visualizações em seus animais: <span className="text-primary">TODO</span></span>
+              <span>Visualizações em seus animais: <span className="text-primary">{stats?.views}</span></span>
             </div>
             <div className="flex gap-2 items-center">
               <MousePointerClick className="w-4 h-4"/> 
-              <span>Cliques em seus animais: <span className="text-primary">TODO</span></span>
+              <span>Cliques em seus animais: <span className="text-primary">{stats?.clicks}</span></span>
             </div>
             
           </div>

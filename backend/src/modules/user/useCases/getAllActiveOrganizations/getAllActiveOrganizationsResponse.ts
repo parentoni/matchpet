@@ -3,4 +3,4 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { Either } from "../../../../shared/core/Result";
 import { IUserPersistant } from "../../../../shared/infra/database/models/User";
 
-export type GetAllActiveOrganizationsResponse = Either<CommonUseCaseResult.UnexpectedError | GuardError, IUserPersistant[]>;
+export type GetAllActiveOrganizationsResponse = Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, IUserPersistant[]>;

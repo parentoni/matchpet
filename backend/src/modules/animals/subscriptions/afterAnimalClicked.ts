@@ -8,7 +8,7 @@ export class AfterAnimalClicked implements IHandle<AnimalClicked> {
 
   constructor(updateClickedCounterUseCase: UpdateClickedCounterUseCase) {
     this.setupSubscriptions();
-    this.updateClickedCounterUseCase =updateClickedCounterUseCase;
+    this.updateClickedCounterUseCase = updateClickedCounterUseCase;
   }
   setupSubscriptions(): void {
     DomainEvents.register(this.onAnimalClicked.bind(this), AnimalClicked.name);
@@ -16,7 +16,7 @@ export class AfterAnimalClicked implements IHandle<AnimalClicked> {
 
   private async onAnimalClicked(event: AnimalClicked): Promise<void> {
     const response = await this.updateClickedCounterUseCase.execute({
-      animal:event.animal
+      animal: event.animal
     });
     if (response.isLeft()) {
       console.log(`[AfterAnimalClikcked]: Unable to execute updateClickedCounterUseCase for animal click. AnimalId: ${event.animal.id.toValue}.`);

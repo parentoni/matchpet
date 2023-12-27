@@ -6,19 +6,18 @@ import { UpdateClickedCounterResponse } from "./updateClickedCounterResponse";
 
 export class UpdateClickedCounterUseCase implements UseCase<UpdateClickedCounterDTO, UpdateClickedCounterResponse> {
   animalRepo: IAnimalRepo;
-  
+
   constructor(animalRepo: IAnimalRepo) {
-    this.animalRepo = animalRepo
+    this.animalRepo = animalRepo;
   }
-  
-  
-  async execute(request: UpdateClickedCounterDTO ): Promise<UpdateClickedCounterResponse> {
-    request.animal.incrementAnimalClickCount(1)
-    const response = await this.animalRepo.save(request.animal)
+
+  async execute(request: UpdateClickedCounterDTO): Promise<UpdateClickedCounterResponse> {
+    request.animal.incrementAnimalClickCount(1);
+    const response = await this.animalRepo.save(request.animal);
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
-    return right(null)
+    return right(null);
   }
 }

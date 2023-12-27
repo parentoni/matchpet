@@ -2,4 +2,4 @@ import { GuardError } from "../../../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCaseError";
 import { Either } from "../../../../../shared/core/Result";
 
-export type NotificateRenovationPossibilityResponse = Either<CommonUseCaseResult.UnexpectedError | GuardError, null>
+export type NotificateRenovationPossibilityResponse = Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, null>;

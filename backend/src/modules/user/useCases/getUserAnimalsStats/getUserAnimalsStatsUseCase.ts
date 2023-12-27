@@ -5,19 +5,18 @@ import { GetUserAnimalsStatsDTO } from "./getUserAnimalStatsDTO";
 import { GetUserAnimalsStatsResponse } from "./getUserAnimalsStatsResponse";
 
 export class GetUserAnimalsStatsUseCase implements UseCase<GetUserAnimalsStatsDTO, GetUserAnimalsStatsResponse> {
-  
-  private animalRepo: IAnimalRepo
+  private animalRepo: IAnimalRepo;
 
   constructor(animalRepo: IAnimalRepo) {
-    this.animalRepo = animalRepo
+    this.animalRepo = animalRepo;
   }
-  
-  async execute(request: GetUserAnimalsStatsDTO ):Promise<GetUserAnimalsStatsResponse> {
-    const result = await this.animalRepo.aggregateAnimalsViewsAndClicks(request.user.uid)
+
+  async execute(request: GetUserAnimalsStatsDTO): Promise<GetUserAnimalsStatsResponse> {
+    const result = await this.animalRepo.aggregateAnimalsViewsAndClicks(request.user.uid);
     if (result.isLeft()) {
-      return left(result.value)
+      return left(result.value);
     }
 
-    return right(result.value)
+    return right(result.value);
   }
 }

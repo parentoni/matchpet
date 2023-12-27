@@ -1,11 +1,8 @@
 import { Guard } from "../../../../../shared/core/Guard";
 import { left, right } from "../../../../../shared/core/Result";
 import { UseCase } from "../../../../../shared/core/UseCase";
-import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
-import { updateUserStatsUseCase } from "../../../../user/useCases/updateUserStats";
 import { UpdateUserStatsUseCase } from "../../../../user/useCases/updateUserStats/updateUserStatsUseCase";
-import { ANIMAL_STATUS } from "../../../domain/animal/AnimalStatus";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../../repository/IAnimalRepo";
 import { ISpecieRepo } from "../../../repository/ISpeciesRepo";
@@ -68,8 +65,8 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       name: request.edit.name || persistenAtualAnimal.value.name,
       image: request.edit.image || persistenAtualAnimal.value.image,
       description: request.edit.description || persistenAtualAnimal.value.description,
-      traits: request.edit.traits || persistenAtualAnimal.value.traits,
-    }
+      traits: request.edit.traits || persistenAtualAnimal.value.traits
+    };
 
     const domainNewAnimal = AnimalMapper.toDomain(persistentNewAnimal);
 
@@ -84,27 +81,25 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
     }
 
     if (request.edit.status && request.edit.status !== animal.value.animalStatus.value) {
-      const updateUserResponse = domainNewAnimal.value.animalChangeStatus(request.edit.status)
+      const updateUserResponse = domainNewAnimal.value.animalChangeStatus(request.edit.status);
       if (updateUserResponse.isLeft()) {
         return left(updateUserResponse.value);
       }
 
-      persistentNewAnimal.status = request.edit.status
+      persistentNewAnimal.status = request.edit.status;
     }
 
     const isTraitValid = specie.value.validateArrayOfAnimalTraits(domainNewAnimal.value.animalTraits);
     if (isTraitValid.isLeft()) {
       return left(EditAnimalErrors.dbError);
     }
-    
-    
-    
-    domainNewAnimal.value.markAnimalAsEditied()
+
+    domainNewAnimal.value.markAnimalAsEditied();
     const saveResult = await this.animalRepo.save(domainNewAnimal.value);
     if (saveResult.isLeft()) {
       return left(EditAnimalErrors.dbError);
     }
-    
+
     return right(persistentNewAnimal);
   }
 }

@@ -1,4 +1,4 @@
 export interface GetAnimalListingByIdDTO {
   id: string;
-  click: boolean
+  click: boolean;
 }

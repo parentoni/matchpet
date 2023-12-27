@@ -26,8 +26,7 @@ export class CreateUserController extends BaseController<Request> {
 
         //Generate token for instant user access
 
-
-        this.ok(res, result.value)
+        this.ok(res, result.value);
       } catch (err) {
         this.fail(res, err as Error);
       }

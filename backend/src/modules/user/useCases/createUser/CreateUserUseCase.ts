@@ -6,21 +6,15 @@ import { left, right } from "../../../../shared/core/Result";
 import { UserEmail } from "../../domain/userProps/userEmail";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { EitherUtils } from "../../../../shared/utils/EitherUtils";
-import { UserCpf } from "../../domain/userProps/userCpf";
 import { User } from "../../domain/user";
 import { IUserRepo } from "../../repository/IUserRepo";
-import { AppError } from "../../../../shared/core/Response/AppError";
 import { RepositoryBaseResult } from "../../../../shared/core/IBaseRepositoty";
 import { Iwatch } from "../../../../shared/core/Response/Error";
-import { Guard } from "../../../../shared/core/Guard";
 import { UserDisplayName } from "../../domain/userProps/userDisplayName";
-import { IAuthService } from "../../services/IauthService";
 import { UserRole } from "../../domain/userProps/userRole";
-import { UserCreated } from "../../domain/events/userCreated";
 import { UserPhone } from "../../domain/userProps/userPhone";
 import { UserMap } from "../../mappers/userMap";
 import { Location } from "../../../../shared/core/Location";
-import { Secrets } from "../../../../config/secretsManager";
 import { UserLastLogin } from "../../domain/userProps/userLastLogin";
 import { UserName } from "../../domain/userProps/userName";
 import { UserImage } from "../../domain/userProps/userImage";
@@ -43,31 +37,39 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const phoneOrError = UserPhone.create({ value: request.phone });
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
     const lastLoginOrError = UserLastLogin.create({ date: new Date() });
-    const userNameOrError = UserName.create({username: request.username})
+    const userNameOrError = UserName.create({ username: request.username });
 
-
-    let image: undefined | UserImage
+    let image: undefined | UserImage;
 
     if (request.image) {
-      const imageOrError = UserImage.create({image:request.image})
+      const imageOrError = UserImage.create({ image: request.image });
       if (imageOrError.isLeft()) {
-        return left(imageOrError.value)
+        return left(imageOrError.value);
       }
 
-      image = imageOrError.value
+      image = imageOrError.value;
     }
 
     let description: undefined | UserDescription;
     if (request.description) {
-      const descriptionOrError = UserDescription.create({value: request.description})
+      const descriptionOrError = UserDescription.create({ value: request.description });
       if (descriptionOrError.isLeft()) {
-        return left(descriptionOrError.value)
+        return left(descriptionOrError.value);
       }
 
-      description = descriptionOrError.value
+      description = descriptionOrError.value;
     }
 
-    const result = EitherUtils.combine([passwordOrError, emailOrError, phoneOrError, displayNameOrError, roleOrError, locationOrError, lastLoginOrError, userNameOrError]);
+    const result = EitherUtils.combine([
+      passwordOrError,
+      emailOrError,
+      phoneOrError,
+      displayNameOrError,
+      roleOrError,
+      locationOrError,
+      lastLoginOrError,
+      userNameOrError
+    ]);
 
     if (result.isLeft()) {
       return left(result.value);
@@ -88,7 +90,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     if (hashedPassword.isLeft()) {
       return left(hashedPassword.value);
     }
-    
 
     try {
       // User Conflict checking
@@ -97,23 +98,25 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       const userWithEmail = await this.userRepo.exists({
         filter: { email: email.value }
       });
-      
-      const userWithUserName = await this.userRepo.exists({
-        filter: {username: username.value}
-      })
 
-      watchList.push({
-        name: "USER_EMAIL",
-        watch: userWithEmail,
-        error: `The email ${email.mask()} associated for this account already exists.`,
-        printableErrorMessage: `O email ${email.mask()} associado com essa conta já está sendo utilizado.`
-      }, {
-        name: "USER_NAME",
-        watch: userWithUserName,
-        error: `The username ${username.value} associated for this account already exists.`,
-        printableErrorMessage: `O nome de usuário "${username}" associado com essa conta já está sendo utilizado.`
+      const userWithUserName = await this.userRepo.exists({
+        filter: { username: username.value }
       });
 
+      watchList.push(
+        {
+          name: "USER_EMAIL",
+          watch: userWithEmail,
+          error: `The email ${email.mask()} associated for this account already exists.`,
+          printableErrorMessage: `O email ${email.mask()} associado com essa conta já está sendo utilizado.`
+        },
+        {
+          name: "USER_NAME",
+          watch: userWithUserName,
+          error: `The username ${username.value} associated for this account already exists.`,
+          printableErrorMessage: `O nome de usuário "${username}" associado com essa conta já está sendo utilizado.`
+        }
+      );
 
       for (const watched of watchList) {
         if (watched.watch.isRight()) {
@@ -144,12 +147,12 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         description
         // role: UserRole.create({value: 0})
       });
-  
+
       if (userOrError.isLeft()) {
         return left(userOrError.value);
       }
 
-      const user = userOrError.value
+      const user = userOrError.value;
 
       const persisantResponse = await this.userRepo.create({ dto: user });
 

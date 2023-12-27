@@ -23,7 +23,7 @@ animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnima
 animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req, res));
 animalsRouter.post("/filter/count", (req, res) => countFilterAnimalsController.execute(req, res));
 animalsRouter.post("/renovate", middleware.authenticated(), (req, res) => renovateLastModifiedAtController.execute(req, res));
-animalsRouter.post('/:id/complaint', (req, res) => createAnimalComplaintController.execute(req, res))
+animalsRouter.post("/:id/complaint", (req, res) => createAnimalComplaintController.execute(req, res));
 
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));

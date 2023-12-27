@@ -1,7 +1,7 @@
 import { Either } from "../Result";
-export type IBaseError = { errorMessage: string; location: string };
+export type IBaseError = { errorMessage: string; location: string; statusCode: number };
 export type IBaseResponse = Either<BaseError<IBaseError>, success>;
-export type Iwatch<T> = { name: string; watch: T; error: string, printableErrorMessage:string};
+export type Iwatch<T> = { name: string; watch: T; error: string; printableErrorMessage: string };
 export type success = true;
 
 export class BaseError<T extends IBaseError> {

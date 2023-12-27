@@ -1,7 +1,8 @@
 import { Either, right, left } from "./Result";
 import { GenericError, IBaseError, success } from "./Response/Error";
-export type GuardError = GenericError<IBaseError>;
-export type GuardResponse = Either<GenericError<IBaseError>, success>;
+import { CommonUseCaseResult } from "./Response/UseCaseError";
+export type GuardError = CommonUseCaseResult.InvalidValue;
+export type GuardResponse = Either<CommonUseCaseResult.InvalidValue, success>;
 export interface IGuardArgument {
   argument: any;
   argumentName: string;
@@ -22,9 +23,10 @@ export class Guard {
     return actualValue > minValue
       ? right(true)
       : left(
-          GenericError.create({
+          CommonUseCaseResult.InvalidValue.create({
             errorMessage: `Number given {${actualValue}} is not greater than {${minValue}}`,
-            location: `${Guard.name}.${this.greaterThan.name}`
+            location: `${Guard.name}.${this.greaterThan.name}`,
+            variable: "NUMBER"
           })
         );
   }
@@ -33,9 +35,10 @@ export class Guard {
     return text.length >= numChars
       ? right(true)
       : left(
-          GenericError.create({
+          CommonUseCaseResult.InvalidValue.create({
             errorMessage: `Text is not at least ${numChars} chars.`,
-            location: `${Guard.name}.${this.againstAtLeast.name}`
+            location: `${Guard.name}.${this.againstAtLeast.name}`,
+            variable: "TEXT"
           })
         );
   }
@@ -44,9 +47,10 @@ export class Guard {
     return text.length <= numChars
       ? right(true)
       : left(
-          GenericError.create({
+          CommonUseCaseResult.InvalidValue.create({
             errorMessage: `Text is greater than ${numChars} chars.`,
-            location: `${Guard.name}.${this.againstAtMost.name}`
+            location: `${Guard.name}.${this.againstAtMost.name}`,
+            variable: "TEXT"
           })
         );
   }
@@ -54,9 +58,10 @@ export class Guard {
   public static againstNullOrUndefined(argument: any, argumentName: string): GuardResponse {
     if (argument === null || argument === undefined || argument === "") {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is null or undefined`,
-          location: `${Guard.name}.${this.againstAtLeast.name}`
+          location: `${Guard.name}.${this.againstAtLeast.name}`,
+          variable: argumentName
         })
       );
     } else {
@@ -87,9 +92,10 @@ export class Guard {
       return right(true);
     } else {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} isn't oneOf the correct types in ${JSON.stringify(validValues)}. Got "${value}".`,
-          location: `${Guard.name}.${this.isOneOf.name}`
+          location: `${Guard.name}.${this.isOneOf.name}`,
+          variable: argumentName
         })
       );
     }
@@ -99,9 +105,10 @@ export class Guard {
     const isInRange = num >= min && num <= max;
     if (!isInRange) {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is not within range ${min} to ${max}.`,
-          location: `${Guard.name}.${this.inRange.name}`
+          location: `${Guard.name}.${this.inRange.name}`,
+          variable: argumentName
         })
       );
     } else {
@@ -119,9 +126,10 @@ export class Guard {
 
     if (failingResult !== null) {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is not within the range.`,
-          location: `${Guard.name}.${this.allInRange.name}`
+          location: `${Guard.name}.${this.allInRange.name}`,
+          variable: argumentName
         })
       );
     } else {
@@ -134,9 +142,10 @@ export class Guard {
       return right(true);
     } else {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is in guarded array.`,
-          location: `${Guard.name}.${Guard.inArray.name}`
+          location: `${Guard.name}.${Guard.inArray.name}`,
+          variable: argumentName
         })
       );
     }
@@ -147,9 +156,10 @@ export class Guard {
       return right(true);
     } else {
       return left(
-        GenericError.create({
+        CommonUseCaseResult.InvalidValue.create({
           errorMessage: `Array ${argumentName} is empty.`,
-          location: `${Guard.name}.${this.againstEmpty.name}`
+          location: `${Guard.name}.${this.againstEmpty.name}`,
+          variable: argumentName
         })
       );
     }

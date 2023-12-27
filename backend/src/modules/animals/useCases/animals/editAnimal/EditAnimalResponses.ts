@@ -4,4 +4,7 @@ import { Either } from "../../../../../shared/core/Result";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { Animal } from "../../../domain/Animal";
 
-export type EditAnimalResponse = Either<GuardError | CommonUseCaseResult.Forbidden, IAnimalPersistent>;
+export type EditAnimalResponse = Either<
+  CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.Forbidden,
+  IAnimalPersistent
+>;

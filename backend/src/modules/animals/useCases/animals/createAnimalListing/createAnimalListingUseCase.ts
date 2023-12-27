@@ -1,13 +1,9 @@
-import { Guard } from "../../../../../shared/core/Guard";
 import { left, right } from "../../../../../shared/core/Result";
 import { Timestamp } from "../../../../../shared/core/Timestamp";
 import { UseCase } from "../../../../../shared/core/UseCase";
-import { ValidUrl } from "../../../../../shared/core/ValidUrl";
 import { Contacts } from "../../../../../shared/core/contacts/contacts";
 import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
 import { EitherUtils } from "../../../../../shared/utils/EitherUtils";
-import { UserId } from "../../../../user/domain/userProps/userId";
-import { getUserByIdUseCase } from "../../../../user/useCases/getUserByUID";
 import { GetUserByUIDUseCase } from "../../../../user/useCases/getUserByUID/getUserByUIDUseCase";
 import { Animal } from "../../../domain/Animal";
 import { AnimalAge } from "../../../domain/animal/AnimalAge";
@@ -15,7 +11,6 @@ import { AnimalDescription } from "../../../domain/animal/AnimalDescription";
 import { AnimalImages } from "../../../domain/animal/AnimalImages";
 import { AnimalName } from "../../../domain/animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "../../../domain/animal/AnimalStatus";
-import { AnimalTrait } from "../../../domain/animal/AnimalTrait";
 import { AnimalTraits } from "../../../domain/animal/AnimalTraits";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../../repository/IAnimalRepo";
@@ -31,7 +26,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
   constructor(specieRepo: ISpecieRepo, animalRepo: IAnimalRepo, getUserByIdUseCase: GetUserByUIDUseCase) {
     this.specieRepo = specieRepo;
     this.animalRepo = animalRepo;
-    this.getUserByIdUseCase = getUserByIdUseCase
+    this.getUserByIdUseCase = getUserByIdUseCase;
   }
 
   async execute(request: CreateAnimalListingDTO): Promise<CreateAnimalListingResponse> {
@@ -43,7 +38,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
     const animalStatusOrError = AnimalStatus.create(ANIMAL_STATUS.PENDING);
     const animalDescriptionOrError = AnimalDescription.create({ value: request.description });
-    
+
     const animalCreatedTimespamp = Timestamp.create();
 
     const combineResult = EitherUtils.combine([
@@ -83,24 +78,27 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
 
     let animalContact: Contacts;
     if (request.contact) {
-      const animalContactOrError = Contacts.createFromPersistent(request.contact)
+      const animalContactOrError = Contacts.createFromPersistent(request.contact);
       if (animalContactOrError.isLeft()) {
-        return left(animalContactOrError.value)
+        return left(animalContactOrError.value);
       }
 
-      animalContact = animalContactOrError.value
+      animalContact = animalContactOrError.value;
     } else {
-      const user = await this.getUserByIdUseCase.execute({uid: request.donatorId})
+      const user = await this.getUserByIdUseCase.execute({ uid: request.donatorId });
       if (user.isLeft()) {
-        return left(user.value)
+        return left(user.value);
       }
 
-      const animalContactOrError = Contacts.createFromPersistent([{contact_type: "WHATSAPP", contact_value: user.value.phone_number},{contact_type: "EMAIL", contact_value: user.value.email}])
+      const animalContactOrError = Contacts.createFromPersistent([
+        { contact_type: "WHATSAPP", contact_value: user.value.phone_number },
+        { contact_type: "EMAIL", contact_value: user.value.email }
+      ]);
       if (animalContactOrError.isLeft()) {
-        return left(animalContactOrError.value)
+        return left(animalContactOrError.value);
       }
 
-      animalContact = animalContactOrError.value
+      animalContact = animalContactOrError.value;
     }
 
     const animalResult = Animal.create({

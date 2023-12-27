@@ -8,12 +8,12 @@ export class GetAnimalListingByIdController extends BaseController<Request> {
     super();
     this.versionRegister.addToRegister("1.0.0", async (req, res) => {
       const dto = req.params as unknown as GetAnimalListingByIdDTO;
-      const click = req.query.click
+      const click = req.query.click;
 
-      if (click === 'false') {
-        dto.click = false
+      if (click === "false") {
+        dto.click = false;
       } else {
-        dto.click = true
+        dto.click = true;
       }
 
       const response = await useCase.execute({ id: dto.id, click: dto.click });

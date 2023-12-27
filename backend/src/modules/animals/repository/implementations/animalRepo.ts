@@ -15,9 +15,6 @@ import { GetUserAnimalsStatsSuccessfulResponse } from "../../../user/useCases/ge
 export type DBFilter = Record<string, Record<string, any>>;
 
 export class AnimalRepo implements IAnimalRepo {
-  
-
-  
   async save(animal: Animal): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {
     const animalPersistent = AnimalMapper.toPersistent(animal);
     if (animalPersistent.isLeft()) {
@@ -26,7 +23,7 @@ export class AnimalRepo implements IAnimalRepo {
     const exists = await AnimalModel.exists({ _id: animal.id.toValue() });
 
     if (!!exists) {
-      await AnimalModel.findOneAndUpdate({_id: animal.id.toValue()}, animalPersistent.value);
+      await AnimalModel.findOneAndUpdate({ _id: animal.id.toValue() }, animalPersistent.value);
       return right(null);
     }
 
@@ -155,7 +152,7 @@ export class AnimalRepo implements IAnimalRepo {
   }
 
   //Todo: better filter, clean this || documentate.
-  async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,Animal[]>> {
+  async geoFind(props: AnimalFindProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, Animal[]>> {
     const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
     const idFilter: DBFilter[] = [];
@@ -166,17 +163,16 @@ export class AnimalRepo implements IAnimalRepo {
       const comparation: Record<string, any> = {};
       const filter: Record<string, any> = {};
 
-      
       if (objectIdFields.includes(ind_filter.key)) {
         ind_filter.comparation_value = { $toObjectId: ind_filter.comparation_value };
         filter[ind_filter.mode] = ["$" + ind_filter.key, ind_filter.comparation_value];
         idFilter.push(filter);
       } else {
-        if (ind_filter.mode === '$regex') {
-          comparation[ind_filter.mode] = ind_filter.comparation_value
-          comparation['$options'] = 'i'
-          filter[ind_filter.key] = comparation
-          dbFilter.push(filter)
+        if (ind_filter.mode === "$regex") {
+          comparation[ind_filter.mode] = ind_filter.comparation_value;
+          comparation["$options"] = "i";
+          filter[ind_filter.key] = comparation;
+          dbFilter.push(filter);
         } else {
           comparation[ind_filter.mode] = ind_filter.comparation_value;
           filter[ind_filter.key] = comparation;
@@ -217,19 +213,20 @@ export class AnimalRepo implements IAnimalRepo {
                 }
               }
             }
-          },
+          }
         ]
       );
     }
 
-    filters.push({
-
-      $sort: {
-        last_modified_at: -1 as -1
-      }
-    },
-    { $skip: props.skip },{$limit: props.limit}
-    )
+    filters.push(
+      {
+        $sort: {
+          last_modified_at: -1 as -1
+        }
+      },
+      { $skip: props.skip },
+      { $limit: props.limit }
+    );
     const animalArray: Animal[] = [];
     try {
       const result = await AnimalModel.aggregate(filters);
@@ -247,7 +244,7 @@ export class AnimalRepo implements IAnimalRepo {
     }
   }
 
-  async geoCount(props: AnimalFindCountProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError,number>> {
+  async geoCount(props: AnimalFindCountProps): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, number>> {
     const filters: PipelineStage[] = [];
     const dbFilter: DBFilter[] = [];
     const idFilter: DBFilter[] = [];
@@ -305,96 +302,96 @@ export class AnimalRepo implements IAnimalRepo {
         ]
       );
     }
-    filters.push({$count: "count"})
+    filters.push({ $count: "count" });
 
     try {
-      console.log(filters)
-      const count = await AnimalModel.aggregate(filters)
+      console.log(filters);
+      const count = await AnimalModel.aggregate(filters);
       return right(count[0]?.count || 0);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
+  async countUnactive(
+    date: Date,
+    unactiveDays: number
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[] }[]>> {
+    const threshold = new Date(date.getTime());
+    threshold.setDate(threshold.getDate() - unactiveDays);
 
-  async countUnactive(date: Date, unactiveDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]}[]>> {
-
-    const threshold = new Date(date.getTime())
-    threshold.setDate(threshold.getDate() - unactiveDays)
-
-    try {
-      const result = await  AnimalModel.aggregate([
-        {$match: {status:"PENDING", last_modified_at: {$lt: threshold}}},
-        {$group: {_id: {$toString:"$donator_id"}, animals: {$push: {$mergeObjects: "$$ROOT"}}}}
-      ])
-
-      for (const user of result) {
-        const mapperResponse = AnimalMapper.toDomainBulk(user.animals)
-        if (mapperResponse.isLeft()) {
-          return left(mapperResponse.value)
-        }
-
-        user.animals = mapperResponse.value
-      }
-
-      return right(result)
-    } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
-    }
-  }
-
-  async aggregataCanRenovate(notificationDays: number): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[]; }[]>> {
-    const baseDate = new Date()
-    baseDate.setDate(baseDate.getDate() - notificationDays)
-
-    const start = startOfDay(baseDate)
-    const end = endOfDay(baseDate)
-
-    try {
-      const result = await  AnimalModel.aggregate([
-        {$match: {status:"PENDING", last_modified_at: {$lte: end, $gt: start}}},
-        {$group: {_id: {$toString:"$donator_id"}, animals: {$push: {$mergeObjects: "$$ROOT"}}}}
-      ])
-
-      for (const user of result) {
-        const mapperResponse = AnimalMapper.toDomainBulk(user.animals)
-        if (mapperResponse.isLeft()) {
-          return left(mapperResponse.value)
-        }
-
-        user.animals = mapperResponse.value
-      }
-
-      return right(result)
-    } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
-    }
-
-  }
-
-  async updateViewsForAnimalBatch(animals_ids: string[]): Promise<Either<CommonUseCaseResult.UnexpectedError , null>> {
-    try {
-      await AnimalModel.updateMany({_id: {$in: animals_ids}}, { $inc: { "views": 1 } })
-      return right(null)
-    } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
-    }    
-  }
-
-
-  async aggregateAnimalsViewsAndClicks(donator_id: string): Promise<Either<CommonUseCaseResult.UnexpectedError, GetUserAnimalsStatsSuccessfulResponse>> {
     try {
       const result = await AnimalModel.aggregate([
-        {$match: {donator_id: new mongoose.Types.ObjectId(donator_id)}},
-        {$group: {_id: "$donator_id" ,views: {$sum: "$views"}, clicks: {$sum: "$clicks"}}},
-      ])
+        { $match: { status: "PENDING", last_modified_at: { $lt: threshold } } },
+        { $group: { _id: { $toString: "$donator_id" }, animals: { $push: { $mergeObjects: "$$ROOT" } } } }
+      ]);
 
-      return right({views: result[0]?.views || 0, clicks: result[0]?.clicks || 0})
+      for (const user of result) {
+        const mapperResponse = AnimalMapper.toDomainBulk(user.animals);
+        if (mapperResponse.isLeft()) {
+          return left(mapperResponse.value);
+        }
+
+        user.animals = mapperResponse.value;
+      }
+
+      return right(result);
     } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
-  
-}
+  async aggregataCanRenovate(
+    notificationDays: number
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, { _id: string; animals: Animal[] }[]>> {
+    const baseDate = new Date();
+    baseDate.setDate(baseDate.getDate() - notificationDays);
 
+    const start = startOfDay(baseDate);
+    const end = endOfDay(baseDate);
+
+    try {
+      const result = await AnimalModel.aggregate([
+        { $match: { status: "PENDING", last_modified_at: { $lte: end, $gt: start } } },
+        { $group: { _id: { $toString: "$donator_id" }, animals: { $push: { $mergeObjects: "$$ROOT" } } } }
+      ]);
+
+      for (const user of result) {
+        const mapperResponse = AnimalMapper.toDomainBulk(user.animals);
+        if (mapperResponse.isLeft()) {
+          return left(mapperResponse.value);
+        }
+
+        user.animals = mapperResponse.value;
+      }
+
+      return right(result);
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
+    }
+  }
+
+  async updateViewsForAnimalBatch(animals_ids: string[]): Promise<Either<CommonUseCaseResult.UnexpectedError, null>> {
+    try {
+      await AnimalModel.updateMany({ _id: { $in: animals_ids } }, { $inc: { views: 1 } });
+      return right(null);
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
+    }
+  }
+
+  async aggregateAnimalsViewsAndClicks(
+    donator_id: string
+  ): Promise<Either<CommonUseCaseResult.UnexpectedError, GetUserAnimalsStatsSuccessfulResponse>> {
+    try {
+      const result = await AnimalModel.aggregate([
+        { $match: { donator_id: new mongoose.Types.ObjectId(donator_id) } },
+        { $group: { _id: "$donator_id", views: { $sum: "$views" }, clicks: { $sum: "$clicks" } } }
+      ]);
+
+      return right({ views: result[0]?.views || 0, clicks: result[0]?.clicks || 0 });
+    } catch (error) {
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
+    }
+  }
+}

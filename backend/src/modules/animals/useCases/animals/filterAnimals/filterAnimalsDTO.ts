@@ -20,5 +20,5 @@ export enum FILTER_MODES {
   IN = "$in",
   NOT_EQUAL = "$ne",
   NOT_IN = "$nin",
-  REGEX = '$regex'
+  REGEX = "$regex"
 }

@@ -4,47 +4,46 @@ import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { SendEmailDTO } from "./sendEmailDTO";
 import { SendEmailResponse } from "./sendEmailResponse";
-import {SESClient, SendEmailCommand, SendEmailCommandInput} from '@aws-sdk/client-ses'
+import { SESClient, SendEmailCommand, SendEmailCommandInput } from "@aws-sdk/client-ses";
 export class SendEmailUseCase implements UseCase<SendEmailDTO, SendEmailResponse> {
+  private client: SESClient;
 
-
-  private client:SESClient;
-
-  constructor(key:string, private_key:string) {
-
-    this.client = new SESClient({region: 'sa-east-1', credentials: {
-      accessKeyId: key,
-      secretAccessKey: private_key
-    }})
+  constructor(key: string, private_key: string) {
+    this.client = new SESClient({
+      region: "sa-east-1",
+      credentials: {
+        accessKeyId: key,
+        secretAccessKey: private_key
+      }
+    });
   }
 
-  async execute(request: SendEmailDTO ): Promise<SendEmailResponse> {
+  async execute(request: SendEmailDTO): Promise<SendEmailResponse> {
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      {argument: request.recepient, argumentName: 'RECEPIENT'},
-      {argument: request.html_body, argumentName: "HTML_BODY"},
-      {argument: request.source, argumentName: "SOURCE"},
-      {argument: request.subject, argumentName: "SUBJECT"}
-    ])
+      { argument: request.recepient, argumentName: "RECEPIENT" },
+      { argument: request.html_body, argumentName: "HTML_BODY" },
+      { argument: request.source, argumentName: "SOURCE" },
+      { argument: request.subject, argumentName: "SUBJECT" }
+    ]);
 
-  
     if (guardResult.isLeft()) {
-      return left(guardResult.value)
+      return left(guardResult.value);
     }
 
-    console.log(request.source.split('@')[1])
-    if (request.source.split('@')[1] !== 'matchpet.org') {
-      return left(CommonUseCaseResult.InvalidValue.create({
-        location: `${SendEmailUseCase.name}.${this.execute.name}`,
-        variable: "SOURCE",
-        errorMessage: 'Source must be @matchpet.org.'
-      }))
+    console.log(request.source.split("@")[1]);
+    if (request.source.split("@")[1] !== "matchpet.org") {
+      return left(
+        CommonUseCaseResult.InvalidValue.create({
+          location: `${SendEmailUseCase.name}.${this.execute.name}`,
+          variable: "SOURCE",
+          errorMessage: "Source must be @matchpet.org."
+        })
+      );
     }
 
-    const params:SendEmailCommandInput = {
+    const params: SendEmailCommandInput = {
       Destination: {
-        ToAddresses: [
-          request.recepient
-        ],
+        ToAddresses: [request.recepient]
       },
 
       Message: {
@@ -55,25 +54,21 @@ export class SendEmailUseCase implements UseCase<SendEmailDTO, SendEmailResponse
           }
         },
         Subject: {
-          Charset: 'UTF8',
+          Charset: "UTF8",
           Data: request.subject
         }
       },
       Source: request.source
-    }
+    };
 
-
-    const command = new SendEmailCommand(params)
+    const command = new SendEmailCommand(params);
 
     try {
-      const response = await this.client.send(command)
+      const response = await this.client.send(command);
 
-      return right(request.recepient)
+      return right(request.recepient);
     } catch (error) {
-      return left(CommonUseCaseResult.UnexpectedError.create(error))
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
-
-
-    
   }
 }

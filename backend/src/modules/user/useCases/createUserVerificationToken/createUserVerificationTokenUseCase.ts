@@ -11,14 +11,14 @@ import { CreateUserVerificationTokenResponse } from "./createUserVerificationTok
 export class CreateUserVerificationTokenUseCase implements UseCase<CreateUserVerificationTokenDTO, CreateUserVerificationTokenResponse> {
   private authServive: IAuthService;
 
-  constructor (authService: IAuthService) {
-    this.authServive = authService
+  constructor(authService: IAuthService) {
+    this.authServive = authService;
   }
 
   async execute(request: CreateUserVerificationTokenDTO): Promise<CreateUserVerificationTokenResponse> {
-    const response = Guard.againstNullOrUndefined(request.user, 'USER')
+    const response = Guard.againstNullOrUndefined(request.user, "USER");
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
     const token = await this.authServive.signJWT({
@@ -29,11 +29,11 @@ export class CreateUserVerificationTokenUseCase implements UseCase<CreateUserVer
       display_name: request.user.displayName.value,
       role: request.user.role,
       token_function: TokenFunctions.verifyUser
-    })
+    });
 
     return right({
       token: token,
-      url: Secrets.getSecret('PUBLIC_APP_URL') + `/auth/register/verify?token=${token}`
-    })
+      url: Secrets.getSecret("PUBLIC_APP_URL") + `/auth/register/verify?token=${token}`
+    });
   }
 }

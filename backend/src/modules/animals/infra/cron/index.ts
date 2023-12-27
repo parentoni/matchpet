@@ -4,5 +4,9 @@ import { notificateRenovationPossibilityController } from "../../useCases/animal
 
 // I dont know if this should be here😭. Maybe pass this to user
 
-CronJob.from({cronTime: deactivateUnactiveAnimalsController.cronTime, onTick: () => deactivateUnactiveAnimalsController.onTick(), start: true})
-CronJob.from({cronTime: notificateRenovationPossibilityController.cronTime, onTick: () => notificateRenovationPossibilityController.onTick(), start: true})
+CronJob.from({ cronTime: deactivateUnactiveAnimalsController.cronTime, onTick: () => deactivateUnactiveAnimalsController.onTick(), start: true });
+CronJob.from({
+  cronTime: notificateRenovationPossibilityController.cronTime,
+  onTick: () => notificateRenovationPossibilityController.onTick(),
+  start: true
+});

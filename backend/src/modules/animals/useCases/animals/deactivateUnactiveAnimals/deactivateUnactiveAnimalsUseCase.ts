@@ -13,49 +13,47 @@ import { Secrets } from "../../../../../config/secretsManager";
 import { SendEmailUseCase } from "../../../../notifications/useCase/sendEmail/sendEmailUseCase";
 
 export class DeactivateUnactiveAnimalsUseCase implements UseCase<DeactivateUnactiveAnimalsDTO, DeactivateAnimalsResponse> {
-  
-  protected getUserByUiduseCase: GetUserByUIDUseCase
-  protected animalRepo: IAnimalRepo
-  protected sendEmailuseCase: SendEmailUseCase
-  static UNACTIVE_DAYS = 35
+  protected getUserByUiduseCase: GetUserByUIDUseCase;
+  protected animalRepo: IAnimalRepo;
+  protected sendEmailuseCase: SendEmailUseCase;
+  static UNACTIVE_DAYS = 35;
 
-  constructor (getUserByUidUseCase: GetUserByUIDUseCase, animalRepo: IAnimalRepo, sendEmailUseCase: SendEmailUseCase) {
-    this.getUserByUiduseCase = getUserByUidUseCase
-    this.animalRepo = animalRepo
-    this.sendEmailuseCase = sendEmailUseCase
+  constructor(getUserByUidUseCase: GetUserByUIDUseCase, animalRepo: IAnimalRepo, sendEmailUseCase: SendEmailUseCase) {
+    this.getUserByUiduseCase = getUserByUidUseCase;
+    this.animalRepo = animalRepo;
+    this.sendEmailuseCase = sendEmailUseCase;
   }
 
   async execute(request: DeactivateUnactiveAnimalsDTO): Promise<DeactivateAnimalsResponse> {
-    const result = await this.animalRepo.countUnactive(request.date, DeactivateUnactiveAnimalsUseCase.UNACTIVE_DAYS)
+    const result = await this.animalRepo.countUnactive(request.date, DeactivateUnactiveAnimalsUseCase.UNACTIVE_DAYS);
 
     if (result.isLeft()) {
-      return left(result.value)
+      return left(result.value);
     }
 
-    const data = result.value
+    const data = result.value;
 
     for (const user of data) {
-      const userResponse = await this.getUserByUiduseCase.execute({uid: user._id})
+      const userResponse = await this.getUserByUiduseCase.execute({ uid: user._id });
       if (userResponse.isRight()) {
         for (const animal of user.animals) {
-          animal.animalChangeStatus(ANIMAL_STATUS.AUTO_CANCELED)
-          const response = await this.animalRepo.save(animal)
-
-          
+          animal.animalChangeStatus(ANIMAL_STATUS.AUTO_CANCELED);
+          const response = await this.animalRepo.save(animal);
         }
 
-      const file = await ejs.renderFile(join(__dirname + '../../../../../../../static/emails/ejs/animalDeactivated.ejs'), { link: `${Secrets.getSecret('PUBLIC_APP_URL')}/partner`, animals: user.animals.map(a => a.name.value)})
-      await this.sendEmailuseCase.execute({
-        recepient: userResponse.value.email,
-        source: 'nao-responda@matchpet.org',
-        html_body: file,
-        subject: "Anúncio de animal cancelado."
-      })
+        const file = await ejs.renderFile(join(__dirname + "../../../../../../../static/emails/ejs/animalDeactivated.ejs"), {
+          link: `${Secrets.getSecret("PUBLIC_APP_URL")}/partner`,
+          animals: user.animals.map((a) => a.name.value)
+        });
+        await this.sendEmailuseCase.execute({
+          recepient: userResponse.value.email,
+          source: "nao-responda@matchpet.org",
+          html_body: file,
+          subject: "Anúncio de animal cancelado."
+        });
       }
     }
 
-
-    return right('ok')
-  
+    return right("ok");
   }
 }

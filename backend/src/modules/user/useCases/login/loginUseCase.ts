@@ -19,41 +19,40 @@ export class LoginUseCase implements UseCase<LoginDTO, LoginResponse> {
 
   constructor(userRepo: IUserRepo, authService: IAuthService) {
     this.userRepo = userRepo;
-    this.authService = authService
+    this.authService = authService;
   }
 
   async execute(request: LoginDTO): Promise<LoginResponse> {
-
     const GuardResult = Guard.againstNullOrUndefinedBulk([
-      {argument: request.credential, argumentName: "CREDENTIALS"},
-      {argument: request.password, argumentName: "PASSWORD"}
-    ])
+      { argument: request.credential, argumentName: "CREDENTIALS" },
+      { argument: request.password, argumentName: "PASSWORD" }
+    ]);
 
     if (GuardResult.isLeft()) {
-      return left(GuardResult.value)
+      return left(GuardResult.value);
     }
     let filter: Partial<IUserPersistant>;
 
-    if (request.credential.includes('@')) {
+    if (request.credential.includes("@")) {
       const givenEmailOrError = UserEmail.create({ value: request.credential });
       if (givenEmailOrError.isLeft()) {
-        return left(givenEmailOrError.value)
+        return left(givenEmailOrError.value);
       }
 
-      filter = {email: givenEmailOrError.getRight().value}
+      filter = { email: givenEmailOrError.getRight().value };
     } else {
       const givenUserNameOrError = UserName.create({ username: request.credential });
       if (givenUserNameOrError.isLeft()) {
-        return left(givenUserNameOrError.value)
+        return left(givenUserNameOrError.value);
       }
 
-      filter = {username: givenUserNameOrError.getRight().value}
+      filter = { username: givenUserNameOrError.getRight().value };
     }
 
     const givenPasswordOrError = UserPassword.create({
-          value: request.password,
-          hashed: false
-        });
+      value: request.password,
+      hashed: false
+    });
 
     if (givenPasswordOrError.isLeft()) {
       return left(givenPasswordOrError.value);

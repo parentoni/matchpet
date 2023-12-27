@@ -8,22 +8,22 @@ export class UpdateViewCounterUseCase implements UseCase<UpdateViewCounterDTO, U
   animalRepo: IAnimalRepo;
 
   constructor(animalRepo: IAnimalRepo) {
-    this.animalRepo = animalRepo
+    this.animalRepo = animalRepo;
   }
 
-  async execute(request: UpdateViewCounterDTO ): Promise<UpdateViewCounterResponse> {
-    const idArr:string[] = []
-    if (request.animals.length> 0) {
+  async execute(request: UpdateViewCounterDTO): Promise<UpdateViewCounterResponse> {
+    const idArr: string[] = [];
+    if (request.animals.length > 0) {
       for (const animal of request.animals) {
-        idArr.push(animal.id.toValue())
+        idArr.push(animal.id.toValue());
       }
-      const response = await this.animalRepo.updateViewsForAnimalBatch(idArr)
+      const response = await this.animalRepo.updateViewsForAnimalBatch(idArr);
 
       if (response.isLeft()) {
-        return left(response.value)
+        return left(response.value);
       }
     }
-  
-    return right(null)
+
+    return right(null);
   }
 }

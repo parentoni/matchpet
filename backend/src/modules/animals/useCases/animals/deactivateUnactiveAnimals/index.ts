@@ -3,6 +3,6 @@ import { DeactivateUnactiveAnimalsController } from "./deactivateUnactiveAnimals
 import { DeactivateUnactiveAnimalsUseCase } from "./deactivateUnactiveAnimalsUseCase";
 import { getUserByIdUseCase } from "../../../../user/useCases/getUserByUID";
 import { sendEmailUseCase } from "../../../../notifications/useCase/sendEmail";
-const deactivateUnactiveAnimalsUseCase = new DeactivateUnactiveAnimalsUseCase(getUserByIdUseCase, animalRepo, sendEmailUseCase)
-const deactivateUnactiveAnimalsController = new DeactivateUnactiveAnimalsController(deactivateUnactiveAnimalsUseCase)
-export {deactivateUnactiveAnimalsController}
+const deactivateUnactiveAnimalsUseCase = new DeactivateUnactiveAnimalsUseCase(getUserByIdUseCase, animalRepo, sendEmailUseCase);
+const deactivateUnactiveAnimalsController = new DeactivateUnactiveAnimalsController(deactivateUnactiveAnimalsUseCase);
+export { deactivateUnactiveAnimalsController };

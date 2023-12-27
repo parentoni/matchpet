@@ -3,4 +3,4 @@ import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCase
 import { Either } from "../../../../../shared/core/Result";
 import { ISpeciePersistent } from "../../../../../shared/infra/database/models/Specie";
 
-export type FindSpecieByIdResponse = Either<GuardError | CommonUseCaseResult.InvalidValue, ISpeciePersistent>;
+export type FindSpecieByIdResponse = Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, ISpeciePersistent>;

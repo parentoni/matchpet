@@ -3,7 +3,4 @@ import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCase
 import { Either } from "../../../../../shared/core/Result";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 
-export type CountFilterAnimalsUseCaseResponse = Either<
-  CommonUseCaseResult.InvalidValue | GuardError | CommonUseCaseResult.UnexpectedError,
-  {count: number}
->;
+export type CountFilterAnimalsUseCaseResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, { count: number }>;

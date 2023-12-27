@@ -27,7 +27,7 @@ export interface IAnimalProps {
   animalTrait: AnimalTraits;
   status: AnimalStatus;
   description: AnimalDescription;
-  
+
   createdAt: Timestamp;
   lastModifiedAt: Timestamp;
   contact: Contacts;
@@ -72,50 +72,50 @@ export class Animal extends AggregateRoot<IAnimalProps> {
   }
 
   get lastModifiedAt(): Timestamp {
-    return this.props.lastModifiedAt
+    return this.props.lastModifiedAt;
   }
-  
+
   get contact(): Contacts {
-    return this.props.contact
+    return this.props.contact;
   }
 
-  get views():number {
-    return this.props.views
+  get views(): number {
+    return this.props.views;
   }
 
-  get clicks():number {
-    return this.props.clicks
+  get clicks(): number {
+    return this.props.clicks;
   }
 
   public markAnimalAsEditied() {
-    this.addDomainEvent(new AnimalEdited(this))
+    this.addDomainEvent(new AnimalEdited(this));
   }
 
-  public incrementAnimalViewCount(i:number = 1) {
-    this.props.views += i
+  public incrementAnimalViewCount(i: number = 1) {
+    this.props.views += i;
   }
 
-  public incrementAnimalClickCount(i:number = 1) {
-    this.props.clicks += i
+  public incrementAnimalClickCount(i: number = 1) {
+    this.props.clicks += i;
   }
 
   public markAnimalAsClicked() {
-    this.addDomainEvent(new AnimalClicked(this))
-    DomainEvents.dispatchEventsForAggregate(this._id)
+    this.addDomainEvent(new AnimalClicked(this));
+    DomainEvents.dispatchEventsForAggregate(this._id);
   }
 
-  public animalChangeStatus(newStatus: ANIMAL_STATUS): Either<GuardError, null>{
-    const oldStatus = this.animalStatus.value
-    
-    const response = AnimalStatus.create(newStatus)
+  public animalChangeStatus(newStatus: ANIMAL_STATUS): Either<GuardError, null> {
+    const oldStatus = this.animalStatus.value;
+
+    const response = AnimalStatus.create(newStatus);
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
-    this.props.status = response.value
+    this.props.status = response.value;
 
-    this.addDomainEvent(new AnimalStatusChanged(this, newStatus, oldStatus))
-    return right(null)
+    this.addDomainEvent(new AnimalStatusChanged(this, newStatus, oldStatus));
+    return right(null);
   }
 
   public static create(props: IAnimalProps, id?: UniqueGlobalId): AnimalCreateResponse {
@@ -130,7 +130,7 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "ANIMAL_LAST_MODIFIED_AT", argument: props.createdAt },
       { argumentName: "ANIMAL_CONTACT", argument: props.contact },
       { argumentName: "ANIMAL_CLICKS", argument: props.clicks },
-      { argumentName: "ANIMAL_VIEWS", argument: props.views },
+      { argumentName: "ANIMAL_VIEWS", argument: props.views }
     ]);
 
     if (guardResult.isLeft()) {

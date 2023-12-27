@@ -17,67 +17,66 @@ export class SendChangePasswordEmailUseCase implements UseCase<SendPasswordChang
   private createNewPasswordToken: CreateNewPasswordTokenUseCase;
   private sendEmailUseCase: SendEmailUseCase;
   private userRepo: IUserRepo;
-  
-  constructor (userRepo:IUserRepo, createNewPasswordTokenUseCase: CreateNewPasswordTokenUseCase, sendEmailUseCase: SendEmailUseCase) {
-    this.createNewPasswordToken = createNewPasswordTokenUseCase
-    this.sendEmailUseCase = sendEmailUseCase
-    this.userRepo = userRepo
+
+  constructor(userRepo: IUserRepo, createNewPasswordTokenUseCase: CreateNewPasswordTokenUseCase, sendEmailUseCase: SendEmailUseCase) {
+    this.createNewPasswordToken = createNewPasswordTokenUseCase;
+    this.sendEmailUseCase = sendEmailUseCase;
+    this.userRepo = userRepo;
   }
 
-  async execute(request: SendPasswordChangeEmailDTO ): Promise<SendPasswordChangeEmailResponse> {
-    const guardResponse = Guard.againstNullOrUndefined(request.credential, 'CREDENTIALS')
+  async execute(request: SendPasswordChangeEmailDTO): Promise<SendPasswordChangeEmailResponse> {
+    const guardResponse = Guard.againstNullOrUndefined(request.credential, "CREDENTIALS");
     if (guardResponse.isLeft()) {
-      return left(guardResponse.value)
+      return left(guardResponse.value);
     }
 
     //Get user by email or username
     let filter: Partial<IUserPersistant>;
-    if (request.credential.includes('@')) {
+    if (request.credential.includes("@")) {
       const givenEmailOrError = UserEmail.create({ value: request.credential });
       if (givenEmailOrError.isLeft()) {
-        return left(givenEmailOrError.value)
+        return left(givenEmailOrError.value);
       }
 
-      filter = {email: givenEmailOrError.getRight().value}
+      filter = { email: givenEmailOrError.getRight().value };
     } else {
       const givenUserNameOrError = UserName.create({ username: request.credential });
       if (givenUserNameOrError.isLeft()) {
-        return left(givenUserNameOrError.value)
+        return left(givenUserNameOrError.value);
       }
 
-      filter = {username: givenUserNameOrError.getRight().value}
+      filter = { username: givenUserNameOrError.getRight().value };
     }
 
+    const user = await this.userRepo.find_one({ filter: filter });
 
-    const user = await this.userRepo.find_one({filter: filter})
-
-    if(user.isLeft()) {
-      return left(user.value)
+    if (user.isLeft()) {
+      return left(user.value);
     }
 
-    const token = await this.createNewPasswordToken.execute({user: user.value})
+    const token = await this.createNewPasswordToken.execute({ user: user.value });
 
     if (token.isLeft()) {
-      return left(token.value)
+      return left(token.value);
     }
 
     try {
-      const render = await renderFile(path.join(__dirname + '../../../../../../static/emails/ejs/newPassword.ejs'), {link: token.value.url})
+      const render = await renderFile(path.join(__dirname + "../../../../../../static/emails/ejs/newPassword.ejs"), { link: token.value.url });
 
       const emailResponse = await this.sendEmailUseCase.execute({
         recepient: user.value.email.value,
         html_body: render,
-        source: 'nao-responda@matchpet.org',
-        subject: 'Mude a sua senha Matchpet.'
-      })
+        source: "nao-responda@matchpet.org",
+        subject: "Mude a sua senha Matchpet."
+      });
 
       if (emailResponse.isLeft()) {
-        return left(emailResponse.value)
+        return left(emailResponse.value);
       }
 
-      return right('ok')
-    } catch (e)  {
-      return left(CommonUseCaseResult.UnexpectedError.create(e))
+      return right("ok");
+    } catch (e) {
+      return left(CommonUseCaseResult.UnexpectedError.create(e));
     }
   }
 }

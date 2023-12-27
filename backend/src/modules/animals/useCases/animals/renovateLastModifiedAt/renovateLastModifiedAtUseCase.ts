@@ -11,46 +11,46 @@ import { Timestamp } from "../../../../../shared/core/Timestamp";
 
 export class RenovateLastModifiedAtUseCase implements UseCase<RenovateLastModifiedAtDTO, RenovateLastModifiedAtResponse> {
   protected animalRepo: IAnimalRepo;
-  protected static DAYS_THRESHOLD = 7
-  constructor (animalRepo: IAnimalRepo) {
-    this.animalRepo = animalRepo
+  protected static DAYS_THRESHOLD = 7;
+  constructor(animalRepo: IAnimalRepo) {
+    this.animalRepo = animalRepo;
   }
 
   async execute(request: RenovateLastModifiedAtDTO): Promise<RenovateLastModifiedAtResponse> {
-    const guardResponse = Guard.againstNullOrUndefined(request.animalId, "ANIMAL_ID")
-    
+    const guardResponse = Guard.againstNullOrUndefined(request.animalId, "ANIMAL_ID");
+
     if (guardResponse.isLeft()) {
-      return left(guardResponse.value)
+      return left(guardResponse.value);
     }
 
-    const repoReponse = await this.animalRepo.findById(request.animalId)
+    const repoReponse = await this.animalRepo.findById(request.animalId);
 
     if (repoReponse.isLeft()) {
-      return left(repoReponse.value)
+      return left(repoReponse.value);
     }
 
-    const animal = repoReponse.value
+    const animal = repoReponse.value;
 
-    const newLastModifiedDate = new Date()
-    
+    const newLastModifiedDate = new Date();
+
     if (differenceInDays(newLastModifiedDate, animal.lastModifiedAt.value) < RenovateLastModifiedAtUseCase.DAYS_THRESHOLD) {
-      return left( CommonUseCaseResult.InvalidValue.create({
-        errorMessage: `Cannot renovate animal with last_modified_at less than ${RenovateLastModifiedAtUseCase.DAYS_THRESHOLD} days ago.`,
-        variable: 'LAST_MODIFED_AT',
-        location: `${RenovateLastModifiedAtUseCase.name}.${this.execute.name}`
-      }))
+      return left(
+        CommonUseCaseResult.InvalidValue.create({
+          errorMessage: `Cannot renovate animal with last_modified_at less than ${RenovateLastModifiedAtUseCase.DAYS_THRESHOLD} days ago.`,
+          variable: "LAST_MODIFED_AT",
+          location: `${RenovateLastModifiedAtUseCase.name}.${this.execute.name}`
+        })
+      );
     }
 
-    repoReponse.value.props.lastModifiedAt = Timestamp.create(newLastModifiedDate)
+    repoReponse.value.props.lastModifiedAt = Timestamp.create(newLastModifiedDate);
 
-    const response = await animalRepo.save(animal)
+    const response = await animalRepo.save(animal);
 
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
-    
-    return right(null)
+
+    return right(null);
   }
-
-
 }
