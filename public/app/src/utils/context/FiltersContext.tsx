@@ -3,6 +3,7 @@ import { FILTER_MODES } from "../../elements/Animals/filters"
 import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO"
 import { Animal } from "../domain/Animal"
 import { AuthContext } from "./AuthContext"
+import { useSearchParams } from "react-router-dom"
 
 
 export type Filters = Record<string, {mode: FILTER_MODES, comparation_value:any}[]>
@@ -19,12 +20,13 @@ export interface ContextProps {
   countFilters: (exclude: string[]) => number
   setPage: (x: number) => void,
   editCachedAnimal: (animal: IAnimalDTO) => void,
+  useListenForQuerySearchParams: () => void,
   persistentCounter: number | undefined,
   loading: boolean,
   animals: IAnimalDTO[],
   page: number,
   filters: React.MutableRefObject<Filters>,
-  animalsLoading: boolean
+  animalsLoading: boolean,
 }
 
 export const FiltersContext = createContext<ContextProps>({
@@ -36,13 +38,14 @@ export const FiltersContext = createContext<ContextProps>({
   useSetAnimalGetter: () => {},
   countFilters: () => -1,
   setPage: () => {},
+  editCachedAnimal: () => {},
+  useListenForQuerySearchParams: () => {},
   persistentCounter: undefined,
   loading: true,
   animals: [],
   page: 0,
   filters: {current: {}},
-  editCachedAnimal: () => {},
-  animalsLoading:true
+  animalsLoading:true,
 })
 
 export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) => {
@@ -190,8 +193,27 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     }
   }
 
+  const useListenForQuerySearchParams = () => {
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    try {
+      const result = searchParams.get('query')
+      if (result !== null) {
+        const resultAsObject = JSON.parse(result)
+        for (const key of Object.keys(resultAsObject)) {
+          filters.current[key] = resultAsObject[key]
+        }
+      
+      }
+      
+    } catch (error) {
+      console.log("[FiltersContext]: Unable to decode query message")
+    }
+
+  }
+
   return (
-    <FiltersContext.Provider value={{animalsLoading,editCachedAnimal,useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
+    <FiltersContext.Provider value={{useListenForQuerySearchParams ,animalsLoading,editCachedAnimal,useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
       {children}
     </FiltersContext.Provider>
   )
