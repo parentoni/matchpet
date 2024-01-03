@@ -79,10 +79,10 @@ export function PartnerAnimalManage () {
   }, [])
 
   const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
+  console.log(animals, animals.length)
   return (
     <>
-
-      <div className="w-full h-screen overflow-y-auto relative">
+      <div className="w-full flex flex-col h-screen overflow-y-auto relative">
         <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8  z-10" >
           <div className="gap-2 h-12 items-center hidden md:flex ">
             <search className=" w-[30rem] h-8 border rounded items-center relative overflow-hidden flex">
@@ -107,31 +107,30 @@ export function PartnerAnimalManage () {
           </button>
         </header>
 
-          {animalsLoading? <div className="h-[calc(100%-3rem)] w-full bg-white flex items-center justify-center">
-            <span className="loading  loading-spinner loading-lg text-primary"></span>
-          </div>:
-          <>
-          <div className="w-full p-8 border-b">
-            <h1 className=" font-semibold text-2xl hidden md:block">Todos animais</h1>
-            <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
-            <div className="flex flex-col gap-2 mt-4">
-            <div className="flex gap-2 items-center">
-              <Eye className="w-4 h-4"/> 
-              <span>Visualizações em seus animais: <span className="text-primary">{stats?.views}</span></span>
-            </div>
-            <div className="flex gap-2 items-center">
-              <MousePointerClick className="w-4 h-4"/> 
-              <span>Cliques em seus animais: <span className="text-primary">{stats?.clicks}</span></span>
-            </div>
-            
-          </div>
-
-          </div>
+          {animalsLoading? 
+            <div className="h-[calc(100%-3rem)] w-full bg-white flex items-center justify-center">
+              <span className="loading  loading-spinner loading-lg text-primary"></span>
+            </div>:
+            <div className=" flex flex-col flex-1">
+              <div className="w-full p-8 border-b">
+                <h1 className=" font-semibold text-2xl hidden md:block">Todos animais</h1>
+                <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
+                <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex gap-2 items-center">
+                    <Eye className="w-4 h-4"/> 
+                    <span>Visualizações em seus animais: <span className="text-primary">{stats?.views}</span></span>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <MousePointerClick className="w-4 h-4"/> 
+                    <span>Cliques em seus animais: <span className="text-primary">{stats?.clicks}</span></span>
+                  </div>
+                </div>
+              </div>
           
-          <section className="p-8 flex-1 flex flex-col">
-            <div className="h-20 block md:hidden">
-              <div className="w-full h-12 flex items-center bg-white ">
-                <search className=" w-full h-8 border rounded items-center relative overflow-hidden flex">
+              <section className="p-8 flex-1 flex flex-col">
+                <div className="h-20 block md:hidden">
+                  <div className="w-full h-12 flex items-center bg-white ">
+                    <search className=" w-full h-8 border rounded items-center relative overflow-hidden flex">
                   <span className="px-2 absolute ">
                     <Search className="w-4 h-4"></Search>
                   </span>
@@ -141,17 +140,20 @@ export function PartnerAnimalManage () {
                     <span className="text-sm">Filtrar</span>
                     <ChevronDown className=" w-4 h-4"/>
                   </button>
-                </search>
-              </div>
-              {
-                (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
-              }
+                    </search>
+                  </div>
+                  {
+                    (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
+                  }
+                </div>
 
-            </div>
             {animals.length > 0?
-            <AnimalGrid />: <div className="flex-1 bg-red-100"></div>}
+            <AnimalGrid />: <div className="flex-1 flex flex-col justify-center items-center">
+              <h1 className="font-medium text-2xl text-primary">Nenhum animal encontrado</h1>
+              <p className="text-sm">Tente mudar os filtros ou pesquisar por outro nome</p>
+            </div>}
           </section>
-          </>
+          </div>
 }
 
 

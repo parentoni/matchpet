@@ -14,7 +14,7 @@ export const AnimalGrid = () => {
   const {animals} = useContext(FiltersContext)
 
   return (
-    <div className="w-full grid grid-resizable-columns gap-8">
+    <div className="flex-1 grid grid-resizable-columns gap-8">
       {animals.map((animal, index) => <PartnerAnimalCard animal={animal} key={index} />)}
     </div>
   );
