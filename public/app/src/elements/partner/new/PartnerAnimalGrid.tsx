@@ -158,7 +158,7 @@ const ActionsModal = (props: ActionsModalProps) => {
                     <div className='px-4'>
                       <h4 className=' uppercase font-medium text-sm  text-neutral-800'>ANIMAL</h4>
                     </div>
-                    <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center'>
+                    <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center' onClick={() => navigate(`/partner/animal/${props.animal._id}`)}>
                       <Pen className=" w-4 h-4 fill-neutral-300"/>
                       <span className='text-sm'>Ver e editar detalhes do animal</span>
                     </button>

@@ -1,5 +1,4 @@
 import { UserPhone } from "../../../modules/user/domain/userProps/userPhone";
-import { IAnimalPersistent } from "../../infra/database/models/Animal";
 import { Contact, ContactProps } from "../Contact";
 import { Guard, GuardError } from "../Guard";
 import { Either, left, right } from "../Result";

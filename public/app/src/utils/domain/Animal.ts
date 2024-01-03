@@ -6,11 +6,14 @@ import {differenceInDays} from 'date-fns'
 export interface CreateAnimalListingDTO {
   name: string;
   image: string[];
-  age: number;
   specie_id: any;
   traits: { _id: string; value: string }[];
   description: string;
   status?: ANIMAL_STATUS;
+  contact?: {
+    contact_type: string
+    contact_value: string
+  }[]
 }
 
 export class Animal {
@@ -33,8 +36,8 @@ export class Animal {
     return new Animal(props);
   }
 
-  public static async getSpecific(animalId: string): Promise<Either<Response, Animal>> {
-    const response = await Api.get(`/animals/${animalId}`);
+  public static async getSpecific(animalId: string, click: boolean = true): Promise<Either<Response, Animal>> {
+    const response = await Api.get(`/animals/${animalId}?click=${click}`);
     if (response.isLeft()) {
       return left(response.value);
     }
@@ -157,10 +160,10 @@ export class Animal {
     return right(response.value);
   }
 
-  public static async editAnimal(data: CreateAnimalListingDTO, token: string, animalId: string) {
+  public static async editAnimal(data: CreateAnimalListingDTO, token: string, animalId: string): Promise<Either<Response, IAnimalDTO>> {
     const response = await Api.put("/animals/" + animalId, JSON.stringify({ edit: data }), token);
     if (response.isLeft()) {
-      return left(response);
+      return left(response.value);
     }
 
     return right(response.value);

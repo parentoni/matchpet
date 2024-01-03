@@ -44,7 +44,7 @@ export function ManagerSidebar () {
   }, [isOpen])
 
   return(
-    <div className='flex w-full h-full'>
+    <div className='flex w-screen h-screen flex-shrink-0 flex-grow-0 overflow-x-hidden'>
       <aside ref={asideRef} className={`md:static md:transition-none transition-all duration-150 ease-linear absolute w-60  h-screen bg-neutral-50 border-r flex flex-col -translate-x-full md:translate-x-0 ${isOpen? "translate-x-0 ": ""}`}>
         <div className='px-5 h-12 flex items-center w-full border-b'>
           {user &&
@@ -72,8 +72,8 @@ export function ManagerSidebar () {
           
           <button onClick={() => navigate('/partner/config')} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === '/partner/config'?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
 
-            <Settings className={` w-4 h-4 text-neutral-800 ${route === '/partner/config'? "text-primary": ""}`}/>
-            <p className={`text-sm text-neutral-800 ${route === '/partner/config'? "text-primary": ""}`}>Configurações</p>
+            <Settings className={`w-4 h-4  fill-neutral-300 text-neutral-800 ${route === '/partner/config'? "text-primary": ""}`}/>
+            <p className={`text-sm  text-neutral-800 ${route === '/partner/config'? "text-primary": ""}`}>Configurações</p>
             <div className='flex-1 flex justify-end'>
               <ChevronRight className={`w-4 h-4 text-neutral-800 ${route === '/partner/config'? "text-primary": ""}`} />
             </div>

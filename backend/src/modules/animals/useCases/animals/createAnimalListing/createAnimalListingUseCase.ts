@@ -31,7 +31,6 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
 
   async execute(request: CreateAnimalListingDTO): Promise<CreateAnimalListingResponse> {
     const animalNameOrError = AnimalName.create({ value: request.name });
-    const animalAgeOrError = AnimalAge.create({ months: request.age });
     const animalImageOrError = AnimalImages.createFromPersistent(request.image);
     const animalSpecieTraitsOrError = AnimalTraits.createFromPersistent(request.traits);
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
@@ -43,7 +42,6 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
 
     const combineResult = EitherUtils.combine([
       animalNameOrError,
-      animalAgeOrError,
       animalImageOrError,
       animalSpecieIdOrError,
       animalDonatorIdOError,

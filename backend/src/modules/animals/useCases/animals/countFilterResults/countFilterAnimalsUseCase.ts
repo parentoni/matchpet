@@ -20,7 +20,6 @@ export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO,
   }
 
   async execute(request: CountFilterAnimalsDTO): Promise<CountFilterAnimalsUseCaseResponse> {
-    console.log("oi");
     const guardResponse = Guard.againstNullOrUndefinedBulk([{ argument: request.filter, argumentName: "FILTER" }]);
 
     if (guardResponse.isLeft()) {
@@ -44,7 +43,13 @@ export class CountFilterAnimalsUseCase implements UseCase<CountFilterAnimalsDTO,
 
     // Treat the filters mode for animalRepo
     for (const untreatedFilter of request.filter) {
-      if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
+      if (untreatedFilter.key === "last_modified_at" || untreatedFilter.key === "created_at") {
+        treatedFilters.push({
+          ...untreatedFilter,
+          comparation_value: new Date(untreatedFilter.comparation_value),
+          mode: untreatedFilter.mode as FILTER_MODES
+        });
+      } else if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
         treatedFilters.push({ ...untreatedFilter, mode: untreatedFilter.mode as FILTER_MODES });
       }
     }

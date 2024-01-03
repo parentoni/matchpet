@@ -1,4 +1,4 @@
-import { createBrowserRouter, matchRoutes, useLocation } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { App } from "./Base";
 import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
@@ -20,9 +20,9 @@ import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
 import { IWantDonate } from "./pages/hero/IWantDonate";
 import { PartnerConfig } from "./pages/partner/PartnerConfig";
 import { ManagerSidebar } from "./elements/ManagerBase";
-import { matchPath } from 'react-router';
 import { UNSAFE_RouteContext } from 'react-router-dom'
 import { useContext } from "react";
+import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
 
 export function usePathPattern() {
   let lastRouteContext = useContext(UNSAFE_RouteContext)
@@ -69,7 +69,7 @@ const routes = [
         element: <PartnerAnimalManage />
       },
       {
-        element: <PartnerEditAnimal />,
+        element: <PartnerCreateAnimal />,
         path: 'animal/:id'
       },
       {

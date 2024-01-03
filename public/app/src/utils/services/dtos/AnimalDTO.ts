@@ -12,6 +12,10 @@ export interface IAnimalDTO {
 
   created_at: Date;
   last_modified_at: string;
+  contact?: {
+    contact_type: string
+    contact_value: string
+  }[]
 }
 
 export enum ANIMAL_STATUS {

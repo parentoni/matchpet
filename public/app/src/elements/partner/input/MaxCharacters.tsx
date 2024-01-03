@@ -6,5 +6,5 @@ export interface MaxCharactersProps {
 
 export const MaxCharacters = (props: MaxCharactersProps) => {
   
-  return(<span className={`text-sm ${(props.error || props.current > props.max)?"text-error":"text-gray-400"}`}>{props.current}/{props.max}</span>)
+  return(<span className={`text-xs ${(props.error || props.current > props.max)?"text-error":"text-primary"}`}>{props.current}/{props.max}</span>)
 }

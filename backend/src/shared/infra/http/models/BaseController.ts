@@ -40,7 +40,7 @@ export abstract class BaseController<T extends Request> {
     }
   }
 
-  public static jsonResponse(res: express.Response, code: number, message: string) {
+  public static jsonResponse(res: express.Response, code: number, message: any) {
     return res.status(code).json({ message });
   }
 
@@ -101,7 +101,7 @@ export abstract class BaseController<T extends Request> {
   //TODO BETTER ERROR HANDLING
   public errorHandler(res: express.Response, error: BaseError<IBaseError>) {
     try {
-      return BaseController.jsonResponse(res, error.error.statusCode, JSON.stringify(error.error));
+      return BaseController.jsonResponse(res, error.error.statusCode, error.error);
     } catch (error) {
       return this.fail(res, "Unknown error");
     }

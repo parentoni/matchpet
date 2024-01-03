@@ -173,7 +173,7 @@ export const PartnerEditAnimal = () => {
 
       setModalText("Fazendo upload do animal...")
       if (id === 'new') {
-        const response = await Animal.newAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
+        const response = await Animal.newAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
         if (response.isRight()) {
           setModalPercentage(1)
         } else {
@@ -182,7 +182,7 @@ export const PartnerEditAnimal = () => {
         }
       } else {
 
-        const response = await Animal.editAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
+        const response = await Animal.editAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
         if (response.isRight()) {
           setModalPercentage(1)
         } else {

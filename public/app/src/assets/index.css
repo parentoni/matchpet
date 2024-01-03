@@ -17,6 +17,14 @@ html {
   .button-animation {
     @apply hover:-translate-x-1 hover:-translate-y-1 transition-all duration-100  hover:shadow-[5px_5px]
   }
+
+  .primary-button {
+    @apply flex items-center justify-center h-8 px-2 rounded text-sm bg-primary text-white hover:bg-primary hover:bg-opacity-80 hover:border border-primary  border
+  }
+  
+  .secondary-button {
+    @apply flex items-center justify-center h-8 px-2 rounded text-sm bg-neutral-50 hover:bg-black hover:bg-opacity-5 border
+  }
 }
 
 @layer utilities {

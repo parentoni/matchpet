@@ -3,7 +3,7 @@ import { PageLayout } from "../../PageLayout";
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { CalendarDays, ChevronDown, Eye, MousePointerClick, Search } from "lucide-react";
+import { CalendarDays, ChevronDown, Eye, Menu, MousePointerClick, Search } from "lucide-react";
 import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
 import { RadioGroup } from "@headlessui/react";
 import { Categories } from "../../utils/domain/Categories";
@@ -11,6 +11,8 @@ import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
 import _ from 'lodash';
 import { User } from "../../utils/domain/User";
 import { PartnerFilterModal } from "./PartnerFilterModal";
+import { useOutletContext } from "react-router-dom";
+import { OutletContextType } from "../../elements/ManagerBase";
 
 export function PartnerAnimalManage () {
 
@@ -75,37 +77,43 @@ export function PartnerAnimalManage () {
       setStats(res.value)
     })
   }, [])
+
+  const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
   return (
     <>
 
       <div className="w-full h-screen overflow-y-auto relative">
-        <header className="w-full sticky bg-white h-12 border-b flex top-0 items-center px-8 gap-2 z-10" >
+        <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8  z-10" >
+          <div className="gap-2 h-12 items-center hidden md:flex ">
+            <search className=" w-[30rem] h-8 border rounded items-center relative overflow-hidden flex">
+              <span className="px-2 absolute ">
+                <Search className="w-4 h-4"></Search>
+              </span>
+              <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome" onChange={e => setQuery(e.target.value)}>
+              </input>
+              <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l hover:bg-black hover:bg-opacity-5" onClick={() => setFilterModalIsOpen(true)}>
+                <span className="text-sm">Filtrar</span>
+                <ChevronDown className=" w-4 h-4"/>
+              </button>
+            </search>
+            {
+              (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
+            }
+          </div>
 
-          
-
-          <search className=" w-[30rem] h-8 border rounded flex items-center relative overflow-hidden" >
-            <span className="px-2 absolute ">
-              <Search className="w-4 h-4"></Search>
-            </span>
-            <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome" onChange={e => setQuery(e.target.value)}>
-            </input>
-            <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l hover:bg-black hover:bg-opacity-5" onClick={() => setFilterModalIsOpen(true)}>
-              <span className="text-sm">Filtrar</span>
-              <ChevronDown className=" w-4 h-4"/>
-            </button>
-          </search>
-          {
-            (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
-          }
-          </header>
+          <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
+            <Menu />
+            <h1 className=" font-medium text-xl">Todos animais</h1>
+          </button>
+        </header>
 
           {animalsLoading? <div className="h-[calc(100%-3rem)] w-full bg-white flex items-center justify-center">
             <span className="loading  loading-spinner loading-lg text-primary"></span>
           </div>:
           <>
           <div className="w-full p-8 border-b">
-            <h1 className=" font-semibold text-2xl ">Todos animais</h1>
-            <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa localizados acima. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
+            <h1 className=" font-semibold text-2xl hidden md:block">Todos animais</h1>
+            <p>Veja e adminstre todos animais de sua ong em um único local. Use também os filtros e a barra de pesquisa. Dica: Renove os seus animais para eles aparecerem entre um dos primeiros do site.</p>
             <div className="flex flex-col gap-2 mt-4">
             <div className="flex gap-2 items-center">
               <Eye className="w-4 h-4"/> 
@@ -119,7 +127,27 @@ export function PartnerAnimalManage () {
           </div>
 
           </div>
+          
           <section className="p-8 flex-1 flex flex-col">
+            <div className="h-20 block md:hidden">
+              <div className="w-full h-12 flex items-center bg-white ">
+                <search className=" w-full h-8 border rounded items-center relative overflow-hidden flex">
+                  <span className="px-2 absolute ">
+                    <Search className="w-4 h-4"></Search>
+                  </span>
+                  <input value={query} className="w-full h-full pl-8 text-sm bg-neutral-50" placeholder="Pesquisar animal por nome" onChange={e => setQuery(e.target.value)}>
+                  </input>
+                  <button className="flex gap-2 absolute items-center right-0 top-0 px-2 h-full border-l hover:bg-black hover:bg-opacity-5" onClick={() => setFilterModalIsOpen(true)}>
+                    <span className="text-sm">Filtrar</span>
+                    <ChevronDown className=" w-4 h-4"/>
+                  </button>
+                </search>
+              </div>
+              {
+                (countFilters(['donator_id']) > 0) && <button className="text-sm text-primary underline" onClick={() => {resetFilters();setQuery('')}}>resetar {countFilters(['donator_id'])} filtros</button>
+              }
+
+            </div>
             {animals.length > 0?
             <AnimalGrid />: <div className="flex-1 bg-red-100"></div>}
           </section>
