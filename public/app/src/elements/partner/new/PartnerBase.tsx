@@ -1,9 +1,9 @@
 import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
-import logo from '../assets/logo.svg'
-import { BadgeHelp, Cat, ChevronDown, ChevronRight, Link2, Plus, Settings } from 'lucide-react'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { AuthContext } from '../utils/context/AuthContext'
-import { usePathPattern } from '../Routes'
+import { BadgeHelp, Cat, ChevronDown, ChevronRight, Link2, LogOut, Plus, Settings, User } from 'lucide-react'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
+import { AuthContext } from '../../../utils/context/AuthContext'
+import { usePathPattern } from '../../../Routes'
+import { Popover, Transition } from '@headlessui/react'
 
 export type SidebarType = Record<string, {icon: React.ElementType, name: string, route: string, goTo?:string}[]>
 export const pages: SidebarType = {
@@ -46,15 +46,8 @@ export function ManagerSidebar () {
   return(
     <div className='flex w-screen h-screen flex-shrink-0 flex-grow-0 overflow-x-hidden'>
       <aside ref={asideRef} className={`md:static md:transition-none transition-all duration-150 ease-linear absolute w-60  h-screen bg-neutral-50 border-r flex flex-col -translate-x-full md:translate-x-0 ${isOpen? "translate-x-0 ": ""}`}>
-        <div className='px-5 h-12 flex items-center w-full border-b'>
-          {user &&
-            <div className='flex gap-2 items-center'>
-              <div className='h-6 w-6'>
-                <ProfilePicture image={user.image} userName={user.display_name}/>
-              </div>
-              <p className='text-sm text-neutral-800 line-clamp-1'>{user.display_name}</p>
-            </div>
-          }
+        <div className='border-b flex items-center justify-center px-2 h-12'>
+          <ProfileButton />
         </div>
 
         <div className='px-2 py-4 flex-1 border-b'>
@@ -127,5 +120,59 @@ export const SidebarSection = ({name, items, }: {name: string, items:  {icon: Re
         )}
 
     </div>
+  )
+}
+
+export const ProfileButton = () => {
+
+  const {user, setToken} = useContext(AuthContext)
+  const navigate = useNavigate()
+  return (
+        <Popover className="relative w-full">
+          {({open}) => (
+            <>
+              <Popover.Button className={'px-3 h-8 flex items-center w-full rounded hover:bg-black hover:bg-opacity-5'}>
+                {user &&
+                  <div className='flex gap-2 items-center'>
+                    <div className='h-6 w-6'>
+                    <ProfilePicture image={user.image} userName={user.display_name}/>
+                    </div>
+                    <p className='text-sm text-neutral-800 line-clamp-1'>{user.display_name}</p>
+                  </div>
+                }
+              </Popover.Button>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-150"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+              > 
+              <Popover.Panel className="absolute left-0 z-40 py-2 mt-4 w-full transform bg-white  border rounded-lg shadow">
+                <div className='w-full  pt-2 pb-3 px-5 border-b'>
+                  <div className='flex flex-col'>
+                    <p className=' font-semibold text-sm'>{user?.username}</p>
+                    <span className='text-xs  text-neutral-700'>{user?.email}</span>
+                  </div>
+                </div>
+                <div className='pt-2 px-2'>
+                  <button onClick={() => {localStorage.removeItem('matchpet_token');window.location.href = '/'}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded hover:bg-opacity-5 hover:bg-black`}>
+                    <LogOut className={`w-4 h-4 fill-neutral-300 text-neutral-800 `}/>
+                    <p className={`text-sm text-neutral-800 `}>Sair da conta</p>
+                  </button>
+                  
+                  <button onClick={() => navigate('/partner/config')} className={`h-8 w-full  flex items-center gap-3 px-3 rounded hover:bg-opacity-5 hover:bg-black`}>
+                    <User className={`w-4 h-4 fill-neutral-300 text-neutral-800 `}/>
+                    <p className={`text-sm text-neutral-800 `}>Conta</p>
+                  </button>
+                </div>
+              </Popover.Panel>
+            </Transition>
+            </>
+          )}
+        </Popover>
+
   )
 }

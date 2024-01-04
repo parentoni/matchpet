@@ -1,5 +1,5 @@
 import { useNavigate, useOutletContext, useParams, useSearchParams } from "react-router-dom"
-import { OutletContextType } from "../../elements/ManagerBase"
+import { OutletContextType } from "../../elements/partner/new/PartnerBase"
 import { Check, Menu } from "lucide-react"
 import { PartnerCreateAnimalForm } from "../../elements/partner/new/PartnerCreateAnimalForm"
 import { useContext, useEffect, useState } from "react"

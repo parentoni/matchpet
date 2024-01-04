@@ -12,7 +12,7 @@ import _ from 'lodash';
 import { User } from "../../utils/domain/User";
 import { PartnerFilterModal } from "./PartnerFilterModal";
 import { useOutletContext } from "react-router-dom";
-import { OutletContextType } from "../../elements/ManagerBase";
+import { OutletContextType } from "../../elements/partner/new/PartnerBase";
 
 export function PartnerAnimalManage () {
 

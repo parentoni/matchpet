@@ -19,7 +19,7 @@ import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
 import { IWantDonate } from "./pages/hero/IWantDonate";
 import { PartnerConfig } from "./pages/partner/PartnerConfig";
-import { ManagerSidebar } from "./elements/ManagerBase";
+import { ManagerSidebar } from "./elements/partner/new/PartnerBase";
 import { UNSAFE_RouteContext } from 'react-router-dom'
 import { useContext } from "react";
 import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
