@@ -55,9 +55,9 @@ export function ManagerSidebar () {
         </div>
         <div className='px-2 py-4'>
 
-          <button onClick={() => {navigator.clipboard.writeText(`https://www.matchpet.org/partners/${user?.username}`).then(() => alert("Link da página de seu projeto copiado para a sua área de transferência."))}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === '/partner/help'?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
-            <Link2 className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/>
-            <p className={`text-sm text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}>Link do seu projeto</p>
+          <button onClick={() => {navigator.clipboard.writeText(`https://www.matchpet.org/organizations/${user?.username}`).then(() => alert("Link da página de seu projeto copiado para a sua área de transferência."))}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === null?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
+            <Link2 className={`w-4 h-4 text-neutral-800 ${route === null? "text-primary": ""}`}/>
+            <p className={`text-sm text-neutral-800 ${route === null? "text-primary": ""}`}>Link do seu projeto</p>
             <div className='flex-1 flex justify-end'>
               {/* <ChevronRight className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/> */}
             </div>
@@ -125,7 +125,7 @@ export const SidebarSection = ({name, items, }: {name: string, items:  {icon: Re
 
 export const ProfileButton = () => {
 
-  const {user, setToken} = useContext(AuthContext)
+  const {user, reloadUser} = useContext(AuthContext)
   const navigate = useNavigate()
   return (
         <Popover className="relative w-full">
@@ -158,7 +158,7 @@ export const ProfileButton = () => {
                   </div>
                 </div>
                 <div className='pt-2 px-2'>
-                  <button onClick={() => {localStorage.removeItem('matchpet_token');window.location.href = '/'}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded hover:bg-opacity-5 hover:bg-black`}>
+                  <button onClick={() => {localStorage.removeItem('matchpet_token');reloadUser();navigate('/')}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded hover:bg-opacity-5 hover:bg-black`}>
                     <LogOut className={`w-4 h-4 fill-neutral-300 text-neutral-800 `}/>
                     <p className={`text-sm text-neutral-800 `}>Sair da conta</p>
                   </button>

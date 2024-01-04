@@ -19,6 +19,14 @@ async function __login (email:string, password:string): Promise<Either<Response,
 }
 
 
+export interface AuthContextProps {
+  user: IUserPersistent | undefined,
+  login: LoginFunction,
+  getToken: () => string,
+  loading: boolean,
+  setToken: (x:string) => void,
+  reloadUser: () => Promise<void>
+}
 export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, getToken: () => string, loading: boolean, setToken: (x:string) => void,  reloadUser: () => Promise<void>}>({user: undefined, login: (() => {}) as unknown as LoginFunction, getToken: () => '', loading:true, setToken: () => {}, reloadUser: async () => {}})
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
@@ -83,6 +91,9 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     const info = await getInfo(token)
     if (info.isRight()) {
       setUser(info.value)
+    } else {
+      setUser(undefined)
+    
     }
   }
   return (

@@ -1,209 +1,213 @@
-import { Info, X } from "lucide-react"
+import { Info, Menu, X } from "lucide-react"
 import { PageLayout } from "../../PageLayout"
 import { Register } from "../../elements/auth/register"
 import { TextInput } from "../../elements/partner/input/TextInput"
-import { Ref, useContext, useEffect, useState } from "react"
+import { ChangeEvent, Ref, useContext, useEffect, useState } from "react"
 import { Form, checkFormErrors } from "../../elements/auth/register/Form"
-import { ImageInput } from "./PartnerEditAnimal"
 import { AuthContext } from "../../utils/context/AuthContext"
-import { User } from "../../utils/domain/User"
+import { ISignInUserProps, User } from "../../utils/domain/User"
 import { Animal } from "../../utils/domain/Animal"
 import { left } from "@popperjs/core"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useOutletContext } from "react-router-dom"
+import { OutletContextType } from "../../elements/partner/new/PartnerBase"
+import { AnimalInputValue } from "../../elements/partner/new/PartnerCreateAnimalFormTypes"
+import { TextArea } from "../../elements/partner/input/TextArea"
+import { ImageInput, ImageInputModal } from "../../elements/partner/new/ImageInput"
+import { HostedImage, IMAGE_TYPES, Image } from "../../utils/domain/Image"
+import { App } from "../../utils/domain/App"
+import { IUserPersistent } from "../../utils/services/dtos/UserDTO"
 
+export type ConfigInputErrors = {
+  [x in keyof ConfigsInput]: boolean
+}
 export const PartnerConfig = () => {
 
-  const [loading, setLoading] = useState(false)
-  const {user, getToken, reloadUser} = useContext(AuthContext)
+  const {setIsOpen} = useOutletContext() as OutletContextType
+  const {getToken, reloadUser} = useContext(AuthContext)
 
-  const navigate = useNavigate()
-  const onPersonalDataSubit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
-    let error = checkFormErrors(form, ['display_name', "phone",'description'])
-    setForm(structuredClone(form))
+  const [
+    [configsInput, setConfigsInput], 
+    [image, setImage]
+  ] = useGetConfigvariables()
 
-    if (location?.length !== 2 && !location) {
-      setLocationErrorMessage("Por favor, insira alguma localização")
-      error++
-    } else {
-      setLocationErrorMessage(undefined)
-    }
-    if (error === 0) {
+  const [animalInputErrors, setAnimalInputErrors] = useState<ConfigInputErrors>({description: false, display_name: false});
+  const [imageError, setImageError] = useState<boolean>(false)
+  const [imageInputModalOpenId, setImageInputModalOpenId] = useState<number | undefined>(undefined);
+  const [imageInputModalOpen, setImageInputModalOpen] = useState(false);
 
-      let imageUpload:string
-      if (image?.type === 'File') {
-        const response = await Animal.uploadAnimalImage(image.data, getToken())
-        if (response.isLeft()) {
-          return alert("Erro salvando imagem, contate parentoni.arthur@gmail.com")
-        } else {
-          imageUpload = response.value
-        }
-      } else if (image?.type === 'url') {
-        imageUpload = image.data
-      } else {
-        imageUpload = ''
-      }
-
-      const response = await User.editUser({
-        display_name: form['display_name'].variable,
-        phone: form['phone'].variable,
-        description: form['description'].variable,
-        location: location,
-        image: imageUpload
-      }, getToken())
-
-      if (response.isLeft()) {
-        return alert("Erro salvando usuário, contate parentoni.arthur@gmail.com")
-      } else {
-        alert("Mudanças salvas com sucesso.")
-        await reloadUser()
-        setLoading(false)
-
-        navigate('/partner')
-      }
-    } else {
-      alert("Algum erro aconteceu, verifique os dados apresentados.")
-    }
-
-    setLoading(false)
-
+  const [loading,setLoading] = useState<boolean>(false)
+  
+  function changeConfigInput<T extends keyof ConfigsInput>(key: T, value: ConfigsInput[T]['value']) {
+    configsInput[key].value = value;
+    setConfigsInput(structuredClone(configsInput));
   }
 
-  const [form, setForm] = useState<Form>(
-    {
-      'display_name': {
-        variable: user?.display_name,
-        regExp: /.+/gm,
-        errorMessage: 'Por favor, digite o nome de exposição.'
-      },
+  function changeConfigInputErrors(key: keyof ConfigInputErrors, value: boolean) {
+    animalInputErrors[key as keyof ConfigInputErrors] = value;
+    setAnimalInputErrors(structuredClone(animalInputErrors));
+  
+  }
 
-      "phone": {
-        variable: user?.phone_number,
-        regExp:  /^(\([1-9]{2}\)\s?9[6-9][0-9]{3}-?[0-9]{4}|[1-9]{2}9[6-9][0-9]{7})$/g,
-        errorMessage: "Por favor, digite um número de whatsapp válido."
-      },
+  const checkForErrors = ():number => {
+    let err = 0
 
-      "description": {
-        variable: user?.description,
-        regExp: /.+/gm,
-        errorMessage: "Por favor, digite uma descrição válida."
+    for (const key of Object.keys(configsInput)) {
+      const value = configsInput[key as keyof ConfigsInput]
+      if (!value.value && value.obrigatory) {
+        err++
+        changeConfigInputErrors(key as keyof ConfigInputErrors, true)
+      } else {
+        changeConfigInputErrors(key as keyof ConfigInputErrors, false)
       }
     }
-    )
-    
-  const [image, setImage] = useState<ImageInput | undefined>()
-  const [location, setLocation] = useState<[number,number]>()
-  const [loacationErrorMessage, setLocationErrorMessage] = useState<string | undefined>()
+
+
+    if (!image) {
+      err++
+      setImageError(true)
+    } else {
+      setImageError(false)
+
+    }
+    return err
+  } 
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const err = checkForErrors()
+    if (err === 0 && !loading) {
+      setLoading(true) 
+
+      let persistentImage: string| undefined = undefined
+      if (image) {
+        if (image.type === IMAGE_TYPES.FILE) {
+          const response = await Image.upload(image.data as File, getToken())
+          if (response.isRight()) {
+            persistentImage = response.value
+          }
+        } else {
+          persistentImage = image.data as string
+        }
+      }
+
+      const uploadDTO: Partial<ISignInUserProps> = {
+        display_name: configsInput.display_name.value,
+      }
+
+      if (persistentImage) {
+        uploadDTO.image = persistentImage
+      }
+
+      if (configsInput.description.value) {
+        uploadDTO.description = configsInput.description.value
+      }
+
+      const response = await User.editUser(uploadDTO, getToken())
+      if (response.isLeft()) {
+        alert("Algo deu errado salvando os dados, contate parentoni.arthur@gmail.com ou +55 31 9 9904-9188.")
+      } else {
+        await reloadUser()
+        alert("Dados do usuário alterados.")
+
+      }
+
+      setLoading(false)
+    } 
+   
+  }
+
+  return (
+    <>
+      <div className="w-full flex flex-col h-screen overflow-y-auto relative">
+        <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8  z-10" >
+          <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
+            <Menu />
+          </button>
+        </header>
+
+        <div className="w-full p-8 border-b">
+          <h1 className=" font-medium text-xl">Configurações</h1>
+          <p>Customize dados de sua organização</p>
+        </div>
+
+        <section className="flex p-8 flex-1 flex-col w-[min(100%,37rem)]">
+          <h2 className=" h-8 flex items-center text-xl font-medium">Informações do projeto</h2>
+          <div className="w-full border-b my-4"></div>
+
+          <form className="flex flex-col gap-3" onSubmit={onSubmit}>
+            <TextInput 
+              state={configsInput.display_name.value}
+              onChange={e => changeConfigInput('display_name', e.target.value)}
+              title={"Nome de exibição"}
+              placeholder={"Projeto Matchpet"}
+              obrigatory={configsInput.display_name.obrigatory}
+              errorMessage={animalInputErrors.display_name ? "O nome de exibição é obrigatório" : undefined}
+            />
+
+            <TextArea
+              state={configsInput.description.value}
+              onChange={e => changeConfigInput('description', e.target.value)}
+              title={"Descrição"}
+              placeholder={"O projeto MatchPet nasceu em 2023 e tem como intuito..."}
+              obrigatory={configsInput.description.obrigatory}
+              errorMessage={animalInputErrors.description ? "Algo deu errado salvando a descrição." : undefined}
+
+            />
+
+            <ImageInput 
+              title={"Foto de perfil"}
+              image={image}
+              id={0} 
+              setImageInputModalOpenId={setImageInputModalOpenId} 
+              setIsOpen={setImageInputModalOpen}
+              obrigatory
+              errorMessage={imageError ? "A imagem é obrigatória" : undefined}
+              />
+
+            <button className="h-8 w-full bg-primary text-white text-xs rounded mt-8 items-center flex justify-center" type="submit">{loading?<span className="loading loading-spinner"></span>:<p>Salvar alterações</p>}</button>
+          </form>
+        </section>
+      </div>
+      <ImageInputModal
+      imageInputModalIsOpenId={imageInputModalOpenId}
+      setImageInputModalOpenId={setImageInputModalOpenId}
+      isOpen={imageInputModalOpen}
+      setIsOpen={setImageInputModalOpen}
+      imagesArray={image? [image]: []}
+      setImagesArray={(x: Image[]) => {
+       setImage(x[0] || undefined)
+      } } />
+    </>
+  )
+}
+
+export interface ConfigsInput {
+  display_name: AnimalInputValue<string>,
+  description: AnimalInputValue<string>,
+}
+export const  useGetConfigvariables = (): [[ConfigsInput, (x: ConfigsInput) => void], [Image | undefined, (x: Image | undefined) => void]] => {
+
+  const {user} = useContext(AuthContext)
+
+
+  const [configsInput, setConfigsInput] = useState<ConfigsInput>({
+    display_name: {value: '', obrigatory: true},
+    description: {value: '', obrigatory: false}
+  })
+
+  const [image, setImage] = useState<Image | undefined>(undefined)
 
   useEffect(() => {
     if (user) {
-      form['display_name'].variable = user.display_name
-      form['phone'].variable = user.phone_number
-      form['description'].variable = user?.description || ''
+      configsInput.display_name.value = user.display_name
+      configsInput.description.value = user.description || ''
 
-      setForm(structuredClone(form))
-      setLocation(user.location.coordinates) 
-      setImage(user.image?{type: 'url', data: user.image}:undefined)
+      setConfigsInput(structuredClone(configsInput))
+
+      if (user.image) {
+        setImage(new HostedImage(user.image))
+      }
     }
   }, [user])
 
-  return (
-            <Register.Root page={0} setPage={() => {}} pages={1} form={form} setForm={setForm} onSubmit={onPersonalDataSubit} loading={loading}>
-    <div className="my-10 flex justify-center">
-      <div className="w-full max-w-4xl px-10 pb-10 lg:p-0">
-        <h1 className="text-xl font-semibold pb-5 border-b ">Configurações</h1>
-        <div className="grid  grid-cols-1 lg:grid-cols-2 gap-10 py-5 border-b">
-          <div className="flex-1">
-            <h2 className="text-lg font-medium">Informações pessoais</h2>
-          </div>
-          <div className="flex-1">
-              <Register.Step page={0}>
-                <Register.TextInput
-                  formName="display_name"
-                  type={'text'}
-                  title="Nome de exibição"
-                  placeholder="ONG matchpet" 
-                  tooltip={
-                    <Register.Tooltip 
-                      onClick={() => alert('Nome que será utilizado para exibir a sua organização em nosso site.')} 
-                      interior={<Info size={24} color="#fff"/>}
-                    />
-                  }
-                />
-                <Register.TextInput 
-                  type="tel"
-                  title="Número Whatsapp"
-                  placeholder="(31) 12345-6789"
-                  formName="phone"
-                />
-
-                <Register.TextArea 
-                  type="text"
-                  title="Descrição"
-                  placeholder="O meu projeto surgiu com o intuito...."
-                  formName="description"
-                />    
-
-                <UserImageInput image={image} setImage={setImage}/>
-              </Register.Step>
-          </div>
-        </div>
-          <div className="grid  grid-cols-1 lg:grid-cols-2 gap-10 py-5 border-b">
-            <div className="flex-1">
-              <h2 className="text-lg font-medium">Localização</h2>
-            </div>
-            <div className="flex-1">
-              <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={loacationErrorMessage}/>
-            </div>
-          </div>
-
-          <div className="grid-cols-2 flex items-center justify-center">
-            <Register.Button />
-          </div>
-          </div>
-        </div>
-      </Register.Root>
-    )
-}
-
-export interface ImageInputProps {
-  image: ImageInput | undefined,
-  setImage: (x: ImageInput | undefined) => void
-}
-export const UserImageInput = (props: ImageInputProps) => {
-
-  const onImageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      props.setImage({type: 'File', data: e.target.files[0]})
-    }
-  }
-
-  const deleteImage = () => {
-    props.setImage(undefined)
-  }
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="flex gap-3 items-center text-base">
-        <span className="font-medium">Imagem</span>
-      </div>
-
-      <div className="w-full relative aspect-square border rounded-md border-neutral-300 items-center justify-center flex">
-        {props.image?
-        <>
-          <button  type="button" className="absolute w-12 h-12 -top-6 -right-6 z-50 border rounded-md bg-primary flex  items-center justify-center" onClick={deleteImage}>
-            <X color="#fff"/>
-          </button>
-          <img alt="Imagem do usuário" className="rounded-md w-full h-full object-contain bg-neutral-100" src={props.image.type === 'url'?props.image.data: URL.createObjectURL(props.image.data)}></img>
-        </> 
-        :
-        <>
-          <label htmlFor="user-image-input">Clique aqui para adicionar a sua imagem</label>
-          <input id="user-image-input" type="file" accept="image/*" className="hidden" onChange={onImageInput}></input>
-        </>
-        }
-      </div>
-
-    </div>
-  )
+  return [[configsInput, setConfigsInput], [image, setImage]]
 }

@@ -40,6 +40,8 @@ export const PartnerCreateAnimal = () => {
 
   const [imagesError, setImagesError] = useState<boolean>(false);
   const [iAmTheContact, setIAmTheContact] = useState(true);
+
+
   const {editCachedAnimal} = useContext(FiltersContext)
 
   const [loading, setLoading] = useState<boolean>(false)
@@ -197,11 +199,20 @@ export const PartnerCreateAnimal = () => {
 
   };
 
+  useEffect(() => {
+    if (id) {
+      if (id !== 'new') {
+        setIAmTheContact(false)
+      }
+    }
+  
+  },[id])
+
 
   return (
     <>
       <div className="w-full flex flex-col h-screen overflow-y-auto relative">
-        <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8 z-10">
+        <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8 z-10 min-h-12">
           <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
               <Menu />
               <h1 className=" font-medium text-xl">Todos animais</h1>
