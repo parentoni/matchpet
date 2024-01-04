@@ -16,7 +16,7 @@ import { OutletContextType } from "../../elements/ManagerBase";
 
 export function PartnerAnimalManage () {
 
-  const {useSetAnimalGetter, filters, dispatch, countFilters, loading, animalsLoading,animals, useCreateVisualFilter} = useContext(FiltersContext)
+  const {useSetAnimalGetter, filters, dispatch, countFilters, animalsLoading, animals, persistentCounter} = useContext(FiltersContext)
   const {user, getToken} = useContext(AuthContext)
   
   useSetAnimalGetter(false)
@@ -107,10 +107,12 @@ export function PartnerAnimalManage () {
           </button>
         </header>
 
-          {animalsLoading? 
-            <div className="h-[calc(100%-3rem)] w-full bg-white flex items-center justify-center">
+          {animalsLoading &&
+            <div className="h-[calc(100%-3rem)] absolute z-10 top-[3rem] left-0 w-full">
+              <div className="w-full h-full fixed bg-white flex items-center justify-center">
               <span className="loading  loading-spinner loading-lg text-primary"></span>
-            </div>:
+              </div>
+            </div> }
             <div className=" flex flex-col flex-1">
               <div className="w-full p-8 border-b">
                 <h1 className=" font-semibold text-2xl hidden md:block">Todos animais</h1>
@@ -148,13 +150,17 @@ export function PartnerAnimalManage () {
                 </div>
 
             {animals.length > 0?
-            <AnimalGrid />: <div className="flex-1 flex flex-col justify-center items-center">
+            <>
+              <AnimalGrid />
+              
+            </>
+            : <div className="flex-1 flex flex-col justify-center items-center">
               <h1 className="font-medium text-2xl text-primary">Nenhum animal encontrado</h1>
               <p className="text-sm">Tente mudar os filtros ou pesquisar por outro nome</p>
             </div>}
           </section>
           </div>
-}
+
 
 
       </div>

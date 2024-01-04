@@ -39,7 +39,6 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
 
   const cleanVisualFilters = (specie_id?: string) => {
     if (user) {
-
       visualFilters = { "donator_id": [{ mode: FILTER_MODES.EQUAL, comparation_value: user._id }] };
       if (specie_id) {
         visualFilters['specie_id'] = [{ mode: FILTER_MODES.EQUAL, comparation_value: specie_id }];
@@ -86,10 +85,7 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
 
 
 
-  useEffect(() => {
 
-    console.log(visualFilters['last_modified_at']?true:null)
-  }, [visualFilters])
   useListenForQuerySearchParams()
   //clean filters
   useCountVisual(visualFilters, setCounter, []);

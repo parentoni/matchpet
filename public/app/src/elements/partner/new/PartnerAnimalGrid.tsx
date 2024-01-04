@@ -11,11 +11,17 @@ import { AuthContext } from '../../../utils/context/AuthContext';
 
 export const AnimalGrid = () => {
 
-  const {animals} = useContext(FiltersContext)
+  const {animals, persistentCounter, setPage, page, loading} = useContext(FiltersContext)
 
+  console.log(persistentCounter, animals.length)
   return (
     <div className="flex-1 grid grid-resizable-columns gap-8">
       {animals.map((animal, index) => <PartnerAnimalCard animal={animal} key={index} />)}
+      {(persistentCounter !== animals.length) && <div className='col-span-full'>
+        <button className='secondary-button w-full' onClick={() => !loading?setPage(page + 1):""}>
+          {loading?<span className=' loading loading-spinner'></span>:<span>Carregar mais animais...</span>}
+        </button>  
+      </div>}
     </div>
   );
 };

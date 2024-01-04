@@ -91,13 +91,18 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
   const dispatch = (filter: Filters, coordinatesV: [number, number][], countViews: boolean) => {
 
-      filters.current = filter
-      coordinates.current = coordinatesV
+    
+      let sycnPage = page
       if (JSON.stringify(filters.current) !== JSON.stringify(filter)) {
         setPage(0)
+        sycnPage = 0
       } 
+    
       count(filter, setPersistentCounter, coordinatesV)
-      getAnimals(filter, coordinatesV, countViews)
+      getAnimals(filter, coordinatesV, countViews, sycnPage)
+
+      filters.current = filter
+      coordinates.current = coordinatesV
     
   }
 
@@ -125,7 +130,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     // }
   }
 
-  const getAnimals = (filter: Filters, coordinatesV: [number, number][], countViews: boolean) => {
+  const getAnimals = (filter: Filters, coordinatesV: [number, number][], countViews: boolean, page:number) => {
     
     if (typeof animalCache.current[createAnimalCacheKey(filter,coordinatesV)] === 'undefined') {
       
@@ -177,7 +182,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     useEffect(() => {
       if (page !== 0) {
         count(filters.current, setPersistentCounter, coordinates.current)
-        getAnimals(filters.current ,coordinates.current, countViews)
+        getAnimals(filters.current ,coordinates.current, countViews, page)
       }
     }, [page])
   }
