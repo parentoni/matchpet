@@ -212,6 +212,7 @@ export const PartnerCreateAnimal = () => {
   return (
     <>
       <div className="w-full flex flex-col h-screen overflow-y-auto relative">
+
         <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8 z-10 min-h-12">
           <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
               <Menu />

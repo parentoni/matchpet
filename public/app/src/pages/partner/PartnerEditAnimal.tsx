@@ -4,7 +4,6 @@ import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { Species } from "../../utils/domain/Species"
 import { Specie } from "../../utils/domain/Specie"
 import { PartnerImageUpload } from "../../elements/partner/PartnerImageUpload"
-import { CarouselProvider } from "pure-react-carousel"
 import { useNavigate, useParams } from "react-router-dom"
 import { SaveAnimalStateModal } from "../../elements/partner/SaveAnimalModal"
 import { AuthContext } from "../../utils/context/AuthContext"
@@ -36,8 +35,7 @@ export const PartnerEditAnimal = () => {
 
   const {id} = useParams()
   const {getToken} = useContext(AuthContext)
-  const {species} = useContext(SpeciesContext)
-  
+  const {species} = useContext(SpeciesContext) 
   
   const navigate = useNavigate()
 
@@ -221,7 +219,8 @@ export const PartnerEditAnimal = () => {
           animalStatus={animalStatus}
           setAnimalStatus={setAnimalStatus}
           />
-          <button className="mt-10 w-full bg-primary h-10 rounded text-white" onClick={formSubmit}>
+
+          <button className="mt-10  w-full bg-primary h-10 rounded text-white" onClick={formSubmit}>
             SALVAR
           </button>
         </div>

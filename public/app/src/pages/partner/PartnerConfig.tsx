@@ -1,21 +1,14 @@
-import { Info, Menu, X } from "lucide-react"
-import { PageLayout } from "../../PageLayout"
-import { Register } from "../../elements/auth/register"
+import { Menu} from "lucide-react"
 import { TextInput } from "../../elements/partner/input/TextInput"
-import { ChangeEvent, Ref, useContext, useEffect, useState } from "react"
-import { Form, checkFormErrors } from "../../elements/auth/register/Form"
+import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../../utils/context/AuthContext"
 import { ISignInUserProps, User } from "../../utils/domain/User"
-import { Animal } from "../../utils/domain/Animal"
-import { left } from "@popperjs/core"
-import { useNavigate, useOutletContext } from "react-router-dom"
+import { useOutletContext } from "react-router-dom"
 import { OutletContextType } from "../../elements/partner/new/PartnerBase"
 import { AnimalInputValue } from "../../elements/partner/new/PartnerCreateAnimalFormTypes"
 import { TextArea } from "../../elements/partner/input/TextArea"
 import { ImageInput, ImageInputModal } from "../../elements/partner/new/ImageInput"
 import { HostedImage, IMAGE_TYPES, Image } from "../../utils/domain/Image"
-import { App } from "../../utils/domain/App"
-import { IUserPersistent } from "../../utils/services/dtos/UserDTO"
 
 export type ConfigInputErrors = {
   [x in keyof ConfigsInput]: boolean
@@ -41,7 +34,7 @@ export const PartnerConfig = () => {
     configsInput[key].value = value;
     setConfigsInput(structuredClone(configsInput));
   }
-
+  
   function changeConfigInputErrors(key: keyof ConfigInputErrors, value: boolean) {
     animalInputErrors[key as keyof ConfigInputErrors] = value;
     setAnimalInputErrors(structuredClone(animalInputErrors));

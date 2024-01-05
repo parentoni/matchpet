@@ -6,7 +6,6 @@ import { Login } from "./pages/auth/Login";
 import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalManage";
 import { Testing } from "./pages/testing/Testing";
 import { FourOFour } from "./pages/error/fourOFour";
-import { PartnerEditAnimal } from "./pages/partner/PartnerEditAnimal";
 import { AllPartnerAnimals } from "./pages/user/AllPartnerAnimals";
 import { RegisterPage } from "./pages/auth/Register";
 import { HeroPage } from "./pages/hero/Hero";
@@ -23,6 +22,7 @@ import { ManagerSidebar } from "./elements/partner/new/PartnerBase";
 import { UNSAFE_RouteContext } from 'react-router-dom'
 import { useContext } from "react";
 import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
+import { PartnerHelp } from "./pages/partner/PartnerHelp";
 
 export function usePathPattern() {
   let lastRouteContext = useContext(UNSAFE_RouteContext)
@@ -77,7 +77,7 @@ const routes = [
         path: 'config'
       },
       {
-        element: <></>,
+        element: <PartnerHelp />,
         path: 'help'
       }
     ]
