@@ -16,9 +16,8 @@ export const PartnerHelp = () => {
       </header>
   
       <div className="w-full p-8 border-b">
-
-            <h1 className=" font-semibold text-2xl hidden md:block">Precisa de ajuda?</h1>
-            <p>Contate <span className="text-primary">parentoni.arthur@gmail.com</span> ou <span className="text-primary">55 31 9 9904-9188</span> a qualquer momento para receber suporte</p>
+        <h1 className=" font-semibold text-2xl hidden md:block">Precisa de ajuda?</h1>
+        <p>Contate <span className="text-primary">parentoni.arthur@gmail.com</span> ou <span className="text-primary">55 31 9 9904-9188</span> a qualquer momento para receber suporte</p>
       </div>
     </div> 
   )

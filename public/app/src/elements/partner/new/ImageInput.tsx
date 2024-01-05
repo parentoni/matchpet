@@ -73,7 +73,7 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
           <div className="fixed inset-0 bg-black/25 z-40" />
         </Transition.Child>
         <div className="fixed inset-0 w-full overflow-y-auto z-50">
-          <div className="flex min-h-full w-full items-center justify-center p-4">
+          <div className="flex min-h-full w-full items-center justify-center p-8">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"

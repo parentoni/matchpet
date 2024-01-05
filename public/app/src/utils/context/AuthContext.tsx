@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { Either, left, right } from "../shared/Result";
 import { Api } from "../services/Api";
 import { IUserPersistent } from "../services/dtos/UserDTO";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 
 type LoginFunction = (email:string, password:string) => Promise<Either<Response, string>>
@@ -25,14 +26,23 @@ export interface AuthContextProps {
   getToken: () => string,
   loading: boolean,
   setToken: (x:string) => void,
-  reloadUser: () => Promise<void>
+  reloadUser: () => Promise<void>,
+  protectRoute: (navigate: NavigateFunction) => void
 }
-export const AuthContext = createContext<{user: IUserPersistent | undefined, login: LoginFunction, getToken: () => string, loading: boolean, setToken: (x:string) => void,  reloadUser: () => Promise<void>}>({user: undefined, login: (() => {}) as unknown as LoginFunction, getToken: () => '', loading:true, setToken: () => {}, reloadUser: async () => {}})
+export const AuthContext = createContext<AuthContextProps>({
+  user: undefined, login: (() => {}) as unknown as LoginFunction,
+  getToken: () => '', 
+  loading:true, 
+  setToken: () => {}, 
+  reloadUser: async () => {},
+  protectRoute: () => {},
+  })
 
 export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   const [user, setUser] = useState<IUserPersistent | undefined>()
   const [token,setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+
 
   useEffect(() => {
     const token = window.localStorage.getItem('matchpet_token')
@@ -96,8 +106,16 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
     
     }
   }
+
+  async function protectRoute (navigate: NavigateFunction) {
+    console.log(getToken(), !getToken())
+    if (!getToken()) {
+      navigate("/auth/login")
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{user, login: login, getToken:getToken, loading, setToken, reloadUser}}>
+    <AuthContext.Provider value={{user, login: login, getToken:getToken, loading, setToken, reloadUser, protectRoute}}>
       {children}
     </AuthContext.Provider>
   )

@@ -25,7 +25,10 @@ export type OutletContextType = {isOpen: boolean, setIsOpen: (x: boolean) => voi
 export function ManagerSidebar () {
 
   const navigate = useNavigate()
-  const {user} = useContext(AuthContext)
+  const {user, protectRoute} = useContext(AuthContext)
+  useEffect(() => {
+      protectRoute(navigate)
+  }, [])
 
   const route = usePathPattern()
   const [isOpen, setIsOpen] = useState(false)
