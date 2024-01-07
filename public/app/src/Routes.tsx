@@ -57,7 +57,7 @@ const routes = [
     ]
   },
   {
-    path: '/organizations/:username',
+    path: '/p/:username',
     element: <AllPartnerAnimals />
   },
   {

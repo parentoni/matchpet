@@ -3,6 +3,7 @@ import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 import {differenceInDays} from 'date-fns'
+import { ISpecieDTO } from "../services/dtos/SpecieDTO";
 export interface CreateAnimalListingDTO {
   name: string;
   image: string[];
@@ -15,7 +16,10 @@ export interface CreateAnimalListingDTO {
     contact_value: string
   }[]
 }
-
+export enum SEX {
+  MALE = "MALE",
+  FEMALE = "FEMALE"
+}
 export class Animal {
   public props: IAnimalDTO;
 
@@ -31,6 +35,11 @@ export class Animal {
 
   public canRenovate () {
     return !!(differenceInDays(new Date(), this.props.last_modified_at) >= 7)
+  }
+
+  public getSex (species: ISpecieDTO[]): SEX {
+    const sexTrait = species.find(a => a._id === this.props.specie_id)?.traits.find(a => a.name === "Sexo")
+    return this.props.traits.find(a => a._id === sexTrait?._id)?.value === sexTrait?.options.find(a => a.name === "Macho")?._id? SEX.MALE: SEX.FEMALE
   }
   public static create(props: IAnimalDTO) {
     return new Animal(props);
@@ -64,7 +73,6 @@ export class Animal {
         }
       }
     }
-    console.log(formatedFilters)
 
     const response = await Api.post(
       `/animals/filter?view=${countViews? "true": "false"}`,

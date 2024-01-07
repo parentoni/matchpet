@@ -1,25 +1,31 @@
-import { Database } from 'lucide-react'
-import Logo from '../../assets/logo.svg'
+import { DomToImage } from "../../elements/partner/new/DomToImage"
+
 export const Testing = () => {
   return (
-  <aside className="w-[300px] h-screen fixed border-r overflow-y-scroll no-scrollbar flex flex-col p-8 gap-3">
-    <div className='w-full h-[100px]'>  
-      <img src={Logo} className=' w-[100px]' alt='Matchpet Logo'></img>
+  <DomToImage className="w-80 h-80  bg-white relative" imageName="Imagem 1 de Remi" proxy="https://matchpetong.s3.sa-east-1.amazonaws.com/animals/45d22f18-e678-483c-8d8e-f89f246eec45-IMG_20231022_181317.jpg">
+    <div className="absolute bottom-8 right-0 w-full flex justify-end">
+
+      {/* Name and next page indicator */} 
+      <div className="max-w-[60%] bg-neutral-50 border p-2 flex flex-col border-r-0 rounded rounded-r-none ">
+        <p className="text-sm">Adote <span className="text-primary">Remi</span>, fêmea.</p>
+        <p className="text-[0.5rem]"> Detalhes na <span className="text-primary">próxima página</span>.</p>
+      </div>
+
     </div>
-    <div className='flex-1 flex flex-col gap-6'>
-      <div className='flex gap-5'>
-        <Database /> Meus animais
-      </div>
-      <div className='flex gap-5'>
-        <Database /> Projetos
-      </div>
-      <div className='flex gap-5'>
-        <Database /> Time
-      </div>
-      <div className='flex gap-5'>
-        <Database /> Tarefas
-      </div>
+    {/*Copyright */}
+
+    <div className="absolute top-0 left-0 flex items-center justify-center w-full">
+      <span className="text-primary text-[0.5rem] "> www.matchpet.org & Parentoni </span>
     </div>
-  </aside>
+    <div className="absolute bottom-0 left-0 flex items-center justify-center w-full">
+      <span className="text-primary text-[0.5rem]  "> www.matchpet.org & Parentoni </span>
+    </div>
+
+    {/* Image container */}
+    <div className="w-full h-full flex items-center justify-center bg-opacity-10  bg-primary">
+      <img alt="Imagem principal do animal" src="https://matchpetong.s3.sa-east-1.amazonaws.com/animals/45d22f18-e678-483c-8d8e-f89f246eec45-IMG_20231022_181317.jpg"
+          className="w-auto h-auto max-w-full max-h-full " />
+    </div>
+  </DomToImage>
   )
 }

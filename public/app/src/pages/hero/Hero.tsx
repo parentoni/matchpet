@@ -48,7 +48,7 @@ export function HeroPage  ()  {
               <ul  className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
 
                 {users.length > 0? users.slice(0,6).map(u => {return(
-                  <button className="flex w-full h-full flex-row gap-2 line-clamp-1" onClick={() => navigate(`/organizations/${u.username}`)}>
+                  <button className="flex w-full h-full flex-row gap-2 line-clamp-1" onClick={() => navigate(`/p/${u.username}`)}>
                     <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
                     <p className="line-clamp-1 text-white">{u.display_name}</p>
                 </button>

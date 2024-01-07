@@ -13,7 +13,6 @@ export interface ImageInputProps {
   obrigatory?: boolean
 }
 
-
 export const ImageInput = (props: ImageInputProps) => {
   return(
     <div className="flex flex-col w-full">
