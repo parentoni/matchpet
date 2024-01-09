@@ -15,7 +15,7 @@ export class EditAnimalController extends BaseController<AuthenticatedRequest> {
       const response = await useCase.execute({
         animal: id,
         user: user,
-        edit: body.edit,
+        edit: body.edit
       });
 
       if (response.isLeft()) {

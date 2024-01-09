@@ -2,6 +2,7 @@ export interface FilterAnimalsDTO {
   filter: FilterObject[];
   page: number;
   coordinates?: GeoJSON.Position[][];
+  countView: boolean;
 }
 
 export interface FilterObject {
@@ -18,5 +19,6 @@ export enum FILTER_MODES {
   LESS_THAN_EQUAL = "$lte",
   IN = "$in",
   NOT_EQUAL = "$ne",
-  NOT_IN = "$nin"
+  NOT_IN = "$nin",
+  REGEX = "$regex"
 }

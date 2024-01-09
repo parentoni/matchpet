@@ -8,9 +8,7 @@ const v1Router = express.Router();
 
 v1Router.use("/auth", authRouter);
 v1Router.use("/user", userRouter);
-v1Router.use('/app', appRouter)
+v1Router.use("/app", appRouter);
 v1Router.use("/animals", animalsRouter);
-
-
 
 export { v1Router };

@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
 import { User } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
-import { AppError } from "../../../shared/core/Response/AppError";
 import { UserMap } from "../mappers/userMap";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { GenericError, IBaseError } from "../../../shared/core/Response/Error";
@@ -33,7 +32,7 @@ export class UserRepo implements IUserRepo {
         );
       }
     } catch (error) {
-      return left(AppError.UnexpectedError.create(error));
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
@@ -58,12 +57,12 @@ export class UserRepo implements IUserRepo {
         return left(userOrError.value);
       }
     } catch (error) {
-      return left(AppError.UnexpectedError.create(error));
+      return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
   //TODO PARAMETERS IN OBJECT
-  public async create({ dto }: { dto: User }): Promise<Either<AppError.UnexpectedError | GenericError<IBaseError>, string>> {
+  public async create({ dto }: { dto: User }): Promise<Either<CommonUseCaseResult.UnexpectedError, string>> {
     const UserM = this.models.user;
     const userInPersistanceFormat = await UserMap.toPersistant(dto);
 
@@ -88,40 +87,38 @@ export class UserRepo implements IUserRepo {
       const result = await UserM.find({
         in_adoption: { $gt: 0 },
         verified: true
-      }).sort({in_adoption: -1})
-      const userArray = await UserMap.toDomainBulk(result)
+      }).sort({ in_adoption: -1 });
+      const userArray = await UserMap.toDomainBulk(result);
       return right(userArray);
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
-  public async aggregateStats (): Promise<Either<CommonUseCaseResult.UnexpectedError,AppStatsResponseSuccess>> {
+  public async aggregateStats(): Promise<Either<CommonUseCaseResult.UnexpectedError, AppStatsResponseSuccess>> {
     try {
-      const UserM = this.models.user
+      const UserM = this.models.user;
       const result = await UserM.aggregate([
-        {$match: {}},
+        { $match: {} },
         {
           $group: {
             _id: null,
             in_adoption: { $sum: "$in_adoption" },
             completed_adoptions: { $sum: "$completed_adoptions" }
           }
-        },
+        }
         // {
         //   $group: {
         //     _id: null,
         //     completed_adoptions: { $sum: "$completed_adoptions" }
         //   }
         // }
-      ])
-
+      ]);
 
       // console.log(result)
-       return right({in_adoption:  result[0].in_adoption, completed_adoptions: result[0].completed_adoptions})
+      return right({ in_adoption: result[0].in_adoption, completed_adoptions: result[0].completed_adoptions });
     } catch (e) {
-      return left(CommonUseCaseResult.UnexpectedError.create(e))
+      return left(CommonUseCaseResult.UnexpectedError.create(e));
     }
   }
-
 }

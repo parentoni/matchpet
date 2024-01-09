@@ -8,14 +8,14 @@ import { AppStatsResponse } from "./AppStatsResponse";
 export class AppStatsUseCase implements UseCase<void, AppStatsResponse> {
   userRepo: IUserRepo;
   constructor(userRepo: IUserRepo) {
-    this.userRepo = userRepo
+    this.userRepo = userRepo;
   }
   async execute(): Promise<AppStatsResponse> {
-    const response = await this.userRepo.aggregateStats() 
+    const response = await this.userRepo.aggregateStats();
     if (response.isLeft()) {
-      return left(response.value)
+      return left(response.value);
     }
 
-    return right(response.value)
+    return right(response.value);
   }
 }

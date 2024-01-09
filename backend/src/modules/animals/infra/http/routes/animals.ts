@@ -12,6 +12,7 @@ import { categoryRouter } from "./category";
 import { editAnimalController } from "../../../useCases/animals/editAnimal";
 import { renovateLastModifiedAtController } from "../../../useCases/animals/renovateLastModifiedAt";
 import { createAnimalComplaintController } from "../../../useCases/animals/createAnimalComplaint";
+import { countFilterAnimalsController } from "../../../useCases/animals/countFilterResults";
 
 const animalsRouter = express.Router();
 
@@ -20,12 +21,12 @@ animalsRouter.use("/categories", categoryRouter);
 
 animalsRouter.post("/new", middleware.authenticated(), (req, res) => createAnimalListingController.execute(req, res));
 animalsRouter.post("/filter", (req, res) => filterAnimalsController.execute(req, res));
+animalsRouter.post("/filter/count", (req, res) => countFilterAnimalsController.execute(req, res));
 animalsRouter.post("/renovate", middleware.authenticated(), (req, res) => renovateLastModifiedAtController.execute(req, res));
-animalsRouter.post('/:id/complaint', (req, res) => createAnimalComplaintController.execute(req, res))
+animalsRouter.post("/:id/complaint", (req, res) => createAnimalComplaintController.execute(req, res));
 
 animalsRouter.get("/:id", (req, res) => getAnimalListingByIdController.execute(req, res));
 animalsRouter.get("/:id/similar", (req, res) => reccommendSimilarAnimalsController.execute(req, res));
 
 animalsRouter.put("/:id", middleware.authenticated(), (req, res) => editAnimalController.execute(req, res));
-
 export { animalsRouter };

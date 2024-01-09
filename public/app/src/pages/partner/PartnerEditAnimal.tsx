@@ -4,7 +4,6 @@ import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { Species } from "../../utils/domain/Species"
 import { Specie } from "../../utils/domain/Specie"
 import { PartnerImageUpload } from "../../elements/partner/PartnerImageUpload"
-import { CarouselProvider } from "pure-react-carousel"
 import { useNavigate, useParams } from "react-router-dom"
 import { SaveAnimalStateModal } from "../../elements/partner/SaveAnimalModal"
 import { AuthContext } from "../../utils/context/AuthContext"
@@ -36,8 +35,7 @@ export const PartnerEditAnimal = () => {
 
   const {id} = useParams()
   const {getToken} = useContext(AuthContext)
-  const {species} = useContext(SpeciesContext)
-  
+  const {species} = useContext(SpeciesContext) 
   
   const navigate = useNavigate()
 
@@ -173,7 +171,7 @@ export const PartnerEditAnimal = () => {
 
       setModalText("Fazendo upload do animal...")
       if (id === 'new') {
-        const response = await Animal.newAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
+        const response = await Animal.newAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
         if (response.isRight()) {
           setModalPercentage(1)
         } else {
@@ -182,7 +180,7 @@ export const PartnerEditAnimal = () => {
         }
       } else {
 
-        const response = await Animal.editAnimal({name: animalInput['name'], age: animalInput['age'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
+        const response = await Animal.editAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
         if (response.isRight()) {
           setModalPercentage(1)
         } else {
@@ -221,7 +219,8 @@ export const PartnerEditAnimal = () => {
           animalStatus={animalStatus}
           setAnimalStatus={setAnimalStatus}
           />
-          <button className="mt-10 w-full bg-primary h-10 rounded text-white" onClick={formSubmit}>
+
+          <button className="mt-10  w-full bg-primary h-10 rounded text-white" onClick={formSubmit}>
             SALVAR
           </button>
         </div>

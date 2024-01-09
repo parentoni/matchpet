@@ -6,13 +6,17 @@ import { UseCase } from "../../../../../shared/core/UseCase";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../../repository/IAnimalRepo";
-import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "./filterAnimalsDTO";
-import { FilterAnimalsUseCaseResponse } from "./filterAnimalsResponse";
+import { FILTER_MODES, FilterAnimalsDTO, FilterObject } from "../filterAnimals/filterAnimalsDTO";
+import { FilterAnimalsUseCaseResponse } from "../filterAnimals/filterAnimalsResponse";
+import { UpdateViewCounterUseCase } from "../updateVIewCounter/UpdateViewCounterUseCase";
 
 export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAnimalsUseCaseResponse> {
   protected animalRepo: IAnimalRepo;
-  constructor(animalRepo: IAnimalRepo) {
+  protected updateViewCounterUseCase: UpdateViewCounterUseCase;
+
+  constructor(animalRepo: IAnimalRepo, updateViewCounterUseCase: UpdateViewCounterUseCase) {
     this.animalRepo = animalRepo;
+    this.updateViewCounterUseCase = updateViewCounterUseCase;
   }
 
   async execute(request: FilterAnimalsDTO): Promise<FilterAnimalsUseCaseResponse> {
@@ -42,10 +46,18 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
 
     // Treat the filters mode for animalRepo
     for (const untreatedFilter of request.filter) {
-      if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
+      if (untreatedFilter.key === "last_modified_at" || untreatedFilter.key === "created_at") {
+        treatedFilters.push({
+          ...untreatedFilter,
+          comparation_value: new Date(untreatedFilter.comparation_value),
+          mode: untreatedFilter.mode as FILTER_MODES
+        });
+      } else if (Object.values(FILTER_MODES).includes(untreatedFilter.mode)) {
         treatedFilters.push({ ...untreatedFilter, mode: untreatedFilter.mode as FILTER_MODES });
       }
     }
+
+    console.log(treatedFilters);
 
     const result = await this.animalRepo.geoFind({
       location: polygon,
@@ -58,7 +70,14 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
     }
 
     const persistentValues: IAnimalPersistent[] = [];
-    for (const value of result.value.animals) {
+    if (request.countView) {
+      const response = await this.updateViewCounterUseCase.execute({ animals: result.value });
+      if (response.isLeft()) {
+        console.log(response);
+      }
+    }
+
+    for (const value of result.value) {
       const mapperResult = AnimalMapper.toPersistent(value);
       if (mapperResult.isLeft()) {
         return left(mapperResult.value);
@@ -66,6 +85,6 @@ export class FilterAnimalsUseCase implements UseCase<FilterAnimalsDTO, FilterAni
 
       persistentValues.push(mapperResult.value);
     }
-    return right({ animals: persistentValues, count: result.value.count });
+    return right({ animals: persistentValues });
   }
 }

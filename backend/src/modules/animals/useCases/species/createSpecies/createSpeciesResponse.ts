@@ -4,4 +4,4 @@ import { Either } from "../../../../../shared/core/Result";
 import { ISpeciePersistent } from "../../../../../shared/infra/database/models/Specie";
 import { Specie } from "../../../domain/Specie";
 
-export type CreateSpeciesResponse = Either<CommonUseCaseResult.InvalidValue | GuardError, ISpeciePersistent>;
+export type CreateSpeciesResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ISpeciePersistent>;

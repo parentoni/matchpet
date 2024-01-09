@@ -5,4 +5,3 @@ import { AfterUserCreated } from "./afterUserCreated";
 
 new AfterUserLogIn(logUserLastActivityUseCase);
 new AfterUserCreated(sendUserVerificationEmailUseCase);
-

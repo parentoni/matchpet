@@ -19,84 +19,32 @@ export function AnimalFiltersModalContainer ()  {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  const {filters, setFilters, loading, searchArea, animalsCount, setSearchArea} = useContext(FiltersContext)
+  // const {countLoading, searchArea, animalsCount, setSearchArea} = useContext(FiltersContext)
+  const countLoading = false
+  const searchArea: [number, number][] = []
+  const animalsCount = 0
+  const setSearchArea = () => {}
+
+
   return (
     <>
       <AnimalFiltersButton setIsOpen={setIsOpen}/>
       <FilterModal 
-        filters={filters}
-        setFilters={setFilters}
-        loading={loading}
+        
+        loading={countLoading}
         open={isOpen}
         setIsOpen={setIsOpen}
         isPartner={false} 
         animalsCount={animalsCount} 
         searchArea={searchArea} 
-        setSearchArea={setSearchArea}/>
-      {/* <AnimalFiltersModal isOpen={isOpen} setIsOpen={setIsOpen}/> */}
+        setSearchArea={setSearchArea}
+        />
     </>
   )
 
 }
 
-function AnimalFiltersModal ({isOpen, setIsOpen}:  {isOpen: boolean, setIsOpen: (open: boolean) => void}) {
 
-  const {species}= useContext(SpeciesContext)
-  const {categories} = useContext(CategoriesContext)
-  const {setFilters, animalsCount, loading, searchArea, setSearchArea, filters} = useContext(FiltersContext)
-
-  const specie = (Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie)
-  return (
-
-    <>
-      {specie &&
-      <FullPageModal isOpen={isOpen} setIsOpen={setIsOpen} absolute={false} title='FILTRAR' className=''>
-        <div className='grid lg:grid-cols-2 grid-cols-1 h-full overflow-y-scroll w-10'>
-
-            <AnimalFilters.Root selectedSpecie={Species.createFromDTO(species).findByID('6501103133585a0a7ee56570') as Specie}>
-              <div className='block lg:hidden w-full'>
-                <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
-              </div>
-              
-              {/* <SlideFilter filters={filters} setFilters={setFilters} /> */}
-              {Categories.createFromDTO(categories).list.map((category, index) => {
-                return(
-                  <div className='border-b flex flex-col gap-3 py-5'>
-                    <h2 className='font-semibold'>{category.props.name}</h2>
-                    {specie.getTraitsThatMatchCategory(category.props._id).map((trait, index) => (
-                      <AnimalFilters.ChoiceFilter filters={filters} setFilters={setFilters} title={trait.name} trait_name={`trait_${trait._id}`} options={trait.options}/>
-                      ))}
-                  </div>
-                )
-              })}
-            </AnimalFilters.Root>
-          
-            <div className='px-8 hidden lg:block'>
-              <LocationFilter searchArea={searchArea} setSearchArea={setSearchArea} filters={filters} setFilters={setFilters}/>
-            </div>
-
-
-          </div>
-
-        {/* </div> */}
-        {/* </div> */}
-            
-                  
- 
-        <div className="px-8 w-full flex justify-between py-5 border-t ">
-              <button className='h-12 px-6 bg-black text-white items-center flex' onClick={() => setFilters({})}>
-                Limpar
-              </button>
-              <button className='h-12 px-6 bg-primary  items-center flex' onClick={() => setIsOpen(false)}>
-                Mostar &nbsp;{loading?<span className='loading loading-spinner loading-xs'></span>:animalsCount || 0}&nbsp; animais
-              </button>
-            </div>
-      </FullPageModal>
-      }
-    </>
-    
-  )
-}
 
 function AnimalFiltersButton ({setIsOpen}: {setIsOpen: (open: boolean) => void}) {
   return (

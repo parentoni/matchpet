@@ -2,6 +2,7 @@ import semver from "semver";
 import { Guard, GuardResponse } from "./Guard";
 import { Either, left, right } from "./Result";
 import { GenericError, IBaseError } from "./Response/Error";
+import { CommonUseCaseResult } from "./Response/UseCaseError";
 
 export type VersionControlRegister<T> = {
   [x in string]: T;
@@ -109,9 +110,10 @@ export class VersionControl<T> {
     }
 
     return left(
-      GenericError.create({
+      CommonUseCaseResult.InvalidValue.create({
         errorMessage: "Version Control is empty",
-        location: `${VersionControl.name}.${this.max.name}`
+        location: `${VersionControl.name}.${this.max.name}`,
+        variable: "VERSION_CONTROL"
       })
     );
   }

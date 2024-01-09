@@ -3,16 +3,23 @@ import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO";
 import { Api } from "../services/Api";
 import { Either, left, right } from "../shared/Result";
 import {differenceInDays} from 'date-fns'
+import { ISpecieDTO } from "../services/dtos/SpecieDTO";
 export interface CreateAnimalListingDTO {
   name: string;
   image: string[];
-  age: number;
   specie_id: any;
   traits: { _id: string; value: string }[];
   description: string;
   status?: ANIMAL_STATUS;
+  contact?: {
+    contact_type: string
+    contact_value: string
+  }[]
 }
-
+export enum SEX {
+  MALE = "MALE",
+  FEMALE = "FEMALE"
+}
 export class Animal {
   public props: IAnimalDTO;
 
@@ -29,12 +36,17 @@ export class Animal {
   public canRenovate () {
     return !!(differenceInDays(new Date(), this.props.last_modified_at) >= 7)
   }
+
+  public getSex (species: ISpecieDTO[]): SEX {
+    const sexTrait = species.find(a => a._id === this.props.specie_id)?.traits.find(a => a.name === "Sexo")
+    return this.props.traits.find(a => a._id === sexTrait?._id)?.value === sexTrait?.options.find(a => a.name === "Macho")?._id? SEX.MALE: SEX.FEMALE
+  }
   public static create(props: IAnimalDTO) {
     return new Animal(props);
   }
 
-  public static async getSpecific(animalId: string): Promise<Either<Response, Animal>> {
-    const response = await Api.get(`/animals/${animalId}`);
+  public static async getSpecific(animalId: string, click: boolean = true): Promise<Either<Response, Animal>> {
+    const response = await Api.get(`/animals/${animalId}?click=${click}`);
     if (response.isLeft()) {
       return left(response.value);
     }
@@ -45,15 +57,13 @@ export class Animal {
   public static async getAll(
     page: number,
     filters: Record<string, { mode: FILTER_MODES; comparation_value: any }[]>,
+    countViews: boolean,
     coordinates?: [number, number][],
-    status?: ANIMAL_STATUS
   ): Promise<Either<Response, { animals: IAnimalDTO[]; count: number }>> {
     // Filter only pending animals
     const formatedFilters = [];
-    if (status) {
-      formatedFilters.push({ mode: "$eq", comparation_value: status, key: "status" });
-    }
 
+    
     for (const key of Object.keys(filters)) {
       for (const method of filters[key]) {
         if (!key.includes("trait")) {
@@ -65,13 +75,54 @@ export class Animal {
     }
 
     const response = await Api.post(
-      "/animals/filter",
+      `/animals/filter?view=${countViews? "true": "false"}`,
       JSON.stringify(
         coordinates
           ? coordinates.length > 0
             ? { page: page, filter: formatedFilters, coordinates: [coordinates] }
             : { page: page, filter: formatedFilters }
           : { page: page, filter: formatedFilters }
+      )
+    );
+    if (response.isLeft()) {
+      return left(response.value);
+    }
+
+    return right({ animals: response.value["animals"] as IAnimalDTO[], count: response.value["count"] as number });
+  }
+
+  public static async count(
+    filters: Record<string, { mode: FILTER_MODES; comparation_value: any }[]>,
+    coordinates?: [number, number][],
+    status?: ANIMAL_STATUS
+  ): Promise<Either<Response, { animals: IAnimalDTO[]; count: number }>> {
+
+    
+    // Filter only pending animals
+    const formatedFilters = [];
+
+    if (status) {
+      formatedFilters.push({ mode: "$eq", comparation_value: status, key: "status" });
+    }
+    
+    for (const key of Object.keys(filters)) {
+      for (const method of filters[key]) {
+        if (!key.includes("trait")) {
+          formatedFilters.push({ mode: method.mode, comparation_value: method.comparation_value, key: key });
+        } else {
+          formatedFilters.push({ mode: method.mode, comparation_value: method.comparation_value, key: "traits.value" });
+        }
+      }
+    }
+
+    const response = await Api.post(
+      "/animals/filter/count",
+      JSON.stringify(
+        coordinates
+          ? coordinates.length > 0
+            ? {filter: formatedFilters, coordinates: [coordinates] }
+            : { filter: formatedFilters }
+          : {filter: formatedFilters }
       )
     );
     if (response.isLeft()) {
@@ -117,10 +168,10 @@ export class Animal {
     return right(response.value);
   }
 
-  public static async editAnimal(data: CreateAnimalListingDTO, token: string, animalId: string) {
+  public static async editAnimal(data: CreateAnimalListingDTO, token: string, animalId: string): Promise<Either<Response, IAnimalDTO>> {
     const response = await Api.put("/animals/" + animalId, JSON.stringify({ edit: data }), token);
     if (response.isLeft()) {
-      return left(response);
+      return left(response.value);
     }
 
     return right(response.value);

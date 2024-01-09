@@ -9,21 +9,24 @@ import { AuthProvider } from './utils/context/AuthContext';
 import {ChakraProvider, StyleFunctionProps, extendTheme} from '@chakra-ui/react'
 import { FiltersContextProvider } from './utils/context/FiltersContext';
 import { OrganizationsProvider } from './utils/context/OrganizationsContext';
-
+import ReactGA from 'react-ga4'
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
-);
-
-const overrides = extendTheme({
-  styles: {
+  );
+  
+  const overrides = extendTheme({
+    styles: {
       global: (props: StyleFunctionProps) => ({
-          body: {
-              fontFamily: '"Roboto", "Noto", sans-serif"'
-          },
+        body: {
+          fontFamily: '"Roboto", "Noto", sans-serif"'
+        },
       }),
-  },
-})
+    },
+  })
 
+  
+//Google analytics 4 initialization
+ReactGA.initialize("G-2KJE25C9EN")
 root.render(
   <FiltersContextProvider>
     <OrganizationsProvider>

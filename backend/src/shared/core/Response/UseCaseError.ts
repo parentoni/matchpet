@@ -5,7 +5,7 @@ interface ICommonInvalidValueProps {
   errorMessage: string;
   variable: string;
   location: string;
-  printableErrorMessage?: string
+  printableErrorMessage?: string;
 }
 
 interface IUnexpectedError {
@@ -13,10 +13,12 @@ interface IUnexpectedError {
   code: string;
   location: string;
   error: any;
+  statusCode: number;
 }
 
 interface ICommonInvalidValue extends ICommonInvalidValueProps {
   code: string;
+  statusCode: number;
 }
 
 export namespace CommonUseCaseResult {
@@ -27,7 +29,8 @@ export namespace CommonUseCaseResult {
         code: `INVALID_${props.variable.toUpperCase()}`,
         location: props.location,
         variable: props.variable,
-        printableErrorMessage: props.printableErrorMessage  
+        printableErrorMessage: props.printableErrorMessage,
+        statusCode: 400
       });
     }
 
@@ -43,8 +46,8 @@ export namespace CommonUseCaseResult {
         code: `CONFLICT_${props.variable.toUpperCase()}`,
         location: props.location,
         variable: props.variable,
-        printableErrorMessage: props.printableErrorMessage  
-
+        printableErrorMessage: props.printableErrorMessage,
+        statusCode: 409
       });
     }
 
@@ -60,7 +63,7 @@ export namespace CommonUseCaseResult {
         error: err,
         code: "SERVER_ERROR",
         location: "App",
-        
+        statusCode: 500
       });
       console.log(`[AppError]: An unexpected error occurred`);
       console.error(err);
@@ -77,8 +80,8 @@ export namespace CommonUseCaseResult {
         code: `FORBIDDEN_${props.variable.toUpperCase()}`,
         location: props.location,
         variable: props.variable,
-        printableErrorMessage: props.printableErrorMessage  
-
+        printableErrorMessage: props.printableErrorMessage,
+        statusCode: 403
       });
     }
 

@@ -11,18 +11,26 @@
     <table role="presentation" border="0" cellspacing="0" width="'100%">
       <tr>
         <td>
-          <h1 style="font-weight: 600; font-size: 2.5rem;">O anúncio de <%= name %> pode ser <span style="color: #FA8128;">renovado</span>.</h1>
+          <h1 style="font-weight: 600; font-size: 2.5rem;">Você possui anúncios que podem ser <span style="color: #FA8128;">renovados</span>.</h1>
         </td>
       </tr>
       <tr> 
         <td>
-          <p style="color: #525252; font-size: 1.25rem;">Renove o anúncio de <%= name %> para garantir que ele apareca entre os primeiros do site.</p>
+          <p style="color: #525252; font-size: 1.25rem;">Renove o anúncio de seus animais para garantir que ele apareca entre os primeiros do site e não seja cancelado por inatividade.</p>
         </td>
       </tr>
 
       <tr> 
         <td>
-          <p style="color: #525252; font-size: 1.25rem;"><b>Aviso!</b> Se você não renovar o anúncio em 35 dias, ele será <b>cancelado</b>.</p>
+          <p style="color: #525252; font-size: 1.25rem;">Animais que podem ser renovados: </p>
+          <% for (var i = 0; i < animals.length; i++) { %>
+            <p style="color: #525252; font-size: 1rem;"><%= animals[i] %></p>
+          <%} %>
+        </td>
+      </tr>
+      <tr> 
+        <td>
+          <p style="color: #525252; font-size: 1.25rem;"><b>Aviso!</b> Se você não renovar os anúncios em 35 dias, eles serão <b>cancelados</b>.</p>
         </td>
       </tr>
 
@@ -32,7 +40,7 @@
 
       <tr>
         <td>
-          <p style="color: #525252; font-size: 1.25rem;">Renove-o agora mesmo:</p>
+          <p style="color: #525252; font-size: 1.25rem;">Renove-os agora mesmo:</p>
           </a>
         </td>
       </tr>
@@ -45,7 +53,7 @@
         <td>
           <a style="width: 400px; line-break: anywhere;" href=<%= link %>>
             <button class="button-link" style="background-color: #FA8128; border: 0; cursor: pointer; width: 400px; height: 40px; color: white; font-size: 1rem;">
-              Gerenciar animais
+              MatchPet
             </button>
           </a>
         </td>

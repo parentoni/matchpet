@@ -3,11 +3,9 @@ import { App } from "./Base";
 import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
 import { Login } from "./pages/auth/Login";
-import { ManagerBase } from "./elements/ManagerBase";
 import { PartnerAnimalManage } from "./pages/partner/PartnerAnimalManage";
 import { Testing } from "./pages/testing/Testing";
 import { FourOFour } from "./pages/error/fourOFour";
-import { PartnerEditAnimal } from "./pages/partner/PartnerEditAnimal";
 import { AllPartnerAnimals } from "./pages/user/AllPartnerAnimals";
 import { RegisterPage } from "./pages/auth/Register";
 import { HeroPage } from "./pages/hero/Hero";
@@ -20,8 +18,22 @@ import { ResetPassword } from "./pages/auth/ResetPassword";
 import { ResetPasswordSuccess } from "./pages/auth/ResetPasswordSuccess";
 import { IWantDonate } from "./pages/hero/IWantDonate";
 import { PartnerConfig } from "./pages/partner/PartnerConfig";
+import { ManagerSidebar } from "./elements/partner/new/PartnerBase";
+import { UNSAFE_RouteContext } from 'react-router-dom'
+import { useContext } from "react";
+import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
+import { PartnerHelp } from "./pages/partner/PartnerHelp";
 
-const router = createBrowserRouter([
+export function usePathPattern() {
+  let lastRouteContext = useContext(UNSAFE_RouteContext)
+  while (lastRouteContext.outlet) lastRouteContext = lastRouteContext.outlet.props.routeContext
+  return lastRouteContext.matches
+    .map(({ route: { path } }) => path)
+    .filter(Boolean)
+    .join('/')
+    .replaceAll(/\/\*?\//g, '/')
+}
+const routes = [
   {
     path: '/',
     element: <App />,
@@ -45,24 +57,28 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/organizations/:username',
+    path: '/p/:username',
     element: <AllPartnerAnimals />
   },
   {
     path: '/partner',
-    element: <ManagerBase />,
+    element: <ManagerSidebar />,
     children: [
       {
         index: true,
         element: <PartnerAnimalManage />
       },
       {
-        element: <PartnerEditAnimal />,
+        element: <PartnerCreateAnimal />,
         path: 'animal/:id'
       },
       {
         element: <PartnerConfig />,
         path: 'config'
+      },
+      {
+        element: <PartnerHelp />,
+        path: 'help'
       }
     ]
   },
@@ -112,6 +128,8 @@ const router = createBrowserRouter([
     path: '*',
     element: <FourOFour />
   }
-])
+]
+
+const router = createBrowserRouter(routes)
 
 export default router

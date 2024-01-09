@@ -9,15 +9,15 @@ import { CreateNewPasswordTokenResponse } from "./createNewPasswordTokenResponse
 
 export class CreateNewPasswordTokenUseCase implements UseCase<CreateNewPasswordTokenDTO, CreateNewPasswordTokenResponse> {
   private authService: IAuthService;
-  
+
   constructor(authService: IAuthService) {
-    this.authService = authService
+    this.authService = authService;
   }
-  
-  async execute(request: CreateNewPasswordTokenDTO ): Promise<CreateNewPasswordTokenResponse> {
-    const guardResponse = Guard.againstNullOrUndefined(request.user, 'USER')
+
+  async execute(request: CreateNewPasswordTokenDTO): Promise<CreateNewPasswordTokenResponse> {
+    const guardResponse = Guard.againstNullOrUndefined(request.user, "USER");
     if (guardResponse.isLeft()) {
-      return left(guardResponse.value)
+      return left(guardResponse.value);
     }
 
     const token = await this.authService.signJWT({
@@ -28,11 +28,11 @@ export class CreateNewPasswordTokenUseCase implements UseCase<CreateNewPasswordT
       token_function: TokenFunctions.changePassword,
       verified: request.user.verified,
       username: request.user.userName.value
-    })
+    });
 
     return right({
       token: token,
-      url: Secrets.getSecret('PUBLIC_APP_URL') + `/auth/new-password?token=${token}`
-    })
+      url: Secrets.getSecret("PUBLIC_APP_URL") + `/auth/new-password?token=${token}`
+    });
   }
 }

@@ -4,8 +4,8 @@ import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
 import { IAnimalPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
 import { IAnimalRepo } from "../../../repository/IAnimalRepo";
-import { ReccommendSimilarAnimalsDTO } from "./reccommendSimilarAnimalsDTO";
 import { ReccommendSimilarAnimalsUseCaseResponse } from "./reccommendSimilarAnimalsResponse";
+import { ReccommendSimilarAnimalsDTO } from "./reccommendSimilarAnimalsDTO";
 
 export class ReccommendSimilarAnimalsUseCase implements UseCase<ReccommendSimilarAnimalsDTO, ReccommendSimilarAnimalsUseCaseResponse> {
   private animalRepo: IAnimalRepo;

@@ -1,3 +1,3 @@
 import { StatusController } from "./StatusController";
-const statusController = new StatusController()
-export {statusController}
+const statusController = new StatusController();
+export { statusController };

@@ -5,25 +5,23 @@ import { CronController } from "../../../../../shared/infra/cron/models/CronCont
 import { DeactivateUnactiveAnimalsUseCase } from "./deactivateUnactiveAnimalsUseCase";
 
 export class DeactivateUnactiveAnimalsController extends CronController {
+  readonly cronTime = "0 0 13 * * * "; //0 13 * * *
+  protected name = "deactivateUnactiveAnimals";
+  protected useCase: DeactivateUnactiveAnimalsUseCase;
 
-  readonly cronTime = '0 0 13 * * * ' //0 13 * * *
-  protected name = 'deactivateUnactiveAnimals'
-  protected useCase: DeactivateUnactiveAnimalsUseCase
-
-  constructor (useCase: DeactivateUnactiveAnimalsUseCase) {
+  constructor(useCase: DeactivateUnactiveAnimalsUseCase) {
     super();
-    this.useCase = useCase
+    this.useCase = useCase;
   }
 
   async execute(): Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, string>> {
-    const date = new Date()
+    const date = new Date();
 
-    const response = await this.useCase.execute({date: date})
-    if (response.isLeft()){
-      return left(response.value)
+    const response = await this.useCase.execute({ date: date });
+    if (response.isLeft()) {
+      return left(response.value);
     }
 
-
-    return right('ok')
+    return right("ok");
   }
 }

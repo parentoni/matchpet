@@ -2,8 +2,7 @@ import * as express from "express";
 import { Request, Response } from "express";
 import { VersionControl, VersionControlRegister } from "../../../core/VersionControl";
 import { CommonUseCaseResult } from "../../../core/Response/UseCaseError";
-import { AppError } from "../../../core/Response/AppError";
-import { GenericError } from "../../../core/Response/Error";
+import { BaseError, GenericError, IBaseError } from "../../../core/Response/Error";
 import { AuthenticatedRequest } from "./AutheticatedRequest";
 import { Either } from "../../../core/Result";
 
@@ -13,7 +12,6 @@ export type CatalogedErrors =
   | CommonUseCaseResult.InvalidValue
   | CommonUseCaseResult.UnexpectedError
   | CommonUseCaseResult.Forbidden
-  | AppError.UnexpectedError
   | GenericError<any>;
 
 export abstract class BaseController<T extends Request> {
@@ -42,7 +40,7 @@ export abstract class BaseController<T extends Request> {
     }
   }
 
-  public static jsonResponse(res: express.Response, code: number, message: string) {
+  public static jsonResponse(res: express.Response, code: number, message: any) {
     return res.status(code).json({ message });
   }
 
@@ -101,22 +99,11 @@ export abstract class BaseController<T extends Request> {
   }
 
   //TODO BETTER ERROR HANDLING
-  public errorHandler(res: express.Response, error: CatalogedErrors) {
-    switch (error.constructor) {
-      case CommonUseCaseResult.InvalidValue:
-        return this.clientError(res, error.error);
-      case CommonUseCaseResult.Conflict:
-        return this.conflict(res, error.error);
-      case AppError.UnexpectedError:
-        return this.fail(res, error.error);
-      case CommonUseCaseResult.UnexpectedError:
-        return this.fail(res, error.error);
-      case CommonUseCaseResult.Forbidden:
-        return this.forbidden(res, error.error);
-      case GenericError:
-        return this.clientError(res, error.error);
+  public errorHandler(res: express.Response, error: BaseError<IBaseError>) {
+    try {
+      return BaseController.jsonResponse(res, error.error.statusCode, error.error);
+    } catch (error) {
+      return this.fail(res, "Unknown error");
     }
-
-    this.fail(res, "Unknown error");
   }
 }

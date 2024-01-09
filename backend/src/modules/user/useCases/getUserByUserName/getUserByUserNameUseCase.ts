@@ -8,33 +8,34 @@ import { GetUserByUserNameDTO } from "./getUserByUserNameDTO";
 import { GetUserByUserNameResponse } from "./getUserByUserNameResponse";
 
 export class GetUserByUserNameUseCase implements UseCase<GetUserByUserNameDTO, GetUserByUserNameResponse> {
-  
-  protected userRepo: IUserRepo
+  protected userRepo: IUserRepo;
 
   constructor(userRepo: IUserRepo) {
-    this.userRepo = userRepo
+    this.userRepo = userRepo;
   }
 
-  async execute(request: GetUserByUserNameDTO ): Promise<GetUserByUserNameResponse> {
-    const guardResult = Guard.againstNullOrUndefined(request.username, "USER_USERNAME")
+  async execute(request: GetUserByUserNameDTO): Promise<GetUserByUserNameResponse> {
+    const guardResult = Guard.againstNullOrUndefined(request.username, "USER_USERNAME");
     if (guardResult.isLeft()) {
-      return left(guardResult.value)
+      return left(guardResult.value);
     }
 
-    const repoResult = await this.userRepo.find_one({filter: {username: request.username}})
+    const repoResult = await this.userRepo.find_one({ filter: { username: request.username } });
     if (repoResult.isLeft()) {
-      return left(CommonUseCaseResult.InvalidValue.create({
-        errorMessage: `Username ${request.username} not found.`,
-        location: `${GetUserByUserNameUseCase.name}.${this.execute.name}`,
-        variable: `USER_USERNAME`
-      }))
+      return left(
+        CommonUseCaseResult.InvalidValue.create({
+          errorMessage: `Username ${request.username} not found.`,
+          location: `${GetUserByUserNameUseCase.name}.${this.execute.name}`,
+          variable: `USER_USERNAME`
+        })
+      );
     }
 
-    const mapperResult = await UserMap.toSafePersistent(repoResult.value)
+    const mapperResult = await UserMap.toSafePersistent(repoResult.value);
     if (mapperResult.isLeft()) {
-      return left(mapperResult.value)
+      return left(mapperResult.value);
     }
 
-    return right(mapperResult.value)
+    return right(mapperResult.value);
   }
 }

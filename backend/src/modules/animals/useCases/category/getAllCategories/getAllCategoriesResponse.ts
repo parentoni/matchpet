@@ -3,4 +3,4 @@ import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCase
 import { Either } from "../../../../../shared/core/Result";
 import { ICategoryPersistent } from "../../../../../shared/infra/database/models/Category";
 
-export type GetAllCategoriesResponse = Promise<Either<CommonUseCaseResult.UnexpectedError | GuardError, ICategoryPersistent[]>>;
+export type GetAllCategoriesResponse = Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, ICategoryPersistent[]>>;

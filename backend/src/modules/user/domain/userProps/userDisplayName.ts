@@ -1,9 +1,7 @@
-import { AppError } from "../../../../shared/core/Response/AppError";
 import { Guard } from "../../../../shared/core/Guard";
-import { Either, Left, left, right } from "../../../../shared/core/Result";
+import { Either, left, right } from "../../../../shared/core/Result";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { ValueObject } from "../../../../shared/domain/ValueObject";
-import { TextUtils } from "../../../../shared/utils/TextUtils";
 
 export interface IUserName {
   display_name: string;

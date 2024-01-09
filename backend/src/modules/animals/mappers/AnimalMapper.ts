@@ -3,6 +3,7 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { Either, left, right } from "../../../shared/core/Result";
 import { Timestamp } from "../../../shared/core/Timestamp";
 import { ValidUrl } from "../../../shared/core/ValidUrl";
+import { Contacts } from "../../../shared/core/contacts/contacts";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { IAnimalPersistent, IAnimalTraitsPersistent } from "../../../shared/infra/database/models/Animal";
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
@@ -26,10 +27,11 @@ export class AnimalMapper {
     const animalTraitsOrError = AnimalTraits.createFromPersistent(persistent.traits);
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
-    
+    const animalContactsOrError = Contacts.createFromPersistent(persistent.contact);
+
     const animalCreatedAt = Timestamp.create(persistent.created_at);
-    const animalLastModified = Timestamp.create(persistent.last_modified_at)
-    
+    const animalLastModified = Timestamp.create(persistent.last_modified_at);
+
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalImageOrError,
@@ -38,7 +40,8 @@ export class AnimalMapper {
       animalTraitsOrError,
       animalIdOrError,
       animalTraitsOrError,
-      animalDescriptionOrError
+      animalDescriptionOrError,
+      animalContactsOrError
     ]);
 
     if (combineResult.isLeft()) {
@@ -53,6 +56,7 @@ export class AnimalMapper {
     const animalId = animalIdOrError.getRight();
     const animalStats = animalStatsOrError.getRight();
     const animalDescription = animalDescriptionOrError.getRight();
+    const animalContacts = animalContactsOrError.getRight();
 
     const animal = Animal.create(
       {
@@ -64,7 +68,10 @@ export class AnimalMapper {
         createdAt: animalCreatedAt,
         status: animalStats,
         description: animalDescription,
-        lastModifiedAt: animalLastModified
+        lastModifiedAt: animalLastModified,
+        contact: animalContacts,
+        views: persistent.views || 0,
+        clicks: persistent.clicks || 0
       },
       animalId
     );
@@ -88,25 +95,27 @@ export class AnimalMapper {
         status: domain.animalStatus.value,
         description: domain.description.value,
         created_at: domain.createdAt.value,
-        last_modified_at: domain.lastModifiedAt.value
+        last_modified_at: domain.lastModifiedAt.value,
+        contact: domain.contact.persistentValue,
+        views: domain.views,
+        clicks: domain.clicks
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
     }
   }
 
-  public static toDomainBulk(persistent: IAnimalPersistent[]):Either<GuardError, Animal[]> {
-    const array: Animal[] = []
+  public static toDomainBulk(persistent: IAnimalPersistent[]): Either<GuardError, Animal[]> {
+    const array: Animal[] = [];
     for (const animal of persistent) {
-      const response = this.toDomain(animal)
+      const response = this.toDomain(animal);
       if (response.isLeft()) {
-        return left(response.value)
+        return left(response.value);
       }
 
-      array.push(response.value)
+      array.push(response.value);
     }
 
-    return right(array)
-
+    return right(array);
   }
 }

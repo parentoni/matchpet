@@ -4,4 +4,4 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { User } from "../../domain/user";
 import { IUserPersistant } from "../../../../shared/infra/database/models/User";
 
-export type GetUserByUIDResponse = Promise<Either<CommonUseCaseResult.InvalidValue | GenericError<IBaseError>, IUserPersistant>>;
+export type GetUserByUIDResponse = Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, IUserPersistant>>;

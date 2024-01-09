@@ -12,8 +12,8 @@ export class AnimalStatusChanged implements IDomainEvent {
   constructor(animal: Animal, newStatus: ANIMAL_STATUS, oldStatus: ANIMAL_STATUS) {
     this.animal = animal;
     this.dateTimeOccurred = new Date();
-    this.newStatus = newStatus
-    this.oldStatus = oldStatus
+    this.newStatus = newStatus;
+    this.oldStatus = oldStatus;
   }
 
   public getAggregateId(): UniqueGlobalId {

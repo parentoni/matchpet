@@ -5,17 +5,17 @@ import { RenovateLastModifiedAtDTO } from "./renovateLastModifiedAtDTO";
 import { RenovateLastModifiedAtUseCase } from "./renovateLastModifiedAtUseCase";
 
 export class RenovateLastModifiedAtController extends BaseController<AuthenticatedRequest> {
-  constructor (useCase: RenovateLastModifiedAtUseCase) {
-   super();
-   this.versionRegister.addToRegister('1.0.0', async (req, res) => {
-    const dto = req.body as RenovateLastModifiedAtDTO
-    const response = await useCase.execute(dto)
+  constructor(useCase: RenovateLastModifiedAtUseCase) {
+    super();
+    this.versionRegister.addToRegister("1.0.0", async (req, res) => {
+      const dto = req.body as RenovateLastModifiedAtDTO;
+      const response = await useCase.execute(dto);
 
-    if (response.isLeft()) {
-      return this.errorHandler(res, response.value)
-    }
+      if (response.isLeft()) {
+        return this.errorHandler(res, response.value);
+      }
 
-    return this.ok(res, {"message": 'OK'})
-   })
+      return this.ok(res, { message: "OK" });
+    });
   }
 }

@@ -17,7 +17,7 @@ import { UserImage } from "../domain/userProps/userImage";
 import { UserDescription } from "../domain/userProps/userDescription";
 
 export class UserMap {
-  static async toDomain(persistance: IUserPersistant): Promise<Either<GenericError<IBaseError> | CommonUseCaseResult.InvalidValue, User>> {
+  static async toDomain(persistance: IUserPersistant): Promise<Either<CommonUseCaseResult.InvalidValue, User>> {
     const userPasswordOrError = UserPassword.create({
       value: persistance.password,
       hashed: true
@@ -33,25 +33,25 @@ export class UserMap {
     const userLocationOrError = Location.GeoJsonPoint.create({ coordinates: persistance.location.coordinates });
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
     const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
-    const userNameOrError = UserName.create({username: persistance.username})
+    const userNameOrError = UserName.create({ username: persistance.username });
 
     let image: undefined | UserImage;
     if (persistance.image) {
-      const imageOrError = UserImage.create({image: persistance.image})
+      const imageOrError = UserImage.create({ image: persistance.image });
       if (imageOrError.isLeft()) {
-        return left(imageOrError.value)
+        return left(imageOrError.value);
       }
-      image = imageOrError.value
+      image = imageOrError.value;
     }
 
     let description: undefined | UserDescription;
     if (persistance.description) {
-      const descriptionOrError = UserDescription.create({value: persistance.description})
+      const descriptionOrError = UserDescription.create({ value: persistance.description });
       if (descriptionOrError.isLeft()) {
-        return left(descriptionOrError.value)
+        return left(descriptionOrError.value);
       }
 
-      description = descriptionOrError.value
+      description = descriptionOrError.value;
     }
 
     const result = EitherUtils.combine([
@@ -122,8 +122,8 @@ export class UserMap {
         completed_adoptions: user.completedAdoptions,
         in_adoption: user.inAdoption,
         last_login: user.lastLogin.value,
-        image: user.image?.value || '',
-        description: user.description?.value || ''
+        image: user.image?.value || "",
+        description: user.description?.value || ""
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));
@@ -141,17 +141,17 @@ export class UserMap {
     return right(persistentResult.value);
   }
 
-  static async toDomainBulk(persistent: IUserPersistant[]) : Promise<User[]> {
-    const userA: User[] = []
+  static async toDomainBulk(persistent: IUserPersistant[]): Promise<User[]> {
+    const userA: User[] = [];
     if (persistent.length > 0) {
       for (const pers of persistent) {
-        const result = await this.toDomain(pers)
+        const result = await this.toDomain(pers);
         if (result.isRight()) {
-          userA.push(result.value)
+          userA.push(result.value);
         }
       }
     }
 
-    return userA
+    return userA;
   }
 }

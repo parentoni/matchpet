@@ -1,3 +1,3 @@
 export interface DeactivateUnactiveAnimalsDTO {
-  date: Date
+  date: Date;
 }

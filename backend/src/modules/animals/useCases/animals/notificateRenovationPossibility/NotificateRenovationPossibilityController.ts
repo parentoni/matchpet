@@ -6,18 +6,18 @@ import { NotificateRenovationPossibilityResponse } from "./NotificateRenovationP
 import { NotificateRenovationPossibilityUseCase } from "./NotificateRenovationPossibilityUseCase";
 
 export class NotificateRenovationPossibilityController extends CronController {
-  cronTime = '0 0 13 * * *' 
-  protected name = 'NotificateRenovationPossibility'
+  cronTime = "0 0 13 * * *";
+  protected name = "NotificateRenovationPossibility";
 
   private useCase: NotificateRenovationPossibilityUseCase;
 
   constructor(useCase: NotificateRenovationPossibilityUseCase) {
-    super()
-    this.useCase = useCase
+    super();
+    this.useCase = useCase;
   }
 
   async execute(): Promise<NotificateRenovationPossibilityResponse> {
-    const response = await this.useCase.execute()
-    return response
+    const response = await this.useCase.execute();
+    return response;
   }
 }

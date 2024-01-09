@@ -1,3 +1,3 @@
 export interface VerifyUserDTO {
-  token:string
+  token: string;
 }

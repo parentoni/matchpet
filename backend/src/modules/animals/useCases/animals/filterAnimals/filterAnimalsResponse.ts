@@ -5,6 +5,6 @@ import { IAnimalPersistent } from "../../../../../shared/infra/database/models/A
 import { Animal } from "../../../domain/Animal";
 
 export type FilterAnimalsUseCaseResponse = Either<
-  CommonUseCaseResult.InvalidValue | GuardError | CommonUseCaseResult.UnexpectedError,
-  { animals: IAnimalPersistent[]; count: number }
+  CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError,
+  { animals: IAnimalPersistent[] }
 >;
