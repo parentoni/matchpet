@@ -4,17 +4,28 @@ import { AnimalGrid } from "../../elements/Animals/AnimalsGrid";
 import { SpeciesContext } from "../../utils/context/SpeciesContext";
 import { AnimalFiltersModalContainer } from "../../elements/Animals/AnimalsFiltersModal";
 import reducedLogo from '../../assets/logo-reduced.svg'
-import { FiltersContext } from "../../utils/context/FiltersContext";
+import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import { useNavigate } from "react-router-dom";
+import { FILTER_MODES } from "../../elements/Animals/filters";
 
 
 export function AllAnimals () {
 
   const {species, preferredSpecie} = useContext(SpeciesContext)  
-  const {persistentCounter, loading, animals, page, filters, setPage, useSetAnimalGetter} = useContext(FiltersContext)
+  const {persistentCounter, loading, animals, page, filters, setPage, useSetAnimalGetter, dispatch} = useContext(FiltersContext)
 
   useSetAnimalGetter(true)
+
+  
+  useEffect(() => {
+    const obj: Filters = structuredClone(filters.current)
+    if (preferredSpecie) {
+      obj['specie_id'] = [{comparation_value: preferredSpecie, mode: FILTER_MODES.EQUAL}]
+      filters.current = structuredClone(obj)
+      dispatch(filters.current, [], false)
+    }
+  }, [preferredSpecie])
   const navigate = useNavigate()
   return (
     <>
