@@ -1,7 +1,6 @@
-import React, { useEffect, useId, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import html2canvas from 'html2canvas'
 import './DomToImage.css'
-import { loadavg } from "os"
 export type DomToImageProps = {
   className?: string,
   proxy?: string,

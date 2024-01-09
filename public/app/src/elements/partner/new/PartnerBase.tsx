@@ -1,4 +1,4 @@
-import { Outlet, matchRoutes, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { BadgeHelp, Cat, ChevronDown, ChevronRight, Link2, LogOut, Plus, Settings, User } from 'lucide-react'
 import { Fragment, useContext, useEffect, useRef, useState } from 'react'
 import { AuthContext } from '../../../utils/context/AuthContext'
@@ -90,7 +90,7 @@ export function ManagerSidebar () {
           </button> */}
         </div>
       </aside>
-      <main className='h-screen transition-all  duration-150 ease-linear flex flex-1  ' onClick={e => isOpen?setIsOpen(false):''} ref={mainRef}>
+      <main className='h-screen transition-all  duration-150 ease-linear flex flex-1  ' onClick={() => isOpen?setIsOpen(false):''} ref={mainRef}>
         <Outlet context={{isOpen, setIsOpen}} />
       </main>
     </div>
@@ -132,7 +132,7 @@ export const ProfileButton = () => {
   const navigate = useNavigate()
   return (
         <Popover className="relative w-full">
-          {({open}) => (
+          {() => (
             <>
               <Popover.Button className={'px-3 h-8 flex items-center w-full rounded hover:bg-black hover:bg-opacity-5'}>
                 {user &&

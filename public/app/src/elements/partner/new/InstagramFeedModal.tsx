@@ -1,7 +1,7 @@
 
 import { IAnimalDTO } from "../../../utils/services/dtos/AnimalDTO";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import { MainPicture } from "./InstagramFeed/MainPicture";
 import { AuthContext } from "../../../utils/context/AuthContext";
 import { IUserPersistent } from "../../../utils/services/dtos/UserDTO";
@@ -9,7 +9,6 @@ import { DomToImage } from "./DomToImage";
 import { TraitsImage } from "./InstagramFeed/TraitsImage";
 import { FinalPicture } from "./InstagramFeed/FinalPicture";
 import { GalleryPicture } from "./InstagramFeed/GalleryPicture";
-import { set } from "date-fns";
 
 export interface InstagramFeedModalProps {
   isOpen: boolean,

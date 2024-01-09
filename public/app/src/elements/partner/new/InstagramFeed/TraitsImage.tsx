@@ -45,7 +45,7 @@ export const TraitsImage = (props: TraitsImageProps) => {
           <div key={index}>
             <p className="text-primary">{category.name}</p>
             <ul className="">
-              {domainSpecie.getTraitsThatMatchCategory(category._id).map((trait, traitIndex) => 
+              {domainSpecie.getTraitsThatMatchCategory(category._id).map((trait) => 
                 <li className="text-xs">&#x2022; { trait.print.replace("{x}", trait.options.find(a => a._id === domainAnimal.getTraitById(trait._id)?.value)?.name || '')}	</li>
               )}
             </ul>

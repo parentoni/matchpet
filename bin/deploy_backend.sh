@@ -11,7 +11,7 @@ echo "[DEPLOY_BACKEND]: Typescript compiled"
 
 # Copy necessary files to instance
 
-ssh $USER@$HOSTNAME -i $IDENTITYFILE 'mkdir app'
+ssh $USER@$HOSTNAME -i $IDENTITYFILE 'rm -rf app && mkdir app'
 
 scp  -q -i $IDENTITYFILE -r ./remote $USER@$HOSTNAME:~/. # Copy scripts
 scp  -q -i $IDENTITYFILE -r ../backend/.conf/nginx $USER@$HOSTNAME:~/. # Copy scripts

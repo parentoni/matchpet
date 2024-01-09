@@ -7,16 +7,12 @@ import { SelectInput } from "../input/SelecInput";
 import _ from 'lodash';
 import { SpeciesContext } from "../../../utils/context/SpeciesContext";
 import { ImageInput, ImageInputModal } from "./ImageInput";
-import { AuthContext } from "../../../utils/context/AuthContext";
 import { AnimalInput, PartnerCreateAnimalFormProps } from "./PartnerCreateAnimalFormTypes";
 
 
 export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => {
 
   const { species } = useContext(SpeciesContext);
-  const { getToken } = useContext(AuthContext);
-
-  
 
   const [imageInputModalOpenId, setImageInputModalOpenId] = useState<number | undefined>(undefined);
   const [imageInputModalOpen, setImageInputModalOpen] = useState(false);
@@ -30,17 +26,6 @@ export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => 
     props.animalInputTraits[key] = value;
     props.setAnimalInputTraits(structuredClone(props.animalInputTraits));
   }
-
-  function changeAnimalInputErrors(key: keyof AnimalInput, value: boolean) {
-    props.animalInputErrors[key] = value;
-    props.setAnimalInputErrors(structuredClone(props.animalInputErrors));
-  }
-
-  function changeAnimalInputTraitsErrors(key: string, value: boolean) {
-    props.animalInputTraitsErrors[key] = value;
-    props.setAnimalInputTraitsErrors(structuredClone(props.animalInputTraitsErrors));
-  }
-
 
 
   return (
@@ -101,7 +86,7 @@ export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => 
               id={0}
               setImageInputModalOpenId={setImageInputModalOpenId}
               errorMessage={props.imagesError ? "A imagem principal é obrigatória." : ""} />
-            {_.range(0, Math.min(props.images.length, 4)).map((e, index) => <ImageInput setIsOpen={setImageInputModalOpen} key={index} image={props.images[index + 1]} title={`Imagem da galeria (${index + 2}/5)`} id={index + 1} setImageInputModalOpenId={setImageInputModalOpenId} />
+            {_.range(0, Math.min(props.images.length, 4)).map((_, index) => <ImageInput setIsOpen={setImageInputModalOpen} key={index} image={props.images[index + 1]} title={`Imagem da galeria (${index + 2}/5)`} id={index + 1} setImageInputModalOpenId={setImageInputModalOpenId} />
             )}
           </div>
         </section>
