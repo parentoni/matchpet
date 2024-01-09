@@ -168,11 +168,3 @@ export function PartnerAnimalManage () {
     </>
   )
 }
-
-
-
-
-
-
-
-

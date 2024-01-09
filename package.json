@@ -17,10 +17,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/html2canvas": "^1.0.0",
+    "@types/qrcode": "^1.5.5",
     "concurrently": "^8.2.2"
   },
   "dependencies": {
     "html-to-image": "^1.11.11",
-    "html2canvas": "^1.4.1"
+    "html2canvas": "^1.4.1",
+    "qrcode": "^1.5.3"
   }
 }

@@ -13,7 +13,6 @@ export const AnimalGrid = () => {
 
   const {animals, persistentCounter, setPage, page, loading} = useContext(FiltersContext)
 
-  console.log(persistentCounter, animals.length)
   return (
     <div className="flex-1 grid grid-resizable-columns gap-8">
       {animals.map((animal, index) => <PartnerAnimalCard animal={animal} key={index} />)}
@@ -188,10 +187,6 @@ const ActionsModal = (props: ActionsModalProps) => {
                     <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center' onClick={() => {props.setIsOpen(false);props.setOpenInstagramFeedModal(true)}}>
                       <Instagram className=" w-4 h-4 fill-neutral-300"/>
                       <span className='text-sm'>Exportar animal para post</span>
-                    </button>
-                    <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center'>
-                      <Instagram className=" w-4 h-4 fill-neutral-300"/>
-                      <span className='text-sm'>Exportar animal para stories</span>
                     </button>
                     <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center'>
                       <Link2 className=" w-4 h-4 "/>

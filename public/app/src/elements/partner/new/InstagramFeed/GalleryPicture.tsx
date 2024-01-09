@@ -1,25 +1,22 @@
-import { useContext } from "react"
-import { SpeciesContext } from "../../../../utils/context/SpeciesContext"
-import { Animal, SEX } from "../../../../utils/domain/Animal"
+import { image } from "html2canvas/dist/types/css/types/image"
 import { IAnimalDTO } from "../../../../utils/services/dtos/AnimalDTO"
 import { IUserPersistent } from "../../../../utils/services/dtos/UserDTO"
 
-export type MainPictureProps = {
-  user: IUserPersistent,
+export type GalleryPictureProps = {
   animal: IAnimalDTO,
+  user: IUserPersistent,
+  imageUrl: string,
+  imageIndex:number,
+  totalImages: number,
 }
 
-export const MainPicture = (props: MainPictureProps) => {
-  
-  const {species} = useContext(SpeciesContext)
-  const domainAnimal = Animal.create(props.animal)
+export const GalleryPicture = (props: GalleryPictureProps) => {
   return (
-    <div className="w-80 h-80  bg-white relative ">
+    <div className="h-80 w-80 bg-white relative">
       {/* Name and next page indicator */} 
       <div className="absolute bottom-8 right-0 w-full flex justify-end">
         <div className="max-w-[60%] bg-neutral-50 border p-2 flex flex-col border-r-0 rounded rounded-r-none ">
-          <p className="text-sm">Adote <span className="text-primary">{props.animal.name}</span>, {domainAnimal.getSex(species) === SEX.FEMALE? "fêmea":"macho"}.</p>
-          <p className="text-[0.5rem]"> Detalhes na <span className="text-primary">próxima página.</span></p>
+          <p className="text-[0.5rem]"> Imagem  <span className="text-primary">{props.imageIndex}</span> de <span className="text-primary">{props.totalImages}</span></p>
         </div>
       </div>
     {/*Copyright */}
@@ -33,7 +30,7 @@ export const MainPicture = (props: MainPictureProps) => {
 
 
     <div className="w-full h-full flex items-center justify-center bg-opacity-10  bg-primary">
-      <img alt="Imagem principal do animal" src={props.animal.image[0]} className="w-auto h-auto max-w-full max-h-full " />
+      <img alt="Imagem principal do animal" src={props.imageUrl} className="w-auto h-auto max-w-full max-h-full " />
     </div>
     </div>
   )
