@@ -12,7 +12,7 @@ export interface IAnimalDTO {
 
   created_at: Date;
   last_modified_at: string;
-  contact?: {
+  contact: {
     contact_type: string
     contact_value: string
   }[]

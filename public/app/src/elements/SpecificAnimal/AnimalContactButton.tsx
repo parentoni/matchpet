@@ -1,16 +1,23 @@
-import { Dialog, Transition } from "@headlessui/react"
-import { useState, Fragment } from "react"
-import {BsWhatsapp} from 'react-icons/bs'
-import {HiOutlineMail} from 'react-icons/hi'
-import { IUserContactDTO } from "../../utils/services/dtos/UserContactDTO"
-import { TransitionedModal } from "../TransitionedModal"
+import { useState,  useContext } from "react"
 import { FullPageModal } from "../FullPageModal"
 import naoCompre from '../../assets/nao_compre.svg'
-export function AnimalContactButton ({ContactDTO, isMale, AnimalName}: {ContactDTO: IUserContactDTO | undefined, isMale: Boolean, AnimalName:string}) {
+import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
+import { Animal, SEX } from "../../utils/domain/Animal"
+import { SpeciesContext } from "../../utils/context/SpeciesContext"
+
+export type AnimalContactProps = {
+  animal: IAnimalDTO
+}
+export function AnimalContactButton (props: AnimalContactProps) {
   
   const [isOpen, setIsOpen] = useState(false)
-  const messageTextWPP = `${`Olá, vi ${isMale?"o": "a"} *${AnimalName}* no aplicativo *MATCHPET* e gostaria de adota-l${isMale?"o":"a"}.`}`
-  const messageTextEmail = `${`Olá, vi ${isMale?"o": "a"} ${AnimalName} no aplicativo MATCHPET e gostaria de adota-l${isMale?"o":"a"}.`}`
+
+  const {species } = useContext(SpeciesContext)
+  const domainAnimal = Animal.create(props.animal)
+
+  const sex = domainAnimal.getSex(species)
+  const messageText = `${`Olá, vi ${sex === SEX.MALE?"o": "a"} *${props.animal.name}* no aplicativo *MATCHPET* e gostaria de adota-l${sex === SEX.MALE?"o":"a"}.`}`
+
   return(
     <>
       {/* <TransitionedModal isOpen={isOpen} setIsOpen={setIsOpen} panelStyle="w-full max-w-md transform overflow-hidden rounded-[10px] brute-border bg-white p-4 text-left align-middle shadow-xl transition-all">
@@ -27,10 +34,12 @@ export function AnimalContactButton ({ContactDTO, isMale, AnimalName}: {ContactD
               
       <FullPageModal title="ADOTAR" isOpen={isOpen} setIsOpen={setIsOpen} absolute={false}>
         <div className="px-8 pt-4">
-          <h2 className="text-2xl">Adote {AnimalName}!</h2>
-          <p className="text-sm">Entre em contato com os responsáveis de {AnimalName} pelos seguintes métodos de contato:</p>
-          <ContactButton color="#000000" textColor="#ffffff" text="WHATSAPP" link={`https://wa.me/${ContactDTO?.phone_number}?text=${messageTextWPP}`} />
-          <ContactButton textColor="#000000" color="#ffffff" text="E-MAIL" link={`mailto:${ContactDTO?.email}?subject=${encodeURI(`Adoção de ${AnimalName}`)}&body=${encodeURI(messageTextEmail)}`}/>
+          <h2 className="text-2xl">Adote {props.animal.name}!</h2>
+          <p className="text-sm">Entre em contato com os responsáveis de {props.animal.name} pelos seguintes métodos de contato:</p>
+          <ContactButton color="#000000" textColor="#ffffff" text="WHATSAPP" link={`https://wa.me/${props.animal.contact.find(a => a.contact_type === "WHATSAPP")?.contact_value}?text=${messageText}`} />
+          {props.animal.contact.find(a => a.contact_type === "EMAIL") &&
+          <ContactButton textColor="#000000" color="#ffffff" text="E-MAIL" link={`mailto:${props.animal.contact.find(a => a.contact_type === "EMAIL")}?subject=${encodeURI(`Adoção de ${props.animal.name}`)}&body=${encodeURI(messageText)}`}/>
+          }
           <div className="w-full justify-center flex">
             <img src={naoCompre} className="mt-4 w-4/5" alt="Não compre, adote"></img>
           </div>

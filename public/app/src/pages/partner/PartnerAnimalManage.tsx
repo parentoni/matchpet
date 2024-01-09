@@ -79,7 +79,6 @@ export function PartnerAnimalManage () {
   }, [])
 
   const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
-  console.log(animals, animals.length)
   return (
     <>
       <div className="w-full flex flex-col h-screen overflow-y-auto relative">
