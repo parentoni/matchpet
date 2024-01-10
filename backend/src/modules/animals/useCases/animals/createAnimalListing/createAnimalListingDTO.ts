@@ -1,6 +1,5 @@
-import { ContactProps } from "../../../../../shared/core/Contact";
 import { IContactPersistent } from "../../../../../shared/infra/database/models/Animal";
-import { JWTDTO } from "../../../../user/domain/jwt";
+import { ANIMAL_SEX } from "../../../domain/animal/AnimalSex";
 
 export interface CreateAnimalListingDTO {
   name: string;
@@ -11,6 +10,7 @@ export interface CreateAnimalListingDTO {
   traits: CreateAnimalListingTraitsDTO[];
   description: string;
   contact?: IContactPersistent[];
+  sex: ANIMAL_SEX
 }
 
 export interface CreateAnimalListingTraitsDTO {

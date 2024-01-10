@@ -8,7 +8,7 @@ import { AnimalInputErrors, AnimalInputTraits, AnimalInputTraitsErrors, AnimalIn
 import { ANIMAL_STATUS } from "../../utils/services/dtos/AnimalDTO"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO"
-import { Animal, CreateAnimalListingDTO } from "../../utils/domain/Animal"
+import { Animal, CreateAnimalListingDTO, SEX } from "../../utils/domain/Animal"
 import { AuthContext } from "../../utils/context/AuthContext"
 import Confetti from 'react-confetti'
 import { useWindowSize } from "react-use"
@@ -35,7 +35,7 @@ export const PartnerCreateAnimal = () => {
     [images, setImages]
   ] = useGetAnimalInputs(id)
 
-  const [animalInputErrors, setAnimalInputErrors] = useState<AnimalInputErrors>({ name: false, description: false, status: false, specie_id: false, whatsapp: false, email: false });
+  const [animalInputErrors, setAnimalInputErrors] = useState<AnimalInputErrors>({ name: false, description: false, status: false, specie_id: false, whatsapp: false, email: false, sex:false});
   const [animalInputTraitsErrors, setAnimalInputTraitsErrors] = useState<AnimalInputTraitsErrors>({});
 
   const [imagesError, setImagesError] = useState<boolean>(false);
@@ -152,6 +152,8 @@ export const PartnerCreateAnimal = () => {
           description: animalInput.description.value,
           traits: traitsDto,
           status: animalInput.status.value,
+          sex: animalInput.sex.value
+
         };
   
         if (!iAmTheContact) {
@@ -297,7 +299,7 @@ export const PartnerCreateAnimalSuccess = () => {
 }
 
 export const useGetAnimalInputs = (animalId: string): [[AnimalInput, (x: AnimalInput) => void], [AnimalInputTraits, (x: AnimalInputTraits) => void], [Image[], (x: Image[]) => void]] => {
-  const [animalInput, setAnimalInput] = useState<AnimalInput>({ name: { value: '', obrigatory: true }, description: { value: '', obrigatory: true }, status: { value: ANIMAL_STATUS.PENDING, obrigatory: true }, specie_id: { value: '', obrigatory: true }, whatsapp: { value: '', obrigatory: true }, email: { value: '', obrigatory: false } });
+  const [animalInput, setAnimalInput] = useState<AnimalInput>({ name: { value: '', obrigatory: true }, description: { value: '', obrigatory: true }, status: { value: ANIMAL_STATUS.PENDING, obrigatory: true }, specie_id: { value: '', obrigatory: true }, whatsapp: { value: '', obrigatory: true }, email: { value: '', obrigatory: false }, sex: {value: "" as SEX, obrigatory:true}});
   const [animalInputTraits, setAnimalInputTraits] = useState<AnimalInputTraits>({});
   const [images, setImages] = useState<Image[]>([]);
 
@@ -308,7 +310,7 @@ export const useGetAnimalInputs = (animalId: string): [[AnimalInput, (x: AnimalI
           if (animal.isLeft()) {
             return;
           }
-          setAnimalInput({ name: { value: animal.value.props.name, obrigatory: true }, description: { value: animal.value.props.description, obrigatory: true }, status: { value: animal.value.props.status, obrigatory: true }, specie_id: { value: animal.value.props.specie_id, obrigatory: true },  whatsapp: { value: animal.value.props.contact?.find(e => e.contact_type === 'WHATSAPP')?.contact_value || '', obrigatory: true }, email: { value: animal.value.props.contact?.find(e => e.contact_type === 'EMAIL')?.contact_value || '', obrigatory: false } })
+          setAnimalInput({ name: { value: animal.value.props.name, obrigatory: true }, description: { value: animal.value.props.description, obrigatory: true }, status: { value: animal.value.props.status, obrigatory: true }, specie_id: { value: animal.value.props.specie_id, obrigatory: true },  whatsapp: { value: animal.value.props.contact?.find(e => e.contact_type === 'WHATSAPP')?.contact_value || '', obrigatory: true }, email: { value: animal.value.props.contact?.find(e => e.contact_type === 'EMAIL')?.contact_value || '', obrigatory: false }, sex: {value: animal.value.getSex(), obrigatory: true}})
           const traits: AnimalInputTraits = {};
           for (const trait of animal.value.props.traits) {
             traits[`trait_${trait._id}`] = trait.value;
@@ -325,7 +327,7 @@ export const useGetAnimalInputs = (animalId: string): [[AnimalInput, (x: AnimalI
 
         })
       } else {
-        setAnimalInput({ name: { value: '', obrigatory: true }, description: { value: '', obrigatory: true }, status: { value: ANIMAL_STATUS.PENDING, obrigatory: true }, specie_id: { value: '', obrigatory: true }, whatsapp: { value: '', obrigatory: true }, email: { value: '', obrigatory: false } })
+        setAnimalInput({ name: { value: '', obrigatory: true }, description: { value: '', obrigatory: true }, status: { value: ANIMAL_STATUS.PENDING, obrigatory: true }, specie_id: { value: '', obrigatory: true }, whatsapp: { value: '', obrigatory: true }, email: { value: '', obrigatory: false }, sex: {value: "" as SEX, obrigatory:true}})
         setAnimalInputTraits({})
         setImages([])
       

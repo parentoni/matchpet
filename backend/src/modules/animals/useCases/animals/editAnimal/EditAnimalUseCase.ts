@@ -65,7 +65,8 @@ export class EditAnimalUseCase implements UseCase<EditAnimalDTO, EditAnimalRespo
       name: request.edit.name || persistenAtualAnimal.value.name,
       image: request.edit.image || persistenAtualAnimal.value.image,
       description: request.edit.description || persistenAtualAnimal.value.description,
-      traits: request.edit.traits || persistenAtualAnimal.value.traits
+      traits: request.edit.traits || persistenAtualAnimal.value.traits,
+      sex: request.edit.sex || persistenAtualAnimal.value.sex
     };
 
     const domainNewAnimal = AnimalMapper.toDomain(persistentNewAnimal);

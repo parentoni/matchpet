@@ -1,6 +1,6 @@
-import { IAnimalPersistent, IAnimalTraitsPersistent } from "../../../../../shared/infra/database/models/Animal";
+import { IAnimalTraitsPersistent } from "../../../../../shared/infra/database/models/Animal";
 import { JWTDTO } from "../../../../user/domain/jwt";
-import { IAuthService } from "../../../../user/services/IauthService";
+import { ANIMAL_SEX } from "../../../domain/animal/AnimalSex";
 import { ANIMAL_STATUS } from "../../../domain/animal/AnimalStatus";
 
 export interface EditAnimalTraits {
@@ -8,6 +8,7 @@ export interface EditAnimalTraits {
   image: string[];
   status: ANIMAL_STATUS;
   description: string;
+  sex: ANIMAL_SEX;
   traits: IAnimalTraitsPersistent[];
 }
 export interface EditAnimalDTO {

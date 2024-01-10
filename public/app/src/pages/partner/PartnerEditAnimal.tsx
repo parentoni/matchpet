@@ -7,7 +7,7 @@ import { PartnerImageUpload } from "../../elements/partner/PartnerImageUpload"
 import { useNavigate, useParams } from "react-router-dom"
 import { SaveAnimalStateModal } from "../../elements/partner/SaveAnimalModal"
 import { AuthContext } from "../../utils/context/AuthContext"
-import { Animal } from "../../utils/domain/Animal"
+import { Animal, SEX } from "../../utils/domain/Animal"
 import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO"
 import { ANIMAL_STATUS } from "../../utils/services/dtos/AnimalDTO"
 export interface AnimalInput {
@@ -171,7 +171,7 @@ export const PartnerEditAnimal = () => {
 
       setModalText("Fazendo upload do animal...")
       if (id === 'new') {
-        const response = await Animal.newAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description']}, getToken())
+        const response = await Animal.newAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], sex: SEX.MALE}, getToken())
         if (response.isRight()) {
           setModalPercentage(1)
         } else {
@@ -180,7 +180,7 @@ export const PartnerEditAnimal = () => {
         }
       } else {
 
-        const response = await Animal.editAnimal({name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
+        const response = await Animal.editAnimal({sex: SEX.MALE, name: animalInput['name'], specie_id: specie?.props._id , image: imagesArray, traits: formatedTraits, description: animalInput['description'], status: animalStatus}, getToken(), id as string)
         if (response.isRight()) {
           setModalPercentage(1)
         } else {

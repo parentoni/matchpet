@@ -1,16 +1,12 @@
-import { Guard, GuardError, GuardResponse } from "../../../shared/core/Guard";
+import { Guard, GuardError } from "../../../shared/core/Guard";
 import { Either, left, right } from "../../../shared/core/Result";
 import { Timestamp } from "../../../shared/core/Timestamp";
-import { ValidUrl } from "../../../shared/core/ValidUrl";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
-import { UserId } from "../../user/domain/userProps/userId";
-import { AnimalAge } from "./animal/AnimalAge";
 import { AnimalImages } from "./animal/AnimalImages";
 import { AnimalDescription } from "./animal/AnimalDescription";
 import { AnimalName } from "./animal/AnimalName";
 import { ANIMAL_STATUS, AnimalStatus } from "./animal/AnimalStatus";
-import { AnimalTrait } from "./animal/AnimalTrait";
 import { AnimalTraits } from "./animal/AnimalTraits";
 import { AnimalCreated } from "./events/AnimalCreated";
 import { AnimalStatusChanged } from "./events/AnimalStatusChanged";
@@ -18,6 +14,7 @@ import { AnimalEdited } from "./events/AnimalEdited";
 import { Contacts } from "../../../shared/core/contacts/contacts";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { AnimalClicked } from "./events/AnimalClicked";
+import { AnimalSex } from "./animal/AnimalSex";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
@@ -34,6 +31,7 @@ export interface IAnimalProps {
 
   views: number;
   clicks: number;
+  sex: AnimalSex
 }
 
 export type AnimalCreateResponse = Either<GuardError, Animal>;
@@ -85,6 +83,10 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   get clicks(): number {
     return this.props.clicks;
+  }
+
+  get sex(): AnimalSex {
+    return this.props.sex
   }
 
   public markAnimalAsEditied() {

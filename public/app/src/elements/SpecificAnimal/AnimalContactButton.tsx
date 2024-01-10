@@ -1,9 +1,8 @@
-import { useState,  useContext } from "react"
+import { useState } from "react"
 import { FullPageModal } from "../FullPageModal"
 import naoCompre from '../../assets/nao_compre.svg'
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
 import { Animal, SEX } from "../../utils/domain/Animal"
-import { SpeciesContext } from "../../utils/context/SpeciesContext"
 
 export type AnimalContactProps = {
   animal: IAnimalDTO
@@ -12,10 +11,9 @@ export function AnimalContactButton (props: AnimalContactProps) {
   
   const [isOpen, setIsOpen] = useState(false)
 
-  const {species } = useContext(SpeciesContext)
   const domainAnimal = Animal.create(props.animal)
 
-  const sex = domainAnimal.getSex(species)
+  const sex = domainAnimal.getSex()
   const messageText = `${`Olá, vi ${sex === SEX.MALE?"o": "a"} *${props.animal.name}* no aplicativo *MATCHPET* e gostaria de adota-l${sex === SEX.MALE?"o":"a"}.`}`
 
   return(

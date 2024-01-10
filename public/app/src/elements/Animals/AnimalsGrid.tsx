@@ -1,14 +1,11 @@
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
 import {BsGenderFemale, BsGenderMale} from 'react-icons/bs'
 import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO";
-import { Species } from "../../utils/domain/Species";
-import { Animal } from "../../utils/domain/Animal";
+import { Animal, SEX } from "../../utils/domain/Animal";
 import { useNavigate } from "react-router-dom";
-import {Trash2, Heart, User, MoreVertical, AlertTriangle, Megaphone} from 'lucide-react'
-import React, { Fragment, useContext, useState } from "react";
-import { FiltersContext } from "../../utils/context/FiltersContext";
+import { Megaphone} from 'lucide-react'
+import React, { useState } from "react";
 import '../partner/PartnerAnimalsGrid.css'
-import { Menu, Transition } from "@headlessui/react";
 import { FullPageModal } from "../FullPageModal";
 import { TextArea } from "../partner/input/TextArea";
 import { TextInput } from "../partner/input/TextInput";
@@ -29,30 +26,26 @@ export function AnimalGrid (props: AnimalGridProps) {
     <div className="w-full grid-cols-1 grid gap-5 grid-resizable-columns pb-20">
       {/* <UserAnimalCardSkeleton /> */}
       {props.AnimalsArray?.length > 0 && 
-        props.AnimalsArray.map((animal, index) => {
+        props.AnimalsArray.map((animal) => {
 
-          const currentSpecie = Species.createFromDTO(props.SpeciesArray).findByID(animal.specie_id)
-          const sexoTrait = currentSpecie?.getTraitByVariable('name', "Sexo")
-          if (sexoTrait) {
-            const selectedOptionValue = currentSpecie?.getTraitOptionValueById(sexoTrait._id, Animal.create(animal).getTraitById(sexoTrait?._id)?.value || '')
-            const male = selectedOptionValue?.name === 'Fêmea' ? false:true
+          const animalDomain = Animal.create(animal)
+
+          const male = animalDomain.getSex() === SEX.FEMALE ? false:true
 
 
-            return(
-              <UserAnimalCard  animal={animal} navigate={navigate} male={male} />
-              )
-          }
+          return(
+            <UserAnimalCard  animal={animal} navigate={navigate} male={male} />
+          )
 
-          return null
-          
+
         })
       }
       {props.loading && [...Array(50).keys()].map(_ => <UserAnimalCardSkeleton />)}
       { (props.AnimalsArray.length % 50) === 0 && props.AnimalsArray.length !== 0?
-      <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => props.setPage(props.page+1)}>
-        Carregar mais
-      </button>:''}
-      
+        <button className="w-full h-10 bg-black flex justify-center items-center text-white" onClick={() => props.setPage(props.page+1)}>
+          Carregar mais
+        </button>:''}
+
 
     </div>
   )
@@ -154,8 +147,8 @@ export const AnimalComplaint = (props: AnimalComplaintProps) => {
         <button className="w-full h-12 bg-primary rounded flex items-center justify-center text-white font-medium" type="submit">
           Denunciar anúncio
         </button>
-        
-        
+
+
       </form>
     </FullPageModal>
   )

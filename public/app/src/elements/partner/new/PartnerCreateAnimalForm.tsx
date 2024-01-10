@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { SpeciesContext } from "../../../utils/context/SpeciesContext";
 import { ImageInput, ImageInputModal } from "./ImageInput";
 import { AnimalInput, PartnerCreateAnimalFormProps } from "./PartnerCreateAnimalFormTypes";
+import { SEX } from "../../../utils/domain/Animal";
 
 
 export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => {
@@ -53,16 +54,6 @@ export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => 
             obrigatory={props.animalInput.description.obrigatory} />
 
           <SelectInput
-            state={props.animalInput.status.value}
-            setState={x => changeAnimalInput('status', x as ANIMAL_STATUS)}
-            title="Estado"
-            array={[ANIMAL_STATUS.PENDING, ANIMAL_STATUS.CANCELED, ANIMAL_STATUS.DONATED]}
-            option={x => PrintableAnimalStatus[x]}
-            checked={x => x === props.animalInput.status.value}
-            errorMessage={props.animalInputErrors.status ? "O estado do animal é obrigatório." : ""}
-            obrigatory />
-          <div className="mt-4 w-full"></div>
-          <SelectInput
             state={props.animalInput.specie_id.value}
             setState={x => changeAnimalInput('specie_id', x as ANIMAL_STATUS)}
             title="Espécie"
@@ -71,6 +62,30 @@ export const PartnerCreateAnimalForm = (props: PartnerCreateAnimalFormProps) => 
             checked={x => x === props.animalInput.specie_id.value}
             errorMessage={props.animalInputErrors.specie_id ? "A espécie do animal é obrigatória." : ""}
 
+            obrigatory />
+          <div className="mt-4 w-full"></div>
+
+          <SelectInput
+            state={props.animalInput.sex.value}
+            setState={x => changeAnimalInput("sex", x as SEX)}
+            title="Sexo"
+            array={[SEX.MALE, SEX.FEMALE]}
+            option={x => x === SEX.MALE? "Macho": x === SEX.FEMALE? "Fêmea": "ERRO"}
+            checked={x => x === props.animalInput.sex.value}
+
+            errorMessage={props.animalInputErrors.sex ? "O sexo do animal é obrigatório" : ""}
+            obrigatory
+            />
+          <div className="mt-4 w-full"></div>
+
+          <SelectInput
+            state={props.animalInput.status.value}
+            setState={x => changeAnimalInput('status', x as ANIMAL_STATUS)}
+            title="Estado"
+            array={[ANIMAL_STATUS.PENDING, ANIMAL_STATUS.CANCELED, ANIMAL_STATUS.DONATED]}
+            option={x => PrintableAnimalStatus[x]}
+            checked={x => x === props.animalInput.status.value}
+            errorMessage={props.animalInputErrors.status ? "O estado do animal é obrigatório." : ""}
             obrigatory />
         </section>
         <section className="pb-4">
