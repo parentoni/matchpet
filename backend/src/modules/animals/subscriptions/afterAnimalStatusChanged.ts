@@ -19,8 +19,8 @@ export class AfterAnimalStatusChanged implements IHandle<AnimalStatusChanged> {
   private async onAnimalStatusChanged(event: AnimalStatusChanged): Promise<void> {
     const response = await this.updateUserStatsUseCase.execute({
       userId: event.animal.donatorId.toValue(),
-      addInAdoption: event.oldStatus === event.newStatus ? 0 : event.oldStatus === ANIMAL_STATUS.PENDING ? -1 : 1,
-      addCompletedAdoptions: event.oldStatus === event.newStatus ? 0 : event.oldStatus !== ANIMAL_STATUS.PENDING ? -1 : 1
+      addInAdoption: event.oldStatus === event.newStatus ? 0 : event.oldStatus === ANIMAL_STATUS.PENDING ? -1 : event.newStatus === ANIMAL_STATUS.PENDING? 1:0,
+      addCompletedAdoptions: event.oldStatus === event.newStatus ? 0 : event.oldStatus === ANIMAL_STATUS.DONATED? -1: event.newStatus === ANIMAL_STATUS.DONATED? 1: 0
     });
 
     if (response.isLeft()) {
