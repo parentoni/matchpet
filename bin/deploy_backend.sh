@@ -5,8 +5,9 @@ source ../backend/.conf/server/.env
 echo "[DEPLOY_BACKEND]: Selected Host: $HOSTNAME"
 
 # Build backend
+rm -rf ../backend/dist
+npm run --silent build --prefix ../backend
 
-npm run --silent ../backend/build 
 echo "[DEPLOY_BACKEND]: Typescript compiled"
 
 # Copy necessary files to instance
