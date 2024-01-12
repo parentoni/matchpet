@@ -1,5 +1,6 @@
 import { ANIMAL_STATUS } from "../../../utils/services/dtos/AnimalDTO";
 import { Image } from "../../../utils/domain/Image";
+import { SEX } from "../../../utils/domain/Animal";
 export interface AnimalInput {
   name: AnimalInputValue<string>;
   description: AnimalInputValue<string>;
@@ -7,6 +8,7 @@ export interface AnimalInput {
   specie_id: AnimalInputValue<string>;
   whatsapp: AnimalInputValue<string>;
   email: AnimalInputValue<string>;
+  sex: AnimalInputValue<SEX>
 }
 
 export interface AnimalInputValue<T> {

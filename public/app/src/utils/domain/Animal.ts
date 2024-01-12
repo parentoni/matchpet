@@ -10,11 +10,13 @@ export interface CreateAnimalListingDTO {
   specie_id: any;
   traits: { _id: string; value: string }[];
   description: string;
+  sex: SEX
   status?: ANIMAL_STATUS;
   contact?: {
     contact_type: string
     contact_value: string
   }[]
+
 }
 export enum SEX {
   MALE = "MALE",
@@ -37,9 +39,8 @@ export class Animal {
     return !!(differenceInDays(new Date(), this.props.last_modified_at) >= 7)
   }
 
-  public getSex (species: ISpecieDTO[]): SEX {
-    const sexTrait = species.find(a => a._id === this.props.specie_id)?.traits.find(a => a.name === "Sexo")
-    return this.props.traits.find(a => a._id === sexTrait?._id)?.value === sexTrait?.options.find(a => a.name === "Macho")?._id? SEX.MALE: SEX.FEMALE
+  public getSex (): SEX {
+    return this.props.sex
   }
   public static create(props: IAnimalDTO) {
     return new Animal(props);
@@ -73,7 +74,8 @@ export class Animal {
         }
       }
     }
-
+    
+    console.log(countViews, "COUNT")
     const response = await Api.post(
       `/animals/filter?view=${countViews? "true": "false"}`,
       JSON.stringify(

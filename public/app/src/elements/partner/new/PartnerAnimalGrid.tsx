@@ -2,8 +2,8 @@ import { Fragment, useContext, useState } from 'react';
 import './PartnerAnimalsGrid.css'
 import { FiltersContext } from '../../../utils/context/FiltersContext';
 import { ANIMAL_STATUS, IAnimalDTO, PrintableAnimalStatus } from '../../../utils/services/dtos/AnimalDTO';
-import { CalendarDays, Copy, Eye, File, Instagram, Link2, MousePointerSquare, Pen, RefreshCcw } from 'lucide-react';
-import { Dialog, Menu, Transition } from '@headlessui/react';
+import { CalendarDays,  Eye, File, Instagram, Link2, MousePointerSquare, Pen, RefreshCcw } from 'lucide-react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
 import { InstagramFeedModal } from './InstagramFeedModal';
 import { Animal } from '../../../utils/domain/Animal';

@@ -6,10 +6,10 @@ import { UniqueGlobalId } from "../../../../../shared/domain/UniqueGlobalD";
 import { EitherUtils } from "../../../../../shared/utils/EitherUtils";
 import { GetUserByUIDUseCase } from "../../../../user/useCases/getUserByUID/getUserByUIDUseCase";
 import { Animal } from "../../../domain/Animal";
-import { AnimalAge } from "../../../domain/animal/AnimalAge";
 import { AnimalDescription } from "../../../domain/animal/AnimalDescription";
 import { AnimalImages } from "../../../domain/animal/AnimalImages";
 import { AnimalName } from "../../../domain/animal/AnimalName";
+import { AnimalSex } from "../../../domain/animal/AnimalSex";
 import { ANIMAL_STATUS, AnimalStatus } from "../../../domain/animal/AnimalStatus";
 import { AnimalTraits } from "../../../domain/animal/AnimalTraits";
 import { AnimalMapper } from "../../../mappers/AnimalMapper";
@@ -37,6 +37,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
     const animalStatusOrError = AnimalStatus.create(ANIMAL_STATUS.PENDING);
     const animalDescriptionOrError = AnimalDescription.create({ value: request.description });
+    const animalSexOrError = AnimalSex.create({ sex: request.sex })
 
     const animalCreatedTimespamp = Timestamp.create();
 
@@ -47,7 +48,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       animalDonatorIdOError,
       animalSpecieTraitsOrError,
       animalStatusOrError,
-      animalDescriptionOrError
+      animalDescriptionOrError,
+      animalSexOrError
     ]);
 
     if (combineResult.isLeft()) {
@@ -61,6 +63,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const animalSpecieTraits = animalSpecieTraitsOrError.getRight();
     const animalStats = animalStatusOrError.getRight();
     const animalDescription = animalDescriptionOrError.getRight();
+    const animalSex = animalSexOrError.getRight();
 
     const specie = await this.specieRepo.findById(animalSpecieId.toValue());
 
@@ -111,7 +114,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       lastModifiedAt: animalCreatedTimespamp,
       contact: animalContact,
       views: 0,
-      clicks: 0
+      clicks: 0,
+      sex: animalSex
     });
 
     if (animalResult.isLeft()) {

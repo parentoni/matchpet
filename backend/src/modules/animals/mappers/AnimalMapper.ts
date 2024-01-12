@@ -2,23 +2,22 @@ import { GuardError } from "../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { Either, left, right } from "../../../shared/core/Result";
 import { Timestamp } from "../../../shared/core/Timestamp";
-import { ValidUrl } from "../../../shared/core/ValidUrl";
 import { Contacts } from "../../../shared/core/contacts/contacts";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
-import { IAnimalPersistent, IAnimalTraitsPersistent } from "../../../shared/infra/database/models/Animal";
+import { IAnimalPersistent } from "../../../shared/infra/database/models/Animal";
 import { EitherUtils } from "../../../shared/utils/EitherUtils";
 import { Animal } from "../domain/Animal";
-import { AnimalAge } from "../domain/animal/AnimalAge";
 import { AnimalDescription } from "../domain/animal/AnimalDescription";
 import { AnimalImages } from "../domain/animal/AnimalImages";
 import { AnimalName } from "../domain/animal/AnimalName";
+import { AnimalSex } from "../domain/animal/AnimalSex";
 import { AnimalStatus } from "../domain/animal/AnimalStatus";
-import { AnimalTrait } from "../domain/animal/AnimalTrait";
 import { AnimalTraits } from "../domain/animal/AnimalTraits";
 
 export class AnimalMapper {
   //!todo: add traits verification
   public static toDomain(persistent: IAnimalPersistent): Either<GuardError, Animal> {
+    // Declare possible left animal variables
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id.toString());
@@ -28,10 +27,11 @@ export class AnimalMapper {
     const animalStatsOrError = AnimalStatus.create(persistent.status);
     const animalDescriptionOrError = AnimalDescription.create({ value: persistent.description });
     const animalContactsOrError = Contacts.createFromPersistent(persistent.contact);
-
+    const animalSexOrError = AnimalSex.create({ sex: persistent.sex })
     const animalCreatedAt = Timestamp.create(persistent.created_at);
     const animalLastModified = Timestamp.create(persistent.last_modified_at);
-
+    
+    // Check for lefts in declared animal values
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalImageOrError,
@@ -41,13 +41,15 @@ export class AnimalMapper {
       animalIdOrError,
       animalTraitsOrError,
       animalDescriptionOrError,
-      animalContactsOrError
+      animalContactsOrError,
+      animalSexOrError
     ]);
 
     if (combineResult.isLeft()) {
       return left(combineResult.value);
     }
-
+  
+    // Declare verified rights animal values
     const animalName = animalNameOrError.getRight();
     const animalImage = animalImageOrError.getRight();
     const animalDonatorId = animalDonatorIdOrError.getRight();
@@ -57,7 +59,9 @@ export class AnimalMapper {
     const animalStats = animalStatsOrError.getRight();
     const animalDescription = animalDescriptionOrError.getRight();
     const animalContacts = animalContactsOrError.getRight();
+    const animalSex = animalSexOrError.getRight()
 
+    // Create domain animal from verified variables
     const animal = Animal.create(
       {
         name: animalName,
@@ -71,7 +75,8 @@ export class AnimalMapper {
         lastModifiedAt: animalLastModified,
         contact: animalContacts,
         views: persistent.views || 0,
-        clicks: persistent.clicks || 0
+        clicks: persistent.clicks || 0,
+        sex: animalSex
       },
       animalId
     );
@@ -98,7 +103,8 @@ export class AnimalMapper {
         last_modified_at: domain.lastModifiedAt.value,
         contact: domain.contact.persistentValue,
         views: domain.views,
-        clicks: domain.clicks
+        clicks: domain.clicks,
+        sex: domain.sex.value
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

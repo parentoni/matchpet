@@ -1,5 +1,3 @@
-import { useContext } from "react"
-import { SpeciesContext } from "../../../../utils/context/SpeciesContext"
 import { Animal, SEX } from "../../../../utils/domain/Animal"
 import { IAnimalDTO } from "../../../../utils/services/dtos/AnimalDTO"
 import { IUserPersistent } from "../../../../utils/services/dtos/UserDTO"
@@ -11,14 +9,13 @@ export type MainPictureProps = {
 
 export const MainPicture = (props: MainPictureProps) => {
   
-  const {species} = useContext(SpeciesContext)
   const domainAnimal = Animal.create(props.animal)
   return (
     <div className="w-80 h-80  bg-white relative ">
       {/* Name and next page indicator */} 
       <div className="absolute bottom-8 right-0 w-full flex justify-end">
         <div className="max-w-[60%] bg-neutral-50 border p-2 flex flex-col border-r-0 rounded rounded-r-none ">
-          <p className="text-sm">Adote <span className="text-primary">{props.animal.name}</span>, {domainAnimal.getSex(species) === SEX.FEMALE? "fêmea":"macho"}.</p>
+          <p className="text-sm">Adote <span className="text-primary">{props.animal.name}</span>, {domainAnimal.getSex() === SEX.FEMALE? "fêmea":"macho"}.</p>
           <p className="text-[0.5rem]"> Detalhes na <span className="text-primary">próxima página.</span></p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { ElementType, Fragment, useContext, useEffect, useState } from "react";
+import React, { ElementType, Fragment, useContext, useEffect } from "react";
 import { ANIMAL_STATUS, PrintableAnimalStatus } from "../../utils/services/dtos/AnimalDTO";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
@@ -6,9 +6,9 @@ import { BarChart2, Cat, RefreshCcw } from "lucide-react";
 import { FiltersContext } from "../../utils/context/FiltersContext";
 import { Dialog, RadioGroup, Transition } from "@headlessui/react";
 import { SpeciesContext } from "../../utils/context/SpeciesContext";
-import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO";
 import { CategoriesContext } from "../../utils/context/CategoriesContext";
 import { Specie } from "../../utils/domain/Specie";
+import { SEX } from "../../utils/domain/Animal";
 
 
 export interface PartnerFilterModalProps {
@@ -119,8 +119,31 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
             >
               <Dialog.Panel className="w-full flex flex-col h-[35rem] max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
                 <div className="flex-1 p-4 flex flex-col gap-4 overflow-y-auto w-full">
-                  <FilterRadioGroup icon={Cat} setSelected={(x) => { x === null ? deleteFromVisualFilters('specie_id') : changeVisualFilters('specie_id', x); cleanVisualFilters(x); }} label="Espécie" options={species.map(a => a._id)} selected={getFromVisualFilters('specie_id')} print={option => species.find(a => a._id === option)?.name || "Qualquer"} />
-                  <FilterRadioGroup icon={BarChart2} setSelected={(x) => x === null ? deleteFromVisualFilters('status') : changeVisualFilters('status', x)} label="Estado" options={Object.keys(ANIMAL_STATUS)} selected={getFromVisualFilters('status')} print={option => PrintableAnimalStatus[option as ANIMAL_STATUS] || "Qualquer"} />
+                  <FilterRadioGroup 
+                    icon={Cat} 
+                    setSelected={(x) => { x === null ? deleteFromVisualFilters('specie_id') : changeVisualFilters('specie_id', x); cleanVisualFilters(x); }} 
+                    label="Espécie" 
+                    options={species.map(a => a._id)} 
+                    selected={getFromVisualFilters('specie_id')} 
+                    print={option => species.find(a => a._id === option)?.name || "Qualquer"} />
+                  
+
+                  <FilterRadioGroup 
+                    icon={BarChart2} 
+                    setSelected={(x) => x === null ? deleteFromVisualFilters('status') : changeVisualFilters('status', x)} 
+                    label="Estado" 
+                    options={Object.keys(ANIMAL_STATUS)} 
+                    selected={getFromVisualFilters('status')} 
+                    print={option => PrintableAnimalStatus[option as ANIMAL_STATUS] || "Qualquer"} />
+
+                  <FilterRadioGroup 
+                    icon={Cat}
+                    setSelected={(x) => { x === null ? deleteFromVisualFilters('sex') : changeVisualFilters('sex', x); }}
+                    label="Sexo" 
+                    options={[SEX.MALE, SEX.FEMALE]} 
+                    selected={getFromVisualFilters('sex')}
+                    print={option => option === SEX.FEMALE? "Fêmea": option === SEX.MALE? "Macho":"Qualquer"} />
+                  
                   <FilterRadioGroup icon={RefreshCcw} setSelected={(x) => x === null ? deleteFromVisualFilters('last_modified_at') : changeVisualFiltersRenew(x)} label="Modificado em mais de 7 dias (Pode ser renovado)" options={[true, false]} selected={visualFilters['last_modified_at']?visualFilters['last_modified_at'][0].mode === FILTER_MODES.LESS_THAN_EQUAL?true:false:null} print={option => option? "Sim": "Não"} />
                   {getFromVisualFilters('specie_id') !== null ? categories.map((category, cIndex) => {
                     const selectedSpecie = species.find(a => a._id === getFromVisualFilters('specie_id'));

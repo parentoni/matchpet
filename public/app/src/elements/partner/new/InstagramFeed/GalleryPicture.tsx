@@ -1,4 +1,3 @@
-import { image } from "html2canvas/dist/types/css/types/image"
 import { IAnimalDTO } from "../../../../utils/services/dtos/AnimalDTO"
 import { IUserPersistent } from "../../../../utils/services/dtos/UserDTO"
 

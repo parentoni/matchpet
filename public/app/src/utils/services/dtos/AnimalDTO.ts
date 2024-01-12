@@ -1,3 +1,5 @@
+import { SEX } from "../../domain/Animal";
+
 export interface IAnimalDTO {
   _id: string;
   name: string;
@@ -15,7 +17,8 @@ export interface IAnimalDTO {
   contact: {
     contact_type: string
     contact_value: string
-  }[]
+  }[],
+  sex: SEX
 }
 
 export enum ANIMAL_STATUS {

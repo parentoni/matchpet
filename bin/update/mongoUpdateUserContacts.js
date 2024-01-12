@@ -33,7 +33,7 @@ db.animals.aggregate([
       ]
     }
   },
-{
-    $out: "animals"  // Write the results back to the "animals" collection
+  {
+    $merge: "animals" // Write the results back to the "animals" collection
   }
 ]);

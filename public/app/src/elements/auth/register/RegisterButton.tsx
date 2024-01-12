@@ -2,7 +2,6 @@ import { useContext } from "react"
 import { RegisterContext } from "./RegisterRoot"
 
 export function RegisterButton () {
-
   const {page, pages, loading} = useContext(RegisterContext)
   return (
     <button type="submit" className="w-full h-12 bg-primary  cursor-pointer rounded-md flex justify-center items-center text-white text-lg mt-5">
