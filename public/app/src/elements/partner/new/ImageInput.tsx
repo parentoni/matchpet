@@ -57,6 +57,27 @@ export interface ImageInputModalProps {
 
 export const ImageInputModal = (props: ImageInputModalProps) => {
 
+  //Set image to set position on images array, with this position given by ID props
+  const changeImageArray = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    //Check if modal is open
+    if (typeof props.imageInputModalIsOpenId !== 'undefined') {
+
+      console.log('oi', props.imageInputModalIsOpenId)
+      //Check for canceled image input
+      if (!e.target.files || !e.target.files[0]) {
+        return null
+      }
+
+      //Replace element (one) at index ID
+      const imageFile = new ImageFile(e.target.files[0])
+      props.imagesArray.splice(props.imageInputModalIsOpenId as number, 1, imageFile)
+
+      //Trigger reload
+      props.setImagesArray(props.imagesArray.slice())
+    }
+  }
+
   return (
     <Transition appear show={props.isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => props.setIsOpen(false)}>
@@ -112,15 +133,7 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
                   </button>}
                 </div>
 
-                <input id="IMAGE_INPUT_MODAL" value={''} className="hidden " accept="image/*" type="file" onChange={e => {
-                  console.log(e.target.files);
-                  if (e.target.files !== null) {
-
-                    props.imagesArray.splice(props.imageInputModalIsOpenId as number, 0, new ImageFile(e.target.files[0]));
-                    props.setImagesArray(props.imagesArray.slice());
-
-                  }
-                }}></input>
+                <input id="IMAGE_INPUT_MODAL" value={''} className="hidden " accept="image/*" type="file" onChange={changeImageArray}></input>
               </Dialog.Panel>
             </Transition.Child>
           </div>
