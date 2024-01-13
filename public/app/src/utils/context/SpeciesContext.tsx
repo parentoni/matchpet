@@ -29,8 +29,9 @@ export function SpeciesContextProvider({children}: React.PropsWithChildren<{}>) 
       setPreferredSpecie("NULL")
     }
   }, [])
+  //todo: Change preferred specie being set as NULL string
   useEffect(() => {
-    if (preferredSpecie) {
+    if (preferredSpecie && preferredSpecie !== 'NULL') {
       localStorage.setItem('prefered_specie', preferredSpecie )
     }
   }, [preferredSpecie])

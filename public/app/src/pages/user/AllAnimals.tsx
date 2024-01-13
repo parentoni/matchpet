@@ -17,11 +17,11 @@ export function AllAnimals () {
   
   useEffect(() => {
     const obj: Filters = structuredClone(filters.current)
-    if (preferredSpecie) {
+    if (preferredSpecie !== 'NULL' && preferredSpecie) {
       obj['specie_id'] = [{comparation_value: preferredSpecie, mode: FILTER_MODES.EQUAL}]
-      filters.current = structuredClone(obj)
-      dispatch(filters.current, [], true)
+      filters.current = obj
     }
+    dispatch(filters.current, [], true)
   }, [preferredSpecie])
 
   return (
