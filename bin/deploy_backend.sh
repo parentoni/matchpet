@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../backend/.conf/server/.env
+source ../backend/.config/server/.env
 
 echo "[DEPLOY_BACKEND]: Selected Host: $HOSTNAME"
 
