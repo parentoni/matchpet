@@ -35,6 +35,8 @@ export const PartnerCreateAnimal = () => {
     [images, setImages]
   ] = useGetAnimalInputs(id)
 
+  console.log(images)
+
   const [animalInputErrors, setAnimalInputErrors] = useState<AnimalInputErrors>({ name: false, description: false, status: false, specie_id: false, whatsapp: false, email: false, sex:false});
   const [animalInputTraitsErrors, setAnimalInputTraitsErrors] = useState<AnimalInputTraitsErrors>({});
 

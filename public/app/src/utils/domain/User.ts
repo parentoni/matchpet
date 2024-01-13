@@ -49,7 +49,8 @@ export class User {
     if (response.isLeft()) {
       
       const data = await response.value.json()
-      return left(data.message.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data.message.location}:${data.message.variable}`)
+      return left(data?.value?.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data?.value?.location}:${data?.value?.variable}`)
+      
     }
     return right('ok')
   }
@@ -88,7 +89,7 @@ export class User {
     if (response.isLeft()) {
       
       const data = await response.value.json()
-      return left(data.message.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data.message.location}:${data.message.variable}`)
+      return left(data?.value?.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data?.value?.location}:${data?.value?.variable}`)
     }
     return right('ok')
   }
@@ -97,7 +98,7 @@ export class User {
     const response = await Api.get('/user/animals/stats', token)
     if (response.isLeft()) {
       const data = await response.value.json()
-      return left(data.message.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data.message.location}:${data.message.variable}`)
+      return left(data?.value?.printableErrorMessage || `Erro desconhecido, contate <parentoni.arthur@gmail.com>. COD ERROR: ${data?.value?.location}:${data?.value?.variable}`)
     }
 
     return right(response.value as {clicks:number, views:number} )

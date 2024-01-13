@@ -43,16 +43,15 @@ export const FilterModal = (props: FilterModalProps) => {
       obj['donator_id'] = [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]
     } else {
       obj['status'] = [{comparation_value: ANIMAL_STATUS.PENDING, mode: FILTER_MODES.EQUAL}]
-      if (specie !== null) {
+      if (specie !== null && specie !== 'NULL') {
         obj['specie_id'] = [{comparation_value: specie, mode: FILTER_MODES.EQUAL}]
       }
     }
     return obj
   }
 
-  console.log(filtersV)
   useEffect(() => {
-    setFilters(createBaseFilters(selectedSpecie? selectedSpecie._id: null))
+    setFilters(createBaseFilters(selectedSpecie ? selectedSpecie._id: null))
   }, [selectedSpecie, props.isPartner])
 
   useEffect(() => {
@@ -73,7 +72,7 @@ export const FilterModal = (props: FilterModalProps) => {
       obj['donator_id'] = [{comparation_value: user._id, mode: FILTER_MODES.EQUAL}]
     } else {
       obj['status'] = [{comparation_value: ANIMAL_STATUS.PENDING, mode: FILTER_MODES.EQUAL}]
-      if (localStorage.getItem('prefered_specie') !== null) {
+      if (localStorage.getItem('prefered_specie') !== null && localStorage.getItem('prefered_specie') !== 'NULL') {
         obj['specie_id'] = [{comparation_value: localStorage.getItem('prefered_specie'), mode: FILTER_MODES.EQUAL}]
       }
     }

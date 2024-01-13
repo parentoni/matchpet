@@ -10,7 +10,6 @@ import { AnimalGrid } from "../../elements/Animals/AnimalsGrid"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { ArrowLeft } from "lucide-react"
 import Logo from '../../assets/logo.svg'
-// import '../'
 export const AllPartnerAnimals = () => {
 
   const { username }  = useParams() as {username:string}
@@ -21,7 +20,6 @@ export const AllPartnerAnimals = () => {
   const [user, setUser] = useState<IUserPersistent>()
   const [page, setPage] = useState<number>(0)
 
-  const [animalsCount, setAnimalsCount] = useState<number>()
   const [animals, setAnimals] = useState<IAnimalDTO[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const routerLocation = useLocation()
@@ -80,7 +78,6 @@ export const AllPartnerAnimals = () => {
         }
 
         setAnimals([...animals, ...res.value.animals])
-        setAnimalsCount(res.value.count)
       })
     }
   }, [user, page])
@@ -125,7 +122,7 @@ export const AllPartnerAnimals = () => {
         </div> 
       </div>    
       <PageLayout>
-        <h2 className="text-2xl"> {!loading && animalsCount? animalsCount: '---'} animais disponíveis da(o) {user?.display_name}</h2>
+        <h2 className="text-2xl"> {!loading && user?.in_adoption? user.in_adoption: '---'} animais disponíveis da(o) {user?.display_name}</h2>
         <AnimalGrid 
           AnimalsArray={animals}
           loading={loading}
