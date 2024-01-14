@@ -1,8 +1,6 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './assets/index.css';
-import { RouterProvider } from 'react-router-dom';
-import router from './Routes';
+import  { RouterApp } from './Routes';
 import { SpeciesContextProvider } from './utils/context/SpeciesContext';
 import { CategoriesContextProvider } from './utils/context/CategoriesContext';
 import { AuthProvider } from './utils/context/AuthContext';
@@ -26,6 +24,7 @@ const root = ReactDOM.createRoot(
 
   
 //Google analytics 4 initialization
+//
 ReactGA.initialize("G-2KJE25C9EN")
 root.render(
   <FiltersContextProvider>
@@ -34,7 +33,7 @@ root.render(
         <AuthProvider>
           <CategoriesContextProvider>
             <SpeciesContextProvider>
-              <RouterProvider router={router}/>
+              <RouterApp />
             </SpeciesContextProvider>
           </CategoriesContextProvider>
         </AuthProvider>
