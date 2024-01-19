@@ -164,7 +164,7 @@ export function RegisterPage () {
               formName="confirm_password"
               type={showSecondPassword ?"text":"password"}
               inputMode={'text'}
-              title="Senha"
+              title="Confirme a senha"
               placeholder="•••••••••"
               tooltip={
                 <Register.Tooltip 
