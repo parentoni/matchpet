@@ -59,7 +59,7 @@ export interface UserAnimalCardProps {
 function UserAnimalCard(props: UserAnimalCardProps) {
 
   const [showModal, setShowModal] = useState<boolean>(false)
-  return <div className="w-full flex flex-col rounded brute-border shadow relative mt-3">
+  return <div className="w-full flex flex-col rounded brute-border shadow relative mt-3 overflow-hidden">
     <img src={props.animal.image[0]} alt={`Imagem de ${props.animal.name}`} className="w-full aspect-video   object-contain bg-neutral-100" onClick={() => props.navigate(`/animals/${props.animal._id}`)}></img>
     <div className="flex flex-1 flex-col p-4">
       <div className="flex justify-between items-center">

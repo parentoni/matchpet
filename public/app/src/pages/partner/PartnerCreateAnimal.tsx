@@ -28,6 +28,7 @@ export const PartnerCreateAnimal = () => {
 
   const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
   const {id} = useParams() as {id: string}
+  const {invalidateCaches} = useContext(FiltersContext)
 
   const [
     [animalInput, setAnimalInput],
@@ -35,7 +36,6 @@ export const PartnerCreateAnimal = () => {
     [images, setImages]
   ] = useGetAnimalInputs(id)
 
-  console.log(images)
 
   const [animalInputErrors, setAnimalInputErrors] = useState<AnimalInputErrors>({ name: false, description: false, status: false, specie_id: false, whatsapp: false, email: false, sex:false});
   const [animalInputTraitsErrors, setAnimalInputTraitsErrors] = useState<AnimalInputTraitsErrors>({});
@@ -173,6 +173,7 @@ export const PartnerCreateAnimal = () => {
           if (response.isLeft()) {
             alert("Algo deu errado salvando o animal, contate parentoni.arthur@gmail.com ou +55 31 9 9904-9188")
           } else {
+            invalidateCaches() //Force sync with backend DB 
             setSearchParams({success: 'true'})
           }
 
@@ -185,8 +186,7 @@ export const PartnerCreateAnimal = () => {
           if (response.isLeft()) {
             alert("Algo deu errado salvando o animal, contate parentoni.arthur@gmail.com ou +55 31 9 9904-9188")
           } else {
-            editCachedAnimal(response.value)
-            
+            invalidateCaches() //Force sync with backend DB 
             setSearchParams({success: 'true'})
           }
 
@@ -194,9 +194,6 @@ export const PartnerCreateAnimal = () => {
 
         }
 
-
-
-      
       
       setLoading(false)
     }
