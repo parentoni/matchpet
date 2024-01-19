@@ -216,8 +216,11 @@ export const PartnerCreateAnimal = () => {
 
         <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8 z-10 min-h-12">
           <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
-              <Menu />
-              <h1 className=" font-medium text-xl">Todos animais</h1>
+            <Menu />
+            {id === 'new' ?
+              <h1 className="font-medium text-xl ">Criar animal</h1>:
+              <h1 className="font-medium text-xl ">Editar animal</h1>
+            }
           </button>
         </header>
 
