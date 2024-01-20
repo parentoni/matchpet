@@ -1,17 +1,13 @@
-import React, { ElementType, useContext, useEffect, useState, useCallback } from "react";
-import { PageLayout } from "../../PageLayout";
-import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO";
+import {useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../utils/context/AuthContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
-import { CalendarDays, ChevronDown, Eye, Menu, MousePointerClick, Search } from "lucide-react";
+import {ChevronDown, Eye, Menu, MousePointerClick, Search } from "lucide-react";
 import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
-import { RadioGroup } from "@headlessui/react";
-import { Categories } from "../../utils/domain/Categories";
 import { AnimalGrid } from "../../elements/partner/new/PartnerAnimalGrid";
 import _ from 'lodash';
 import { User } from "../../utils/domain/User";
 import { PartnerFilterModal } from "./PartnerFilterModal";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { OutletContextType } from "../../elements/partner/new/PartnerBase";
 
 export function PartnerAnimalManage () {
@@ -41,8 +37,6 @@ export function PartnerAnimalManage () {
   }
 
   const [query, setQuery] = useState<string>('')
-
-
 
   const debouncedSearch = _.debounce(() => {
       
@@ -79,6 +73,8 @@ export function PartnerAnimalManage () {
   }, [])
 
   const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
+
+  const navigate = useNavigate()
   return (
     <>
       <div className="w-full flex flex-col h-screen overflow-y-auto relative">
@@ -150,13 +146,24 @@ export function PartnerAnimalManage () {
 
             {animals.length > 0?
             <>
+              
               <AnimalGrid />
               
             </>
-            : <div className="flex-1 flex flex-col justify-center items-center">
-              <h1 className="font-medium text-2xl text-primary">Nenhum animal encontrado</h1>
-              <p className="text-sm">Tente mudar os filtros ou pesquisar por outro nome</p>
-            </div>}
+              
+            : user?.in_adoption === 0 && user.completed_adoptions === 0?
+                <div className="flex-1 flex flex-col justify-center items-center">
+                  {/* first time partner user*/ }
+                  <h1 className="font-medium text-2xl text-primary">Nenhum animal cadastrado</h1>
+                  <p className="text-sm underline text-primary cursor-pointer" onClick={() => navigate('/partner/animal/new')}>Cadastre agora mesmo o seu primeiro animal</p>
+                </div>
+              
+              :
+                <div className="flex-1 flex flex-col justify-center items-center">
+                  <h1 className="font-medium text-2xl text-primary">Nenhum animal encontrado</h1>
+                  <p className="text-sm">Tente mudar os filtros ou pesquisar por outro nome</p>
+                </div>
+            }
           </section>
           </div>
 

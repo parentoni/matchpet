@@ -21,6 +21,7 @@ export interface ContextProps {
   setPage: (x: number) => void,
   editCachedAnimal: (animal: IAnimalDTO) => void,
   useListenForQuerySearchParams: () => void,
+  invalidateCaches: () => void,
   persistentCounter: number | undefined,
   loading: boolean,
   animals: IAnimalDTO[],
@@ -40,6 +41,7 @@ export const FiltersContext = createContext<ContextProps>({
   setPage: () => {},
   editCachedAnimal: () => {},
   useListenForQuerySearchParams: () => {},
+  invalidateCaches: () => {},
   persistentCounter: undefined,
   loading: true,
   animals: [],
@@ -187,6 +189,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
     }, [page])
   }
 
+
   const editCachedAnimal = (animal: IAnimalDTO) => {
     for (const key of Object.keys(animalCache.current)) {
       const cachedAnimals = animalCache.current[key]
@@ -196,6 +199,13 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
       setAnimals(cachedAnimals)
 
     }
+  }
+
+  /**
+   * @description Cache invalidation to force sync with backend.
+   * */
+  const invalidateCaches = () => {
+    animalCache.current = {}
   }
 
   const useListenForQuerySearchParams = () => {
@@ -218,7 +228,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   }
 
   return (
-    <FiltersContext.Provider value={{useListenForQuerySearchParams ,animalsLoading,editCachedAnimal,useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters}}>
+    <FiltersContext.Provider value={{useListenForQuerySearchParams ,animalsLoading,editCachedAnimal,useCreateVisualFilter, dispatch, useCreateVisualCounter, useCountVisual, persistentCounter, loading, animals, page, setPage, filters, useCreateVisualCoordinates, useSetAnimalGetter, countFilters, invalidateCaches}}>
       {children}
     </FiltersContext.Provider>
   )

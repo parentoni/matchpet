@@ -28,6 +28,7 @@ export const PartnerCreateAnimal = () => {
 
   const {isOpen, setIsOpen} = useOutletContext() as OutletContextType
   const {id} = useParams() as {id: string}
+  const {invalidateCaches} = useContext(FiltersContext)
 
   const [
     [animalInput, setAnimalInput],
@@ -35,7 +36,6 @@ export const PartnerCreateAnimal = () => {
     [images, setImages]
   ] = useGetAnimalInputs(id)
 
-  console.log(images)
 
   const [animalInputErrors, setAnimalInputErrors] = useState<AnimalInputErrors>({ name: false, description: false, status: false, specie_id: false, whatsapp: false, email: false, sex:false});
   const [animalInputTraitsErrors, setAnimalInputTraitsErrors] = useState<AnimalInputTraitsErrors>({});
@@ -173,6 +173,7 @@ export const PartnerCreateAnimal = () => {
           if (response.isLeft()) {
             alert("Algo deu errado salvando o animal, contate parentoni.arthur@gmail.com ou +55 31 9 9904-9188")
           } else {
+            invalidateCaches() //Force sync with backend DB 
             setSearchParams({success: 'true'})
           }
 
@@ -185,8 +186,7 @@ export const PartnerCreateAnimal = () => {
           if (response.isLeft()) {
             alert("Algo deu errado salvando o animal, contate parentoni.arthur@gmail.com ou +55 31 9 9904-9188")
           } else {
-            editCachedAnimal(response.value)
-            
+            invalidateCaches() //Force sync with backend DB 
             setSearchParams({success: 'true'})
           }
 
@@ -194,9 +194,6 @@ export const PartnerCreateAnimal = () => {
 
         }
 
-
-
-      
       
       setLoading(false)
     }
@@ -219,8 +216,11 @@ export const PartnerCreateAnimal = () => {
 
         <header className="w-full sticky bg-white h-12 border-b flex items-center top-0 px-8 z-10 min-h-12">
           <button onClick={() => setIsOpen(true)} className="flex md:hidden h-12 gap-4 items-center ">
-              <Menu />
-              <h1 className=" font-medium text-xl">Todos animais</h1>
+            <Menu />
+            {id === 'new' ?
+              <h1 className="font-medium text-xl ">Criar animal</h1>:
+              <h1 className="font-medium text-xl ">Editar animal</h1>
+            }
           </button>
         </header>
 

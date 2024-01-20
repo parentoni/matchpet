@@ -4,7 +4,7 @@ import catLogo from '../../assets/logo-reduced.svg'
 import { useGetStats } from "../../elements/hero/useGetStats"
 import { useGetActiveUsers } from "../../elements/hero/useGetActiveUsers"
 import { useNavigate } from "react-router-dom"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { AuthContext } from "../../utils/context/AuthContext"
 export function HeroPage  ()  {
@@ -17,6 +17,14 @@ export function HeroPage  ()  {
   const navigate = useNavigate()
 
   const {preferredSpecie} = useContext(SpeciesContext)
+
+  //Listen for partner users
+  useEffect(() => {
+    if (user) {
+      navigate("/partner")
+    }
+  },[user])
+  
   return (
     <div>
       <div className="w-full border-b "></div>
