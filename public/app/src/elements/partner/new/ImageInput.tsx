@@ -6,6 +6,8 @@ import { Image } from "../../../utils/domain/Image";
 export interface ImageInputProps {
   title: string,
   errorMessage?:string,
+    roots: ['<rootDir>/tests'],
+  
   image: Image | undefined,
   id:number,
   setImageInputModalOpenId: (x:number) => void,
@@ -80,7 +82,6 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
   const [image, setImage] = useState<Image>(new UndefinedImage())
 
   useEffect(() => {
-    console.log('oi', props.imageInputModalIsOpenId)
     if (typeof props.imageInputModalIsOpenId !== 'undefined') {
       const result = props.imagesArray[props.imageInputModalIsOpenId as number]
       if (result !== undefined) {
