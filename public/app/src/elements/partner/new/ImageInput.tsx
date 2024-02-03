@@ -1,6 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ImageFile } from "../../../utils/domain/Image";
+import { ImageFile, IMAGE_TYPES, UndefinedImage } from "../../../utils/domain/Image";
 import { Image } from "../../../utils/domain/Image";
 
 export interface ImageInputProps {
@@ -17,7 +17,7 @@ export const ImageInput = (props: ImageInputProps) => {
   return(
     <div className="flex flex-col w-full">
       <label className={`mb-2 text-sm  ${props.errorMessage ? "text-error" : ""}`}>{props.title}  {props.obrigatory? <span className="text-primary">*</span>:''}</label>
-      {props.image?
+      {props.image && props.image.type !== IMAGE_TYPES.UNDEFINED?
       <>
         <div className="w-full flex ">
           <div className={`rounded flex-1 rounded-r-none   bg-neutral-50 h-8 border-r-0  text-xs border p-2 ${props.errorMessage ? "border-error  placeholder-error" : "border-gray-300"}`}>
@@ -63,8 +63,6 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
     //Check if modal is open
     if (typeof props.imageInputModalIsOpenId !== 'undefined') {
 
-      console.log('oi', props.imageInputModalIsOpenId)
-      //Check for canceled image input
       if (!e.target.files || !e.target.files[0]) {
         return null
       }
@@ -77,6 +75,23 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
       props.setImagesArray(props.imagesArray.slice())
     }
   }
+
+  //Selected image, according to given image array id
+  const [image, setImage] = useState<Image>(new UndefinedImage())
+
+  useEffect(() => {
+    console.log('oi', props.imageInputModalIsOpenId)
+    if (typeof props.imageInputModalIsOpenId !== 'undefined') {
+      const result = props.imagesArray[props.imageInputModalIsOpenId as number]
+      if (result !== undefined) {
+        console.log(result)
+        setImage(result)
+      } else {
+        console.log('called')
+        setImage(new UndefinedImage())
+      }
+    }
+    }, [props.imagesArray, props.imageInputModalIsOpenId])
 
   return (
     <Transition appear show={props.isOpen} as={Fragment}>
@@ -105,9 +120,9 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
             >
               <Dialog.Panel className="w-full flex flex-col max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
                 <div className="p-8 ">
-                  {(props.imageInputModalIsOpenId !== undefined ? props.imagesArray[props.imageInputModalIsOpenId] !== undefined : false) ?
+                  {image.type !== IMAGE_TYPES.UNDEFINED ?
                     <div className="w-full h-60 border-2 border-primary  bg-opacity-10 bg-primary flex items-center justify-center rounded-lg bg-cover bg-center">
-                      <img alt="Imagem selecionada do animal" className="max-w-full max-h-full object-contain" src={props.imagesArray[props.imageInputModalIsOpenId as number].display()}></img>
+                      <img alt="Imagem selecionada do animal" className="max-w-full max-h-full object-contain" src={image.display()}></img>
                     </div>
                     :
                     <label htmlFor="IMAGE_INPUT_MODAL" className="w-full bg-primary bg-opacity-10 cursor-pointer  border-primary border-dashed border-2 rounded-lg h-60 flex items-center justify-center">
