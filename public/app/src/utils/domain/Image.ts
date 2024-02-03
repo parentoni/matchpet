@@ -3,7 +3,8 @@ import { left, right } from "../shared/Result";
 
 export enum IMAGE_TYPES {
   HOSTED = "HOSTED",
-  FILE = 'FILE'
+  FILE = 'FILE',
+  UNDEFINED = "UNDEFINED"
 }
 
 export abstract class Image {
@@ -70,4 +71,31 @@ export class HostedImage extends Image {
     return this.name
   }
 
+}
+
+
+/**
+ * 
+ * @classdesc Defines a missing image. 
+ *
+ * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
+ */
+export class UndefinedImage extends Image {
+    type = IMAGE_TYPES.UNDEFINED;
+
+    /**
+     * takes no arguments, since image is undefined
+     * */
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+    constructor() {
+      super() 
+    }
+
+    display(): string {
+      return ''
+    }
+    getName(): string {
+      return ''
+    }
+  
 }

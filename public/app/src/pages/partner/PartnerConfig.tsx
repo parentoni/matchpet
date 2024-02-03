@@ -8,7 +8,7 @@ import { OutletContextType } from "../../elements/partner/new/PartnerBase"
 import { AnimalInputValue } from "../../elements/partner/new/PartnerCreateAnimalFormTypes"
 import { TextArea } from "../../elements/partner/input/TextArea"
 import { ImageInput, ImageInputModal } from "../../elements/partner/new/ImageInput"
-import { HostedImage, IMAGE_TYPES, Image } from "../../utils/domain/Image"
+import { HostedImage, IMAGE_TYPES, Image, UndefinedImage } from "../../utils/domain/Image"
 
 export type ConfigInputErrors = {
   [x in keyof ConfigsInput]: boolean
@@ -55,13 +55,6 @@ export const PartnerConfig = () => {
     }
 
 
-    if (!image) {
-      err++
-      setImageError(true)
-    } else {
-      setImageError(false)
-
-    }
     return err
   } 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,25 +63,23 @@ export const PartnerConfig = () => {
     if (err === 0 && !loading) {
       setLoading(true) 
 
-      let persistentImage: string| undefined = undefined
+      let persistentImage: string = ''
       if (image) {
         if (image.type === IMAGE_TYPES.FILE) {
           const response = await Image.upload(image.data as File, getToken())
           if (response.isRight()) {
             persistentImage = response.value
           }
-        } else {
+        } else if (image.type === IMAGE_TYPES.HOSTED){
           persistentImage = image.data as string
-        }
+        } 
       }
 
       const uploadDTO: Partial<ISignInUserProps> = {
         display_name: configsInput.display_name.value,
       }
 
-      if (persistentImage) {
-        uploadDTO.image = persistentImage
-      }
+      uploadDTO.image = persistentImage
 
       if (configsInput.description.value) {
         uploadDTO.description = configsInput.description.value
@@ -152,7 +143,6 @@ export const PartnerConfig = () => {
               id={0} 
               setImageInputModalOpenId={setImageInputModalOpenId} 
               setIsOpen={setImageInputModalOpen}
-              obrigatory
               errorMessage={imageError ? "A imagem é obrigatória" : undefined}
               />
 
@@ -198,6 +188,8 @@ export const  useGetConfigvariables = (): [[ConfigsInput, (x: ConfigsInput) => v
 
       if (user.image) {
         setImage(new HostedImage(user.image))
+      } else {
+        setImage(new UndefinedImage())
       }
     }
   }, [user])
