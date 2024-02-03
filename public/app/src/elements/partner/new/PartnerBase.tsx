@@ -46,6 +46,10 @@ export function ManagerSidebar () {
     }
   }, [isOpen])
 
+  useEffect(() => {
+    setIsOpen(false)
+  }, [route])
+
   return(
     <div className='flex w-screen h-screen flex-shrink-0 flex-grow-0 overflow-x-hidden'>
       <aside ref={asideRef} className={`md:static md:transition-none transition-all duration-150 ease-linear absolute w-60  h-screen bg-neutral-50 border-r flex flex-col -translate-x-full md:translate-x-0 ${isOpen? "translate-x-0 ": ""}`}>
