@@ -1,6 +1,6 @@
 import { MoveLeft } from "lucide-react"
 import { PageLayout } from "../../PageLayout"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation} from "react-router-dom"
 
 import reducedLogo from '../../assets/logo-reduced.svg'
 import logo from '../../assets/logo.svg'
@@ -15,6 +15,7 @@ export const ForgotPassword = () => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const forgotPassword = async () => {
     setLoading(true)
@@ -40,7 +41,7 @@ export const ForgotPassword = () => {
     <div className="flex  justify-center ">
       <div className=" max-w-lg w-full bg-white lg:mt-24">
         <div className="flex justify-between mb-3">
-          <button className="" onClick={() => navigate(-1)}>
+          <button className="" onClick={() => location.key !== 'default'? navigate(-1): navigate('/auth/login')}>
             <MoveLeft />
           </button>
           <button onClick={() => navigate('/')} className="lg:hidden">
