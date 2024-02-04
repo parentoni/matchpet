@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PageLayout } from "../../PageLayout";
 import { MoveLeft } from "lucide-react";
 import { useContext, useState } from "react";
@@ -6,7 +6,10 @@ import { Eye, EyeOff } from "lucide-react";
 import reducedLogo from '../../assets/logo-reduced.svg'
 import { AuthContext } from "../../utils/context/AuthContext";
 export function Login () {
+
   const navigate = useNavigate()
+  const location = useLocation()
+
   const {login, loading} = useContext(AuthContext)
   
   const [email, setEmail] = useState<string>('')
@@ -35,7 +38,7 @@ export function Login () {
         <div className=" max-w-lg w-full bg-white lg:mt-24">
 
           <div className="flex justify-between mb-3">
-            <button className="" onClick={() => navigate(-1)}>
+            <button className="" onClick={() => location.key !== 'default'? navigate(-1):navigate('/')}>
               <MoveLeft />
             </button>
             <button onClick={() => navigate('/')}>

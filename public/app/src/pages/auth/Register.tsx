@@ -1,6 +1,6 @@
 import { PropsWithChildren, useContext, useEffect, useRef, useState } from "react"
 import { PageLayout } from "../../PageLayout"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { Eye, EyeOff, Info, MoveLeft } from "lucide-react";
 import reducedLogo from '../../assets/logo-reduced.svg'
 import logo from '../../assets/logo.svg'
@@ -13,6 +13,7 @@ import { User } from "../../utils/domain/User";
 export function RegisterPage () {
 
   const navigate = useNavigate()
+  const routerLocation = useLocation()
 
   const [page, setPage] = useState<number>(0)
 
@@ -100,7 +101,7 @@ export function RegisterPage () {
         <div className=" max-w-lg w-full bg-white lg:mt-24">
 
         <div className="flex justify-between mb-3">
-          <button className="" onClick={() => page === 0?navigate(-1): setPage(page - 1)}>
+          <button className="" onClick={() => page === 0?(routerLocation.key !== 'default'?navigate(-1): navigate('/')) : setPage(page - 1)}>
             <MoveLeft />
           </button>
           <button onClick={() => navigate('/')} className="lg:hidden">

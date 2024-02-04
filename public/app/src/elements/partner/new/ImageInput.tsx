@@ -6,8 +6,6 @@ import { Image } from "../../../utils/domain/Image";
 export interface ImageInputProps {
   title: string,
   errorMessage?:string,
-    roots: ['<rootDir>/tests'],
-  
   image: Image | undefined,
   id:number,
   setImageInputModalOpenId: (x:number) => void,
