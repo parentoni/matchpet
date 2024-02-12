@@ -1,0 +1,19 @@
+name: check-unused-dependencies
+on: [pull]
+
+jobs:
+  depcheck-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: packages check
+      working-dir: ./backend
+      uses: Amr-Reda/npm-unused-packages-checker@v1
+
+  depcheck-app:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: packages check
+      working-dir: ./public/app
+      uses: Amr-Reda/npm-unused-packages-checker@v1
