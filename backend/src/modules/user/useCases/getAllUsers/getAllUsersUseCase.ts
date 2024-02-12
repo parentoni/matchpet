@@ -28,6 +28,7 @@ export class GetAllUsersUseCase implements UseCase<GetAllUsersDTO, GetAllUsersRe
 
     const mapperResult = await UserMap.toPersistentBulk(result.value)
     return right(mapperResult)
+    
 
   }
 

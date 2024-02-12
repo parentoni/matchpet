@@ -49,7 +49,7 @@ export class Middleware {
 
     // if not token return missing token repsonse (401)
     if (guardResult.isLeft()) {
-      return res.status(401).send(guardResult.value.prettyError)
+      return res.status(401).send(guardResult.value.prettyError())
     }
 
     //decode jwt
@@ -57,7 +57,7 @@ export class Middleware {
 
     //If error decoding, send error forbidden
     if (decoded.isLeft()){
-      return res.status(403).send(decoded.value.prettyError)
+      return res.status(403).send(decoded.value.prettyError())
     }
 
     //If not admin
