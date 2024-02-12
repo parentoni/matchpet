@@ -97,7 +97,7 @@ const routes = [
     element: <RegisterPage />
   },
   {
-    path: 'auth/register/success',
+    path: '/auth/register/success',
     element: <Thanks />
   },
   {

@@ -41,8 +41,8 @@ export const Verify = () => {
               <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner/config')}>
                 Adicionar imagem e descrição
               </button>
-              <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner')}>
-                Gerenciar animais
+              <button className="w-60 h-10 rounded text-white bg-primary flex items-center justify-center " onClick={() => navigate('/partner?first=true')}>
+                Cadastrar animais
               </button>
             </div>
         </div>

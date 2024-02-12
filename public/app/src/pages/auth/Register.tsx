@@ -10,6 +10,7 @@ import { Form} from "../../elements/auth/register/Form";
 import { firstPageSubmit } from "../../elements/auth/register/functions/firstPageSubmit";
 import { secondPageSubmit } from "../../elements/auth/register/functions/secondPageSubmit";
 import { User } from "../../utils/domain/User";
+
 export function RegisterPage () {
 
   const navigate = useNavigate()

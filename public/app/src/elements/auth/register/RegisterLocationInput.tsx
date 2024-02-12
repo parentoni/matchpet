@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, useMap, useMapEvent } from "react-leaflet"
 import 'leaflet/dist/leaflet.css';
 import { MapPinned } from "lucide-react";
 import { useEffect, useState } from "react";
-import L, { Circle, Marker, Polygon, circle, icon, latLng, marker } from "leaflet";
+import { Marker, icon,  marker } from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png"
 
 export interface RegisterLocationInputProps {
@@ -26,7 +26,7 @@ export function RegisterLocationInput (props:RegisterLocationInputProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
     </MapContainer>
-    <span className="text-sm mt-1">Não se preocupe, <b>não divulgaremos a sua localização exata</b>. Contudo, caso se sinta mais confortável, clique apenas no bairro em que você está localizado.</span>
+    <span className="text-sm mt-1">Não se preocupe, <b>não divulgaremos a sua localização exata</b>. Contudo, caso se sinta mais confortável, selecione apenas o bairro em que você está localizado.</span>
     {props.errorMessage && <span className="text-sm mt-1 text-error">{props.errorMessage}</span>}
   </div>
     )

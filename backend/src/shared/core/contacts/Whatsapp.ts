@@ -28,6 +28,6 @@ export class WhatsApp extends Contact {
       return left(validateResult.value);
     }
 
-    return right(new WhatsApp({ contactValue: p.contactValue }));
+    return right(new WhatsApp({ contactValue: validateResult.value }));
   }
 }

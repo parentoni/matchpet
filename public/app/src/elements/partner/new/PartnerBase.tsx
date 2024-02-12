@@ -64,7 +64,7 @@ export function ManagerSidebar () {
 
           <button onClick={() => {navigator.clipboard.writeText(`Veja todos os meus animais no matchpet: https://www.matchpet.org/p/${user?.username}`).then(() => alert("Link da página de seu projeto copiado para a sua área de transferência."))}} className={`h-8 w-full  flex items-center gap-3 px-3 rounded ${route === null?"bg-primary bg-opacity-10":"hover:bg-opacity-5 hover:bg-black"}`}>
             <Link2 className={`w-4 h-4 text-neutral-800 ${route === null? "text-primary": ""}`}/>
-            <p className={`text-sm text-neutral-800 ${route === null? "text-primary": ""}`}>Link do seu projeto</p>
+            <p className={`text-sm text-neutral-800 ${route === null? "text-primary": ""}`}>Link meus animais</p>
             <div className='flex-1 flex justify-end'>
               {/* <ChevronRight className={`w-4 h-4 text-neutral-800 ${route === '/partner/help'? "text-primary": ""}`}/> */}
             </div>
