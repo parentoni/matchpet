@@ -8,6 +8,7 @@
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "pretty": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
+    "lint": "tsc -noEmit",
     "start-production": "pm2 start pm2.json"
   },
   "repository": {
