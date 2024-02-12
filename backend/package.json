@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon",
-    "test": "jest --config jest.config.js --runInBand --no-cache --detectOpenHandles",
+    "test": "jest --config jest.config.ts --runInBand --no-cache --detectOpenHandles",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "pretty": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",

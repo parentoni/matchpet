@@ -3,6 +3,7 @@
 *.env.development
 *.env.production
 *.env
+*coverage
 .DS_Store
 
 /scripts/tmp/*
