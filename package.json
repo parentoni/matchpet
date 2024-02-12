@@ -10,7 +10,7 @@
     "start-dev": "concurrently \"npm run start-dev-backend\" \"npm run start-dev-frontend\" ",
     "start-dev-backend": "cd backend && npm run start-dev",
     "start-dev-frontend": "cd public/app && npm run start",
-    "start-production-backend": ""
+    "deploy": "concurrently \"./bin/deploy_backend.sh\" \"./bin/deploy_frontend.sh\""
   },
   "keywords": [],
   "author": "",
