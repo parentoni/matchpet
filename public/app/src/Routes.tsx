@@ -23,6 +23,7 @@ import { UNSAFE_RouteContext } from 'react-router-dom'
 import { useContext } from "react";
 import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
 import { PartnerHelp } from "./pages/partner/PartnerHelp";
+import { Captive } from "./pages/auth/Captive";
 
 export function usePathPattern() {
   let lastRouteContext = useContext(UNSAFE_RouteContext)
@@ -107,6 +108,10 @@ const routes = [
   {
     path :'/auth/password',
     element: <ForgotPassword />
+  },
+  {
+    path: '/auth/captive',
+    element: <Captive />
   },
   {
     path :'/auth/password/success',
