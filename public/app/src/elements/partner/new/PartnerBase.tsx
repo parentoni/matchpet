@@ -9,7 +9,7 @@ export type SidebarType = Record<string, {icon: React.ElementType, name: string,
 export const pages: SidebarType = {
   "ANIMAIS": [
     {icon: Cat, name: "Todos animais", route: '/partner'},
-    {icon: Plus, name: "Adcionar animal", route: '/partner/animal/:id', goTo: '/partner/animal/new'}
+    {icon: Plus, name: "Adicionar animal", route: '/partner/animal/:id', goTo: '/partner/animal/new'}
   ]
 }
 
