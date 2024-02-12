@@ -154,4 +154,28 @@ export class UserMap {
 
     return userA;
   }
+
+  /**
+   * @param {User[]} domain 
+   * Transform an array of domain users into a array of persistent ones
+   * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
+   */
+  static async toPersistentBulk(domain: User[]): Promise<IUserPersistant[]> {
+    //Defines initial array
+    const userPersistent: IUserPersistant[] = []
+    if (domain.length > 0) {
+      for (const user of domain) {
+
+        //call already defined toPersistant
+        const result = await this.toPersistant(user)
+
+        //only if is right push
+        if (result.isRight()) {
+          userPersistent.push(result.value)
+        }
+      }
+    }
+
+    return userPersistent
+  }
 }

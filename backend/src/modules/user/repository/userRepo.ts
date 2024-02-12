@@ -4,7 +4,6 @@ import { User } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { UserMap } from "../mappers/userMap";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
-import { GenericError, IBaseError } from "../../../shared/core/Response/Error";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { Either } from "../../../shared/core/Result";
 import { IUserRepo } from "./IUserRepo";
@@ -121,4 +120,25 @@ export class UserRepo implements IUserRepo {
       return left(CommonUseCaseResult.UnexpectedError.create(e));
     }
   }
+
+  /**
+   * get all users, with support for pagination
+   * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
+   */
+  public async allUsers(props: {skip?:number, size?:number}): Promise<Either<CommonUseCaseResult.UnexpectedError, User[]>> {
+
+    //Try catch to handle mongo raising errors
+    try {
+      
+      //Get all active users, considering  skip = 0, and size = 50 as defaults
+      const result = await this.models.user.find().skip(props.skip || 0).limit(props.size || 50)
+
+      //transform persistent user into domain user
+      const usersArray = await UserMap.toDomainBulk(result)
+      return right(usersArray)
+    } catch (e) {
+      return left(CommonUseCaseResult.UnexpectedError.create(e))
+    }
+  }
+
 }

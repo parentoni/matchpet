@@ -14,4 +14,6 @@ export interface IUserRepo {
   create: ({ dto }: { dto: User }) => Promise<Either<CommonUseCaseResult.UnexpectedError, string>>;
   getActiveUsers: (props: { limit?: number; skip?: number }) => RepositoryBaseResult<User[]>;
   aggregateStats: () => Promise<Either<CommonUseCaseResult.UnexpectedError, AppStatsResponseSuccess>>;
+  allUsers: ({skip, size}: {skip?:number, size?:number}) => Promise<Either<CommonUseCaseResult.UnexpectedError, User[]>>;
+
 }

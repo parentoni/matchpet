@@ -5,7 +5,7 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 export enum USER_ROLE {
   common = 0,
   client = 1,
-  admin = 2
+  admin = 10
 }
 
 export interface IUserRole {
