@@ -1,24 +1,19 @@
-import mongoose from "mongoose";
 import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
 import { User } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { UserMap } from "../mappers/userMap";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
-import { IUserPersistant } from "../../../shared/infra/database/models/User";
+import { IUserPersistant, UserModel } from "../../../shared/infra/database/models/User";
 import { Either } from "../../../shared/core/Result";
 import { IUserRepo } from "./IUserRepo";
 import { AppStatsResponseSuccess } from "../../app/useCases/stats/AppStatsResponse";
-export class UserRepo implements IUserRepo {
-  private models: mongoose.Models;
 
-  constructor(models: mongoose.Models) {
-    this.models = models;
-  }
+export class UserRepo implements IUserRepo {
+
 
   public async exists({ filter }: { filter: Partial<IUserPersistant> }): RepositoryBaseResult<boolean> {
-    const UserM = this.models.user;
     try {
-      const testUser = await UserM.findOne(filter);
+      const testUser = await UserModel.findOne(filter);
       if (testUser) {
         return right(!!testUser === true);
       } else {
@@ -36,9 +31,8 @@ export class UserRepo implements IUserRepo {
   }
 
   public async find_one({ filter }: { filter: Partial<IUserPersistant> }): RepositoryBaseResult<User> {
-    const UserM = this.models.user;
     try {
-      const testUser = await UserM.findOne(filter);
+      const testUser = await UserModel.findOne(filter);
       if (!testUser) {
         return left(
           CommonUseCaseResult.InvalidValue.create({
@@ -62,28 +56,26 @@ export class UserRepo implements IUserRepo {
 
   //TODO PARAMETERS IN OBJECT
   public async create({ dto }: { dto: User }): Promise<Either<CommonUseCaseResult.UnexpectedError, string>> {
-    const UserM = this.models.user;
     const userInPersistanceFormat = await UserMap.toPersistant(dto);
 
     if (userInPersistanceFormat.isLeft()) {
       return left(userInPersistanceFormat.value);
     }
-    const exists = await UserM.exists({ _id: dto.id.toValue() });
+    const exists = await UserModel.exists({ _id: dto.id.toValue() });
 
     if (!!exists) {
-      const resp = await UserM.findByIdAndUpdate(dto.id.toValue(), userInPersistanceFormat.value);
+      const resp = await UserModel.findByIdAndUpdate(dto.id.toValue(), userInPersistanceFormat.value);
       return right(dto.id.toValue());
     }
 
-    const created = await UserM.create(userInPersistanceFormat.value);
+    const created = await UserModel.create(userInPersistanceFormat.value);
     return right(created._id);
   }
 
   public async getActiveUsers(props: { limit?: number; skip?: number }): RepositoryBaseResult<User[]> {
-    const UserM = this.models.user;
     const userArray: User[] = [];
     try {
-      const result = await UserM.find({
+      const result = await UserModel.find({
         in_adoption: { $gt: 0 },
         verified: true
       }).sort({ in_adoption: -1 });
@@ -96,8 +88,7 @@ export class UserRepo implements IUserRepo {
 
   public async aggregateStats(): Promise<Either<CommonUseCaseResult.UnexpectedError, AppStatsResponseSuccess>> {
     try {
-      const UserM = this.models.user;
-      const result = await UserM.aggregate([
+      const result = await UserModel.aggregate([
         { $match: {} },
         {
           $group: {
@@ -131,7 +122,7 @@ export class UserRepo implements IUserRepo {
     try {
       
       //Get all active users, considering  skip = 0, and size = 50 as defaults
-      const result = await this.models.user.find().skip(props.skip || 0).limit(props.size || 50)
+      const result = await UserModel.find().skip(props.skip || 0).limit(props.size || 50)
 
       //transform persistent user into domain user
       const usersArray = await UserMap.toDomainBulk(result)
