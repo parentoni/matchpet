@@ -2,7 +2,7 @@
   "apps": [
       {
           "name": "api",
-          "script": "./dist/index.js",
+          "script": "./dist/src/index.js",
           "merge_logs": true,
           "max_memory_restart": "200M",
           "env": {
