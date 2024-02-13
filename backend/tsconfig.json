@@ -8,5 +8,6 @@
     "strict": true,                                      /* Enable all strict type-checking options. */
     "noUncheckedIndexedAccess": true,
     "outDir": "dist"
-  }
+  },
+  "include":["src"]
 }
