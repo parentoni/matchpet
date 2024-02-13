@@ -2,7 +2,6 @@ import { Request } from "express";
 import { BaseController } from "../../../../../shared/infra/http/models/BaseController";
 import { CreateAnimalComplaintUseCase } from "./createAnimalComplaintUseCase";
 import { CreateAnimalComplaintDTO } from "./createAnimalComplaintDTO";
-import { left } from "../../../../../shared/core/Result";
 
 export class CreateAnimalComplaintController extends BaseController<Request> {
   constructor(useCase: CreateAnimalComplaintUseCase) {
@@ -12,7 +11,7 @@ export class CreateAnimalComplaintController extends BaseController<Request> {
       const { id } = req.params;
       const response = await useCase.execute({
         ...body,
-        animal_id: id
+        animal_id: id || ''
       });
 
       if (response.isLeft()) {

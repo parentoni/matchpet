@@ -35,11 +35,11 @@ export namespace Location {
     }
 
     get latitude(): number {
-      return this.props.coordinates[0];
+      return this.props.coordinates[0] as number;
     }
 
     get longitude(): number {
-      return this.props.coordinates[1];
+      return this.props.coordinates[1] as number;
     }
 
     get coordinates(): GeoJSON.Position {

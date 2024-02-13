@@ -1,5 +1,5 @@
 import semver from "semver";
-import { Guard, GuardResponse } from "./Guard";
+import { Guard } from "./Guard";
 import { Either, left, right } from "./Result";
 import { GenericError, IBaseError } from "./Response/Error";
 import { CommonUseCaseResult } from "./Response/UseCaseError";
@@ -64,7 +64,7 @@ export class VersionControl<T> {
       if (highestVersion.isLeft()) {
         return left(highestVersion.value);
       } else {
-        return right(this.register[highestVersion.value]);
+        return right(this.register[highestVersion.value] as T);
       }
     }
   }
@@ -73,11 +73,11 @@ export class VersionControl<T> {
     const cachedVersionData = this.register[version];
 
     const check = Guard.againstNullOrUndefined(cachedVersionData, "Cached version data");
-    if (check.isRight()) {
-      return right(cachedVersionData);
+    if (check.isLeft()) {
+      return left(check.value);
     }
-
-    return left(check.value);
+    
+    return right(cachedVersionData as T) //Has already been checked
   }
 
   public set default(version: string) {
@@ -100,9 +100,11 @@ export class VersionControl<T> {
       let max: string = "0.0.0";
       for (let i = 0; i < Object.keys(this.register).length; i++) {
         const v = Object.keys(this.register)[i];
-
-        if (semver.gt(v, max)) {
-          max = v;
+        //version exists?
+        if (v){
+          if (semver.gt(v, max)) {
+            max = v;
+          }
         }
       }
 

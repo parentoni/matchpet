@@ -47,4 +47,5 @@ userSchema.post("save", (t) => {
   DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(t._id.toString()));
 });
 
-export default { name: "user", schema: userSchema };
+const UserModel = mongoose.model('users', userSchema)
+export { UserModel }
