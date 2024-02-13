@@ -49,12 +49,13 @@ export class UserEmail extends ValueObject<IUserEmailProps> {
 
   public mask(): string {
     const [name, domain] = this.value.split("@");
+
     const result = Guard.againstNullOrUndefinedBulk([
       { argumentName: "EMAIL_NAME", argument: name },
       { argumentName: "EMAIL_DOMAIN", argument: domain }
     ]);
 
-    if (result.isRight()) {
+    if (result.isRight() && name) {
       const maskedName = name.substring(0, 3) + "***" + name.substring(name.length - 3, name.length);
       return maskedName + "@" + domain;
     }
