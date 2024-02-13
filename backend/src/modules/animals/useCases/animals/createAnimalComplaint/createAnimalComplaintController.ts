@@ -12,7 +12,7 @@ export class CreateAnimalComplaintController extends BaseController<Request> {
       const { id } = req.params;
       const response = await useCase.execute({
         ...body,
-        animal_id: id
+        animal_id: id || ''
       });
 
       if (response.isLeft()) {
