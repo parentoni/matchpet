@@ -14,7 +14,7 @@ export function AnimalContactButton (props: AnimalContactProps) {
   const domainAnimal = Animal.create(props.animal)
 
   const sex = domainAnimal.getSex()
-  const messageText = `${`Olá, vi ${sex === SEX.MALE?"o": "a"} *${props.animal.name}* no aplicativo *MATCHPET* e gostaria de adota-l${sex === SEX.MALE?"o":"a"}.`}`
+  const messageText = `${`Olá, vi ${sex === SEX.MALE?"o": "a"} *${props.animal.name}* (https://www.matchpet.org/animals/${props.animal._id}) no aplicativo *MATCHPET* e gostaria de adota-l${sex === SEX.MALE?"o":"a"}.`}`
 
   return(
     <>
