@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useContext, useEffect, useState } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { Animal } from "../../utils/domain/Animal"
-import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
+import { ANIMAL_STATUS, IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
 import { AnimalImage } from "../../elements/SpecificAnimal/AnimalImage"
 import { CategoriesContext } from "../../utils/context/CategoriesContext"
 import { Specie } from "../../utils/domain/Specie"
@@ -35,7 +35,12 @@ export const SpecificAnimal = () => {
       if (response.isLeft()) {
         alert("Não foi posível encontrar o animal.")
       } else {
-        setSelectedAnimalDTO(response.value.props)
+        //Check if animal is available
+        if (response.value.props.status === ANIMAL_STATUS.PENDING) {
+          setSelectedAnimalDTO(response.value.props)
+        } else {
+          navigate('/animals')
+        }
       }
     })
 

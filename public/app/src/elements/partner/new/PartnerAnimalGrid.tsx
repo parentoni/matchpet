@@ -167,10 +167,11 @@ const ActionsModal = (props: ActionsModalProps) => {
                       <Pen className=" w-4 h-4 fill-neutral-300"/>
                       <span className='text-sm'>Ver e editar detalhes do animal</span>
                     </button>
+                    {props.animal.status === ANIMAL_STATUS.PENDING &&
                     <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center' onClick={() => navigate(`/animals/${props.animal._id}`)}>
                       <File className=" w-4 h-4 fill-neutral-300"/>
                       <span className='text-sm'>Ver página do animal (recomendado apenas em celulares)</span>
-                    </button>
+                    </button> }
                     {canBeModifiedAt < new Date() &&
                       <button className='flex rounded w-full px-4 hover:bg-black hover:bg-opacity-5 gap-2 h-8 items-center' onClick={renewAnimal}>
                         <RefreshCcw className=" w-4 h-4 "/>
