@@ -3,6 +3,7 @@ import { FullPageModal } from "../FullPageModal"
 import naoCompre from '../../assets/nao_compre.svg'
 import { IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
 import { Animal, SEX } from "../../utils/domain/Animal"
+import { TrackGoogleAnalyticsEvent } from "../../utils/shared/TrackGoogleAnalyticsEvent"
 
 export type AnimalContactProps = {
   animal: IAnimalDTO
@@ -15,7 +16,16 @@ export function AnimalContactButton (props: AnimalContactProps) {
 
   const sex = domainAnimal.getSex()
   const messageText = `${`Olá, vi ${sex === SEX.MALE?"o": "a"} *${props.animal.name}* (https://www.matchpet.org/animals/${props.animal._id}) no aplicativo *MATCHPET* e gostaria de adota-l${sex === SEX.MALE?"o":"a"}.`}`
-
+  
+  // Function to open contact modal + log contact attempt
+  const openContactModal = () => {
+    setIsOpen(!isOpen)
+    //GA4
+    TrackGoogleAnalyticsEvent("animal_contact",
+                              "Animal contact button clicked",
+                              {animal_id: props.animal}
+    )
+  }
   return(
     <>
       {/* <TransitionedModal isOpen={isOpen} setIsOpen={setIsOpen} panelStyle="w-full max-w-md transform overflow-hidden rounded-[10px] brute-border bg-white p-4 text-left align-middle shadow-xl transition-all">
@@ -45,7 +55,7 @@ export function AnimalContactButton (props: AnimalContactProps) {
       </FullPageModal>
         
       <div className="px-8 pt-2">
-        <button className="w-full h-12 text-white rounded  bg-primary flex justify-center items-center cursor-pointer shadow" onClick={() => setIsOpen(!isOpen)}>
+        <button className="w-full h-12 text-white rounded  bg-primary flex justify-center items-center cursor-pointer shadow" onClick={openContactModal}>
           CONTATO
         </button>
       </div>
@@ -54,9 +64,16 @@ export function AnimalContactButton (props: AnimalContactProps) {
 }
 
 export function ContactButton ({text,  link, color, textColor}: {text:string,  link: string, color:string, textColor: string}) {
+  const linkToContact = () => {
+    //ga
+    TrackGoogleAnalyticsEvent("animal_contact", `Animal ${text} clicked`)
+
+    //Open link
+    window.location.href = link
+  }
   return (
-    <a className="w-full h-12  mt-4 brute-border flex items-center px-3 gap-3 justify-center" href={link} style={{background: color}}>
+    <button onClick={linkToContact} className="w-full h-12  mt-4 brute-border flex items-center px-3 gap-3 justify-center" style={{background: color}}>
       <h3 className="" style={{color: textColor}}>{text}</h3>
-    </a>
+    </button>
   )
 }
