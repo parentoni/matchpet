@@ -3,8 +3,6 @@ import { Request, Response } from "express";
 import { VersionControl, VersionControlRegister } from "../../../core/VersionControl";
 import { CommonUseCaseResult } from "../../../core/Response/UseCaseError";
 import { BaseError, GenericError, IBaseError } from "../../../core/Response/Error";
-import { AuthenticatedRequest } from "./AutheticatedRequest";
-import { Either } from "../../../core/Result";
 
 export type BaseControllerRequest<T extends Request> = (req: T, res: Response) => Promise<void | any> | void | any;
 export type CatalogedErrors =

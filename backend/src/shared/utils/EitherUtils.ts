@@ -1,5 +1,5 @@
 import { success } from "../core/Response/Error";
-import { Either, Right, left, right } from "../core/Result";
+import { Either, left, right } from "../core/Result";
 
 export class EitherUtils {
   public static combine<L>(array: Either<L, any>[]): Either<L, success> {
