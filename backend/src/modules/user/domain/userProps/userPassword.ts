@@ -2,9 +2,7 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 import * as bcrypt from "bcrypt";
 import { Guard } from "../../../../shared/core/Guard";
 import { Either, left, right } from "../../../../shared/core/Result";
-import { GenericError, IBaseResponse, success } from "../../../../shared/core/Response/Error";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
-// import { Result } from "../../../shared/core/Result";
 export interface IUserPasswordProps {
   value: string;
   hashed?: boolean;

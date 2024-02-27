@@ -2,7 +2,6 @@ import { UserEmail } from "../../../modules/user/domain/userProps/userEmail";
 import { Contact, ContactProps } from "../Contact";
 import { Guard, GuardError } from "../Guard";
 import { Either, left, right } from "../Result";
-import { WhatsApp } from "./Whatsapp";
 
 export class Email extends Contact {
   protected CONTACT_TYPE = "EMAIL";

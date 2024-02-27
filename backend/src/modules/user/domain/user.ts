@@ -1,5 +1,4 @@
 import { Guard } from "../../../shared/core/Guard";
-import { BaseError, GenericError, IBaseError } from "../../../shared/core/Response/Error";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { UserEmail } from "./userProps/userEmail";
@@ -7,10 +6,8 @@ import { UserId } from "./userProps/userId";
 import { UserPassword } from "./userProps/userPassword";
 import { Either, left, right } from "../../../shared/core/Result";
 import { UserCreated } from "./events/userCreated";
-import { UserCpf } from "./userProps/userCpf";
 import { UserDisplayName } from "./userProps/userDisplayName";
 import { USER_ROLE, UserRole } from "./userProps/userRole";
-import { Timestamp } from "../../../shared/core/Timestamp";
 import { UserPhone } from "./userProps/userPhone";
 import { Location } from "../../../shared/core/Location";
 import { UserLastLogin } from "./userProps/userLastLogin";

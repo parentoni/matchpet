@@ -1,5 +1,4 @@
-import { Interface } from "readline";
-import { BaseError, IBaseError } from "./Error";
+import { BaseError } from "./Error";
 
 interface ICommonInvalidValueProps {
   errorMessage: string;
