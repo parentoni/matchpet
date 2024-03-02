@@ -12,11 +12,11 @@ export const App = () => {
 
   const [showNavigate, setShowNavigate] = useState(false)
   const navigate = useNavigate()
-
   return(
     <>
       <div className='min-h-screen'>
-        <div className="w-full flex justify-between px-8 py-6">
+        <div className="w-full max-w-7xl mx-auto flex justify-between px-8 py-6">
+          
           <img src={logo} width={70} alt='Matchpet logo' className=' cursor-pointer' onClick={() => navigate('/')}></img>
           <button onClick={() => setShowNavigate(true)}>
             <img src={Hamburguer} alt='Menu' width={42}></img> 

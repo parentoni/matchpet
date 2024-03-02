@@ -24,6 +24,7 @@ import { useContext } from "react";
 import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
 import { PartnerHelp } from "./pages/partner/PartnerHelp";
 import { Captive } from "./pages/auth/Captive";
+import { About } from "./pages/hero/About";
 
 export function usePathPattern() {
   let lastRouteContext = useContext(UNSAFE_RouteContext)
@@ -54,6 +55,10 @@ const routes = [
       {
         path: '/i-want-to-donate', 
         element: <IWantDonate />
+      },
+      { 
+        path: '/about',
+        element: <About />
       }
     ]
   },
