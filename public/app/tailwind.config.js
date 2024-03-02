@@ -6,7 +6,11 @@ module.exports = {
     extend: {
       colors: {
         "primary": "#FA8128",
-        "loading": "#e5e7eb"
+        "loading": "#e5e7eb",
+        "text": "#202020",
+        "neutral": "#fafafa",
+        "border": "#e6e6e6",
+        "neutral-text": "#5f5f5f"
       },
     },
   },

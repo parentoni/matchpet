@@ -99,22 +99,6 @@ export function HeroPage  ()  {
         </div>
           
       </HeroPageSection>
-   
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-8 sm:mt-12 lg:mt-16 my-6">
-        <div className="mx-auto max-w-2xl lg:max-w-none">
-          <div className="w-full flex items-center">
-            <div className="flex-1">
-              <p className="text-xs font-medium">MatchPet, 2024</p>
-              <a  className='text-xs' href="mailto:parentoni.arthur@gmail.com">&lt;parentoni.arthur@gmail.com&gt;</a>
-            </div>
-            <div className="flex gap-5">
-              <a target="#" href="https://www.instagram.com/matchpetorg/"><Instagram size={28}/></a>
-              <a target="#" href="https://github.com/parentoni/matchpet"><GithubIcon  size={28}/></a>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
   )
 }
