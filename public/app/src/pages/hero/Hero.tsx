@@ -55,14 +55,17 @@ export function HeroPage  ()  {
             <h2 className="text-4xl font-medium text-white">Projetos parceiros</h2>
               <ul  className="mt-10 grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-4">
 
-                {users.length > 0? users.slice(0,6).map(u => {return(
-                  <button className="flex w-full h-full flex-row gap-2 line-clamp-1" onClick={() => navigate(`/p/${u.username}`)}>
-                    <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
-                    <p className="line-clamp-1 text-white">{u.display_name}</p>
-                </button>
-                )}):''}
+                {users.length > 0?
+                  users.slice(0,7).map(u => {
+                    return(
+                      <button className="flex w-full h-full flex-row gap-2 line-clamp-1" onClick={() => navigate(`/p/${u.username}`)}>
+                        <img src={catLogo} className="w-[35px]" alt="Logo matchpet"></img>
+                        <p className="line-clamp-1 text-white">{u.display_name}</p>
+                      </button>
+                    )}):''}
 
-                {[...Array(8-users.length).keys()].map(i => <p className="line-clamp-1 text-white">..........</p>)}
+                {users.length > 7?<p className="line-clamp-1 text-white"> E mais {users.length - 7}</p>:[...Array(Math.max(8-users.length, 0)).keys()].map(i => <p className="line-clamp-1 text-white">..........</p>)}
+
                 
                 
               </ul>
