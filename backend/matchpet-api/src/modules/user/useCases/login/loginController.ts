@@ -1,7 +1,6 @@
-import { Request } from "express";
+import { Request, Response} from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { LoginUseCase } from "./loginUseCase";
-import { Response } from "express-serve-static-core";
 import { LoginDTO } from "./loginDTO";
 
 export class LoginController extends BaseController<Request> {

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  matchpet-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/app/src
+      - ./nodemon.json:/app/nodemon.json
+    container_name: matchpet-api
+    expose:
+      - '8000'
+    ports:
+      - '8000:8000'
+    command: 'npm run start-dev'
+    networks:
+      - internal
+  
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - internal
+
+volumes:
+  mongodb_data:
+
+networks:
+  internal:
+    driver: bridge
