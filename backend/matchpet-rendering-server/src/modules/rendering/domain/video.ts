@@ -4,27 +4,27 @@ import { Either, left, right } from "../../../shared/core/result";
 import { Media, MediaProps, MediaPropsInput } from "./media";
 
 /**
- * Image class 
+ * Video class 
  *
- * Responsible for handling image files
+ * Responsible for handling video files
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
-export class Image extends Media {
+export class Video extends Media {
 
-  private static validate(image: Blob): Either<CommonUseCaseResult.InvalidValue, null> {
+  private static validate(video: Blob): Either<CommonUseCaseResult.InvalidValue, null> {
 
     // check if guard result is true
-    const guardResult = Guard.againstNullOrUndefined(image, 'image');
+    const guardResult = Guard.againstNullOrUndefined(video, 'video');
     if (guardResult.isLeft()) {
       return left(guardResult.value)
     }
 
     // check if blob has correct type
-    if (!image.type.includes('image')) {
+    if (!video.type.includes('video')) {
       return left(CommonUseCaseResult.InvalidValue.create({
-        errorMessage: "Invalid image type",
-        variable: "image",
-        location: "Image.validate",
+        errorMessage: "Invalid video type",
+        variable: "video",
+        location: "Video.validate",
       }))
     }
 
@@ -33,7 +33,7 @@ export class Image extends Media {
   }
 
 
-  public static create(props: MediaPropsInput): Either<CommonUseCaseResult.InvalidValue, Image> {
+  public static create(props: MediaPropsInput): Either<CommonUseCaseResult.InvalidValue, Video> {
     try {
       // check if validation result is true
       const validationResult = this.validate(props.raw);
@@ -41,13 +41,13 @@ export class Image extends Media {
         return left(validationResult.value)
       }
 
-      return right(new Image({raw: props.raw, type: props.raw.type}))
+      return right(new Video({raw: props.raw, type: props.raw.type}))
     } catch (err) {
       // return error if something goes wrong
       return left(CommonUseCaseResult.InvalidValue.create({
-        errorMessage: "An error occured while creating the image",
-        variable: "image",
-        location: "Image.create",
+        errorMessage: "An error occured while creating the video",
+        variable: "video",
+        location: "Video.create",
       }))
     }
   }
