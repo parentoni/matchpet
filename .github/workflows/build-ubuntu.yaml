@@ -2,17 +2,17 @@ name: build-ubuntu
 on: [push]
 
 jobs:
- build-backend:
+ build-api:
   runs-on: ubuntu-latest
   defaults:
     run:
-      working-directory: ./backend
+      working-directory: ./backend/matchpet-api
   steps:
       - uses: actions/checkout@v3
       - name: Load node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20.x
+          node-version: 21.x
       - run: npm ci
       - run: npm run lint
       - run: npm run test

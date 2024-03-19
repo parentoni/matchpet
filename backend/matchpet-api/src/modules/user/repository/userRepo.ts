@@ -1,4 +1,3 @@
-import { RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
 import { User } from "../domain/user";
 import { left, right } from "../../../shared/core/Result";
 import { UserMap } from "../mappers/userMap";
@@ -7,6 +6,7 @@ import { IUserPersistant, UserModel } from "../../../shared/infra/database/model
 import { Either } from "../../../shared/core/Result";
 import { IUserRepo } from "./IUserRepo";
 import { AppStatsResponseSuccess } from "../../app/useCases/stats/AppStatsResponse";
+import { RepositoryBaseResult } from "./IUserRepo";
 
 export class UserRepo implements IUserRepo {
 

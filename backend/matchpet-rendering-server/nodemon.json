@@ -1,0 +1,8 @@
+{
+  "watch": ["src"],
+  "ext": ".ts",
+  "ignore": [],
+  "execMap": {
+    "ts": "node --inspect=0.0.0.0:9292 --require ts-node/register"
+  }
+}

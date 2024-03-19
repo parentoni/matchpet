@@ -17,6 +17,23 @@ services:
     command: 'npm run start-dev'
     networks:
       - internal
+
+  matchpet-rendering-server:
+    build:
+      context: ./matchpet-rendering-server
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./matchpet-rendering-server/src:/app/src
+      - ./matchpet-rendering-server/nodemon.json:/app/nodemon.json
+    container_name: matchpet-rendering-server
+    expose:
+      - '8001'
+    ports:
+      - '8001:8001'
+    command: 'npm run start-dev'
+    networks:
+      - internal
   
   mongodb:
     image: mongo:4.4

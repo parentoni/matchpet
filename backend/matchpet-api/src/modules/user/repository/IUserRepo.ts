@@ -1,13 +1,10 @@
-import { IBaseRepository, RepositoryBaseResult } from "../../../shared/core/IBaseRepositoty";
-import { UserProps } from "../domain/user";
 import { User } from "../domain/user";
 import { Either } from "../../../shared/core/Result";
-import { GenericError } from "../../../shared/core/Response/Error";
-import { IBaseError } from "../../../shared/core/Response/Error";
 import { IUserPersistant } from "../../../shared/infra/database/models/User";
 import { AppStatsResponseSuccess } from "../../app/useCases/stats/AppStatsResponse";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 
+export type RepositoryBaseResult<T> = Promise<Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, T>>;
 export interface IUserRepo {
   exists: ({ filter }: { filter: Partial<IUserPersistant> }) => RepositoryBaseResult<boolean>;
   find_one: ({ filter }: { filter: Partial<IUserPersistant> }) => RepositoryBaseResult<User>;

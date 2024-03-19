@@ -8,7 +8,6 @@ import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseErr
 import { EitherUtils } from "../../../../shared/utils/EitherUtils";
 import { User } from "../../domain/user";
 import { IUserRepo } from "../../repository/IUserRepo";
-import { RepositoryBaseResult } from "../../../../shared/core/IBaseRepositoty";
 import { Iwatch } from "../../../../shared/core/Response/Error";
 import { UserDisplayName } from "../../domain/userProps/userDisplayName";
 import { UserRole } from "../../domain/userProps/userRole";
@@ -19,7 +18,7 @@ import { UserLastLogin } from "../../domain/userProps/userLastLogin";
 import { UserName } from "../../domain/userProps/userName";
 import { UserImage } from "../../domain/userProps/userImage";
 import { UserDescription } from "../../domain/userProps/userDescription";
-
+import { RepositoryBaseResult } from "../../repository/IUserRepo";
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
 
