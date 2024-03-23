@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   build-api:
+    name: build-api
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -17,7 +18,9 @@ jobs:
         - run: npm run lint
         - run: npm run test
         - run: npm run build
+
   build-rendering-server:
+    name: build-rendering-server
     runs-on: ubuntu-latest
     defaults:
       run:
