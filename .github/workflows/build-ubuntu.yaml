@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend/matchpet-rednering-server
+        working-directory: ./backend/matchpet-rendering-server
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
