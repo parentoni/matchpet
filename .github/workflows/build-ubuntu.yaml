@@ -18,18 +18,3 @@ jobs:
           run: npm run lint
           run: npm run test
           run: npm run build
-  build-rendering-server:
-    name: build-rendering-server
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend/matchpet-rendering-server
-      steps:
-          uses: actions/checkout@v3
-          uses: actions/setup-node@v3
-          with:
-            node-version: 21.x
-          run: npm ci
-          run: npm run lint
-          run: npm run test
-          run: npm run build
