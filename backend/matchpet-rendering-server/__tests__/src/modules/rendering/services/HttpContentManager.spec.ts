@@ -6,32 +6,31 @@ import { CommonUseCaseResult } from "../../../../../src/shared/core/response/use
 
 const mockedAxiosClient = axios.create();
 
-mockedAxiosClient.get = jest.fn().mockImplementation((src: string)=> {
-  console.log(src)
+global.fetch = jest.fn().mockImplementation((src: string)=> {
   if (src === 'image') {
     return {
-      headers: {
-        'content-type': 'image/png'
-      },
-      data: 'imageData'
+      ok: true,
+      blob: async () => new Blob([''], {type: 'image/png'}),
     }
   }
 
   if (src === 'video') {
     return {
-      headers: {
-        'content-type': 'video/mp4'
-      },
-      data: 'videoData'
+      ok: true,
+      blob: async () => new Blob([''], {type: 'video/mp4'}),
     }
   }
 
   if (src === 'unsupported') {
     return {
-      headers: {
-        'content-type': 'unsupported'
-      },
-      data: 'unsupportedData'
+      ok: true,
+      blob: async () => new Blob(['imageData'], {type: 'text/html'}),
+    }
+  }
+
+  if (src === 'notfound') {
+    return {
+      ok: false,
     }
   }
 
@@ -39,7 +38,7 @@ mockedAxiosClient.get = jest.fn().mockImplementation((src: string)=> {
 })
 
 // defines mocked httpContentManager
-const httpContentManager = new HttpContentManager(mockedAxiosClient);
+const httpContentManager = new HttpContentManager();
 
 describe('HttpContentManager', () => {
   it('should download image', async () => {
@@ -67,4 +66,11 @@ describe('HttpContentManager', () => {
     expect(response.isLeft()).toBeTruthy();
     expect(response.value).toBeInstanceOf(CommonUseCaseResult.UnexpectedError);
   })  
+
+  it('should return invalid value on not found', async () => {
+    const response = await httpContentManager.download({src: 'notfound'});
+    expect(response.isLeft()).toBeTruthy();
+    expect(response.value).toBeInstanceOf(CommonUseCaseResult.InvalidValue);
+  })
+
 })

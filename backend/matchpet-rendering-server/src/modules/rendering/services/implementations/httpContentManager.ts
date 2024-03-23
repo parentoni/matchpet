@@ -28,7 +28,6 @@ export class HttpContentManager implements IExternalMediaManager {
     try {
       // Download the media
       const response = await fetch(props.src, {method: 'GET'})
-      const mediaType = response.headers.get('content-type') || ''
 
       //check if response is ok
       if (!response.ok) {
