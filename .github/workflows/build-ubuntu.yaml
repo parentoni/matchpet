@@ -10,11 +10,11 @@ jobs:
       run:
         working-directory: ./backend/matchpet-api
     steps:
-      uses: actions/checkout@v3
-      uses: actions/setup-node@v3
-      with:
-        node-version: 21.x
-      run: npm ci
-      run: npm run lint
-      run: npm run test
-      run: npm run build
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
