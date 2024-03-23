@@ -20,7 +20,7 @@ export class Video extends Media {
     }
 
     // check if blob has correct type
-    if (!video.type.includes('video')) {
+    if (!video.type.includes('video/')) {
       return left(CommonUseCaseResult.InvalidValue.create({
         errorMessage: "Invalid video type",
         variable: "video",

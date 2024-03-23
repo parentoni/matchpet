@@ -20,7 +20,7 @@ export class Image extends Media {
     }
 
     // check if blob has correct type
-    if (!image.type.includes('image')) {
+    if (!image.type.includes('image/')) {
       return left(CommonUseCaseResult.InvalidValue.create({
         errorMessage: "Invalid image type",
         variable: "image",
