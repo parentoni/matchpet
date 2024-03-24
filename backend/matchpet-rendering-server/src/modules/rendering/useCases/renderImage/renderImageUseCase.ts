@@ -5,6 +5,14 @@ import { RenderImageDTO } from "./renderImageDTO";
 import { RenderImageResponse } from "./renderImageResponse";
 import { Image } from "../../domain/image";
 import { HTML } from "../../domain/HTML";
+import { CommonUseCaseResult } from "../../../../shared/core/response/useCaseError";
+import { IDrawHTML } from "../../services/IDrawHTML";
+
+export enum RENDER_IMAGE_MIME_TYPE {
+  PNG = 'image/png',
+  JPEG = 'image/jpeg',
+  WEBP = 'image/webp',
+}
 
 /**
  * 
@@ -15,12 +23,23 @@ import { HTML } from "../../domain/HTML";
  */
 export class RenderImageUseCase implements UseCase<RenderImageDTO, RenderImageResponse> {
   htmlParser: IHTMLParser;
+    drawHTML: IDrawHTML;
 
-  constructor(htmlParser: IHTMLParser) {
+  constructor(htmlParser: IHTMLParser, drawHTML: IDrawHTML) {
     this.htmlParser = htmlParser;
+    this.drawHTML = drawHTML;
   }
 
   async execute(request: RenderImageDTO): Promise<RenderImageResponse> {
+
+    // check if request mime type is valid
+    if (!Object.values(RENDER_IMAGE_MIME_TYPE).includes(request.type as RENDER_IMAGE_MIME_TYPE)) {
+      return left(CommonUseCaseResult.InvalidValue.create({
+        errorMessage: "Invalid export mime type. only png, jpeg and webp are supported.",
+        variable: "type",
+        location: "RenderImageUseCase.execute",
+      }))
+    }
 
     // create the html virtual dom with the html string code
     const htmlCode = HTML.create({ html: request.html })
@@ -34,9 +53,17 @@ export class RenderImageUseCase implements UseCase<RenderImageDTO, RenderImageRe
       return left(response.value);
     }
 
-    console.log(response.value.html)
-    // create domain image
-    const image = Image.create({raw: new Blob([], {type: request.type})})
+    // draw the html code to an image
+    const image = await this.drawHTML.image({
+      html: htmlCode.value,
+      width: 1024,
+      height: 1024,
+      type: request.type as RENDER_IMAGE_MIME_TYPE,
+    });
+    if (image.isLeft()) {
+      return left(image.value);
+    }
+
     return image
   }
 }

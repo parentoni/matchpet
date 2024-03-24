@@ -32,7 +32,10 @@ export class RenderHTMLController extends BaseController<Request> {
         return this.errorHandler(res, response.value)
       }
 
-      return res.status(200).send(response.value);
+      const image = response.value;
+
+      res.setHeader("Content-Type", image.props.type);
+      return res.status(200).send((await image.toBuffer()));
     }
 
     // if the request is for a video render video
