@@ -60,7 +60,7 @@ export class Guard {
       return left(
         CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is null or undefined`,
-          location: `${Guard.name}.${this.againstAtLeast.name}`,
+          location: `${Guard.name}.${this.againstNullOrUndefined.name}`,
           variable: argumentName
         })
       );
@@ -68,6 +68,7 @@ export class Guard {
       return right(true);
     }
   }
+
 
   public static againstNullOrUndefinedBulk(args: GuardArgumentCollection): GuardResponse {
     for (let arg of args) {

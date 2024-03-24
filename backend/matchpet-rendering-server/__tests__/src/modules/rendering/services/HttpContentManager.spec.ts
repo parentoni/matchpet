@@ -62,6 +62,7 @@ describe('HttpContentManager', () => {
   })
 
   it('should return unexpectederror on invalid urls value', async () => {
+    global.console.error = jest.fn();
     const response = await httpContentManager.download({src: '123456789'});
     expect(response.isLeft()).toBeTruthy();
     expect(response.value).toBeInstanceOf(CommonUseCaseResult.UnexpectedError);

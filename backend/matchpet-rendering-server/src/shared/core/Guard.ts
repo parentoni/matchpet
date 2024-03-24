@@ -61,7 +61,7 @@ export class Guard {
       return left(
         CommonUseCaseResult.InvalidValue.create({
           errorMessage: `${argumentName} is null or undefined`,
-          location: `${Guard.name}.${this.againstAtLeast.name}`,
+          location: `${Guard.name}.${this.againstNullOrUndefined.name}`,
           variable: argumentName
         })
       );

@@ -41,7 +41,7 @@ export class Video extends Media {
         return left(validationResult.value)
       }
 
-      return right(new Video({raw: props.raw, type: props.raw.type}))
+      return right(new Video({raw: props.raw}))
     } catch (err) {
       // return error if something goes wrong
       return left(CommonUseCaseResult.InvalidValue.create({
