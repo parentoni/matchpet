@@ -56,8 +56,8 @@ export class RenderImageUseCase implements UseCase<RenderImageDTO, RenderImageRe
     // draw the html code to an image
     const image = await this.drawHTML.image({
       html: htmlCode.value,
-      width: 1024,
-      height: 1024,
+      width: request.width,
+      height: request.height,
       type: request.type as RENDER_IMAGE_MIME_TYPE,
     });
     if (image.isLeft()) {

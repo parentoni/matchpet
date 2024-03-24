@@ -23,19 +23,19 @@ export class RenderHTMLController extends BaseController<Request> {
 
   async executeImpl(req: Request, res: Response): Promise<any> {
     const accept = req.headers.accept;
+    const {width, height} = req.query;
 
     // if the request is for an image render image
     if (accept?.includes("image/")) {
       // render the image
-      const response = await this.renderImageUseCase.execute({ html: req.body, type: accept});
+      const response = await this.renderImageUseCase.execute({ html: req.body, type: accept, width: Number(width) || 1024, height: Number(height) || 1024});
       if (response.isLeft()) {
         return this.errorHandler(res, response.value)
       }
-
       const image = response.value;
 
       res.setHeader("Content-Type", image.props.type);
-      return res.status(200).send((await image.toBuffer()));
+      return res.status(200).send(await image.toBuffer());
     }
 
     // if the request is for a video render video

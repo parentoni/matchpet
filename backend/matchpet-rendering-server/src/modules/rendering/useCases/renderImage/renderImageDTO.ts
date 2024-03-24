@@ -3,5 +3,7 @@
  */
 export type RenderImageDTO = {
   html: string,
-  type: string
+  type: string,
+  width: number,
+  height: number
 }
