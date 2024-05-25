@@ -25,6 +25,7 @@ import { PartnerCreateAnimal } from "./pages/partner/PartnerCreateAnimal";
 import { PartnerHelp } from "./pages/partner/PartnerHelp";
 import { Captive } from "./pages/auth/Captive";
 import { About } from "./pages/hero/About";
+import { SpecificAnimalPC } from "./pages/user/SpecificAnimalPC";
 
 export function usePathPattern() {
   let lastRouteContext = useContext(UNSAFE_RouteContext)
@@ -35,6 +36,8 @@ export function usePathPattern() {
     .join('/')
     .replaceAll(/\/\*?\//g, '/')
 }
+  const width = window.innerWidth
+
 const routes = [
   {
     path: '/',
@@ -91,8 +94,9 @@ const routes = [
 
 
   {
+    // Normal: SpecificAnimal
     path:'/animals/:animalId',
-    element: <SpecificAnimal />
+    element: width <= 768? <SpecificAnimal/> : <SpecificAnimalPC/>
   },
   {
     path: '/auth/login',

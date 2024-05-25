@@ -14,4 +14,8 @@ export abstract class WatchList<T> {
   public get list(): T[] {
     return this.items;
   }
+
+  public clear() {
+    this.items = []
+  }
 }

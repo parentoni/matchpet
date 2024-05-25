@@ -12,6 +12,7 @@ export enum RENDER_IMAGE_MIME_TYPE {
   PNG = 'image/png',
   JPEG = 'image/jpeg',
   WEBP = 'image/webp',
+  jpg = 'image/jpg',
 }
 
 /**

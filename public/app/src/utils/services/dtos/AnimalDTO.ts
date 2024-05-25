@@ -4,6 +4,7 @@ export interface IAnimalDTO {
   _id: string;
   name: string;
   image: string[];
+  imageExport : string[],
   status: ANIMAL_STATUS;
   description: string;
   donator_id: string;

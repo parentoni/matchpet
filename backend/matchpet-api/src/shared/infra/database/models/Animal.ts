@@ -17,6 +17,7 @@ export const contactSchema = new mongoose.Schema({
 export const AnimalSchema = new mongoose.Schema({
   name: { type: String, required: true },
   image: { type: [String], required: true },
+  imageExport : {type : [String], required: true},
   status: { type: String, enum: ["PENDING", "CANCELED", "DONATED", "AUTO_CANCELED"], required: true },
   sex: {type: String, enum: ANIMAL_SEX, required:true},
   donator_id: { type: mongoose.Types.ObjectId, required: true },
@@ -35,6 +36,7 @@ export interface IAnimalPersistent {
   _id: string;
   name: string;
   image: string[];
+  imageExport : string[]
   created_at: Date;
   status: ANIMAL_STATUS;
   sex: ANIMAL_SEX;

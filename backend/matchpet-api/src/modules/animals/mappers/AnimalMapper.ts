@@ -13,6 +13,7 @@ import { AnimalName } from "../domain/animal/AnimalName";
 import { AnimalSex } from "../domain/animal/AnimalSex";
 import { AnimalStatus } from "../domain/animal/AnimalStatus";
 import { AnimalTraits } from "../domain/animal/AnimalTraits";
+import { AnimalImagesExport } from "../domain/animal/AnimalImageExport";
 
 export class AnimalMapper {
   //!todo: add traits verification
@@ -20,6 +21,7 @@ export class AnimalMapper {
     // Declare possible left animal variables
     const animalNameOrError = AnimalName.create({ value: persistent.name });
     const animalImageOrError = AnimalImages.createFromPersistent(persistent.image);
+    const animalImageExportOrError = AnimalImagesExport.createFromPersistent(persistent.imageExport)
     const animalDonatorIdOrError = UniqueGlobalId.createExisting(persistent.donator_id.toString());
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(persistent.specie_id.toString());
     const animalIdOrError = UniqueGlobalId.createExisting(persistent._id.toString());
@@ -35,6 +37,7 @@ export class AnimalMapper {
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalImageOrError,
+      animalImageExportOrError,
       animalDonatorIdOrError,
       animalSpecieIdOrError,
       animalTraitsOrError,
@@ -52,6 +55,7 @@ export class AnimalMapper {
     // Declare verified rights animal values
     const animalName = animalNameOrError.getRight();
     const animalImage = animalImageOrError.getRight();
+    const animalExportImage = animalImageExportOrError.getRight();
     const animalDonatorId = animalDonatorIdOrError.getRight();
     const animalSpecieId = animalSpecieIdOrError.getRight();
     const animalTraits = animalTraitsOrError.getRight();
@@ -66,6 +70,7 @@ export class AnimalMapper {
       {
         name: animalName,
         image: animalImage,
+        exportImage : animalExportImage,
         donatorId: animalDonatorId,
         specieId: animalSpecieId,
         animalTrait: animalTraits,
@@ -94,6 +99,7 @@ export class AnimalMapper {
         _id: domain.id.toValue(),
         name: domain.name.value,
         image: domain.image.persistentValue,
+        imageExport : domain.exportImage.persistentValue,
         donator_id: domain.donatorId.toValue(),
         specie_id: domain.specieId.toValue(),
         traits: domain.animalTraits.persistentValue,

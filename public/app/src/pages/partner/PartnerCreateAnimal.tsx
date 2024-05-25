@@ -97,12 +97,20 @@ export const PartnerCreateAnimal = () => {
         }
       }
     }
+    // console.log(images[0].data, "IMAGE")
   
-    if (images.filter(a => a).length === 0) {
+    if (images.filter(a => a).length === 0 ) {
       error++;
       setImagesError(true);
     } else {
-      setImagesError(false);
+
+      if (images[0]?.data?.name?.match(/\.(jpeg|jpg|png|pdf|webp|tiff|ai|raw|indd|psd)$/) === null) {
+        setImagesError(true);
+
+      } else {
+
+        setImagesError(false);
+      }
     }
     if (animalInput.whatsapp.value) {
       if (parseBrazilianTelefone(animalInput.whatsapp.value, { apenasCelular: true })) {

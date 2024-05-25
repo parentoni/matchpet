@@ -17,6 +17,7 @@ import { IAnimalRepo } from "../../../repository/IAnimalRepo";
 import { ISpecieRepo } from "../../../repository/ISpeciesRepo";
 import { CreateAnimalListingDTO } from "./createAnimalListingDTO";
 import { CreateAnimalListingResponse } from "./createAnimalListingResponse";
+import { AnimalImagesExport } from "../../../domain/animal/AnimalImageExport";
 
 export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDTO, CreateAnimalListingResponse> {
   private specieRepo: ISpecieRepo;
@@ -32,6 +33,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
   async execute(request: CreateAnimalListingDTO): Promise<CreateAnimalListingResponse> {
     const animalNameOrError = AnimalName.create({ value: request.name });
     const animalImageOrError = AnimalImages.createFromPersistent(request.image);
+    const animalImageExportOrError = AnimalImagesExport.createFromPersistent([])
     const animalSpecieTraitsOrError = AnimalTraits.createFromPersistent(request.traits);
     const animalDonatorIdOError = UniqueGlobalId.createExisting(request.donatorId);
     const animalSpecieIdOrError = UniqueGlobalId.createExisting(request.specie_id);
@@ -44,6 +46,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     const combineResult = EitherUtils.combine([
       animalNameOrError,
       animalImageOrError,
+      animalImageExportOrError,
       animalSpecieIdOrError,
       animalDonatorIdOError,
       animalSpecieTraitsOrError,
@@ -106,6 +109,7 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       name: animalName,
       donatorId: animalDonatorId,
       image: animalImage,
+      exportImage: animalImageExportOrError.getRight(),
       specieId: animalSpecieId,
       animalTrait: traitsValidation.value,
       createdAt: animalCreatedTimespamp,

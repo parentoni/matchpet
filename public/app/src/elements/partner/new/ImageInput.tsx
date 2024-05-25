@@ -10,10 +10,11 @@ export interface ImageInputProps {
   id:number,
   setImageInputModalOpenId: (x:number) => void,
   setIsOpen: (x: boolean) => void,
-  obrigatory?: boolean
+  obrigatory?: boolean,
 }
 
 export const ImageInput = (props: ImageInputProps) => {
+
   return(
     <div className="flex flex-col w-full">
       <label className={`mb-2 text-sm  ${props.errorMessage ? "text-error" : ""}`}>{props.title}  {props.obrigatory? <span className="text-primary">*</span>:''}</label>
@@ -32,8 +33,9 @@ export const ImageInput = (props: ImageInputProps) => {
       </>
       :
       <button className="secondary-button" type="button" onClick={() => {props.setImageInputModalOpenId(props.id);props.setIsOpen(true)}}>
-        Adicionar imagem
+        Adicionar imagem {props.id !== 0? "ou vídeo" : ""}
       </button>
+      
       }
 
         <div className="flex items-center">
@@ -56,14 +58,14 @@ export interface ImageInputModalProps {
 }
 
 export const ImageInputModal = (props: ImageInputModalProps) => {
-
   //Set image to set position on images array, with this position given by ID props
   const changeImageArray = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+   
     //Check if modal is open
     if (typeof props.imageInputModalIsOpenId !== 'undefined') {
-
+   
       if (!e.target.files || !e.target.files[0]) {
+       
         return null
       }
 
@@ -121,12 +123,12 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
                 <div className="p-8 ">
                   {image.type !== IMAGE_TYPES.UNDEFINED ?
                     <div className="w-full h-60 border-2 border-primary  bg-opacity-10 bg-primary flex items-center justify-center rounded-lg bg-cover bg-center">
-                      <img alt="Imagem selecionada do animal" className="max-w-full max-h-full object-contain" src={image.display()}></img>
+                      <img alt="Imagem/vídeo selecionado do animal" className="max-w-full max-h-full object-contain" src={image.display()}></img>
                     </div>
                     :
                     <label htmlFor="IMAGE_INPUT_MODAL" className="w-full bg-primary bg-opacity-10 cursor-pointer  border-primary border-dashed border-2 rounded-lg h-60 flex items-center justify-center">
                       <div className="text-center">
-                        <p className="text-lg font-medium text-primary">Arraste e solte sua imagem aqui</p>
+                        <p className="text-lg font-medium text-primary">Arraste e solte sua imagem {props.imageInputModalIsOpenId !== 0? "ou vídeo" : ""} aqui</p>
                         <p className="text-sm text-primary">ou clique para selecionar</p>
                       </div>
                     </label>}
@@ -147,7 +149,7 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
                   </button>}
                 </div>
 
-                <input id="IMAGE_INPUT_MODAL" value={''} className="hidden " accept="image/*" type="file" onChange={changeImageArray}></input>
+                <input id="IMAGE_INPUT_MODAL" value={''} className="hidden" accept={props.imageInputModalIsOpenId !== 0? "image/*, video/*" : "image/*"} type="file" onChange={changeImageArray}></input>
               </Dialog.Panel>
             </Transition.Child>
           </div>

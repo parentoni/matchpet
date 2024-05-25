@@ -2,9 +2,8 @@ import { GuardError } from "../../../../shared/core/Guard";
 import { Either, left, right } from "../../../../shared/core/Result";
 import { ValidUrl, ValidUrlCreateResponse, ValidUrlProps } from "../../../../shared/core/ValidUrl";
 import { WatchList } from "../../../../shared/domain/WatchList";
-import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 
-export class AnimalImages extends WatchList<ValidUrl> {
+export class AnimalImagesExport extends WatchList<ValidUrl> {
   constructor(images: ValidUrl[]) {
     super(images);
   }
@@ -14,7 +13,7 @@ export class AnimalImages extends WatchList<ValidUrl> {
   }
 
   public static create(images: ValidUrl[]) {
-    return new AnimalImages(images);
+    return new AnimalImagesExport(images);
   }
 
   getImages() {
@@ -28,15 +27,8 @@ export class AnimalImages extends WatchList<ValidUrl> {
     return validImages
   }
 
-  public static createFromPersistent(props: string[]): Either<GuardError, AnimalImages> {
+  public static createFromPersistent(props: string[]): Either<GuardError, AnimalImagesExport> {
     const urlsArray: ValidUrl[] = [];
-    if (!props || !(props.length > 0)) {
-      return left(CommonUseCaseResult.InvalidValue.create({
-        location: `${AnimalImages.name}.${AnimalImages.createFromPersistent}`,
-        variable: "ANIMAL_IMAGE",
-        errorMessage: "Animal must have images"
-      }))
-    }
     for (const image of props) {
       const createResult = ValidUrl.create({ value: image });
       if (createResult.isLeft()) {
@@ -46,7 +38,7 @@ export class AnimalImages extends WatchList<ValidUrl> {
       urlsArray.push(createResult.value);
     }
 
-    return right(AnimalImages.create(urlsArray));
+    return right(AnimalImagesExport.create(urlsArray));
   }
 
   public get persistentValue() {

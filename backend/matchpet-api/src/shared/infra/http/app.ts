@@ -6,6 +6,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import https from "node:https";
 import fs from "node:fs";
+
 const cors = require("cors");
 const app = express(); //
 
@@ -17,7 +18,7 @@ app.disable("etag");
 
 app.use("/", v1Router);
 
-const port = Secrets.getSecret("port");
+const port = Secrets.getSecret("PORT");
 
 app.listen(port, () => {
   console.log(`[App]: Listening on port ${port}`);

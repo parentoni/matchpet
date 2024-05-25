@@ -13,7 +13,7 @@ export function FullPageModal ({isOpen, setIsOpen, title, children, absolute, cl
   return (
     <Transition appear show={isOpen} as={Fragment}>
 
-      <Dialog as='div' className="relative z-50" onClose={closeModal}>
+      <Dialog as='div' className="relative z-50 " onClose={closeModal}>
         <Transition.Child
             as={Fragment}
             enter="ease-out duration-100"
@@ -36,7 +36,7 @@ export function FullPageModal ({isOpen, setIsOpen, title, children, absolute, cl
           <Dialog.Panel className={`fixed flex flex-col w-screen modal-height overflow-y-scroll bg-white top-0 left-0 no-scrollbar ${className}`}>
             <div className="flex-1 flex flex-col h-full">
               <Dialog.Title as="h2" className={` ${absolute && 'absolute'} top-0 left-0 flex gap-3 px-8 h-16 items-center z-50 `}onClick={() => setIsOpen(false)}>
-                <X />{title}
+                <X className="cursor-pointer"/>{title}
               </Dialog.Title>
                 {children}
             </div>

@@ -15,11 +15,13 @@ import { Contacts } from "../../../shared/core/contacts/contacts";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { AnimalClicked } from "./events/AnimalClicked";
 import { AnimalSex } from "./animal/AnimalSex";
+import { AnimalImagesExport } from "./animal/AnimalImageExport";
 
 export interface IAnimalProps {
   donatorId: UniqueGlobalId;
   name: AnimalName;
   image: AnimalImages;
+  exportImage : AnimalImagesExport
   specieId: UniqueGlobalId;
   animalTrait: AnimalTraits;
   status: AnimalStatus;
@@ -51,6 +53,10 @@ export class Animal extends AggregateRoot<IAnimalProps> {
 
   get image(): AnimalImages {
     return this.props.image;
+  }
+
+  get exportImage() : AnimalImagesExport {
+    return this.props.exportImage
   }
 
   get animalTraits(): AnimalTraits {

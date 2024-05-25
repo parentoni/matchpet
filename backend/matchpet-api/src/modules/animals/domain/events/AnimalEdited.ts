@@ -14,4 +14,6 @@ export class AnimalEdited implements IDomainEvent {
   public getAggregateId(): UniqueGlobalId {
     return this.animal.id;
   }
+
+  // public saveImage()
 }

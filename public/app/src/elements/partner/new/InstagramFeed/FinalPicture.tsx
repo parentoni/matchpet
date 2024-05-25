@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { IAnimalDTO } from "../../../../utils/services/dtos/AnimalDTO"
 import { IUserPersistent } from "../../../../utils/services/dtos/UserDTO"
-import QRCode  from "qrcode"
+import QRCode from "qrcode"
 
 export type FinalPictureProps = {
   user: IUserPersistent,
-  animal:IAnimalDTO
+  animal: IAnimalDTO
 }
 export const FinalPicture = (props: FinalPictureProps) => {
   const [url, setUrl] = useState<string | undefined>()

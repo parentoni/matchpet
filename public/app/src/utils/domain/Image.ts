@@ -16,7 +16,6 @@ export abstract class Image {
   static async upload (file: File, token: string)  {
     const formData = new FormData();
     formData.append("image", file);
-
     const response = await fetch(Api.baseUrl + "/app/image/upload", {
       body: formData,
       headers: {

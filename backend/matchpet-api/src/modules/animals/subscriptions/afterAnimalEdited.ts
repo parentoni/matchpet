@@ -4,6 +4,7 @@ import { AnimalEdited } from "../domain/events/AnimalEdited";
 import { RenovateLastModifiedAtUseCase } from "../useCases/animals/renovateLastModifiedAt/renovateLastModifiedAtUseCase";
 import { left } from "../../../shared/core/Result";
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
+import { saveInstagramImageUseCase } from "../useCases/animals/saveInstagramImage";
 
 export class AfterAnimalEdited implements IHandle<AnimalEdited> {
   protected renovateLastModifiedAtUseCase: RenovateLastModifiedAtUseCase;
@@ -24,6 +25,15 @@ export class AfterAnimalEdited implements IHandle<AnimalEdited> {
       } else {
         console.log("[AfterAnimalEdited]: Success updating animal stats");
       }
+      
+      const res = await saveInstagramImageUseCase.execute({animalId : event.animal.id.toValue()})
+
+      if (res.isLeft()) {
+        console.log(`[AfterAnimalEdited]: Unable to execute SaveInstagramImageUseCase for animal creation. Animal Id: ${event.animal.id.toValue()}.`);
+      } else {
+        console.log(`[AfterAnimalEdited]: Updated donator stats. Animal Id: ${event.animal.id.toValue()}.`);
+      }
+      
     } else {
       console.log("[AfterAnimalEdited]: Success updating animal stats");
     }
