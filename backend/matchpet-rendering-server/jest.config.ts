@@ -8,6 +8,7 @@ const config: Config = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': "ts-jest"
   },
+  cache: false,
 };
 
 export default config

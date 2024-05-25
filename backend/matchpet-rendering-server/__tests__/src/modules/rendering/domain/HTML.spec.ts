@@ -1,4 +1,3 @@
-import { HTMLInput } from "../../../../../src/modules/rendering/domain/HTML";
 import { HTML } from "../../../../../src/modules/rendering/domain/HTML";
 
 describe('HTML', () => {
@@ -16,9 +15,11 @@ describe('HTML', () => {
     expect(htmlOrError.isLeft()).toBeTruthy()
   })
 
-  it('It should not exit on invalid HTML data', () => {
+  it("should fail with missing html", () => {
+    const htmlOrError = HTML.create({html: ''})
 
-    expect(HTML.create({ html: ''})).toBeTruthy()
-    expect(HTML.create({ html: undefined} as unknown as HTMLInput)).toBeTruthy()
+    expect(htmlOrError.isLeft()).toBeTruthy() 
+    if (htmlOrError.isRight()) return;
+    expect(htmlOrError.value.error.location).toEqual('Guard.againstNullOrUndefined')
   })
 })

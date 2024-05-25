@@ -18,8 +18,8 @@ export abstract class BaseController<T extends Request> {
     try {
       await this.executeImpl(req as T, res);
     } catch (err) {
-      console.log(`[BaseController]: Uncaught controller error`);
-      console.log(err);
+      console.error(`[BaseController]: Uncaught controller error`);
+      console.error(err);
       this.fail(res, 'An unexpected error occurred')
     }
   }

@@ -41,7 +41,7 @@ export class Image extends Media {
         return left(validationResult.value)
       }
 
-      return right(new Image({raw: props.raw, type: props.raw.type}))
+      return right(new Image({raw: props.raw}))
     } catch (err) {
       // return error if something goes wrong
       return left(CommonUseCaseResult.InvalidValue.create({
@@ -52,14 +52,4 @@ export class Image extends Media {
     }
   }
 
-  public async toBase64(): Promise<string> {
-    const buff = await this.props.raw.arrayBuffer()
-    const base64 = Buffer.from(buff).toString('base64');
-    return `data:${this.props.type};base64,${base64}`
-  }
-
-  public async toBuffer(): Promise<Buffer> {
-    const buff = await this.props.raw.arrayBuffer()
-    return Buffer.from(buff)
-  }
 }

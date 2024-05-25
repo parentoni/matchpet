@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "lint": "tsc --noEmit",
-    "test": "jest --config jest.config.ts --runInBand --no-cache --detectOpenHandles",
+    "test": "jest --config jest.config.ts",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "build": "tsc"
   },

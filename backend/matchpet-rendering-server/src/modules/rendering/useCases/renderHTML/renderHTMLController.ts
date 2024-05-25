@@ -34,7 +34,7 @@ export class RenderHTMLController extends BaseController<Request> {
       }
       const image = response.value;
 
-      res.setHeader("Content-Type", image.props.type);
+      res.setHeader("Content-Type", image.props.raw.type);
       return res.status(200).send(await image.toBuffer());
     }
 

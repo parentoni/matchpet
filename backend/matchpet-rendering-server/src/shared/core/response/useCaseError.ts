@@ -57,7 +57,7 @@ export namespace CommonUseCaseResult {
 
   export class UnexpectedError extends BaseError<IUnexpectedError> {
     public constructor(err: any) {
-      console.log(err);
+      console.error(err);
       super({
         errorMessage: `An unexpected error occurred.`,
         error: err,
