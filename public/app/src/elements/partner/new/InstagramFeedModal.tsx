@@ -65,6 +65,7 @@ export const InstagramFeedModal = (props: InstagramFeedModalProps) => {
     //   }, 500)
     // }
   }
+  // d
   return ( 
       <Transition appear show={props.isOpen} as={Fragment}>
         <Dialog as="div" open={props.isOpen} className="relative z-10" onClose={() => props.setIsOpen(false)}>
