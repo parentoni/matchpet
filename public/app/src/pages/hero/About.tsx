@@ -63,6 +63,17 @@ export const About = () => {
             </div>
             <p className="leading-tight">Vice-presidente do MatchPet, estudante no CSA-NL</p>
           </div>
+          {/* Ju siste */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-medium">Julia Siste</p>
+              <a href="https://www.linkedin.com/in/julia-vianna-siste-0b4140300/" target={"_blank"} rel="noreferrer">
+                <Linkedin size={20} strokeWidth={1}/>
+              </a>
+            </div>
+            <p className="leading-tight">Responsável pelas redes sociais.</p>
+          </div>
+
         </div>
       </div>
     </main>)
