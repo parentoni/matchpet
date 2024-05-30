@@ -1,14 +1,16 @@
 {
   "compilerOptions":
   {
-    "typeRoots": ["node_modules/cron"],
+    "typeRoots": ["node_modules/cron", "node_modules/@types"],
     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "commonjs",                                /* Specify what module code is generated. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
     "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
     "strict": true,                                      /* Enable all strict type-checking options. */
     "noUncheckedIndexedAccess": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "types" : ["node", "jest"]
   },
-  "include":["src"]
+  "include":["src"],
+
 }
