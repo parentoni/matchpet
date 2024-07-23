@@ -91,11 +91,41 @@ export const InstagramFeedModal = (props: InstagramFeedModalProps) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
               > 
+              
                 <Dialog.Panel className="w-full flex flex-col max-w-xl transform overflow-hidden rounded-2xl gap-4 bg-white shadow-xl transition-all">                
                   
                   <div className="px-6 h-16 flex items-center border-b">
                     <h1 className="text-xl font-semibold " >Exportar animal para post</h1>
+                    
                   </div>
+                  
+                  {!props.animal.imageExport || props.animal.imageExport.length === 0? 
+                  <>
+                   <div className="flex flex-col gap-4 p-4">
+                   <div className="flex w-full shrink-0 overflow-x-auto gap-4" ref={imageContainerRef}>
+                       <DomToImage imageName={`Imagem_1_${props.animal.name}`} proxy={props.animal.image[0]} containerRef={imageContainerRef}  pictureSaveArray={pictureSaveArray}  >
+                         <MainPicture user={user as IUserPersistent} animal={props.animal} />
+                       </DomToImage> 
+ 
+                       <DomToImage imageName={`Imagem_2_${props.animal.name}`} containerRef={imageContainerRef} pictureSaveArray={pictureSaveArray}>
+                         <TraitsImage user={user as IUserPersistent} animal={props.animal} hasGallery={!!(props.animal.image.length > 1)}/>
+                       </DomToImage>
+                       {props.animal.image.length > 1 && props.animal.image.slice(1).map((imageUrl, index) => <DomToImage containerRef={imageContainerRef} proxy={imageUrl} imageName={`Imagem_${String(3 + index)}_${props.animal.name}`} pictureSaveArray={pictureSaveArray}>
+                         <GalleryPicture imageUrl={imageUrl} imageIndex={index + 1} user={user as IUserPersistent} animal={props.animal} totalImages={props.animal.image.length - 1}/>                      
+                       </DomToImage>)}
+                       <DomToImage imageName={`Imagem_${props.animal.image.length - 1 + 3}_${props.animal.name}`} containerRef={imageContainerRef} pictureSaveArray={pictureSaveArray}>
+                         <FinalPicture user={user as IUserPersistent} animal={props.animal} />
+                       </DomToImage>
+                     </div>
+                   </div>
+ 
+                   <div className="border-t h-16 w-full flex justify-end items-center px-4">
+                     <button className="primary-button w-60" onClick={saveAll}>
+                       {saveAllLoading?<span className="loading loading-spinner"></span>:"Salvar todas (.jpg)"}
+                     </button>
+                     </div>
+                     </> :
+                  <>
                   <div className="flex flex-col gap-4 p-4">
                     <div className="flex-row flex h-full  w-full overflow-x-scroll gap-4" ref={imageContainerRef}>
                       {props.animal.imageExport.map((img, index) => {
@@ -103,6 +133,26 @@ export const InstagramFeedModal = (props: InstagramFeedModalProps) => {
                           <ImageForExport index={index} animal={props.animal}/>
                         )
                       })}
+                      </div>
+                  </div>
+                 
+                  <div className="border-t h-16 w-full flex justify-end items-center px-4">
+                    <button className="primary-button w-60" onClick={saveAll}>
+                     
+                      {saveAllLoading?<span className="loading loading-spinner"></span>:"Salvar todas (.jpg)"}
+                    </button>
+                  </div>
+                  </>
+                }
+                 
+
+                  {/* <div className="flex flex-col gap-4 p-4">
+                    <div className="flex-row flex h-full  w-full overflow-x-scroll gap-4" ref={imageContainerRef}>
+                      {props.animal.imageExport.map((img, index) => {
+                        return (
+                          <ImageForExport index={index} animal={props.animal}/>
+                        )
+                      })} */}
                       
                      
                       {/* <DomToImage imageName={`Imagem_1_${props.animal.name}`} proxy={props.animal.imageExport[0]} containerRef={imageContainerRef}  pictureSaveArray={pictureSaveArray}  >
@@ -122,15 +172,15 @@ export const InstagramFeedModal = (props: InstagramFeedModalProps) => {
                       <DomToImage imageName={`Imagem_${props.animal.image.length - 1 + 3}_${props.animal.name}`} containerRef={imageContainerRef} pictureSaveArray={pictureSaveArray}>
                         <FinalPicture user={user as IUserPersistent} animal={props.animal} />
                       </DomToImage> */}
-                    </div>
-                  </div>
+                    {/* </div>
+                  </div> */}
 
-                  <div className="border-t h-16 w-full flex justify-end items-center px-4">
+                  {/* <div className="border-t h-16 w-full flex justify-end items-center px-4">
                     <button className="primary-button w-60" onClick={saveAll}>
-                     {/* Salvar Todas (.jpg) */}
+                   
                       {saveAllLoading?<span className="loading loading-spinner"></span>:"Salvar todas (.jpg)"}
                     </button>
-                  </div>
+                  </div> */}
                 </Dialog.Panel>
             </Transition.Child> 
           </div>
