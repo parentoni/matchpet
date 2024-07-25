@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { Either, left, right } from "../shared/Result";
 import { Api } from "../services/Api";
 import { IUserPersistent } from "../services/dtos/UserDTO";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction} from "react-router-dom";
 
 
 type LoginFunction = (email:string, password:string) => Promise<Either<Response, string>>

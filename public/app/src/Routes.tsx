@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, useLoaderData, useLocation } from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import { App } from "./Base";
 import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
