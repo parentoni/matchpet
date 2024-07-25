@@ -3,20 +3,15 @@ import { useContext, useEffect, useState } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { Animal } from "../../utils/domain/Animal"
 import { ANIMAL_STATUS, IAnimalDTO } from "../../utils/services/dtos/AnimalDTO"
-import { AnimalImage } from "../../elements/SpecificAnimal/AnimalImage"
 import { CategoriesContext } from "../../utils/context/CategoriesContext"
 import { Specie } from "../../utils/domain/Specie"
 import { Species } from "../../utils/domain/Species"
 import { Categories } from "../../utils/domain/Categories"
-import { AnimalDescription } from "../../elements/SpecificAnimal/AnimalDescription"
 import { AnimalContactButton } from "../../elements/SpecificAnimal/AnimalContactButton"
 import { IUserContactDTO } from "../../utils/services/dtos/UserContactDTO"
 import logo from '../../assets/logo.svg'
-import Hamburguer from '../../assets/hamburger.svg'
 import { User } from "../../utils/domain/User"
 import { ISpecieDTO } from "../../utils/services/dtos/SpecieDTO"
-import { AnimalAction } from "../../elements/SpecificAnimal/AnimalActions"
-import { AnimalTraits } from "../../elements/SpecificAnimal/AnimalTraits"
 import { AnimalImagePC } from "../../elements/SpecificAnimalPC/AnimalImage"
 import { AnimalInfoPC } from "../../elements/SpecificAnimalPC/AnimalInfo"
 import { AnimalTraitsPC } from "../../elements/SpecificAnimalPC/AnimalTraitsPC"
@@ -127,7 +122,7 @@ export const SpecificAnimalPC = () => {
                     <AnimalImagePC AnimalImages={selectedAnimalDTO.image} AnimalName={selectedAnimalDTO.name} AnimalId={selectedAnimalDTO._id}/>
                 </div>
                 <div style={{height: `${width}px`}} className={` w-[50%]  flex flex-col justify-between`}>
-                  <div>
+                  <div className="flex flex-col gap-4">
                     <AnimalInfoPC AnimalId={animalId as string} description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name} AnimalSex={isMale === true? "Macho" : "Fêmea"} AnimalSpecie={selectedSpecie.name}/>
                     <AnimalTraitsPC  AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
                   </div>
