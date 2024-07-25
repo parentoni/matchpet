@@ -5,14 +5,18 @@ import { SpeciesContext } from "../../utils/context/SpeciesContext";
 import { AnimalFiltersModalContainer } from "../../elements/Animals/AnimalsFiltersModal";
 import { Filters, FiltersContext } from "../../utils/context/FiltersContext";
 import { FILTER_MODES } from "../../elements/Animals/filters";
+import { LocationContext } from "../../utils/context/LocationContext";
+import { useNavigate } from "react-router-dom";
 
 
 export function AllAnimals () {
 
   const {species, preferredSpecie} = useContext(SpeciesContext)  
   const {persistentCounter, loading, animals, page, filters, setPage, useSetAnimalGetter, dispatch} = useContext(FiltersContext)
+  const {ensureLocationIsSelected} = useContext(LocationContext)
 
   useSetAnimalGetter(true)
+  const navigate = useNavigate();
 
   
   useEffect(() => {
@@ -24,6 +28,7 @@ export function AllAnimals () {
     dispatch(filters.current, [], true)
   }, [preferredSpecie])
 
+  ensureLocationIsSelected(navigate);
   return (
     <>
       <div className="px-6 pt-8">

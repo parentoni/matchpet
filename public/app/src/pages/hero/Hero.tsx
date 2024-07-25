@@ -7,12 +7,10 @@ import { useNavigate } from "react-router-dom"
 import { useContext, useEffect } from "react"
 import { SpeciesContext } from "../../utils/context/SpeciesContext"
 import { AuthContext } from "../../utils/context/AuthContext"
-import { LocationContext, LocationContextInterface, LocationContextProvider } from "../../utils/context/LocationContext"
 export function HeroPage  ()  {
 
   const stats = useGetStats()
   const users = useGetActiveUsers()
-  const {ensureLocationIsSelected} = useContext<LocationContextInterface>(LocationContext);
 
   const {user} = useContext(AuthContext)
 
@@ -27,7 +25,6 @@ export function HeroPage  ()  {
     }
   },[user])
 
-  ensureLocationIsSelected(navigate);
   
   return (
     <div>

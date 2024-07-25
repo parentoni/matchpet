@@ -1,5 +1,5 @@
 import { createContext, useEffect, useRef, useState} from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 
 
 /**
@@ -15,10 +15,9 @@ const LocationContextDefault = {
   ibgeId: "", 
   ensureLocationIsSelected: (navigate:NavigateFunction) => {},
   changeLocation: (newLocation:string) => {},
-
 };
-export const LocationContext = createContext<LocationContextInterface>(LocationContextDefault);
 
+export const LocationContext = createContext<LocationContextInterface>(LocationContextDefault);
 export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>) => {
 
   const ibgeId = useRef<string>("");
@@ -31,9 +30,8 @@ export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>)
 
   const ensureLocationIsSelected = (navigate: NavigateFunction) => {
     if (ibgeId.current && ibgeId.current != null) return;
-    navigate("/location");
+    navigate(`/location?to=${window.location.pathname}`);
   }
-
 
   const changeLocation = (newLocation:string) => {
     localStorage.setItem("ibgeid", newLocation);
