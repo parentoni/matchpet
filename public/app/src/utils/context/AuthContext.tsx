@@ -108,7 +108,6 @@ export const AuthProvider = ({children}: React.PropsWithChildren<{}>) => {
   }
 
   async function protectRoute (navigate: NavigateFunction) {
-    console.log(getToken(), !getToken())
     if (!getToken()) {
       navigate("/auth/login")
     }

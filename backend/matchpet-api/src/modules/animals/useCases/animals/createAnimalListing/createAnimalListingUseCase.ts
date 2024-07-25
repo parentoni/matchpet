@@ -18,6 +18,7 @@ import { ISpecieRepo } from "../../../repository/ISpeciesRepo";
 import { CreateAnimalListingDTO } from "./createAnimalListingDTO";
 import { CreateAnimalListingResponse } from "./createAnimalListingResponse";
 import { AnimalImagesExport } from "../../../domain/animal/AnimalImageExport";
+import { UserMap } from "../../../../user/mappers/userMap";
 
 export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDTO, CreateAnimalListingResponse> {
   private specieRepo: ISpecieRepo;
@@ -81,6 +82,17 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
     }
 
     let animalContact: Contacts;
+
+    // retrieve user for animal contact information and location information
+    const userPersistent = await this.getUserByIdUseCase.execute({ uid: request.donatorId });
+    if (userPersistent.isLeft()) {
+      return left(userPersistent.value);
+    }
+
+    const user = await UserMap.toDomain(userPersistent.value); 
+
+
+    if (user.isLeft()) return left(user.value);
     if (request.contact) {
       const animalContactOrError = Contacts.createFromPersistent(request.contact);
       if (animalContactOrError.isLeft()) {
@@ -89,15 +101,12 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
 
       animalContact = animalContactOrError.value;
     } else {
-      const user = await this.getUserByIdUseCase.execute({ uid: request.donatorId });
-      if (user.isLeft()) {
-        return left(user.value);
-      }
 
       const animalContactOrError = Contacts.createFromPersistent([
-        { contact_type: "WHATSAPP", contact_value: user.value.phone_number },
-        { contact_type: "EMAIL", contact_value: user.value.email }
+        { contact_type: "WHATSAPP", contact_value: user.value.phone.value},
+        { contact_type: "EMAIL", contact_value: user.value.email.value}
       ]);
+
       if (animalContactOrError.isLeft()) {
         return left(animalContactOrError.value);
       }
@@ -119,7 +128,8 @@ export class CreateAnimalListingUseCase implements UseCase<CreateAnimalListingDT
       contact: animalContact,
       views: 0,
       clicks: 0,
-      sex: animalSex
+      sex: animalSex,
+      ibgeId: user.value.ibgeId 
     });
 
     if (animalResult.isLeft()) {

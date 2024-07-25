@@ -152,7 +152,6 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
         }
         setAnimalsLoading(false)
       }).catch(err => {
-        console.log(err)
         setAnimalsLoading(false)
     })
     } else {

@@ -305,7 +305,6 @@ export class AnimalRepo implements IAnimalRepo {
     filters.push({ $count: "count" });
 
     try {
-      console.log(filters);
       const count = await AnimalModel.aggregate(filters);
       return right(count[0]?.count || 0);
     } catch (error) {

@@ -10,7 +10,6 @@ export const PartnerImageUpload = (props: PartnerImageUploadProps) => {
 
   const handleFileUpload = (e:  React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      console.log(e.target.files)
       props.setImages([...props.images,{"type": 'File', data: e.target.files[0]}])      
     }
   }

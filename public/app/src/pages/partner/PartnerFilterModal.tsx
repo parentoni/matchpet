@@ -71,7 +71,6 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
     }
 
     setVisualFilters(structuredClone(visualFilters));
-    console.log(visualFilters)
   }
 
   const deleteFromVisualFilters = (key: string) => {

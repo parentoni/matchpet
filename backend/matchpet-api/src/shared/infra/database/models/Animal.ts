@@ -14,6 +14,9 @@ export const contactSchema = new mongoose.Schema({
   contact_value: { type: String, required: true }
 });
 
+/**
+ * @property ibgeId: IBGE's mesoregion of listed animal;
+ * */
 export const AnimalSchema = new mongoose.Schema({
   name: { type: String, required: true },
   image: { type: [String], required: true },
@@ -28,7 +31,8 @@ export const AnimalSchema = new mongoose.Schema({
   last_modified_at: { type: Date, required: true },
   contact: { type: [contactSchema], required: true },
   views: { type: Number, required: true, default: 0 },
-  clicks: { type: Number, required: true, default: 0 }
+  clicks: { type: Number, required: true, default: 0 },
+  ibgeId: {type: String, required: true}
 });
 
 //db.animals.updateMany({}, {$set: {last_modified_at: new Date()}})
@@ -48,6 +52,7 @@ export interface IAnimalPersistent {
   contact: IContactPersistent[];
   views: number;
   clicks: number;
+  ibgeId: string;
 }
 
 export interface IAnimalTraitsPersistent {
