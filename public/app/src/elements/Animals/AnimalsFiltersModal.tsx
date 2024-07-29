@@ -33,7 +33,7 @@ export function AnimalFiltersModalContainer ()  {
 
 function AnimalFiltersButton ({setIsOpen}: {setIsOpen: (open: boolean) => void}) {
   return (
-    <div className='flex gap-5'>
+    <div className='flex gap-5 max-w-7xl mx-auto'>
      <button className="w-full h-11 bg-primary rounded flex justify-center items-center " onClick={() => setIsOpen(true)}>
       <p className='text-white text-xl font-light'>Filtrar</p>
     </button>

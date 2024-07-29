@@ -1,31 +1,41 @@
 import { createContext, useEffect, useRef } from "react";
 import { NavigateFunction} from "react-router-dom";
+import { IbgeMesoregion } from "../services/dtos/IbgeLocatin";
 
 
 /**
  * Ibge id is the id of the user's selected mesoregion
  * */
 export type LocationContextInterface = {
-  ibgeId: string,
+  ibgeId: IbgeMesoregion,
   ensureLocationIsSelected: (navigate: NavigateFunction) => void,
-  changeLocation: (newLocation: string) => void;
+  changeLocation: (newLocation: IbgeMesoregion) => void;
 };
 
 const LocationContextDefault = {
-  ibgeId: "", 
-  ensureLocationIsSelected: (navigate:NavigateFunction) => {},
-  changeLocation: (newLocation:string) => {},
+  ibgeId: {id:"", nome: "", UF: {
+    id:"",
+    nome:"",
+    sigla:"", 
+    regiao:{
+      id:"",
+      nome:"",
+      sigla:"",
+    }}
+  }, 
+  ensureLocationIsSelected: () => {},
+  changeLocation: () => {},
 };
 
 export const LocationContext = createContext<LocationContextInterface>(LocationContextDefault);
 export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>) => {
 
-  const ibgeId = useRef<string>("");
+  const ibgeId = useRef<IbgeMesoregion>(LocationContextDefault.ibgeId);
 
   useEffect(() => {
     const id = localStorage.getItem("ibgeid");
     if (id == null || !id) return;
-    ibgeId.current = id;
+    ibgeId.current = JSON.parse(id);
   }, [])
 
   const ensureLocationIsSelected = (navigate: NavigateFunction) => {
@@ -33,11 +43,10 @@ export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>)
     navigate(`/location?to=${window.location.pathname}`);
   }
 
-  const changeLocation = (newLocation:string) => {
-    localStorage.setItem("ibgeid", newLocation);
+  const changeLocation = (newLocation:IbgeMesoregion) => {
+    localStorage.setItem("ibgeid", JSON.stringify(newLocation));
     ibgeId.current = newLocation;
   }
-
 
   return (
     <LocationContext.Provider value={{ibgeId: ibgeId.current, ensureLocationIsSelected, changeLocation}}> {children}
