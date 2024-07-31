@@ -1,5 +1,3 @@
-import { GithubIcon, Instagram } from "lucide-react"
-import { PageLayout } from "../../PageLayout"
 import catLogo from '../../assets/logo-reduced.svg'
 import { useGetStats } from "../../elements/hero/useGetStats"
 import { useGetActiveUsers } from "../../elements/hero/useGetActiveUsers"
@@ -15,7 +13,6 @@ export function HeroPage  ()  {
   const {user} = useContext(AuthContext)
 
   const navigate = useNavigate()
-
   const {preferredSpecie} = useContext(SpeciesContext)
 
   //Listen for partner users
