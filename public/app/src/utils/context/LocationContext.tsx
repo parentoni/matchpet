@@ -10,6 +10,7 @@ export type LocationContextInterface = {
   ibgeId: IbgeMesoregion,
   ensureLocationIsSelected: (navigate: NavigateFunction) => void,
   changeLocation: (newLocation: IbgeMesoregion) => void;
+  getLocation : () => IbgeMesoregion
 };
 
 const LocationContextDefault = {
@@ -25,6 +26,16 @@ const LocationContextDefault = {
   }, 
   ensureLocationIsSelected: () => {},
   changeLocation: () => {},
+  getLocation: () => {return {id:"", nome: "", UF: {
+    id:"",
+    nome:"",
+    sigla:"", 
+    regiao:{
+      id:"",
+      nome:"",
+      sigla:"",
+    }}
+  }}
 };
 
 export const LocationContext = createContext<LocationContextInterface>(LocationContextDefault);
@@ -39,17 +50,23 @@ export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>)
   }, [])
 
   const ensureLocationIsSelected = (navigate: NavigateFunction) => {
-    if (ibgeId.current && ibgeId.current != null) return;
-    navigate(`/location?to=${window.location.pathname}`);
+    if (ibgeId.current.id && ibgeId.current != null) return;
+    navigate(`/regions`);
+    // navigate(`/location?to=${window.location.pathname}`);
   }
 
   const changeLocation = (newLocation:IbgeMesoregion) => {
     localStorage.setItem("ibgeid", JSON.stringify(newLocation));
     ibgeId.current = newLocation;
+    // console.log("HA", ibgeId.current)
+  }
+
+  const getLocation = () => {
+    return ibgeId.current
   }
 
   return (
-    <LocationContext.Provider value={{ibgeId: ibgeId.current, ensureLocationIsSelected, changeLocation}}> {children}
+    <LocationContext.Provider value={{ibgeId: ibgeId.current, ensureLocationIsSelected, changeLocation, getLocation}}> {children}
     </LocationContext.Provider>
   )
 

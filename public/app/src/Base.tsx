@@ -8,6 +8,7 @@ import { AuthContext } from './utils/context/AuthContext'
 import { FullPageModal } from './elements/FullPageModal'
 import { PageLayout } from './PageLayout'
 import { Footer } from './elements/app/Footer'
+import { LocationContext } from './utils/context/LocationContext'
 export const App = () => {
 
   const [showNavigate, setShowNavigate] = useState(false)
@@ -37,7 +38,7 @@ export const AppMenuModal = ({showNavigate, setShowNavigate}: {showNavigate: boo
   // Contexts
   const {user} = useContext(AuthContext)
   const {species, preferredSpecie } = useContext(SpeciesContext)
-
+  const {ensureLocationIsSelected, ibgeId, getLocation} = useContext(LocationContext)
   // State
   const navigate = useNavigate()
 
@@ -72,10 +73,16 @@ export const AppMenuModal = ({showNavigate, setShowNavigate}: {showNavigate: boo
             <p>Mudar espécie selecionada ({species.find(x => x._id === preferredSpecie)?.name || 'nenhuma'})</p>
           </button>
           <div className='dividier border-b'></div>
+          <button className='flex gap-3 items-center' onClick={() => {navigate('/regions'); setShowNavigate(false)}}>
+            <img alt='Match' src={reducedLogo} className='w-8'></img>
+            <p>Mudar região de busca selecionada ({getLocation().nome})</p>
+          </button>
+          <div className='dividier border-b'></div>
           <button className='flex gap-3 items-center' onClick={() => {navigate('/animals');setShowNavigate(false)}}>
             <img alt='Match' src={reducedLogo} className='w-8'></img>
             <p>Ver animais para adoção</p>
           </button>
+          
         </div>
       </PageLayout>
 
