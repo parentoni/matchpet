@@ -144,8 +144,10 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
 
         if (page === 0) {
           setAnimals(res.value.animals)
+
           animalCache.current[createAnimalCacheKey(filter, coordinatesV)] = res.value.animals
         } else {
+
           setAnimals([...animals, ...res.value.animals])
           animalCache.current[createAnimalCacheKey(filter, coordinatesV)] = [...animals, ...res.value.animals]
 

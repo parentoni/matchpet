@@ -17,7 +17,6 @@ export interface PartnerFilterModalProps {
 }
 
 export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
-
   const { species } = useContext(SpeciesContext);
   const { useCreateVisualFilter, useCreateVisualCounter, useCountVisual, useListenForQuerySearchParams,  loading, dispatch } = useContext(FiltersContext);
   const { categories } = useContext(CategoriesContext);
@@ -31,6 +30,8 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
   };
 
   useEffect(() => {
+    // visualFilters["ibgeId"] = [{comparation_value: getLocation().id.toString(), mode: FILTER_MODES.EQUAL }]
+    // setVisualFilters(structuredClone(visualFilters))
     if (user) {
       visualFilters['donator_id'] = [{ mode: FILTER_MODES.EQUAL, comparation_value: user._id }];
       setVisualFilters(structuredClone(visualFilters));
@@ -64,7 +65,6 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
 
   const changeVisualFiltersRenew = (canBeRenewed:boolean) => {
     if (canBeRenewed) {
-      // visualFilters['renew'] = [{ mode: FILTER_MODES.EQUAL, comparation_value: 'true' }]; | Such a good implementation, check this later
       visualFilters['last_modified_at'] = [{ mode: FILTER_MODES.LESS_THAN_EQUAL, comparation_value: sevenDaysAgo.toISOString()}];
     } else {
       visualFilters['last_modified_at'] = [{ mode: FILTER_MODES.GREATHER_THAN, comparation_value: sevenDaysAgo.toISOString()}]; 

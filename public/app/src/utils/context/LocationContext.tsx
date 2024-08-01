@@ -51,8 +51,8 @@ export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>)
 
   const ensureLocationIsSelected = (navigate: NavigateFunction) => {
     if (ibgeId.current.id && ibgeId.current != null) return;
-    navigate(`/regions`);
-    // navigate(`/location?to=${window.location.pathname}`);
+    // navigate(`/regions`);
+    navigate(`/regions?to=${window.location.pathname}`);
   }
 
   const changeLocation = (newLocation:IbgeMesoregion) => {

@@ -11,6 +11,7 @@ import { Specie } from "../utils/domain/Specie"
 import { ANIMAL_STATUS } from "../utils/services/dtos/AnimalDTO"
 import { AuthContext } from "../utils/context/AuthContext"
 import { SEX } from "../utils/domain/Animal"
+import { LocationContext } from "../utils/context/LocationContext"
 
 export interface FilterModalProps {
   animalsCount: number,
@@ -28,7 +29,7 @@ export const FilterModal = (props: FilterModalProps) => {
   const {categories} = useContext(CategoriesContext)
   const {useCreateVisualFilter, useCreateVisualCounter, useCreateVisualCoordinates, useCountVisual, dispatch, filters} = useContext(FiltersContext)
   const {user} = useContext(AuthContext)
-
+  const {getLocation} = useContext(LocationContext)
   const [selectedSpecie, setSelectedSpecie] = useState<ISpecieDTO | null>(null)
 
   const [filtersV, setFilters] = useCreateVisualFilter()
@@ -78,7 +79,7 @@ export const FilterModal = (props: FilterModalProps) => {
     }
 
     filters.current = structuredClone(obj)
-  }, [])
+      }, [])
 
   return (
     <>
@@ -144,7 +145,7 @@ export const FilterModal = (props: FilterModalProps) => {
               <button className='h-12  gap-6 px-6 text-white bg-black brute-border rounded items-center flex' onClick={() => setFilters({})}>
                 Limpar
               </button>
-              <button className='h-12  px-6 bg-primary rounded  items-center flex' onClick={() => {dispatch(filtersV, coordinatesV, true);props.setIsOpen(false)}}>
+              <button className='h-12  px-6 bg-primary rounded  items-center flex' onClick={() => {filtersV['ibgeId'] = [{comparation_value: getLocation().id.toString(), mode: FILTER_MODES.EQUAL }];dispatch(filtersV, coordinatesV, true);props.setIsOpen(false)}}>
                 Mostar &nbsp;{props.loading?<span className='loading loading-spinner loading-xs'></span>:counter}&nbsp; animais
               </button>
             </div>

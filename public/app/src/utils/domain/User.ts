@@ -12,7 +12,8 @@ export interface ISignInUserProps {
   phone: string;
   location: [number, number];
   description?:string,
-  image?:string
+  image?:string,
+  ibgeId : string
 }
 export class User {
   public static async getUserContactInfo(id: string): Promise<Either<Response, IUserContactDTO>> {

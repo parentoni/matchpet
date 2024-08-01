@@ -25,9 +25,9 @@ export function AllAnimals () {
       obj['specie_id'] = [{comparation_value: preferredSpecie, mode: FILTER_MODES.EQUAL}]
       filters.current = obj
     }
-    obj['ibgeId'] = [{comparation_value: getLocation().id, mode: FILTER_MODES.EQUAL }]
+    obj['ibgeId'] = [{comparation_value: getLocation().id.toString(), mode: FILTER_MODES.EQUAL }]
     filters.current = obj
-    console.log(filters.current)
+    // console.log(filters.current)
     dispatch(filters.current, [], true)
   }, [preferredSpecie])
 

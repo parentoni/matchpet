@@ -10,20 +10,23 @@ import { Form} from "../../elements/auth/register/Form";
 import { firstPageSubmit } from "../../elements/auth/register/functions/firstPageSubmit";
 import { secondPageSubmit } from "../../elements/auth/register/functions/secondPageSubmit";
 import { User } from "../../utils/domain/User";
+import { LocationContext } from "../../utils/context/LocationContext";
 
 export function RegisterPage () {
 
+
   const navigate = useNavigate()
   const routerLocation = useLocation()
-
   const [page, setPage] = useState<number>(0)
-
+  const {getLocation, ensureLocationIsSelected} = useContext(LocationContext)
   const [showFirstPassword, setShowFirstPassword] = useState<boolean>(false)
   const [showSecondPassword, setShowSecondPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
 
   const usernameRef = useRef<HTMLInputElement>(null)
-
+  useEffect(() => {
+    ensureLocationIsSelected(navigate)
+  }, [])
   const [form, setForm] = useState<Form>(
     {
       'display_name': {
@@ -62,6 +65,7 @@ export function RegisterPage () {
     )
 
   const [location, setLocation] = useState<[number,number]>()
+
   const [locationErrorMessage, setLocationErrorMessage] = useState<string>()
 
   const [errorMessage, setErrorMessage] = useState<string>()
@@ -80,7 +84,8 @@ export function RegisterPage () {
         email: form['email'].variable,
         password: form['password'].variable,
         phone:  form['phone'].variable,
-        location: location || [0,0]
+        location: location || [0,0],
+        ibgeId : getLocation().id
       })
 
       if (response.isLeft()) {
@@ -185,7 +190,8 @@ export function RegisterPage () {
               placeholder="(31) 12345-6789"
               formName="phone"
             />
-            <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={locationErrorMessage}/>
+            <p className="font-medium">Região atualmente selecionada: <b>{getLocation().nome}</b>, <span className="font-medium text-primary underline cursor-pointer" onClick={() => navigate("/regions?to=/auth/register")}>clique aqui para alterar.</span></p>
+            {/* <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={locationErrorMessage}/> */}
           </Register.Step>
 
           <Register.Step page={2}>
