@@ -1,3 +1,4 @@
+import { Secrets } from "../../../../config/secretsManager";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { CreateUserDTO } from "./CreateUserDTO";
 import { CreateUserResponse } from "./CreateUserResponse";
@@ -142,7 +143,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         password: hashedPassword.value,
         phone,
         role,
-        verified: false,
+        verified: Secrets.NODE_ENV == 'production'?false:true,
         location,
         inAdoption: 0,
         completedAdoptions: 0,

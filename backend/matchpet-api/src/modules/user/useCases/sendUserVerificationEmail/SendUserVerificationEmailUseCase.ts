@@ -1,3 +1,4 @@
+import { Secrets } from "../../../../config/secretsManager";
 import { Guard } from "../../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { left, right } from "../../../../shared/core/Result";
@@ -26,6 +27,11 @@ export class SendUserVerificationEmailUseCase implements UseCase<CreateUserVerif
     const userVerificationTokenResponse = await this.createUserVerificationTokenUseCase.execute({ user: request.user });
     if (userVerificationTokenResponse.isLeft()) {
       return left(userVerificationTokenResponse.value);
+    }
+
+    if (Secrets.NODE_ENV == 'development') {
+      console.log(`[${SendUserVerificationEmailUseCase.name}.execute]: skipping email verification for ${request.user.email.value}`)
+      return right('ok');
     }
 
     try {
