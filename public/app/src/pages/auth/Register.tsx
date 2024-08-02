@@ -64,8 +64,7 @@ export function RegisterPage () {
     }
     )
 
-  const [location, setLocation] = useState<[number,number]>()
-
+  const [location, setLocation] = useState<[number,number]>([0,0])
   const [locationErrorMessage, setLocationErrorMessage] = useState<string>()
 
   const [errorMessage, setErrorMessage] = useState<string>()
