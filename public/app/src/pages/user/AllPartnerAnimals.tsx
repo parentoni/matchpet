@@ -36,6 +36,7 @@ export const AllPartnerAnimals = () => {
       )
     }
   }, [user])
+  
   useEffect(() => {
     // Thx to Liam on stack overflow
     // Function that should be called on window resize
@@ -94,7 +95,7 @@ export const AllPartnerAnimals = () => {
   return (
 
     <>
-      <div className="w-full flex  flex-col mt-8 border-b pb-3">
+      <div className="w-full flex flex-col mt-8 border-b pb-3">
 
         <button className="mb-5 font-medium flex gap-2 mx-8" onClick={() => routerLocation.key !== 'default'?navigate(-1):navigate('/')}>
           <span><ArrowLeft /></span>

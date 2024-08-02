@@ -34,6 +34,7 @@ export class UserMap {
     const userIdOrError = UniqueGlobalId.createExisting(persistance._id);
     const userLastLoginOrError = UserLastLogin.create({ date: persistance.last_login });
     const userNameOrError = UserName.create({ username: persistance.username });
+    const userIbgeIdOrError= UniqueGlobalId.createExisting(persistance.ibgeId);
 
     let image: undefined | UserImage;
     if (persistance.image) {
@@ -63,7 +64,8 @@ export class UserMap {
       userIdOrError,
       userLastLoginOrError,
       userDisplayNameOrError,
-      userNameOrError
+      userNameOrError,
+      userIbgeIdOrError
     ]);
 
     if (result.isRight()) {
@@ -81,8 +83,10 @@ export class UserMap {
           completedAdoptions: persistance.completed_adoptions,
           lastLogin: userLastLoginOrError.getRight(),
           image,
-          description
+          description,
+          ibgeId: userIbgeIdOrError.getRight(),
         },
+
         new UniqueGlobalId(userIdOrError.getRight().toValue().toString() as string)
       );
 
@@ -123,7 +127,8 @@ export class UserMap {
         in_adoption: user.inAdoption,
         last_login: user.lastLogin.value,
         image: user.image?.value || "",
-        description: user.description?.value || ""
+        description: user.description?.value || "",
+        ibgeId: user.ibgeId.toValue()
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

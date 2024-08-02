@@ -26,6 +26,7 @@ export interface IAnimalProps {
   animalTrait: AnimalTraits;
   status: AnimalStatus;
   description: AnimalDescription;
+  ibgeId: UniqueGlobalId;
 
   createdAt: Timestamp;
   lastModifiedAt: Timestamp;
@@ -95,6 +96,11 @@ export class Animal extends AggregateRoot<IAnimalProps> {
     return this.props.sex
   }
 
+  get ibgeId(): UniqueGlobalId {
+    return this.props.ibgeId;
+
+  }
+
   public markAnimalAsEditied() {
     this.addDomainEvent(new AnimalEdited(this));
   }
@@ -138,7 +144,8 @@ export class Animal extends AggregateRoot<IAnimalProps> {
       { argumentName: "ANIMAL_LAST_MODIFIED_AT", argument: props.createdAt },
       { argumentName: "ANIMAL_CONTACT", argument: props.contact },
       { argumentName: "ANIMAL_CLICKS", argument: props.clicks },
-      { argumentName: "ANIMAL_VIEWS", argument: props.views }
+      { argumentName: "ANIMAL_VIEWS", argument: props.views },
+      { argumentName: "ANIMAL_IBGE", argument: props.ibgeId}
     ]);
 
     if (guardResult.isLeft()) {

@@ -40,8 +40,9 @@ export const Footer = () => {
             {name: "Tela inicial", href: "/"},
             {name: "Ver todos animais", href: "/animals"},
             {name: "Selecionar preferência de animais", href: "/select?to=/animals"},
+            {name: "Selecionar região de busca", href: "/regions"},
             {name: "Entrar", href: "/auth/login"},
-            {name: "Cadastrar", href: "/auth/register"},
+            {name: "Cadastrar", href: "/auth/register"}
           ]}/>
         </div>
 

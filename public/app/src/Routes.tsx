@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, useLoaderData, useLocation } from "react-router-dom";
+import { createBrowserRouter, RouterProvider} from "react-router-dom";
 import { App } from "./Base";
 import { SpecificAnimal } from "./pages/user/SpecificAnimal";
 import { AllAnimals } from "./pages/user/AllAnimals";
@@ -12,6 +12,7 @@ import { HeroPage } from "./pages/hero/Hero";
 import { AnimalSelect } from "./pages/hero/AnimalSelect";
 import { Thanks } from "./pages/auth/Thanks";
 import { Verify } from "./pages/auth/Verify";
+import { RegionsPage } from "./pages/hero/RegionsPage";
 import { ForgotPassword } from "./pages/auth/ForgotPassword";
 import { ForgotPasswordSuccess } from "./pages/auth/ForgotPassrodSuccess";
 import { ResetPassword } from "./pages/auth/ResetPassword";
@@ -62,6 +63,10 @@ const routes = [
       { 
         path: '/about',
         element: <About />
+      },
+      { 
+        path: '/regions',
+        element: <RegionsPage />
       }
     ]
   },

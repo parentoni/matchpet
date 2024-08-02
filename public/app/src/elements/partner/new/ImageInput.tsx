@@ -85,10 +85,8 @@ export const ImageInputModal = (props: ImageInputModalProps) => {
     if (typeof props.imageInputModalIsOpenId !== 'undefined') {
       const result = props.imagesArray[props.imageInputModalIsOpenId as number]
       if (result !== undefined) {
-        console.log(result)
         setImage(result)
       } else {
-        console.log('called')
         setImage(new UndefinedImage())
       }
     }

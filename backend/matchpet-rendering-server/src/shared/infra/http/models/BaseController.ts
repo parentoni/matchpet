@@ -78,7 +78,6 @@ export abstract class BaseController<T extends Request> {
   }
 
   public fail(res: express.Response, error?: any) {
-    console.log(error);
     return BaseController.jsonResponse(res, 500, error ? error : "Something went wrong");
   }
 

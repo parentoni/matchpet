@@ -32,6 +32,7 @@ export class AnimalMapper {
     const animalSexOrError = AnimalSex.create({ sex: persistent.sex })
     const animalCreatedAt = Timestamp.create(persistent.created_at);
     const animalLastModified = Timestamp.create(persistent.last_modified_at);
+    const animalIbgeIdOrError = UniqueGlobalId.createExisting(persistent.ibgeId); // not really a unique global id but whatever
     
     // Check for lefts in declared animal values
     const combineResult = EitherUtils.combine([
@@ -45,7 +46,8 @@ export class AnimalMapper {
       animalTraitsOrError,
       animalDescriptionOrError,
       animalContactsOrError,
-      animalSexOrError
+      animalSexOrError,
+      animalIbgeIdOrError
     ]);
 
     if (combineResult.isLeft()) {
@@ -64,6 +66,7 @@ export class AnimalMapper {
     const animalDescription = animalDescriptionOrError.getRight();
     const animalContacts = animalContactsOrError.getRight();
     const animalSex = animalSexOrError.getRight()
+    const animalIbgeId = animalIbgeIdOrError.getRight();
 
     // Create domain animal from verified variables
     const animal = Animal.create(
@@ -81,7 +84,8 @@ export class AnimalMapper {
         contact: animalContacts,
         views: persistent.views || 0,
         clicks: persistent.clicks || 0,
-        sex: animalSex
+        sex: animalSex,
+        ibgeId: animalIbgeId
       },
       animalId
     );
@@ -110,7 +114,8 @@ export class AnimalMapper {
         contact: domain.contact.persistentValue,
         views: domain.views,
         clicks: domain.clicks,
-        sex: domain.sex.value
+        sex: domain.sex.value,
+        ibgeId: domain.ibgeId.toValue(),
       });
     } catch (error) {
       return left(CommonUseCaseResult.UnexpectedError.create(error));

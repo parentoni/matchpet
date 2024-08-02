@@ -30,7 +30,6 @@ export class SendEmailUseCase implements UseCase<SendEmailDTO, SendEmailResponse
       return left(guardResult.value);
     }
 
-    console.log(request.source.split("@")[1]);
     if (request.source.split("@")[1] !== "matchpet.org") {
       return left(
         CommonUseCaseResult.InvalidValue.create({

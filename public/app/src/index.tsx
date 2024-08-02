@@ -8,6 +8,7 @@ import {ChakraProvider, StyleFunctionProps, extendTheme} from '@chakra-ui/react'
 import { FiltersContextProvider } from './utils/context/FiltersContext';
 import { OrganizationsProvider } from './utils/context/OrganizationsContext';
 import ReactGA from 'react-ga4'
+import { LocationContext, LocationContextProvider } from './utils/context/LocationContext';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
   );
@@ -33,7 +34,9 @@ root.render(
         <AuthProvider>
           <CategoriesContextProvider>
             <SpeciesContextProvider>
-              <RouterApp />
+              <LocationContextProvider>
+                <RouterApp />
+              </LocationContextProvider>
             </SpeciesContextProvider>
           </CategoriesContextProvider>
         </AuthProvider>

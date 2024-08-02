@@ -1,25 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { Image, Megaphone } from "lucide-react"
-import { AnimalImageGallery } from "../SpecificAnimal/AnmalImageGallery"
-import { CarouselContext, CarouselProvider } from "pure-react-carousel"
-import { Play, Pause } from "lucide-react"
-import { AnimalComplaint } from "../Animals/AnimalsGrid"
-// import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator"
-// import ThumbnailGenerator from "@conpago/video-thumbnail-generator"
-// import { VideoThumbnail }  from "react-video-thumbnail"
+import {  useRef, useState } from "react"
+import {  CarouselProvider } from "pure-react-carousel"
 
 export function AnimalImagePC({AnimalImages, AnimalName, AnimalId}: {AnimalImages: string[], AnimalName: string, AnimalId: string}) {
 
   const vidRef = useRef<null | HTMLVideoElement>(null)
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, _setCurrentSlide] = useState(0)
   const windowWidth = useRef(window.innerWidth)
   const [chosenImage, setChosenImage] = useState<string>(AnimalImages[0])  
-  console.log(chosenImage, "IMAGE")
-  const [showComplainModal, setShowComplaintModal] = useState<boolean>(false)
-  console.log(AnimalId)
 
-  useEffect(() => {
-  }, [])
   return(
     <>
     <div className='relative w-full  h-full flex-col'>

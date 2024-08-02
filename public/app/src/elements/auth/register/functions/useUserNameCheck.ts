@@ -15,7 +15,6 @@ export const useUserNameCheck = (form: Form, setForm: (x: Form) => void, usernam
         //   setUserNameTaken(false)
         // }
 
-        console.log(form['username'].variable)
 
       })
     return (
