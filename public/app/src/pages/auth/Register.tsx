@@ -18,7 +18,7 @@ export function RegisterPage () {
   const navigate = useNavigate()
   const routerLocation = useLocation()
   const [page, setPage] = useState<number>(0)
-  const {getLocation, ensureLocationIsSelected} = useContext(LocationContext)
+  const {ibgeId, ensureLocationIsSelected} = useContext(LocationContext)
   const [showFirstPassword, setShowFirstPassword] = useState<boolean>(false)
   const [showSecondPassword, setShowSecondPassword] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
@@ -84,7 +84,7 @@ export function RegisterPage () {
         password: form['password'].variable,
         phone:  form['phone'].variable,
         location: location || [0,0],
-        ibgeId : getLocation().id
+        ibgeId : ibgeId()!.id
       })
 
       if (response.isLeft()) {
@@ -189,7 +189,7 @@ export function RegisterPage () {
               placeholder="(31) 12345-6789"
               formName="phone"
             />
-            <p className="font-medium">Região atualmente selecionada: <b>{getLocation().nome}</b>, <span className="font-medium text-primary underline cursor-pointer" onClick={() => navigate("/regions?to=/auth/register")}>clique aqui para alterar.</span></p>
+            <p className="font-medium">Região atualmente selecionada: <b>{ibgeId()!.nome}</b>, <span className="font-medium text-primary underline cursor-pointer" onClick={() => navigate("/regions?to=/auth/register")}>clique aqui para alterar.</span></p>
             {/* <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={locationErrorMessage}/> */}
           </Register.Step>
 

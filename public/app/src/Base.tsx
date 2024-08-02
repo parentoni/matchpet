@@ -38,7 +38,7 @@ export const AppMenuModal = ({showNavigate, setShowNavigate}: {showNavigate: boo
   // Contexts
   const {user} = useContext(AuthContext)
   const {species, preferredSpecie } = useContext(SpeciesContext)
-  const {ensureLocationIsSelected, ibgeId, getLocation} = useContext(LocationContext)
+  const {ibgeId} = useContext(LocationContext)
   // State
   const navigate = useNavigate()
 
@@ -75,7 +75,7 @@ export const AppMenuModal = ({showNavigate, setShowNavigate}: {showNavigate: boo
           <div className='dividier border-b'></div>
           <button className='flex gap-3 items-center' onClick={() => {navigate('/regions'); setShowNavigate(false)}}>
             <img alt='Match' src={reducedLogo} className='w-8'></img>
-            <p>Mudar região de busca selecionada ({getLocation().nome})</p>
+            <p>Mudar região de busca selecionada ({ibgeId()!.nome})</p>
           </button>
           <div className='dividier border-b'></div>
           <button className='flex gap-3 items-center' onClick={() => {navigate('/animals');setShowNavigate(false)}}>

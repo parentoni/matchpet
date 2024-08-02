@@ -30,8 +30,6 @@ export const PartnerFilterModal = (props: PartnerFilterModalProps) => {
   };
 
   useEffect(() => {
-    // visualFilters["ibgeId"] = [{comparation_value: getLocation().id.toString(), mode: FILTER_MODES.EQUAL }]
-    // setVisualFilters(structuredClone(visualFilters))
     if (user) {
       visualFilters['donator_id'] = [{ mode: FILTER_MODES.EQUAL, comparation_value: user._id }];
       setVisualFilters(structuredClone(visualFilters));
