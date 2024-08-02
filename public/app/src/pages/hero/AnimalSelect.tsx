@@ -11,7 +11,6 @@ export const AnimalSelect = () => {
 
   const setSelected = (id: string) => {
     setPreferredSpecie(id)
-    console.log(id)
     navigate(searchParams.get('to') || '/animals')
   }
 

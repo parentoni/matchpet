@@ -30,6 +30,7 @@ export interface UserProps {
   completedAdoptions: number;
   inAdoption: number;
   lastLogin: UserLastLogin;
+  ibgeId: UniqueGlobalId
 
   image?: UserImage;
   description?: UserDescription;
@@ -89,8 +90,12 @@ export class User extends AggregateRoot<UserProps> {
   get image(): UserImage | undefined {
     return this.props.image;
   }
-  public get description(): UserDescription | undefined {
+  get description(): UserDescription | undefined {
     return this.props.description;
+  }
+
+  get ibgeId(): UniqueGlobalId {
+    return this.props.ibgeId
   }
 
   public updateCompletedAdoptions(num: number): void {
@@ -119,7 +124,9 @@ export class User extends AggregateRoot<UserProps> {
       { argument: props.role, argumentName: "USER_ROLE" },
       { argument: props.verified, argumentName: "USER_VERIFIED" },
       { argument: props.location, argumentName: "USER_LOCATION" },
-      { argument: props.lastLogin, argumentName: "USER_LASTLOGIN" }
+      { argument: props.lastLogin, argumentName: "USER_LASTLOGIN" },
+      { argument: props.ibgeId, argumentName: "USER_IBGEID" }
+
     ]);
 
     if (guardResult.isLeft()) {

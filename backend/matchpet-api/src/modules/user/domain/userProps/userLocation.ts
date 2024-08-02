@@ -38,9 +38,7 @@ export class UserLocation extends ValueObject<UserLocationProps> {
       return left(validateResult.value);
     }
 
-    const geoHadhedCoordinates = geohash.encode(validateResult.value.latitude, validateResult.value.longitude);
 
-    console.log(geoHadhedCoordinates);
     // const geoHash = GeoHash.encode(validateResult.value.latitude, validateResult.value.longitude)
     // console.log(geoHash)
   }

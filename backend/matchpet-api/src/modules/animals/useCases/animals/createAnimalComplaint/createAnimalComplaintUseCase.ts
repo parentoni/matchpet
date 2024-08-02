@@ -47,7 +47,6 @@ export class CreateAnimalComplaintUseCase implements UseCase<CreateAnimalComplai
       } | ${repoResponse.value.id.toValue()} || CONTACT INFO: ${JSON.stringify(request.contact_info)}`,
       subject: "DENUNCIA MATCHPET"
     });
-    console.log("oo");
 
     if (response.isLeft()) {
       return left(response.value);

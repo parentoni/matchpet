@@ -16,7 +16,7 @@ export class DeactivateUnactiveAnimalsUseCase implements UseCase<DeactivateUnact
   protected getUserByUiduseCase: GetUserByUIDUseCase;
   protected animalRepo: IAnimalRepo;
   protected sendEmailuseCase: SendEmailUseCase;
-  static UNACTIVE_DAYS = 35;
+  static UNACTIVE_DAYS = 70;
 
   constructor(getUserByUidUseCase: GetUserByUIDUseCase, animalRepo: IAnimalRepo, sendEmailUseCase: SendEmailUseCase) {
     this.getUserByUiduseCase = getUserByUidUseCase;

@@ -7,4 +7,5 @@ export interface CreateUserDTO {
   location: GeoJSON.Position;
   image?: string;
   description?: string;
+  ibgeId: string
 }

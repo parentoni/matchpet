@@ -62,12 +62,10 @@ export function PartnerAnimalManage () {
   const [stats, setStats] = useState<{clicks:number, views:number} | undefined>(undefined)
   useEffect(() => {
     User.getUserAnimalStats(getToken()).then(res => {
-      console.log(res)
       if (res.isLeft()) {
         return alert(res.value)
       }
 
-      console.log(res.value)
       setStats(res.value)
     })
   }, [])

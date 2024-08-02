@@ -75,7 +75,6 @@ export class Animal {
       }
     }
     
-    console.log(countViews, "COUNT")
     const response = await Api.post(
       `/animals/filter?view=${countViews? "true": "false"}`,
       JSON.stringify(

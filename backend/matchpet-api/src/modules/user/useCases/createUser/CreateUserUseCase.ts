@@ -1,3 +1,4 @@
+import { Secrets } from "../../../../config/secretsManager";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { CreateUserDTO } from "./CreateUserDTO";
 import { CreateUserResponse } from "./CreateUserResponse";
@@ -19,6 +20,7 @@ import { UserName } from "../../domain/userProps/userName";
 import { UserImage } from "../../domain/userProps/userImage";
 import { UserDescription } from "../../domain/userProps/userDescription";
 import { RepositoryBaseResult } from "../../repository/IUserRepo";
+import { UniqueGlobalId } from "../../../../shared/domain/UniqueGlobalD";
 export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserResponse> {
   private userRepo: IUserRepo;
 
@@ -37,6 +39,7 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
     const locationOrError = Location.GeoJsonPoint.create({ coordinates: request.location });
     const lastLoginOrError = UserLastLogin.create({ date: new Date() });
     const userNameOrError = UserName.create({ username: request.username });
+    const ibgeIdOrError = UniqueGlobalId.createExisting(request.ibgeId);
 
     let image: undefined | UserImage;
 
@@ -67,7 +70,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       roleOrError,
       locationOrError,
       lastLoginOrError,
-      userNameOrError
+      userNameOrError,
+      ibgeIdOrError
     ]);
 
     if (result.isLeft()) {
@@ -86,6 +90,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
       value: await password.getHashedValue(),
       hashed: true
     });
+    const ibgeId = ibgeIdOrError.getRight();
+
     if (hashedPassword.isLeft()) {
       return left(hashedPassword.value);
     }
@@ -137,13 +143,14 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         password: hashedPassword.value,
         phone,
         role,
-        verified: false,
+        verified: Secrets.NODE_ENV == 'production'?false:true,
         location,
         inAdoption: 0,
         completedAdoptions: 0,
         lastLogin: lastLogin,
         image,
-        description
+        description,
+        ibgeId,
         // role: UserRole.create({value: 0})
       });
 

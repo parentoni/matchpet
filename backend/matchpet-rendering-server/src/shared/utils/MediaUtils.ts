@@ -22,7 +22,6 @@ export class MediaUtils {
    */
   static createDomainMedia(props: {raw: Blob}): Either<CommonUseCaseResult.InvalidValue, Media>{
     // check if response is image
-    console.log(props.raw.type)
     if (props.raw.type.includes('image/') || props.raw.type.includes('application/')) {
       const image = Image.create({raw: props.raw})
       if (image.isLeft()) {
