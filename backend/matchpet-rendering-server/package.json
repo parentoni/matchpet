@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "start-production": "pm2-runtime start pm2.json",
     "lint": "tsc --noEmit",
     "test": "jest --config jest.config.ts",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
@@ -37,6 +38,7 @@
     "fetch": "^1.1.0",
     "mongoose": "^8.2.2",
     "morgan": "^1.10.0",
-    "node-html-parser": "^6.1.12"
+    "node-html-parser": "^6.1.12",
+    "pm2": "^5.4.2"
   }
 }

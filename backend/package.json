@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "restart-docker": "docker-compose down && docker compose build && docker-compose up -d",
+    "restart-docker": "docker-compose down && docker-compose build && docker-compose up -d",
+    "restart-docker-production": "docker-compose -f docker-compose-prod.yaml down && docker-compose -f docker-compose-prod.yaml build && docker-compose -f docker-compose-prod.yaml up -d",
+    "logs-production": "docker-compose -f docker-compose-prod.yaml logs -f",
     "logs": "docker-compose logs -f"
   },
   "keywords": [],

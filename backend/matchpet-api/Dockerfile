@@ -13,5 +13,5 @@ FROM base as production
 # Set the environment to production
 ENV NODE_ENV=production
 ENV NODE_PATH=./dist
-
 RUN npm run build
+copy . . 

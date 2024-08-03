@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.ts",
-    "start-production": "pm2 start pm2.json",
+    "start-production": "pm2-runtime start pm2.json",
     "test": "jest --config jest.config.ts --runInBand --no-cache --detectOpenHandles --passWithNoTests",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "pretty": "prettier --write \"src/**/*.ts\"",

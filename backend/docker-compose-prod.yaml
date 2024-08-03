@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  matchpet-api:
+    build:
+      context: ./matchpet-api
+      dockerfile: Dockerfile
+      target: production 
+    volumes:
+      - ./matchpet-api/src:/app/src
+      - ./matchpet-api/pm2.json:/app/pm2.json
+    container_name: matchpet-api
+    expose:
+      - '8000'
+    ports:
+      - '8000:8000'
+    command: 'npm run start-production'
+    networks:
+      - internal
+
+  matchpet-rendering-server:
+    build:
+      context: ./matchpet-rendering-server
+      dockerfile: Dockerfile
+      target: production
+    volumes:
+      - ./matchpet-rendering-server/src:/app/src
+      - ./matchpet-api/pm2.json:/app/pm2.json
+    container_name: matchpet-rendering-server
+    expose:
+      - '8001'
+    command: 'npm run start-production'
+    networks:
+      - internal
+  
+
+networks:
+  internal:
+    driver: bridge

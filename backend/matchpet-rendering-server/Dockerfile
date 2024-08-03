@@ -29,3 +29,11 @@ USER pptruser
 run npm i 
 copy . . 
 
+FROM base as production
+
+# Set the environment to production
+ENV NODE_ENV=production
+ENV NODE_PATH=./dist
+
+run npm run build
+copy . . 
