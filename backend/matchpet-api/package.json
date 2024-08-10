@@ -4,11 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.ts",
-    "start-production": "pm2-runtime start pm2.json",
+    "build": "tsc",
+    "start-production": "npm run build && cross-env NODE_ENV=production NODE_PATH=./dist node ./dist/index.js",
     "test": "jest --config jest.config.ts --runInBand --no-cache --detectOpenHandles --passWithNoTests",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "pretty": "prettier --write \"src/**/*.ts\"",
-    "build": "tsc",
     "lint": "tsc -noEmit"
   },
   "repository": {

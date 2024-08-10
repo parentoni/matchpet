@@ -22,4 +22,5 @@ const port = Secrets.getSecret("PORT");
 
 app.listen(port, () => {
   console.log(`[App]: Listening on port ${port}`);
+  console.log(`[App]: NODE_ENV ${Secrets.NODE_ENV}`);
 });
