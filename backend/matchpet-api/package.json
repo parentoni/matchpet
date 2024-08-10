@@ -5,7 +5,7 @@
   "scripts": {
     "start-dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "build": "tsc",
-    "start-production": "npm run build && cross-env NODE_ENV=production NODE_PATH=./dist node ./dist/index.js",
+    "start-production": "cross-env NODE_ENV=production NODE_PATH=./dist node ./dist/index.js",
     "test": "jest --config jest.config.ts --runInBand --no-cache --detectOpenHandles --passWithNoTests",
     "coverage": "jest --coverage --detectOpenHandles --forceExit",
     "pretty": "prettier --write \"src/**/*.ts\"",

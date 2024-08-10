@@ -30,8 +30,8 @@ export class AnimalImagesExport extends WatchList<ValidUrl> {
   public static createFromPersistent(props: string[]): Either<GuardError, AnimalImagesExport> {
     const urlsArray: ValidUrl[] = [];
 
-    for (const image of props) {
-      const createResult = ValidUrl.create({ value: image });
+    for (let i=0;i<props?.length || 0;i++) {
+      const createResult = ValidUrl.create({ value: props[i] as string });
       if (createResult.isLeft()) {
         return left(createResult.value);
       }
