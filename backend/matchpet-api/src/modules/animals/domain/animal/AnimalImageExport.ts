@@ -38,7 +38,6 @@ export class AnimalImagesExport extends WatchList<ValidUrl> {
 
       urlsArray.push(createResult.value);
     }
-
     return right(AnimalImagesExport.create(urlsArray));
   }
 
