@@ -2,11 +2,12 @@ version: '3.8'
 
 services:
   matchpet-api:
+    platform: linux/amd64
     build:
       context: ./matchpet-api
       dockerfile: Dockerfile
       target: production 
-    image: "936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-api-08102024:latest"
+    image: "936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-api:latest"
     volumes:
       - ./matchpet-api/src:/app/src
       - ./matchpet-api/pm2.json:/app/pm2.json
@@ -20,11 +21,12 @@ services:
       - internal
 
   matchpet-rendering-server:
+    platform: linux/amd64
     build:
       context: ./matchpet-rendering-server
       dockerfile: Dockerfile
       target: production
-    image: "936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server-08102024:latest"
+    image: "936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server:latest"
     volumes:
       - ./matchpet-rendering-server/src:/app/src
       - ./matchpet-api/pm2.json:/app/pm2.json
