@@ -26,10 +26,10 @@ jobs:
           aws-region: sa-east-1
 
       - name: Builds react
-        run: npm run --prefix public/app build --silent
+        run: npm run --prefix ./public/app build --silent
 
       - name: Syncs s3 bucket
-        run: aws s3 sync public/app/build s3://webapp-matchpet --delete 
+        run: aws s3 sync ./public/app/build s3://webapp-matchpet --delete 
       
       - name: Invalidates cloud front files
         run: aws cloudfront create-invalidation --distribution-id E1U0QTXQKXFJYT --paths '/*' 
