@@ -13,6 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.x
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
