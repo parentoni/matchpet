@@ -26,8 +26,7 @@ jobs:
           aws-region: sa-east-1
 
       - name: Installs dependencies
-        run: npm run ci
-
+        run: npm run --prefix ./public/app ci
       - name: Builds react
         run:  npm run --prefix ./public/app build --silent
 
