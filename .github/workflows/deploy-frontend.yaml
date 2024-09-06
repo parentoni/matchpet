@@ -25,8 +25,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_FRONTEND_SECRET_ACCESS_KEY }}
           aws-region: sa-east-1
 
+      - name: Installs dependencies
+        run: npm run --prefix ./public/app ci
       - name: Builds react
-        run: npm run --prefix ./public/app build --silent
+        run:  npm run --prefix ./public/app build --silent
 
       - name: Syncs s3 bucket
         run: aws s3 sync ./public/app/build s3://webapp-matchpet --delete 
