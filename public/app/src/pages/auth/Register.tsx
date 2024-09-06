@@ -84,7 +84,7 @@ export function RegisterPage () {
         password: form['password'].variable,
         phone:  form['phone'].variable,
         location: location || [0,0],
-        ibgeId : ibgeId()!.id
+        ibgeId : ibgeId() != null? ibgeId()!.id : " "
       })
 
       if (response.isLeft()) {
@@ -189,7 +189,7 @@ export function RegisterPage () {
               placeholder="(31) 12345-6789"
               formName="phone"
             />
-            <p className="font-medium">Região atualmente selecionada: <b>{ibgeId()!.nome}</b>, <span className="font-medium text-primary underline cursor-pointer" onClick={() => navigate("/regions?to=/auth/register")}>clique aqui para alterar.</span></p>
+            <p className="font-medium">Região atualmente selecionada: <b>{ibgeId() != null?ibgeId()!.nome: "nenhuma"}</b>, <span className="font-medium text-primary underline cursor-pointer" onClick={() => navigate("/regions?to=/auth/register")}>clique aqui para alterar.</span></p>
             {/* <Register.Location title="Localização" location={location} setLocation={setLocation} errorMessage={locationErrorMessage}/> */}
           </Register.Step>
 

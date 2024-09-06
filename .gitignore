@@ -11,3 +11,14 @@
 *dist
 node_modules
 *.DS_Store
+
+**/.terraform/*
+
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+.terraform.tfstate.lock.info
+.terraformrc
+terraform.rc

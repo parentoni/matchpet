@@ -34,6 +34,7 @@ export const LocationContextProvider = ({children}: React.PropsWithChildren<{}>)
   }
 
   const ensureLocationIsSelected = (navigate: NavigateFunction) => {
+    console.log(ibgeId())
     if (ibgeId() != null) return;
     // navigate(`/regions`);
     navigate(`/regions?to=${window.location.pathname}`);

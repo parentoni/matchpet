@@ -75,7 +75,7 @@ export const AppMenuModal = ({showNavigate, setShowNavigate}: {showNavigate: boo
           <div className='dividier border-b'></div>
           <button className='flex gap-3 items-center' onClick={() => {navigate('/regions'); setShowNavigate(false)}}>
             <img alt='Match' src={reducedLogo} className='w-8'></img>
-            <p>Mudar região de busca selecionada ({ibgeId()!.nome})</p>
+            <p>Mudar região de busca selecionada ({ibgeId() != null?ibgeId()!.nome: "Nenhuma"})</p>
           </button>
           <div className='dividier border-b'></div>
           <button className='flex gap-3 items-center' onClick={() => {navigate('/animals');setShowNavigate(false)}}>

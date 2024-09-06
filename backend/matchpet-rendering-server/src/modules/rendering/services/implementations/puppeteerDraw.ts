@@ -15,7 +15,13 @@ export class PuppeteerDraw implements IDrawHTML {
 
   async image(props: DrawImageProps): DrawImageResponse {
     // defines the browser and page.
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      defaultViewport: null,
+      protocolTimeout: 240000,
+      args: ['--no-sandbox']}
+    );
+
     const page = await browser.newPage();
 
     try {

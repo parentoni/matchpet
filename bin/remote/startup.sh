@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #source scripts
 sudo chmod +x  ~/remote/start_nginx.sh
 sudo chmod +x  ~/remote/start_express.sh

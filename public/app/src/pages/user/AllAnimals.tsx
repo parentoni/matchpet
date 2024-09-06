@@ -25,13 +25,15 @@ export function AllAnimals () {
       obj['specie_id'] = [{comparation_value: preferredSpecie, mode: FILTER_MODES.EQUAL}]
       filters.current = obj
     }
-    obj['ibgeId'] = [{comparation_value: ibgeId()!.id.toString(), mode: FILTER_MODES.EQUAL }]
+    obj['ibgeId'] = [{comparation_value: ibgeId() != null? ibgeId()!.id.toString(): " ", mode: FILTER_MODES.EQUAL }]
     filters.current = obj
     // console.log(filters.current)
     dispatch(filters.current, [], true)
   }, [preferredSpecie])
 
-  ensureLocationIsSelected(navigate);
+  useEffect(() => {
+    ensureLocationIsSelected(navigate);
+  }, [])
   return (
     <>
       <div className="px-6 pt-8">

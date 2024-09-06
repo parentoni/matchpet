@@ -36,4 +36,6 @@ ENV NODE_ENV=production
 ENV NODE_PATH=./dist
 
 run npm run build
+CMD ["npm", "run", "start-production"]
+
 copy . . 
