@@ -26,8 +26,8 @@ RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
 # Run everything after as non-privileged user.
 USER pptruser
 
-run npm i 
-copy . . 
+RUN npm i 
+COPY . . 
 
 FROM base as production
 
@@ -35,7 +35,7 @@ FROM base as production
 ENV NODE_ENV=production
 ENV NODE_PATH=./dist
 
-run npm run build
+RUN npm run build
 CMD ["npm", "run", "start-production"]
 
-copy . . 
+COPY . . 
