@@ -51,12 +51,12 @@ jobs:
           terraform_version: "1.9.4"
 
       - name: Terraform init
-        run: terraform init
+        run: terraform -chdir=./backend/deploy init 
 
       - name: Terraform apply
         run: >
-          terraform -chdir=./backend/deploy -auto-approve -input=false -var='region=sa-east-1' 
+          terraform -chdir=./backend/deploy apply -auto-approve -input=false -var='region=sa-east-1' 
           -var='aws_account_id=936580475072' -var='aws_az1=sa-east-1a' -var='aws_az2=sa-east-1c'
           -var='aws_route53_zone=Z09294692OG4LRJHK94OG' -var='access_key=${{secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY}}'
-          -var='secret_key=${{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}}' apply
+          -var='secret_key=${{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}}'
 
