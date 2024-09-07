@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
-run npm i 
+RUN npm i 
 
-copy . . 
+COPY . . 
 
 FROM base as production
 
@@ -15,6 +15,6 @@ ENV NODE_ENV=production
 ENV NODE_PATH=./dist
 
 RUN npm run build
-copy . . 
+COPY . . 
 
 CMD ["npm", "run", "start-production"]
