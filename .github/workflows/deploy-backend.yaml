@@ -37,3 +37,26 @@ jobs:
 
       - name: Builds and push matchpet-rendering-server.
         run: docker buildx build --target production --platform linux/amd64 --push -t 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server:latest ./backend/matchpet-api 
+  
+  run-terraform:
+    runs-on: ubuntu-latest
+    needs: deploy-ecr
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.4"
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform apply
+        run: >
+          terraform apply -auto-approve -input=false -var='region=sa-east-1' 
+          -var='aws_account_id=936580475072' -var'aws_az1=sa-east-1a' -var='aws_az2=sa-east-1c'
+          -var='aws_route53_zone=Z09294692OG4LRJHK94OG' -var='access_key=${{secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY}}'
+          -var='secret_key={{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}}'
+
