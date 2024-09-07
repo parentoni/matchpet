@@ -1,4 +1,4 @@
-FROM  node:21-alpine as base
+FROM  node:21-alpine AS base
 
 WORKDIR /app
 COPY package*.json ./
@@ -29,7 +29,7 @@ USER pptruser
 RUN npm i 
 COPY . . 
 
-FROM base as production
+FROM base AS production
 
 # Set the environment to production
 ENV NODE_ENV=production
