@@ -10,9 +10,10 @@ terraform {
 
   backend "s3" {
     bucket  = "matchpet-terraform"
-    profile = "terraform-test"
     region  = "sa-east-1"
     key     = "state/terraform.tfstate"
+    access_key = var.access_key
+    secret_key = var.secret_key
   }
 }
 
