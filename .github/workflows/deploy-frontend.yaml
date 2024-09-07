@@ -27,8 +27,11 @@ jobs:
 
       - name: Installs dependencies
         run: npm --prefix ./public/app ci
+
       - name: Builds react
         run:  npm run --prefix ./public/app build --silent
+        env:
+          CI: false
 
       - name: Syncs s3 bucket
         run: aws s3 sync ./public/app/build s3://webapp-matchpet --delete 

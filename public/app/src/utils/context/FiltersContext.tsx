@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react"
 import { FILTER_MODES } from "../../elements/Animals/filters"
-import { ANIMAL_STATUS, IAnimalDTO } from "../services/dtos/AnimalDTO"
+import { IAnimalDTO } from "../services/dtos/AnimalDTO"
 import { Animal } from "../domain/Animal"
 import { AuthContext } from "./AuthContext"
 import { useSearchParams } from "react-router-dom"
@@ -210,7 +210,7 @@ export const FiltersContextProvider = ({children}: React.PropsWithChildren<{}>) 
   }
 
   const useListenForQuerySearchParams = () => {
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, _setSearchParams] = useSearchParams()
 
     try {
       const result = searchParams.get('query')

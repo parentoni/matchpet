@@ -1,7 +1,6 @@
 import { ISpecieTraitOptionsDTO } from "../../../utils/services/dtos/SpecieDTO"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { FILTER_MODES } from "."
-import { FiltersContext } from "../../../utils/context/FiltersContext"
 
 interface Props {
   title: string,
