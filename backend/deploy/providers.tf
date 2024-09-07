@@ -4,11 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
-
-    mongodbatlas = {
-      source  = "mongodb/mongodbatlas"
-      version = "1.9"
-    }
   }
 
   required_version = ">= 1.2.0"
@@ -22,12 +17,8 @@ terraform {
 }
 
 provider "aws" {
-  profile = "terraform-test"
+  access_key= var.access_key
+  secret_key= var.secret_key
   region  = var.region
-}
-
-provider "mongodbatlas" {
-  public_key  = var.atlas_public_key
-  private_key = var.atlas_private_key
 }
 

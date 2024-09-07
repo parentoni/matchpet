@@ -20,3 +20,11 @@ variable "aws_az2" {
 variable "aws_route53_zone" {
   description = "AWS route53 hosted zone"
 }
+
+variable "access_key" {
+  description = "aws access key"
+}
+
+variable "secret_key" {
+  description = "aws secret key"
+}
