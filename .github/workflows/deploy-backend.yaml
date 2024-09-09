@@ -54,7 +54,7 @@ jobs:
         run: terraform -chdir=./backend/deploy init 
 
       - name: Setup enviroment variables
-        run: export AWS_ACCESS_KEY_ID= ${{secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY}} && export AWS_SECRETE_ACCESS_KEY=${{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}}
+        run: export AWS_ACCESS_KEY_ID= ${{secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY}} && export AWS_SECRET_ACCESS_KEY=${{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}} && export AWS_DEFAULT_REGION=sa-east-1 && export AWS_PROFILE=default
       - name: Terraform apply
         run: >
           terraform -chdir=./backend/deploy apply -auto-approve -input=false -var='region=sa-east-1' 
