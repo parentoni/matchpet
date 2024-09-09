@@ -45,6 +45,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1
+
       - name: Set up terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -53,8 +60,6 @@ jobs:
       - name: Terraform init
         run: terraform -chdir=./backend/deploy init 
 
-      - name: Setup enviroment variables
-        run: export AWS_ACCESS_KEY_ID= ${{secrets.AWS_TERRAFORM_AGENT_ACCESS_KEY}} && export AWS_SECRET_ACCESS_KEY=${{secrets.AWS_TERRAFORM_AGENT_SECRET_ACCESS_KEY}} && export AWS_DEFAULT_REGION=sa-east-1 && export AWS_PROFILE=default
       - name: Terraform apply
         run: >
           terraform -chdir=./backend/deploy apply -auto-approve -input=false -var='region=sa-east-1' 
