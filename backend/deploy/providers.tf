@@ -12,8 +12,6 @@ terraform {
     bucket  = "matchpet-terraform"
     region  = "sa-east-1"
     key     = "state/terraform.tfstate"
-    access_key = var.access_key
-    secret_key = var.secret_key
   }
 }
 
