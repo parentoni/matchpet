@@ -88,7 +88,7 @@ export const SpecificAnimalPC = () => {
   return(
     <>
       {selectedAnimalDTO && selectedSpecie &&
-      <div className="flex  h-screen overflow-hidden   w-full items-center  flex-col gap-3">
+      <div className="flex h-screen overflow-scroll overflow-x-hidden  w-full items-center  flex-col gap-3">
 
         
         <div className="w-full mx-auto flex border-b-2 bg-white justify-between px-8 py-6">
@@ -115,7 +115,7 @@ export const SpecificAnimalPC = () => {
         </div> 
 
         {/* <AnimalAction AnimalId={selectedAnimalDTO._id}/> */}
-        <div className="w-[75%] self-center snap-center h-full  pt-4 ">
+        <div className="w-[70%] self-center snap-center h-full pt-4 ">
         
             <div className='flex h-full  flex-row'>
                 <div id="Test" className='h-full w-[50%]'>
@@ -123,7 +123,9 @@ export const SpecificAnimalPC = () => {
                 </div>
                 <div style={{height: `${width}px`}} className={` w-[50%]  flex flex-col justify-between`}>
                   <div className="flex flex-col gap-4">
-                    <AnimalInfoPC AnimalId={animalId as string} description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name} AnimalSex={isMale === true? "Macho" : "Fêmea"} AnimalSpecie={selectedSpecie.name}/>
+                  
+                    <AnimalInfoPC AnimalId={animalId as string} contactInfo={contactInfo as IUserContactDTO} description={selectedAnimalDTO.description} AnimalName={selectedAnimalDTO.name} AnimalSex={isMale === true? "Macho" : "Fêmea"} AnimalSpecie={selectedSpecie.name}/>
+                    
                     <AnimalTraitsPC  AnimalTraits={selectedAnimalDTO.traits} Specie={Species.createFromDTO(species).findByID(selectedAnimalDTO.specie_id) as Specie} Categories={Categories.createFromDTO(categories)}/>
                   </div>
 
