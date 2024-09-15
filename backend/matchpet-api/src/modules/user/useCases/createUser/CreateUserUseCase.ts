@@ -151,7 +151,6 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, CreateUserRespo
         image,
         description,
         ibgeId,
-        // role: UserRole.create({value: 0})
       });
 
       if (userOrError.isLeft()) {
