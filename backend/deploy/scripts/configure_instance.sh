@@ -17,4 +17,4 @@ docker network create -d bridge matchpet-internal-network
 
 # docker start
 docker run -itd -p 8000:8000 --network=matchpet-internal-network --restart always --name matchpet-api 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-api
-docker run -itd --network=matchpet-internal-network --name matchpet-rendering-server --restart always 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server
+#docker run -itd --network=matchpet-internal-network --name matchpet-rendering-server --restart always 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server
