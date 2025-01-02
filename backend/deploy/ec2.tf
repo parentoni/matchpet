@@ -2,7 +2,7 @@ resource "aws_instance" "backend" {
   ami           = "ami-02358d44dc96b8fdb"
   key_name      = "AWS_MATCHPET"
   subnet_id     = aws_subnet.az1-public.id
-  instance_type = "t2.small"
+  instance_type = "t2.micro"
   tags = {
     Name = "matchpet-backend"
   }
