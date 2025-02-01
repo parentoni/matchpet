@@ -7,7 +7,7 @@ const devVariables: IGloabalVariables = {
 };
 
 const prodVariables: IGloabalVariables = {
-  apiUrl: "https://apiv2.matchpet.org"
+  apiUrl: "https://api.matchpet.org"
 };
 
 function getGlobal(key: keyof IGloabalVariables) {

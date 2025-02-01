@@ -46,6 +46,9 @@ jobs:
       - name: Builds and push matchpet-api.
         run: docker buildx build --target production --platform linux/amd64 --push -t 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-api:latest ./backend/matchpet-api 
 
+      - name: Builds and push matchpet-nginx
+        run: docker buildx build --platform linux/amd64 --push -t 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-nginx:latest ./backend/matchpet-nginx
+
       - name: Builds and push matchpet-rendering-server.
         run: docker buildx build --target production --platform linux/amd64 --push -t 936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server:latest ./backend/matchpet-rendering-server 
   

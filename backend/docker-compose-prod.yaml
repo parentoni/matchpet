@@ -20,24 +20,19 @@ services:
     networks:
       - internal
 
-  matchpet-rendering-server:
+  nginx:
+    depends_on:
+      - matchpet-api
     platform: linux/amd64
-    build:
-      context: ./matchpet-rendering-server
-      dockerfile: Dockerfile
-      target: production
-    image: "936580475072.dkr.ecr.sa-east-1.amazonaws.com/matchpet-rendering-server:latest"
+    image: "nginx:latest"
+    container_name: nginx
     volumes:
-      - ./matchpet-rendering-server/src:/app/src
-      - ./matchpet-api/pm2.json:/app/pm2.json
-    container_name: matchpet-rendering-server
-    expose:
-      - '8001'
-    command: 'npm run start-production'
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '80:80'
     networks:
       - internal
   
-
 networks:
   internal:
     driver: bridge
